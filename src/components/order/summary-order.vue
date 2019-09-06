@@ -15,17 +15,21 @@
 					<span>Envío</span><span class="summary-amount">{{getCurrencySymbol}}. {{shippingCost}}</span>
 				</p>
 				<p
-					v-if="stepThree"
+					v-if="stepTwo || stepThree"
 					:style="`color: ${globalColors.primary} !important;`"
 					class="summary-amount-container separate shipping"
 				>
 					<button
 						type="button"
 						class="shipping-cost"
+						@click="toogleShippingCostForm"
 					>
 						<span>Calcular costo de envío</span>
 						<i class="material-icons">expand_less</i>
 					</button>
+					<transition name="fade-vertical" mode="out-in">
+						<ShipingCostForm v-if="flagShippingCostForm"/>
+					</transition>
 				</p>
 				<p class="summary-amount-container total">
 					<span>Total</span><span class="summary-total">{{getCurrencySymbol}}. {{total}}</span>
@@ -62,6 +66,8 @@
 import { mapGetters } from 'vuex';
 import appButton from '@/components/shared/buttons/app-button';
 import lib from '@/shared/lib';
+
+const ShipingCostForm = () => import('@/components/order/shipping-cost-form');
 
 function total() {
 	return (this.getTotalToBuy - this.discount) + this.shippingCost;
@@ -182,9 +188,14 @@ function stepTwo() {
 	return lib.getDeeper('meta.step')(this.$route) === 2;
 }
 
+function toogleShippingCostForm() {
+	this.flagShippingCostForm = !this.flagShippingCostForm;
+}
+
 function data() {
 	return {
 		discount: 0,
+		flagShippingCostForm: false,
 		shippingCost: 0,
 	};
 }
@@ -193,6 +204,7 @@ export default {
 	name: 'summary-order',
 	components: {
 		appButton,
+		ShipingCostForm,
 	},
 	computed: {
 		...mapGetters([
@@ -226,6 +238,7 @@ export default {
 		getDetails,
 		makeOrder,
 		setTaxes,
+		toogleShippingCostForm,
 	},
 };
 </script>
@@ -279,6 +292,7 @@ export default {
 	}
 
 	.shipping {
+		flex-direction: column;
 		padding-bottom: 12px;
 	}
 
@@ -286,6 +300,7 @@ export default {
 		align-items: center;
 		display: flex;
 		justify-content: space-between;
+		margin-bottom: 5px;
 		width: 100%;
 	}
 

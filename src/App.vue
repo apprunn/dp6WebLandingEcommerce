@@ -164,6 +164,36 @@ input.app-input::-webkit-input-placeholder {
   	transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 
+.light-select {
+	background-color: color(white) !important;
+
+	.v-input__control {
+		
+		.v-input__slot {
+			border: 1px solid color(border) !important;
+			border-radius: 7px !important;
+			height: -webkit-fill-available !important;
+			min-height: inherit !important;
+
+			.v-select__selections {
+				color: color(base);
+				padding-top: 0 !important;
+
+				input::placeholder {
+					color: color(border);
+					font-family: font(demi) !important;
+					font-size: size(minmedium) !important;
+					font-weight: normal !important;
+				}
+			}
+
+			.v-input__append-inner {
+				margin-top: 4px !important;
+			}
+		}
+	}
+}
+
 .ecommerce-select {
 	background-color: color(background) !important;
 	font-family: font(medium) !important;
@@ -600,5 +630,18 @@ input.app-input::-webkit-input-placeholder {
 		overflow: hidden;
 		max-height: 0;
 	}
+}
+
+.fade-vertical-enter,
+.fade-vertical-leave-to {
+	transform: rotateX(90deg);
+}
+
+.fade-vertical-enter-active {
+	transition: transform .3s ease;
+}
+
+.fade-vertical-leave-active {
+	transition: transform .5s ease-in;
 }
 </style>
