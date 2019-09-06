@@ -227,9 +227,7 @@ export default {
 		height: inherit;
 		overflow: hidden;
 		padding: 0px 6%;
-		// position: fixed;
 		transition: all .2s linear 0s;
-		// top: 89px;
 		width: 100vw;
 		z-index: 5;
 
@@ -240,7 +238,6 @@ export default {
 		}
 
 		&.scrolling {
-			// top: 0;
 			position: fixed;
 		}
 	}

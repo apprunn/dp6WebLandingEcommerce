@@ -46,7 +46,7 @@
 					<div v-if="list.detail && list.select" class="menu-mobile">
 						<div v-for="(listTwo, indexTwo) in list.detail" :key="indexTwo" class="content-list-subcategory">
 							<div class="list-name-category list-subcategory">
-								<span class="list-item-name bold">{{listTwo.title}}</span>
+								<span class="list-item-name bold" @click="goToCategories(list, listTwo)">{{listTwo.title}}</span>
 								<button @click="clickSubCategory(listTwo,index)">
 									<simple-svg
 										v-if="listTwo.detail.length"
@@ -62,7 +62,8 @@
 								<span 
 									v-for="(listThree, indexThree) in listTwo.detail" 
 									:key="indexThree"
-									class="list-item-sub list-subcategory">{{listThree.title}}</span>
+									class="list-item-sub list-subcategory"
+									@click="goToSubCategories(list, listTwo, listThree)">{{listThree.title}}</span>
 							</div>
 						</div>
 					</div>

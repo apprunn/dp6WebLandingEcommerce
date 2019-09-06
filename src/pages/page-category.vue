@@ -1,7 +1,34 @@
 <template>
 <div>
 	<div class="page-category">
-		<div class="menu-category">
+		<div class="name-select-mobile" v-if="!open">
+			<div class="flex-center flex-60">
+				<img 
+					:src="categorySelected.webImage" 
+					:alt="categorySelected.title" 
+					class="mr-2" 
+					height="21">
+				<span class="text-select" :style="`color: ${globalColors.primary}`">{{categorySelected.title}}</span>
+			</div>
+			<div class="flex-center flex-40">
+				<button @click="toggleMenu">
+					<img 
+						src="/static/img/icons/icon-filter-category.svg" 
+						alt="filtro"
+						class="mr-2"
+						height="16"
+					>
+					<span>Filtrar por</span>
+				</button>
+			</div>
+		</div>
+		<div class="menu-category" :class="{open: open}" v-if="open">
+			<button class="btn-close" @click="closeOpen">
+				<img 
+					src="/static/img/icons/close.svg" 
+					alt="cerrar" 
+					height="17">
+			</button>
 			<menu-category
 				:categories="categories"
 				@change-category="changeCategory"
@@ -10,7 +37,10 @@
 				@open-category="openCategory"
 			></menu-category>
 		</div>
-		<section class="section-product-card" v-if="listProducts.length">
+		<section 
+			class="section-product-card" 
+			v-if="listProducts.length"
+			:class="{close: open}">
 			<product-card
 				class="product-card"
 				v-for="product in listProducts"
@@ -46,6 +76,8 @@ const sliderCategory = () => import('@/components/shared/category/slider-categor
 
 function created() {
 	this.selectCategory();
+	this.changeOpen();
+	window.addEventListener('resize', this.changeOpen);
 }
 
 function closeCategory() {
@@ -87,6 +119,7 @@ function filterProducts() {
 
 function selectCategory() {
 	this.loadProduct();
+	this.categorySelected = this.getCategories.filter(c => Number(c.id) === Number(this.fisrt))[0];
 	this.categories = this.getCategories.map((c) => {
 		const newCategory = { ...c };
 		newCategory.selectFirst = Number(c.id) === Number(this.fisrt);
@@ -121,14 +154,23 @@ function selectCategory() {
 
 function changeCategory(id) {
 	this.goTo('category', { params: { fisrt: id } });
+	if (window.innerWidth < 986) {
+		this.open = false;
+	}
 }
 
 function changeSubCategory(id, idCategory) {
 	this.goTo('category', { params: { fisrt: id, second: idCategory } });
+	if (window.innerWidth < 986) {
+		this.open = false;
+	}
 }
 
 function changeSubSubCategory(id, idCategory, idSubCategory) {
 	this.goTo('category', { params: { fisrt: id, second: idCategory, third: idSubCategory } });
+	if (window.innerWidth < 986) {
+		this.open = false;
+	}
 }
 
 function openCategory(id) {
@@ -137,6 +179,18 @@ function openCategory(id) {
 		newCategory.open = c.id === id ? !c.open : false;
 		return newCategory;
 	});
+}
+
+function toggleMenu() {
+	this.open = true;
+}
+
+function changeOpen() {
+	this.open = window.innerWidth > 986;
+}
+
+function closeOpen() {
+	this.open = false;
 }
 
 function data() {
@@ -175,6 +229,8 @@ function data() {
 		page: 1,
 		totalPages: 5,
 		categories: [],
+		categorySelected: {},
+		open: false,
 	};
 }
 
@@ -205,6 +261,9 @@ export default {
 		changeSubCategory,
 		changeSubSubCategory,
 		openCategory,
+		toggleMenu,
+		changeOpen,
+		closeOpen,
 	},
 	data,
 	props: {
@@ -232,24 +291,33 @@ export default {
 	background-color: color(background);
 	padding: 0 0 0 27px;
 	position: relative;
+	transition: all .2s linear 0s;
 
-	@media (max-width: 980px) {
-		display: none;
+	@media (max-width: 986px) {
+		height: 100%;
+		left: -150%;
+		padding: 0;
+
+		&.open {
+			left: 0 !important;
+			width: 100%;
+		}
 	}
 }
 
 .content-category {
 	background-color: color(white);
 	width: 75%;
-
-	@media (max-width: 980px) {
-		width: 100%;
-	}
 }
 
 .page-category {
 	display: flex;
+	position: relative;
 	width: 100%;
+
+	@media (max-width: 986px) {
+		flex-direction: column;
+	}
 }
 
 .space-between {
@@ -285,11 +353,6 @@ export default {
 .section-pagination-category {
 	align-items: center;
 	display: flex;
-
-	@media (max-width: 980px) {
-		display: none;
-		width: 50%;
-	}
 }
 
 .section-product-card {
@@ -299,8 +362,15 @@ export default {
 	margin: 30px 0 0 51px;
 	width: 70%;
 
-	@media (max-width: 980px) {
-		margin: 19px auto;
+	@media (max-width: 986px) {
+		margin: 0;
+		width: 100%;
+	}
+
+	&.close {
+		@media (max-width: 986px) {
+			display: none;
+		}
 	}
 }
 
@@ -392,5 +462,50 @@ export default {
 	margin: 50px;
 	text-align: center;
 	width: 70%;
+}
+
+.name-select-mobile {
+	background: color(white);
+	box-shadow: 0 2px 9px 0 rgba(0, 0, 0, 0.05);
+	display: none;
+	height: 59px;
+	position: sticky;
+  top: 75px;
+
+	@media (max-width: 986px) {
+		display: flex;
+	}
+}
+
+.flex-center {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+.flex-60 {
+	border-right: 1px solid color(border);
+	flex: 1 60%;
+}
+
+.flex-40 {
+	flex: 1 40%;
+}
+
+.text-select {
+	font-family: font(bold);
+	font-size: size(xlarge);
+}
+
+.btn-close {
+	border-bottom: 1px solid color(border);
+	display: none;
+	padding: 15px;
+	text-align: right;
+	width: 100%;
+
+	@media (max-width: 986px) {
+		display: block;
+	}
 }
 </style>
