@@ -18,7 +18,7 @@
 					<td class="order-number">{{row.number}}</td>
 					<td class="order-amount">{{row.amount}}</td>
 					<td class="order-status">{{row.paymentStateName}}</td>
-					<td class="order-reference">{{row.documentNumber}}</td>
+					<td class="order-reference">{{row.referenceId || row.documentNumber}}</td>
 					<td class="date">
 						<span>Fecha:</span>
 						{{row.dateTransaction | formatDate}}

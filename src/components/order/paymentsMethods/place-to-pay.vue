@@ -28,7 +28,7 @@
 </div>
 </template>
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 function conditionsAndTermsLink() {
 	const findIt = this.help.find((h) => {
@@ -59,6 +59,8 @@ async function linkGenerator() {
 	};
 	try {
 		const { data: response } = await this.$httpSales.post(url, body);
+		this.SET_DEFAULT_VALUES();
+		this.removeProductFromLS();
 		window.open(response.data.url, '_self');
 	} catch (error) {
 		this.showNotification(
@@ -85,6 +87,10 @@ export default {
 	},
 	data,
 	methods: {
+		...mapActions([
+			'SET_DEFAULT_VALUES',
+			'removeProductFromLS',
+		]),
 		conditionsAndTermsLink,
 		linkGenerator,
 		normalize,
