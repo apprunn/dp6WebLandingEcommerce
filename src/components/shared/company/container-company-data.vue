@@ -67,7 +67,7 @@ export default {
 		display: flex;
 		height: 86px;
 		justify-content: space-around;
-		width: 701px;
+		width: 901px;
 		
 		@media screen and (max-width: 860px) {
 			height: 52px;

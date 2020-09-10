@@ -7,7 +7,7 @@
 			@input="validateForm"
 		>
 			<span v-if="!$v.responsible.name.required">El nombre es requerido</span>
-			<span v-if="!$v.responsible.name.validNameAndLastname">Solo se permiten letras</span>
+			<span v-if="!$v.responsible.name.onlyCharacters">Solo se permiten letras</span>
 		</app-input>
 		<app-input
 			placeholder="Apellido responsable de recibir"
@@ -16,7 +16,7 @@
 			@input="validateForm"
 		>
 			<span v-if="!$v.responsible.lastname.required">El Apellido es requerido</span>
-			<span v-if="!$v.responsible.lastname.validNameAndLastname">Solo se permiten letras</span>
+			<span v-if="!$v.responsible.lastname.onlyCharacters">Solo se permiten letras</span>
 		</app-input>
 		<app-input
 			:placeholder="labelCountry"
@@ -25,7 +25,7 @@
 			@input="validateForm"
 		>
 			<span v-if="!$v.responsible.dni.required">{{labelError}}.</span>
-			<span v-if="isPeru && !$v.responsible.dni.validDni">Solo se permiten números</span>
+			<span v-if="!$v.responsible.dni.onlyNumbers">Solo se permiten números</span>
 		</app-input>
 		<app-input
 			placeholder="Celular"
@@ -33,7 +33,8 @@
 			v-model="responsible.phone"
 			@input="validateForm"
 		>
-			<span v-if="$v.responsible.phone.$invalid">El teléfono es requerido</span>
+			<span v-if="!$v.responsible.phone.required">El teléfono es requerido</span>
+			<span v-if="!$v.responsible.phone.onlyNumbers">Solo se permiten números</span>
 		</app-input>
 		<app-input
 			placeholder="Correo"
@@ -86,36 +87,41 @@ function labelError() {
 	return getDeeper('company.country.countryCode')(this.user) === 'ECU' ? 'El número de documento es requerido' : 'El DNI es requerido';
 }
 
-function validDni(dni) {
-	const reg = /[0-9]/i;
-	return reg.test(dni);
+function onlyNumbers(val) {
+	return Number(val) > 0;
 }
 
-function validNameAndLastname(char) {
-	const trimedChar = char.split(' ').join('');
-	const noChar = /[^a-zA-ZáéíóúáéíóúÁÉÍÓÚ]/i.test(trimedChar);
-	return !noChar;
+function onlyCharacters(char) {
+	if (char !== null) {
+		const trimedChar = char.split(' ').join('');
+		const noChar = /[^a-zA-ZáéíóúáéíóúÁÉÍÓÚ]/i.test(trimedChar);
+		return !noChar;
+	}
+	return false;
 }
 
 function validations() {
 	const validating = {
 		responsible: {
-			dni: { required },
+			dni: {
+				required,
+				onlyNumbers,
+			},
 			email: { email, required },
 			lastname: {
 				required,
-				validNameAndLastname,
+				onlyCharacters,
 			},
 			name: {
 				required,
-				validNameAndLastname,
+				onlyCharacters,
 			},
-			phone: { required },
+			phone: {
+				required,
+				onlyNumbers,
+			},
 		},
 	};
-	if (this.isPeru) {
-		validating.responsible.dni.validDni = this.validDni;
-	}
 	return validating;
 }
 
@@ -148,9 +154,8 @@ export default {
 	data,
 	methods: {
 		setUserData,
-		validDni,
 		validateForm,
-		validNameAndLastname,
+		onlyCharacters,
 	},
 	mounted,
 	validations,

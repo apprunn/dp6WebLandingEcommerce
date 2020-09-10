@@ -44,10 +44,17 @@ export default {
 .text-company-data {
 	color: color(white);
 	margin: 0 0 0 9px;
+	max-width: 290px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
 	@media (max-width: 860px) {
 		font-size: 8px;
 		margin-left: 6px;
+		max-width: 80px;
+    	overflow: auto;
+    	text-overflow: initial;
 	}
 }
 

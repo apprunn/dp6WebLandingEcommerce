@@ -26,8 +26,8 @@
 			<div class="order-payment" v-if="!rating">
 				<div class="order-payment-wrapper">
 					<div class="mb-2 delivery-address">
-						<div v-if="pendingPayment && isPaymentLink" class="payment-link-data">
-							<div class="link-container">
+						<div v-if="isPaymentLink" class="payment-link-data">
+							<div class="link-container" v-if="pendingPayment">
 								<span>Paga ahora en {{gatewayName}}: </span>
 								<div class="link-wrapper">
 									<a
@@ -44,7 +44,7 @@
 								ID de transacción: <span class="label">{{transactionPaymentLinkId}}</span>
 							</div>
 						</div>
-						<div v-if="pendingPayment && isPaymentez && !isPaymentLink" class="payment-link-data">
+						<div v-if="isPaymentez && !isPaymentLink" class="payment-link-data">
 							<div class="link-container">
 								Id transacción: <span class="label">{{paymentezData.id}}</span>
 							</div>
@@ -152,7 +152,9 @@ function paymentLink() {
 
 function transactionPaymentLinkId() {
 	if (this.isPaymentLink) {
-		return this.getValue('gatewayTransactionId', this.additionalInformation);
+		const gTransactionId = this.getValue('gatewayTransactionId', this.additionalInformation);
+		const refId = this.getValue('paymentGateway.referenceId', this.additionalInformation);
+		return refId || gTransactionId;
 	}
 	return false;
 }

@@ -243,6 +243,7 @@ export default {
 		font-size: size(large);
 		font-weight: bold;
 		margin-bottom: 5px;
+		padding-right: 2rem;
 		text-align: left;
 		width: inherit;
 	}
