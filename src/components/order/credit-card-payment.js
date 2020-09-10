@@ -36,6 +36,7 @@ async function getClientIp() {
  * @param {array} gateway - arreglo con enlaces de pago configurados para el comercio
 */
 function paymentLinkCreator(h, gateway) {
+	const that = this;
 	if (this.getOrderInfo) {
 		const orderId = this.getOrderInfo.id;
 		const redirectUri = 'perfil/detalle-orden';
@@ -54,7 +55,7 @@ function paymentLinkCreator(h, gateway) {
 						categoryCode,
 						code,
 						imgLink: urlImage,
-						ipAddress: this.clientIp,
+						ipAddress: that.clientIp || '',
 						orderId,
 						uri: redirectUri,
 					},

@@ -63,7 +63,7 @@ async function onCreditCardResponse(response) {
 	if (status === 'success') {
 		await this.getOrderStateIdForCreditCard(orderStatesEnum.confirmed.code);
 		this.showNotification('Pago realizado con éxito', 'success');
-		this.$router.push({ name: 'buy-summary' });
+		this.$router.push({ name: 'buy-summary', params: { orderId: this.getOrderInfo.id } });
 	} else if (status === 'failure') {
 		this.showNotification('El pago no fue realizado con éxito', 'error');
 		await this.getOrderStateIdForCreditCard(orderStatesEnum.canceled.code);
