@@ -58,33 +58,49 @@
 							activatable
 							@update:active="goToCategories"
 							return-object
-						>
-						</v-treeview>
+						></v-treeview>
 					</div>
 				</div>
 			</div>
-			<div class="menu-list-item desktop" v-if="selectCategory && selectCategory.description">
-				<v-treeview
-					v-if="load && selectCategory.detail.length > 0"
-					activatable
-					return-object
-					open-all
-					item-children="detail"
-					item-text="title"
-					item-key="id"
-					:items="selectCategory.detail"
-					@update:active="goToCategories"
-				>
-				</v-treeview>
-				<div v-else-if="selectCategory.description" class="category-description">
-					<h2 :style="`color:${globalColors.primary}`">{{selectCategory.title}}</h2>
-					<p>{{selectCategory.description}}</p>
+			<div
+				class="menu-list-item desktop"
+				:class="!selectCategory.details || selectCategory.details.length === 0 ? 'menu-list-item-data' : ''"
+				v-if="selectCategory"
+			>
+				<template v-if="selectCategory.details && selectCategory.details.length > 0">
+					<v-treeview 
+						:items="selectCategory.detail"
+						item-children="detail"
+						open-all
+						item-text="title"
+						item-key="id"
+						activatable
+						@update:active="goToCategories"
+						return-object
+						v-if="load">
+					</v-treeview>
+				</template>
+				<template v-else>
+					<div
+						class="menu-list-item-title"
+						:style="`color: ${globalColors.title};`"
+					>
+						{{ selectCategory.title }}
+					</div>
+					<div class="menu-list-item-description">
+						{{ selectCategory.description || '...' }}
+					</div>
 					<button
+						class="menu-list-item-btn"
+						:style="
+							`border: 1px solid ${selectCategory.select ? globalColors.secondary : 'white'};
+							color: ${selectCategory.select ? globalColors.secondary : 'white'}`"
 						type="button"
-						:style="`color:${globalColors.primary};border-color:${globalColors.primary}`"
-						@click.stop="goToCategory(selectCategory)"
-					>Ver productos</button>
-				</div>
+						@click="goToCategory({ slug: selectCategory.slug, id: selectCategory.id })"
+					>
+						Ver productos
+					</button>
+				</template>
 			</div>
 			<div class="menu-list-banner">
 				<img :src="selectCategory.urlImage" alt="imagen de la categoria">
@@ -303,6 +319,10 @@ export default {
 		z-index: 5;
 		width: 100%;
 
+		@media (min-width: 926px) {
+			max-width: 926px;
+		}
+
 		@media (max-width: 764px) {
 			height: 100vh;
 			max-height: none;
@@ -334,12 +354,14 @@ export default {
 
 	.menu-list-name-category {
 		border-right: 3px solid color(border);
-		flex: 0 0 17%;
+		// flex: 0 0 17%;
+		flex: 0 0 26%;
 		overflow-y: scroll;
 
 		@media (max-width: 764px) {
 			border: none;
-			flex: 1 1 17%;
+			// flex: 1 1 17%;
+			flex: 1 1 26%;
 			max-height: none;
 		}
 	}
@@ -347,7 +369,7 @@ export default {
 	.menu-app-category {
 		display: flex;
 		height: 100%;
-		padding: 33px 3% 5% 33px;
+		padding: 36px 34px;
 
 		@media (max-width: 764px) {
 			height: fit-content;
@@ -362,9 +384,43 @@ export default {
 
 	.menu-list-item {
 		cursor: pointer;
-		flex: 1 1 auto;
+		display: flex;
+		// flex: 1 1 auto;
+		flex: 0 0 44%;
 		height: 100%;
 		overflow-y: scroll;
+
+		&.menu-list-item-data {
+			align-items: flex-start;
+			flex-direction: column;
+			flex-wrap: wrap;
+			justify-content: center;
+			padding-left: 60px;
+			text-align: left;
+		}
+
+		&-title {
+			font-family: font(bold);
+			font-size: 15px;
+		}
+
+		&-description {
+			color: #494949;
+			font-family: font(demi);
+			font-size: 12px;
+			min-height: 136px;
+			padding-bottom: 13px;
+			padding-top: 13px;
+		}
+
+		&-btn {
+			border-radius: 3px;
+			font-family: font(bold);
+			font-size: 15px;
+			max-width: max-content;
+			max-width: -moz-max-content;
+			padding: 5px 20px;
+		}
 	}
 
 	.desktop {
@@ -531,13 +587,15 @@ export default {
 	}
 
 	.menu-list-banner {
-		flex: 0 0 20%;
+		// flex: 0 0 20%;
+		flex: 0 0 30%;
 		text-align: end;
 
 		img {
 			height: 100%;
 			object-fit: cover;
-			width: 202px;
+			// width: 202px;
+			max-width: 100%;
 		}
 		
 		@media (max-width: 764px) {
