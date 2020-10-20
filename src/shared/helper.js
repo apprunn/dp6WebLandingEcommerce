@@ -115,8 +115,6 @@ function buildOrderBody(flagFinish, getters) {
 		body.bankAccountId = null;
 		// body.bankAccountId = flagFinish ? getters.getWayPayment.bankAccountId : null;
 		body.wayPaymentId = flagFinish ? getters.getWayPayment.wayPayment : null;
-		body.gatewayAuthorizationResponse = flagFinish ? getters.getGatewayAuthorizationResponse : null;
-		body.gatewayErrorCode = flagFinish ? getters.getGatewayErrorCode : null;
 	} else {
 		body.commerceCode = process.env.COMMERCE_CODE;
 	}

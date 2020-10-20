@@ -99,6 +99,8 @@ class ProductDetails {
 	}
 	featureSelected(feature) {
 		if (isEmpty(this.selectedFeatures)) {
+			this.globalFeatures.features = this.globalFeatures.features.filter(f =>
+				f.values && f.values.length > 0);
 			this.globalFeatures.allUnSelected();
 		}
 		this.updateSelectedFeatures.call(this, feature);

@@ -1,7 +1,7 @@
 import { mapGetters } from 'vuex';
 import { LINK, BUTTON } from '@/shared/enums/paymentStrategy';
 import {
-	leadgods, visa, datafast, pagoplux, pagopluxLink, xchange, paymentez, placetopay,
+	leadgods, visa, datafast, pagoplux, pagopluxLink, xchange, paymentez, placetopay, alignet,
 } from '@/shared/enums/gatewayCodes';
 
 const VisaPeru = () => import('@/components/order/paymentsMethods/visa-payment');
@@ -12,6 +12,7 @@ const PagoPluxLink = () => import('@/components/order/paymentsMethods/pago-plux-
 const Xchange = () => import('@/components/order/paymentsMethods/xchange');
 const LeadGods = () => import('@/components/order/paymentsMethods/leadgods');
 const PlaceToPay = () => import('@/components/order/paymentsMethods/place-to-pay');
+const Alignet = () => import('@/components/order/paymentsMethods/alignet');
 
 function created() {
 	this.getClientIp();
@@ -90,8 +91,9 @@ const paymentButtonCreator = (h, gateway) => {
 		[datafast]: DataFast,
 		[pagoplux]: PagoPlux,
 		[xchange]: Xchange,
+		[alignet]: Alignet,
 	};
-	let selectedButtons = [];
+	let selectedButtons = [h(Alignet)];
 	gateway.forEach((t) => {
 		const { code, urlImage } = t;
 		const paymentBtns = h(

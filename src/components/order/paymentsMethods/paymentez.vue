@@ -58,8 +58,6 @@ async function checkout() {
 async function onCreditCardResponse(response) {
 	this.informBackend(response);
 	const { transaction: { status } } = response;
-	this.$store.dispatch('updateGatewayErrorCode', status === 'success' ? null : status);
-	this.$store.dispatch('updateGatewayAuthorizationResponse', response);
 	if (status === 'success') {
 		await this.getOrderStateIdForCreditCard(orderStatesEnum.confirmed.code);
 		this.showNotification('Pago realizado con éxito', 'success');

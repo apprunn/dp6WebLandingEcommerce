@@ -200,14 +200,6 @@ function setRatingProductId({ commit }, productId) {
 	commit('SET_PRODUCT_ID_TO_RATE', productId);
 }
 
-function updateGatewayErrorCode({ commit }, errorCode) {
-	commit('SET_GATEWAY_ERROR_CODE', errorCode);
-}
-
-function updateGatewayAuthorizationResponse({ commit }, data) {
-	commit('SET_GATEWAY_AUTHORIZATION_RESPONSE', data);
-}
-
 function UPDATE_PRODUCT_SEARCH({ commit }, search) {
 	commit('SET_PRODUCT_SEARCH', search);
 }
@@ -240,8 +232,6 @@ const methods = {
 	showSnackBar,
 	toggleLoading,
 	updateFilters,
-	updateGatewayAuthorizationResponse,
-	updateGatewayErrorCode,
 	UPDATE_ORDER_FROM_LOCAL_STORAGE,
 	UPDATE_PRODUCT_FILTER,
 	UPDATE_PRODUCT_SEARCH,
