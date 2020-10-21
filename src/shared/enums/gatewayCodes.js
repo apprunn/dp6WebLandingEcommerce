@@ -8,3 +8,5 @@ export const placetopay = 'placetopay';
 export const visa = 'visa';
 export const xchange = 'xchange';
 export const alignet = 'alignet';
+export const mercadopagoMp = 'mercadopagoMp';
+export const mercadopago = 'mercadopago';
