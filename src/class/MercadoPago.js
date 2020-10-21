@@ -117,7 +117,6 @@ class MercadoPago {
 			this.doSubmit = true;
 			this.pay.call(this, form, response.id);
 		} else {
-			console.log(response.cause);
 			const { cause } = response;
 			if (cause.find(c => c.code === 'E302')) {
 				this.showNotification('Código de seguridad inválido', 'error');
@@ -125,6 +124,12 @@ class MercadoPago {
 				this.showNotification('Debe introducir un número de tarjeta', 'error');
 			} else if (cause.find(c => c.code === '208' || c.code === '209')) {
 				this.showNotification('Debe introducir un tiempo de expiración', 'error');
+			} else if (cause.find(c => c.code === '221')) {
+				this.showNotification('El titular de la tarjeta es requerido', 'error');
+			} else if (cause.find(c => c.code === '214')) {
+				this.showNotification('El número de documento es requerido', 'error');
+			} else {
+				this.showNotification('Complete los datos en el formulario', 'error');
 			}
 		}
 	}
