@@ -1,5 +1,6 @@
 <template>
 	<div
+		v-if="product.price || product.priceDiscount"
 		class="product-container"
 		:class="{ 'small': small }"
 		@click="goToProduct(product)"
@@ -13,9 +14,15 @@
 				Agotado
 			</div>
 			<div class="pd-10">
-				<section class="product-header" :class="{ 'small': small }">
+				<section
+					:class="[
+						'product-header',
+						{ 'small': small },
+						{ 'noDiscount': !discountPercentage },
+					]"
+				>
 					<div
-						v-if="product.priceDiscount || !indeterminate"
+						v-if="!!discountPercentage"
 						:style="`background-color:${indeterminate ? 'transparent' : globalColors.primary}`"
 						:class="[
 							'product-discount',
@@ -46,9 +53,15 @@
 					<div class="product-description-wrapper">
 						<p
 							:class="[
-								indeterminate ? 'loading text-field' : 'product-description'
+								indeterminate ? 'loading text-field' : 'product-name'
 							]"
 						>{{product.name}}</p>
+						<span
+							v-if="product.description"
+							:class="[
+								indeterminate ? 'loading text-field' : 'product-description'
+							]"
+						>{{product.description | cuttingWord(53)}}</span>
 						<small
 							v-if="product.warehouseProduct && product.warehouseProduct.brand"
 							class="product-brand">{{product.warehouseProduct.brand.name}}</small>
@@ -70,11 +83,6 @@
 						>
 							{{ product.price | currencyFormat }}
 						</small>
-						<small
-							:class="[
-								indeterminate ? 'loading text-field' : 'other-buy',
-							]"
-						>+ 1000 compraron esto</small>
 					</div>
 				</section>
 			</div>
@@ -213,6 +221,9 @@ export default {
 		display: flex;
 		height: 3rem;
 		justify-content: space-between;
+		&.noDiscount {
+			justify-content: flex-end;
+		}
 	}
 
 	.product-discount {
@@ -264,16 +275,21 @@ export default {
 		width: 125px;
 	}
 
+	.product-name,
 	.product-description {
 		color: color(dark);
 		font-size: size(small);
 		font-family: font(bold);
-		height: 35px;
+		max-height: 35px;
 		margin: 0 auto;
 		max-width: 150px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		text-transform: capitalize;
+	}
+
+	.product-description {
+		font-family: font(medium);
 	}
 
 	.product-brand {
@@ -286,20 +302,9 @@ export default {
 		font-size: size(xlarge);
 	}
 
-	.product-price,
-	.other-buy {
+	.product-price {
+		font-size: size(medium);
 		color: color(base) !important;
-		font-size: size(xsmall);
-	}
-
-	.other-buy {
-		font-family: font(regular);
-		display: none;
-
-		@media (min-width: 500px) {
-			display: block;
-			flex-direction: column;
-		}
 	}
 
 	.product-price {

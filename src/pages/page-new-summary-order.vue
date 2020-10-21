@@ -22,7 +22,9 @@
 			</div>
 		</section>
 		<section class="summary-content-container">
-			<h2 class="title" :style="`color:${globalColors.primary}`">Resumen de compra</h2>
+			<h2 class="title" :style="`color:${globalColors.primary}`">
+				Resumen de compra - Pedido: {{this.order.number}}
+			</h2>
 			<div class="summary-content">
 				<div class="products-in-order">
 					<productInSummary

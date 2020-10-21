@@ -21,6 +21,7 @@
 				/>
 			</div>
 			<component class="component-container"
+				:ip="ip"
 				:is="paymentMethodSelectedComponent"
 				:paymentsTypes="gatewayConfiguration"
 			></component>
@@ -72,12 +73,27 @@ import { BUTTON } from '@/shared/enums/paymentStrategy';
 import { creditCard, transfer } from '@/shared/enums/wayPayment';
 
 function created() {
+	this.getClientIp();
 	if (isEmpty(this.getWaysPayments)) {
 		this.$store.dispatch('SET_WAY_PAYMENT', this);
 		this.$store.dispatch('SET_BANK_ACCOUNTS', this);
 	} else {
 		const selectThisWayPayment = this.getCreditCard || this.getWaysPayments[0];
 		this.onSelect(selectThisWayPayment);
+	}
+}
+
+/**
+ * getClientIp - obtiene el ip del computador del cliente
+*/
+async function getClientIp() {
+	try {
+		({ data: this.ip } = await this.$http.get('https://api.ipify.org'));
+	} catch (err) {
+		this.showNotification(
+			'Ocurrio un error con la ip de origen',
+			'error',
+		);
 	}
 }
 
@@ -163,23 +179,14 @@ function data() {
 		logo: {
 			section: '/static/icons/payment.svg',
 		},
+		ip: '',
 		open: false,
 		paymentMethodSelected: '',
 	};
 }
 
-// function beforeRouteEnter(from, to, next) {
-// 	if (to.name === 'buy-delivery' && from.name === 'buy-payment') {
-// 		next();
-// 		window.location.reload();
-// 	} else {
-// 		next();
-// 	}
-// }
-
 export default {
 	name: 'payment',
-	// beforeRouteEnter,
 	components: {
 		depositPayment,
 		appButton,
@@ -200,6 +207,7 @@ export default {
 	created,
 	data,
 	methods: {
+		getClientIp,
 		datafastAdditionals,
 		onSelect,
 		openDetails,

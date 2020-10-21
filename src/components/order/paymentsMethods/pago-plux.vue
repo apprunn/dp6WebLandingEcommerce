@@ -26,24 +26,6 @@
 <script>
 import { mapGetters } from 'vuex';
 
-function created() {
-	this.getClientIp();
-}
-
-/**
- * getClientIp - obtiene el ip del computador del cliente
-*/
-async function getClientIp() {
-	try {
-		({ data: this.ipAddress } = await this.$http.get('https://api.ipify.org'));
-	} catch (err) {
-		this.showNotification(
-			'Ocurrio un error con la ip de origen',
-			'error',
-		);
-	}
-}
-
 function clickOnButton() {
 	this.loading = true;
 	this.mountJQ();
@@ -168,7 +150,6 @@ function data() {
 		payboxSendname: '',
 		payboxDescription: '',
 		productionEnv: null,
-		ipAddress: null,
 	};
 }
 
@@ -180,11 +161,9 @@ export default {
 			'getResponsible',
 		]),
 	},
-	created,
 	data,
 	methods: {
 		clickOnButton,
-		getClientIp,
 		informBackend,
 		loadPagoPluxData,
 		mountData,
@@ -193,6 +172,10 @@ export default {
 		openPagoPlux,
 		pagoPluxHandlerError,
 		pagoPluxHandlerSuccess,
+	},
+	props: {
+		required: true,
+		default: String,
 	},
 };
 </script>

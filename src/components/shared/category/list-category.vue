@@ -37,7 +37,11 @@
 					return-object
 				>
 					<template slot="label" slot-scope="{ item }">
-						<button :style="idSelect(item.id) ? `color: ${globalColors.secondary}` : `color: ${globalColors.base}`">{{item.title}}</button>
+						<button
+							:style="`color:${idSelect(item.id) ? globalColors.secondary : globalColors.title}`"
+						>
+							{{item.title}}
+						</button>
 					</template>
 				</v-treeview>
 			</div>
