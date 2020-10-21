@@ -1,7 +1,8 @@
 import { mapGetters } from 'vuex';
 import { LINK, BUTTON } from '@/shared/enums/paymentStrategy';
 import {
-	leadgods, niubiz, datafast, pagoplux, pagopluxLink, xchange, paymentez, placetopay, alignet,
+	leadgods, niubiz, datafast, pagoplux, pagopluxLink,
+	xchange, paymentez, placetopay, alignet, mercadopago, mercadopagoMp,
 } from '@/shared/enums/gatewayCodes';
 
 const Niubiz = () => import('@/components/order/paymentsMethods/niubiz');
@@ -13,6 +14,7 @@ const Xchange = () => import('@/components/order/paymentsMethods/xchange');
 const LeadGods = () => import('@/components/order/paymentsMethods/leadgods');
 const PlaceToPay = () => import('@/components/order/paymentsMethods/place-to-pay');
 const Alignet = () => import('@/components/order/paymentsMethods/alignet');
+const MercadoPago = () => import('@/components/order/paymentsMethods/mercadopago');
 
 /**
  * @param {object-function} h render function
@@ -73,14 +75,17 @@ const paymentButtonCreator = (h, gateway, ipAddress) => {
 		[pagoplux]: PagoPlux,
 		[xchange]: Xchange,
 		[alignet]: Alignet,
+		[mercadopago]: MercadoPago,
+		[mercadopagoMp]: MercadoPago,
 	};
-	let selectedButtons = [h(Alignet)];
+	let selectedButtons = [];
 	gateway.forEach((t) => {
-		const { code, urlImage } = t;
+		const { code, urlImage, code: gatewayCode } = t;
 		const paymentBtns = h(
 			buttonOptions[code],
 			{
 				props: {
+					code: gatewayCode,
 					img: urlImage,
 					ipAddress,
 				},
