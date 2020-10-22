@@ -60,6 +60,13 @@ function created() {
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
 }
 
+function mounted() {
+	const { orderId: id } = this.$route.params;
+	if (id) {
+		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+	}
+}
+
 function stepOneAndTwo() {
 	const step = getDeeper('meta.step')(this.$route);
 	return step !== 3;
@@ -109,6 +116,7 @@ export default {
 	methods: {
 		getProductToBuyHandler,
 	},
+	mounted,
 	watch: {
 		getProductToBuy: {
 			deep: true,
