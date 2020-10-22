@@ -25,8 +25,7 @@
 				:is="paymentMethodSelectedComponent"
 				:paymentsTypes="gatewayConfiguration"
 			></component>
-			<div class="details-collapse component-container"
-			v-if="datafastData.creditCards">
+			<div class="details-collapse component-container" v-if="flagDataFast">
 				<div class="details-collapse-title payment-sections">
 					Tarjetas con las que puedes pagar en DATAFAST
 					<button
@@ -81,6 +80,14 @@ function created() {
 		const selectThisWayPayment = this.getCreditCard || this.getWaysPayments[0];
 		this.onSelect(selectThisWayPayment);
 	}
+	this.flagDataFast = this.gatewayConfiguration.reduce((acum, item) => {
+		const index = item.gateway.findIndex(g => g.code === 'datafast');
+		let newAcum = acum;
+		if (index > -1) {
+			newAcum += 1;
+		}
+		return newAcum;
+	}, 0);
 }
 
 /**
@@ -174,6 +181,7 @@ function openDetails() {
 
 function data() {
 	return {
+		flagDataFast: null,
 		datafastData: {},
 		gatewayConfiguration: [],
 		logo: {
