@@ -70,7 +70,7 @@ async function checkout() {
 function redirect() {
 	const orderId = `orderId=${this.getOrderId}`;
 	const successUri = 'uri=resumen-de-mi-pedido';
-	const errorUri = 'errorUri=carrito-de-compras/pago';
+	const errorUri = `errorUri=carrito-de-compras/pago/${this.getOrderId}`;
 	return `${this.apiSales}/payment-gateway/validation?${orderId}&${successUri}&${errorUri}`;
 }
 
