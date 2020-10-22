@@ -117,6 +117,10 @@
 				</div>
 			</div>
 		</section>
+		<section v-if="isNiubiz" class="card-data-niubiz">
+			<h4>Pago realizado con tarjeta: <span>{{niubizGateway.cardBrand}}</span>, nro: <span>{{niubizGateway.cardNumber}}</span></h4>
+			<h5>el día <span>{{niubizGateway.createdAt | formatDate}}</span></h5>
+		</section>
 		<section class="summary-btns">
 			<button :style="`background-color:${globalColors.primary}`" type="button" @click="seeOrder">Ver pedido</button>
 			<button :style="`background-color:${globalColors.primary}`" type="button" @click="cancelOrder">Cancelar pedido</button>
@@ -126,6 +130,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import deliveryWays from '@/shared/enums/waysDeliveries';
+import { niubiz } from '@/shared/enums/gatewayCodes';
 import productInSummary from '@/components/products/product-in-summary';
 import { getDeeper, isEmpty } from '@/shared/lib';
 import helper from '@/shared/helper';
@@ -216,19 +221,9 @@ function copyLink() {
 	this.showNotification('Enlace copiado al porta papeles', 'primary');
 }
 
-function data() {
-	return {
-		swiperOption: {
-			slidesPerView: 2,
-			spaceBetween: 5,
-			slidesPerGroup: 1,
-			allowTouchMove: true,
-			navigation: {
-				nextEl: '.swiper-button-next',
-				prevEl: '.swiper-button-prev',
-			},
-		},
-	};
+function isNiubiz() {
+	const codeNiubiz = getDeeper('additionalInformation.gatewayCode')(this.order);
+	return codeNiubiz === niubiz;
 }
 
 function seeOrder() {
@@ -251,6 +246,31 @@ function discount() {
 	const percentage = this.user.discount || 0;
 	const amount = this.order.total * (Number(percentage) / 100);
 	return Number(amount.toFixed(2));
+}
+
+function niubizGateway() {
+	const payment = getDeeper('additionalInformation.paymentGateway')(this.order);
+	const { cardBrand, cardReference } = payment;
+	return {
+		createdAt: this.order.createdAt,
+		cardBrand,
+		cardNumber: cardReference,
+	};
+}
+
+function data() {
+	return {
+		swiperOption: {
+			slidesPerView: 2,
+			spaceBetween: 5,
+			slidesPerGroup: 1,
+			allowTouchMove: true,
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
+		},
+	};
 }
 
 export default {
@@ -276,10 +296,12 @@ export default {
 		discount,
 		isHome,
 		isDeposit,
+		isNiubiz,
 		isOnlinePayment,
 		isReciveAndPay,
 		isStore,
 		link,
+		niubizGateway,
 		wayPayment,
 	},
 	created,
@@ -490,6 +512,14 @@ export default {
 		padding: 0.75rem 2rem;
 		width: 14rem;
 	}
+}
+
+.card-data-niubiz {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	font-family: font(regular);
+	justify-content: center;
 }
 
 </style>

@@ -1,5 +1,10 @@
 <template>
 	<div class="buy-container">
+		<section class="rejected-transaction" v-if="isNiubiz">
+			<h4>La transacción <span>{{transactionId}}</span> fue rechazada</h4>
+			<h5>Nro pedido: <span>{{getOrderInfo.id}}</span></h5>
+			<h5>fecha: <span>{{getOrderInfo.createdAt | formatDate}}</span></h5>
+		</section>
 		<div
 			v-if="stepThree"
 			:style="`border-bottom: 3px solid ${globalColors.primary});`"
@@ -50,6 +55,7 @@
 <script>
 import { getDeeper } from '@/shared/lib';
 import { mapGetters } from 'vuex';
+import { niubiz } from '@/shared/enums/gatewayCodes';
 import appButton from '@/components/shared/buttons/app-button';
 import productInCar from '@/components/products/product-in-car';
 import summaryOrder from '@/components/order/summary-order';
@@ -58,6 +64,13 @@ import summaryInPayment from '@/components/order/summary-in-payment';
 function created() {
 	const localOrder = this.getLocalStorage('ecommerce-order');
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
+}
+
+async function mounted() {
+	const { orderId: id } = this.$route.params;
+	if (id) {
+		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+	}
 }
 
 function stepOneAndTwo() {
@@ -77,6 +90,16 @@ function getProductToBuyHandler(newProducts) {
 	if (newProducts && newProducts.length === 0) {
 		this.goTo('page-home');
 	}
+}
+
+function transactionId() {
+	const transactionNumber = getDeeper('additionalInformation.gatewayTransactionId');
+	return transactionNumber(this.getOrderInfo);
+}
+
+function isNiubiz() {
+	const codeNiubiz = getDeeper('additionalInformation.gatewayCode')(this.getOrderInfo);
+	return codeNiubiz === niubiz;
 }
 
 function data() {
@@ -99,16 +122,20 @@ export default {
 		...mapGetters([
 			'getProductToBuy',
 			'getTotalQuantityProducts',
+			'getOrderInfo',
 		]),
+		isNiubiz,
 		stepOneAndTwo,
 		stepThree,
 		stepTwo,
+		transactionId,
 	},
 	created,
 	data,
 	methods: {
 		getProductToBuyHandler,
 	},
+	mounted,
 	watch: {
 		getProductToBuy: {
 			deep: true,
@@ -210,5 +237,13 @@ export default {
 		display: flex;
 		justify-content: flex-start;
 		margin-bottom: 40px;
+	}
+
+	.rejected-transaction {
+		background-color: rgba(237, 100, 100, 0.15);
+		border: 1px solid color(error);
+		color: color(error);
+		margin: 0 3rem;
+		padding: 1rem;
 	}
 </style>

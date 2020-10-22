@@ -23,7 +23,7 @@ const route = {
 		},
 		{
 			name: 'buy-payment',
-			path: 'pago',
+			path: 'pago/:orderId?',
 			meta: {
 				step: 3,
 			},
