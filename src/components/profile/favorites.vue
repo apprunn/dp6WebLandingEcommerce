@@ -19,7 +19,6 @@
 							<img :src="row.urlImage" alt="imagen del producto" class="product-img"/>
 							<div class="text-xs-left">
 								<h4 class="product-name">{{row.name}}</h4>
-								<span class="product-description">{{row.description}}</span>
 							</div>
 						</div>
 					</td>
@@ -107,7 +106,10 @@ export default {
 		align-items: center;
 		display: grid;
 		grid-column-gap: 20px;
-		grid-template-columns: 50px 1fr;
+
+		@media (min-width: 600px) {
+			grid-template-columns: 50px 1fr;
+		}
 	}
 
 	.table {
@@ -151,7 +153,6 @@ export default {
 		}
 	}
 
-	.product-description,
 	.product-img {
 
 		@media (max-width: 600px) {
@@ -180,9 +181,12 @@ export default {
 	}
 
 	.product-actions {
+		align-items: center;
+		display: flex;
 		grid-column: 3;
-		grid-row: 1;
+		grid-row: 1 / 3;
 		height: 65px;
+		padding: 10px 5px !important;
 
 		@media (max-width: 600px) {
 			border-bottom: none;

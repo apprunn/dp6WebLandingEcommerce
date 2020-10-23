@@ -7,6 +7,7 @@ class MercadoPago {
 		this.showNotification = context.showNotification;
 		this.$router = context.$router;
 		this.orderId = context.getOrderInfo.id;
+		this.closeModal = context.closeModal;
 	}
 	init(publicKey, hash) {
 		this.hash = hash;
@@ -163,7 +164,9 @@ class MercadoPago {
 			await this.$httpSales.post('payment-gateway/validation', body);
 			this.$router.push({ name: 'buy-summary', params: { orderId: this.orderId } });
 		} catch (error) {
-			console.log('error pagando con mercado pago', error);
+			const message = error.data.status;
+			this.showNotification(message, 'error');
+			this.closeModal();
 		}
 	}
 }

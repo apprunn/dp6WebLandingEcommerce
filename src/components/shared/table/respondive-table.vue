@@ -1,6 +1,6 @@
 <template>
 	<table>
-		<thead>
+		<thead class="table-head">
 			<tr class="grid-system">
 				<th
 					v-for="column in columns"
@@ -177,6 +177,9 @@ export default {
 
 	thead {
 		background-color: color(border);
+		position: sticky;
+		top: 75px;
+		z-index: 7;
 
 		th {
 			font-family: font(bold);

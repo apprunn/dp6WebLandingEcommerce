@@ -257,11 +257,12 @@ input.app-input::-webkit-input-placeholder {
 	height: 46.8px !important;
 
 	.v-input__control {
+		height: inherit;
 		
 		.v-input__slot {
 			border: 1px solid color(border) !important;
 			border-radius: 7px !important;
-			height: -webkit-fill-available !important;
+			height: inherit;
 			min-height: inherit !important;
 
 			.v-select__selections {
@@ -972,5 +973,8 @@ input.app-input::-webkit-input-placeholder {
 
 .wpwl-control-brand {
 	width: 127px !important;
+}
+.application--wrap {
+	display: block;
 }
 </style>
