@@ -10,6 +10,7 @@
 		</button>
 		<modal
 			id="mercadopago-modal"
+			max-width="32rem"
 			v-model="showModal"
 		>
 			<div class="modal">
@@ -26,16 +27,16 @@
 				<form id="paymentForm" ref="paymentForm-vue">
 					<h3 class="font-bold">Detalles del comprador</h3>
 					<div class="mb-8">
-						<div class="mb-4">
+						<div class="mb-2">
 							<label class="input-label" for="email">E-mail</label>
 							<input class="input-field" id="email" name="email" type="text" value="">
 						</div>
 						<div class="document-number">
-							<div class="mb-4">
-								<label class="input-label" for="docType">Tipo de documento</label>
+							<div class="mb-2">
+								<label class="input-label" for="docType">Tipo</label>
 								<select class="input-field" id="docType" name="docType" data-checkout="docType" type="text"></select>
 							</div>
-							<div class="mb-4">
+							<div class="mb-2">
 								<label class="input-label" for="docNumber">Número de documento</label>
 								<input class="input-field" id="docNumber" name="docNumber" data-checkout="docNumber" type="text"/>
 							</div>
@@ -43,8 +44,8 @@
 					</div>
 					<h3 class="font-bold">Detalles de la tarjeta</h3>
 					<div>
-						<div class="card-data">
-							<div class="mb-4">
+						<div class="card-owner-expi">
+							<div class="mb-2">
 								<label class="input-label" for="cardholderName">Titular de la tarjeta</label>
 								<input class="input-field" id="cardholderName" data-checkout="cardholderName" type="text">
 							</div>
@@ -105,7 +106,7 @@
 						</div>
 						<div class="payment-section">
 							<div id="issuerInput">
-								<label class="input-label" for="issuer">Banco emisor</label>
+								<label class="input-label" for="issuer">Banco</label>
 								<select id="issuer" name="issuer" data-checkout="issuer" class="input-field"></select>
 							</div>
 							<div>
@@ -251,9 +252,10 @@ export default {
 	background-color: white;
 	border-radius: 5px;
 	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-	max-height: 75%;
+	max-height: 40rem;
 	overflow: auto;
 	padding: 2rem;
+	max-width: 32rem;
 }
 
 .modal-close-btn-container {
@@ -286,12 +288,25 @@ export default {
 .document-number {
 	display: grid;
 	grid-gap: 10px;
-	grid-template-columns: 0.45fr 1fr;
+
+	@media (min-width: 425px) {
+		grid-template-columns: 0.45fr 1fr;
+	}
 }
-.card-data {
+.card-data,
+.card-owner-expi {
 	display: grid;
 	grid-gap: 10px;
-	grid-template-columns: 1fr 0.45fr;
+
+	@media (min-width: 425px) {
+		grid-template-columns: 0.8fr 0.45fr;
+	}
+}
+
+.card-owner-expi {
+	@media (min-width: 425px) {
+		grid-template-columns: 0.7fr 0.45fr;
+	}
 }
 .card-expiration {
 	align-items: center;
@@ -309,6 +324,9 @@ export default {
 	align-items: flex-end;
 	display: grid;
 	grid-gap: 10px;
-	grid-template-columns: 0.45fr 0.45fr 0.6fr;
+
+	@media (min-width: 425px) {
+		grid-template-columns: 0.45fr 0.45fr 0.6fr;
+	}
 }
 </style>
