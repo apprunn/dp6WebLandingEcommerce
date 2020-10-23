@@ -22,7 +22,7 @@ function createScript() {
 		const dataCurrency = this.currency;
 		const src = this.payboxProduction === 'dev' ? this.dev : this.prod;
 		const purchaseNumber = this.getOrderId;
-		const logo = this.companyLogo;
+		const logo = this.getCommerceData.urlImage;
 		const name = process.env.COMPANY_LOGIN_TITLE;
 		const btnColor = process.env.COLOR_PRIMARY;
 		visaForm.setAttribute('src', src);
@@ -99,6 +99,7 @@ export default {
 			'getShippingCost',
 			'getTotalToBuy',
 			'token',
+			'getCommerceData',
 		]),
 		orderTotal,
 		redirect,

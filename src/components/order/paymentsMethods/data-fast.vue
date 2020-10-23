@@ -144,7 +144,6 @@ function insertForm(dtc) {
 	const purchaseNumber = `orderId=${this.getOrderId}`;
 	const redirect = 'uri=resumen-de-mi-pedido';
 	const url = `${this.baseUrl}?${commerceCode}&${purchaseNumber}&${redirect}`;
-	console.log('url', url);
 	dataFastForm.setAttribute('action', url);
 	dataFastForm.setAttribute('method', 'get');
 	dataFastForm.setAttribute('data-brands', dataBrands);
