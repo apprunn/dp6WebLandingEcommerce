@@ -118,7 +118,7 @@ function data() {
 }
 
 export default {
-	name: 'address',
+	name: 'address-data',
 	components: {
 		deleteComponent,
 		newAddressForm,
@@ -244,7 +244,8 @@ export default {
 	}
 
 	.action-btn {
-		margin: 0 10px;
+		margin: 0 5px;
+		width: 2rem;
 	}
 
 	.section-title {

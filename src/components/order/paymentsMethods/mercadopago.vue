@@ -281,6 +281,7 @@ export default {
 	border: 1px solid color(base);
 	color: color(dark);
 	font-size: size(medium);
+	overflow: hidden;
 	padding: 10px;
 	width: 100%;
 }
