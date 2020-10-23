@@ -13,7 +13,11 @@
 				<img :src="data.webImage" :alt="data.title" class="mr-3" width="25">
 				<span>{{data.title}}</span>
 			</button>
-			<button @click="$emit('open-category', data.id)" v-if="data.detail.length">
+			<button
+				v-if="data.detail.length"
+				@click="$emit('open-category', data.id)"
+				class="simple-svg-container"
+			>
 				<simple-svg
 					filepath="/static/img/arrow-left.svg"
 					:fill="globalColors.primary"
@@ -133,5 +137,9 @@ export default {
 				transform: rotateZ(450deg);
 			}
 		}
+	}
+
+	.simple-svg-container {
+		width: 1rem;
 	}
 </style>

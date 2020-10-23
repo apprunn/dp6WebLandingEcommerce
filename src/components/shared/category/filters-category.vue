@@ -13,7 +13,7 @@
 					:style="`color: ${globalColors.primary}`"
 				>Filtros</p>
 			</div>
-			<div>
+			<div class="simple-svg-container">
 				<simple-svg
 					filepath="/static/img/arrow-left.svg"
 					:fill="globalColors.primary"
@@ -253,5 +253,8 @@ export default {
 	&.rotate-icon {
 		transform: rotateZ(450deg);
 	}
+}
+.simple-svg-container {
+	width: 1rem;
 }
 </style>
