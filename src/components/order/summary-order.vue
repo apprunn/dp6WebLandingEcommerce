@@ -83,9 +83,12 @@ function goToMakeOrder() {
 	if (this.token) {
 		this.goTo('buy-delivery');
 	} else if (window.screen.width < 765) {
+		this.isBtn = true;
 		this.showNotification(
-			'Debe iniciar sesión para continuar',
+			'Iniciar sesión para continuar',
 			'accent',
+			null,
+			true,
 		);
 	} else {
 		this.setLocalData('route-after-login', 'buy-delivery');
