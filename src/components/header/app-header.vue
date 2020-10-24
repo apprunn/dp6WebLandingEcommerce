@@ -53,7 +53,18 @@
 					class="icon-desktop"
 					@click="openModalLogin"
 				/>
-				<HeartComponent @click="goToFavorites"/>
+				<button 
+					class="icon-mobile" 
+					@click="goToFavorites">
+					<UserSvg
+						@click="openModalLogin"
+					/>
+				</button>
+					<button 
+					class="icon-desktop" 
+					@click="goToFavorites">
+					<HeartComponent @click="goToFavorites"/>
+				</button>
 				<CarComponent @click="goShopping" :count="totalProducts"/>
 			</div>
 		</div>

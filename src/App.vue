@@ -43,7 +43,17 @@
 				v-if="snackbar.html"
 				v-html="snackbar.html">
 			</div>
+		
 			<v-btn
+				flat
+				class="white--text"
+				@click.native="goToOpen"
+				v-if="snackbar.isBtn"
+			>
+				Iniciar Sesión
+			</v-btn>
+			<v-btn
+				v-else
 				flat
 				class="white--text"
 				@click.native="snackbar.isVisible = false"
@@ -117,6 +127,10 @@ function getCommerceData(newData) {
 	this.logo = newData;
 }
 
+function goToOpen() {
+	this.goTo('login');
+}
+
 function data() {
 	return {
 		logo: {
@@ -162,6 +176,7 @@ export default {
 	methods: {
 		bannerTopAndHeaderHeight,
 		changeMenu,
+		goToOpen,
 	},
 	mounted,
 	watch: {
