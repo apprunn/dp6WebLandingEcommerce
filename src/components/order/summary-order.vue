@@ -83,10 +83,7 @@ function goToMakeOrder() {
 	if (this.token) {
 		this.goTo('buy-delivery');
 	} else if (window.innerWidth < 765) {
-		this.showNotification(
-			'Debe iniciar sesión para continuar',
-			'accent',
-		);
+		this.goTo('login');
 	} else {
 		this.setLocalData('route-after-login', 'buy-delivery');
 		this.$store.commit('toogleLoginModal');

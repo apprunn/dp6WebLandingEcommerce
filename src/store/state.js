@@ -7,6 +7,7 @@ export default {
 			text: '',
 			isVisible: false,
 			color: 'primary',
+			isBtn: false,
 		},
 	},
 	banners: [],
