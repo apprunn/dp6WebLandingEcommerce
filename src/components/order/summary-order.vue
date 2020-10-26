@@ -82,7 +82,7 @@ function stepTwo() {
 function goToMakeOrder() {
 	if (this.token) {
 		this.goTo('buy-delivery');
-	} else if (window.screen.width < 765) {
+	} else if (window.innerWidth < 765) {
 		this.showNotification(
 			'Debe iniciar sesión para continuar',
 			'accent',
