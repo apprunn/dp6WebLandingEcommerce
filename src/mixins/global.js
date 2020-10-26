@@ -14,6 +14,7 @@ function data() {
 			lastPage: 1,
 			rows: [],
 		},
+		isBtn: false,
 	};
 }
 
@@ -63,8 +64,8 @@ function replaceString(word, selectionStart, newWord) {
 	return newWord;
 }
 
-function showNotification(text, color = 'success', html = null) {
-	this.$store.dispatch('showSnackBar', { text, color, html });
+function showNotification(text, color = 'success', html = null, isBtn = false) {
+	this.$store.dispatch('showSnackBar', { text, color, html, isBtn });
 }
 
 function showGenericError(text = 'Ups, ocurrió algún problema') {
