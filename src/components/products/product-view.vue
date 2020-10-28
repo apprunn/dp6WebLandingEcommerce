@@ -170,6 +170,7 @@ export default {
 		width: 100%;
 
 		@media screen and (max-width: 996px) {
+			object-fit: contain;
 			max-height: 217px;
 		}
 	}
