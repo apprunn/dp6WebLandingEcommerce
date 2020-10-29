@@ -87,15 +87,14 @@
 	.account-form {
 		background-color: color(white);
 		border-radius: 7px;
+		height: fit-content;
 		max-width: 304px;
-		min-height: 67vh;
 		padding-bottom: 54px;
 		padding-top: 30px;
 		width: 100%;
 		z-index: 1;
 
 		@media (min-width: 768px) {
-			min-height: 55vh;
 			max-width: 379px;
 			padding-bottom: 55px;
 			padding-top: 50px;

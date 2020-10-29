@@ -83,7 +83,7 @@ function goToMakeOrder() {
 	if (this.token) {
 		this.goTo('buy-delivery');
 	} else if (window.innerWidth < 765) {
-		this.setLocalData('route-after-login', '/carrito-de-compras/entrega-y-facturacion');
+		this.setLocalData('route-after-login', '/carrito-de-compras');
 		this.goTo('login');
 	} else {
 		this.$store.commit('toogleLoginModal');
