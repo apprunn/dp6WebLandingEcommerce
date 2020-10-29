@@ -50,6 +50,7 @@
 		<div class="container-detail-bottom">
 			<div class="d-center">
 				<span
+					v-show="data.priceDiscount"
 					:class="[isLoading ? 'loading' : 'text-price-dis']"
 					:style="`color: ${globalColors.primary}`"
 				>
