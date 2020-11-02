@@ -127,6 +127,7 @@ export default {
 		flex-direction: column;
 		height: 411px;
 		padding: 15px 0;
+		position: relative;
 	}
 }
 
@@ -142,6 +143,7 @@ export default {
 		font-size: size(xlarge);
 		max-width: 151px;
 		padding-top: 17px;
+		white-space: break-spaces;
 	}
 }
 
