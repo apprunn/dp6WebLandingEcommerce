@@ -153,12 +153,17 @@ export default {
 		padding: 40px 0;
 		width: 100%;
 	}
+
 	.buy-layout {
 		align-items: flex-start;
 		display: flex;
 		flex-wrap: wrap;
 		height: 100%;
 		padding: 0 10px;
+
+		@media (max-width: 875px) {
+			height: auto;
+		}
 	}
 
 	.big {

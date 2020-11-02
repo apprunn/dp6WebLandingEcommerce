@@ -91,14 +91,14 @@ function created() {
 	}, 0);
 }
 
-function mounted() {
-	const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-	const regDeviceTwo = /iPad|iPhone|iPod/;
-	if (regDeviceTwo.test(userAgent)) {
-		const containerIos = document.getElementsByClassName('component-container-ios');
-		containerIos[0].style = 'position: relative; z-index: 999';
-	}
-}
+// function mounted() {
+// 	const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+// 	const regDeviceTwo = /iPad|iPhone|iPod/;
+// 	if (regDeviceTwo.test(userAgent)) {
+// 		const containerIos = document.getElementsByClassName('component-container-ios');
+// 		containerIos[0].style = 'position: relative; z-index: 999';
+// 	}
+// }
 
 /**
  * getClientIp - obtiene el ip del computador del cliente
@@ -230,7 +230,7 @@ export default {
 		onSelect,
 		openDetails,
 	},
-	mounted,
+	// mounted,
 	watch: {
 		getWaysPayments,
 	},
