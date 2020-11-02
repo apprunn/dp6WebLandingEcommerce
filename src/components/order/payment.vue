@@ -20,7 +20,8 @@
 					@click="onSelect(method)"
 				/>
 			</div>
-			<component class="component-container"
+			<component
+				class="component-container component-container-ios"
 				:ip="ip"
 				:is="paymentMethodSelectedComponent"
 				:paymentsTypes="gatewayConfiguration"
@@ -88,6 +89,15 @@ function created() {
 		}
 		return newAcum;
 	}, 0);
+}
+
+function mounted() {
+	const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+	const regDeviceTwo = /iPad|iPhone|iPod/;
+	if (regDeviceTwo.test(userAgent)) {
+		const containerIos = document.getElementsByClassName('component-container-ios');
+		containerIos[0].style = 'position: relative; z-index: 999';
+	}
 }
 
 /**
@@ -220,6 +230,7 @@ export default {
 		onSelect,
 		openDetails,
 	},
+	mounted,
 	watch: {
 		getWaysPayments,
 	},
