@@ -46,6 +46,11 @@
 		>
 			<span v-if="$v.newAddress.addressLine1.$invalid">La dirección es requerida</span>
 		</app-input>
+		<app-input
+			placeholder="Dpto. - Ofic."
+			class="mx-1 my-1 address-location addres-field"
+			v-model="newAddress.addressLine2"
+		></app-input>
 		<plus-component @click="addNewAddress" class="add-new-address-btn"/>
 	</form>	
 </template>
@@ -93,6 +98,7 @@ function validations() {
 function clearNewAddressForm() {
 	this.newAddress = {
 		addressLine1: '',
+		addressLine2: '',
 		cityId: null,
 		name: '',
 		parishId: null,
@@ -104,6 +110,7 @@ function data() {
 	return {
 		newAddress: {
 			addressLine1: '',
+			addressLine2: '',
 			cityId: null,
 			name: '',
 			parishId: null,

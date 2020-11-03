@@ -13,8 +13,9 @@
 			<responsive-table
 				class="address"
 				:columns="columns"
-				:rows="getAddress"
 				:pages="totalPage"
+				:rows="getAddress"
+				:tfoot-hidden="false"
 				@page-changed="pageChange"
 			>
 				<template slot-scope="{ row }">
@@ -23,6 +24,7 @@
 					<td class="address-city">{{getValue('city.name', row) || '--'}}</td>
 					<td class="address-province">{{getValue('parish.name', row) || '--'}}</td>
 					<td class="address-location">{{row.addressLine1}}</td>
+					<td class="address-location-2">{{row.addressLine2}}</td>
 					<td class="address-actions">
 						<div class="address-actions-wrapper">
 							<star-component class="action-btn" @click="favoriteAddress(row)" v-model="row.isFavorite"/>
@@ -109,10 +111,11 @@ function data() {
 			{ value: 'province', title: '', responsive: true },
 			{ value: 'district', title: '', responsive: true },
 			{ value: 'address', title: 'Dirección', responsive: false },
+			{ value: 'addressLine2', title: 'Dpto. - Ofic.', responsive: false },
 			{ value: 'actions', title: 'Acción', responsive: false },
 		],
 		currentPage: 1,
-		limit: 5,
+		limit: 10,
 		totalPage: 0,
 	};
 }
@@ -235,6 +238,11 @@ export default {
 		@media (max-width: 600px) {
 			font-family: font(demi);
 			text-align: left;
+		}
+
+		&-2 {
+			grid-column: 2/4;
+			grid-row: 1;
 		}
 	}
 
