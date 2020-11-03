@@ -97,12 +97,25 @@
 					:rows="details"
 				>
 					<template slot-scope="{ row }">
-						<td class="row-product">
+						<td class="row-product row-product-name">
 							<div class="product-info-container">
 								<img :src="row.productImage" alt="imagen del producto" class="product-img"/>
 								<div class="text-xs-left">
-									<h4 class="product-name">{{row.productName}}</h4>
-									<span class="product-description">{{row.description}}</span>
+									<div class="product-name-mobile">
+										<template v-if="row.productName.length > 24">
+											<v-tooltip top>
+												<h4 slot="activator" class="product-name">{{ row.productName | limitTo(23) }}</h4>
+												<span>{{ row.productName }}</span>
+											</v-tooltip>
+										</template>
+										<template v-else>
+											<h4 class="product-name">{{ row.productName }}</h4>
+										</template>
+									</div>
+									<div class="product-name-desktop">
+										<h4 class="product-name">{{ row.productName }}</h4>
+									</div>
+									<span class="product-description">{{ row.description }}</span>
 								</div>
 							</div>
 						</td>
@@ -399,11 +412,16 @@ export default {
 	.details-main-container {
 		font-family: font(regular);
 	}
+
 	.product-info-container {
 		align-items: center;
 		display: grid;
 		grid-column-gap: 20px;
-		grid-template-columns: 50px 1fr;
+		grid-template-columns: auto;
+
+		@media (min-width: 601px) {
+			grid-template-columns: 50px 1fr;
+		}
 	}
 
 	.row-product {
@@ -699,4 +717,25 @@ export default {
 		}
 	}
 
+	.product-name-desktop {
+		display: none;
+
+		@media (min-width: 601px) {
+			display: initial;
+		}
+	}
+
+	.product-name-mobile {
+		@media (min-width: 601px) {
+			display: none;
+		}
+	}
+
+	.row-product-name {
+		padding: 4px 10px !important;
+
+		@media (min-width: 601px) {
+			padding: 10px 30px !important;
+		}
+	}
 </style>
