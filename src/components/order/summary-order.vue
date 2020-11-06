@@ -6,21 +6,26 @@
 			</div>
 			<div class="summary-amounts">
 				<p class="summary-amount-container separate">
-					<span>Subtotal</span><span class="summary-amount">{{getCurrencySymbol}}. {{getTotalToBuy | currencyFormat}}</span>
+					<span>Subtotal</span>
+					<span data-cy="subtotal" class="summary-amount">{{getCurrencySymbol}}. {{getTotalToBuy | currencyFormat}}</span>
 				</p>
 				<p class="summary-amount-container separate">
-					<span>Descuento</span><span class="summary-amount">{{getCurrencySymbol}}. {{discount | currencyFormat}}</span>
+					<span>Descuento</span>
+					<span data-cy="discount" class="summary-amount">{{getCurrencySymbol}}. {{discount | currencyFormat}}</span>
 				</p>
 				<p class="summary-amount-container separate">
-					<span>Envío</span><span class="summary-amount">{{getCurrencySymbol}}. {{getShippingCost | currencyFormat}}</span>
+					<span>Envío</span>
+					<span data-cy="shipping" class="summary-amount">{{getCurrencySymbol}}. {{getShippingCost | currencyFormat}}</span>
 				</p>
 				<p class="summary-amount-container total">
-					<span>Total</span><span class="summary-total">{{getCurrencySymbol}}. {{total | currencyFormat}}</span>
+					<span>Total</span>
+					<span data-cy="total" class="summary-total">{{getCurrencySymbol}}. {{total | currencyFormat}}</span>
 				</p>
 			</div>
 		</section>
 		<section class="btns-summary-order">
 			<app-button
+				data-cy="make-order"
 				v-if="stepOne"
 				action='Hacer pedido'
 				class="btn-order"
@@ -28,6 +33,7 @@
 				@click="goToMakeOrder"
 			/>
 			<app-button
+				data-cy="go-pay"
 				v-else-if="stepTwo"
 				action="Pasar a caja"
 				class="btn-order"
@@ -36,6 +42,7 @@
 				@click="makeOrder(false)"
 			/>
 			<app-button
+				data-cy="pay"
 				v-else-if="stepThree"
 				action="Pagar"
 				class="btn-order"
@@ -75,8 +82,10 @@ function stepTwo() {
 function goToMakeOrder() {
 	if (this.token) {
 		this.goTo('buy-delivery');
+	} else if (window.innerWidth < 765) {
+		this.setLocalData('route-after-login', '/carrito-de-compras');
+		this.goTo('login');
 	} else {
-		this.setLocalData('route-after-login', 'buy-delivery');
 		this.$store.commit('toogleLoginModal');
 	}
 }

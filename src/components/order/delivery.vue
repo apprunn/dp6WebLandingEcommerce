@@ -4,7 +4,7 @@
 			<img :src="logo.section" alt="logo del método de pago">
 			<h2 class="payment-section-title">¿COMÓ QUIERES RECIBIR TU PRODUCTO?</h2>
 		</div>
-		<section class="delivery">
+		<section class="delivery" data-cy="delivery-buttons">
 			<app-button-order
 				v-if="atHouse"
 				button-title="Envío a Domicilio"

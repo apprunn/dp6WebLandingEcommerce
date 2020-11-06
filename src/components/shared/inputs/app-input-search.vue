@@ -6,6 +6,7 @@
 	]">
 		<SearchIcon v-if="!indeterminate"/>
 		<input
+			data-cy="inputSearcher"
 			v-bind="$attrs"
 			placeholder="¿Qué buscas?"
 			:class="[

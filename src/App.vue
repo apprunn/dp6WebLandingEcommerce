@@ -43,7 +43,17 @@
 				v-if="snackbar.html"
 				v-html="snackbar.html">
 			</div>
+		
 			<v-btn
+				flat
+				class="white--text"
+				@click.native="goToOpen"
+				v-if="snackbar.isBtn"
+			>
+				Iniciar Sesión
+			</v-btn>
+			<v-btn
+				v-else
 				flat
 				class="white--text"
 				@click.native="snackbar.isVisible = false"
@@ -117,6 +127,10 @@ function getCommerceData(newData) {
 	this.logo = newData;
 }
 
+function goToOpen() {
+	this.goTo('login');
+}
+
 function data() {
 	return {
 		logo: {
@@ -162,6 +176,7 @@ export default {
 	methods: {
 		bannerTopAndHeaderHeight,
 		changeMenu,
+		goToOpen,
 	},
 	mounted,
 	watch: {
@@ -257,11 +272,12 @@ input.app-input::-webkit-input-placeholder {
 	height: 46.8px !important;
 
 	.v-input__control {
+		height: inherit;
 		
 		.v-input__slot {
 			border: 1px solid color(border) !important;
 			border-radius: 7px !important;
-			height: -webkit-fill-available !important;
+			height: inherit;
 			min-height: inherit !important;
 
 			.v-select__selections {
@@ -900,5 +916,80 @@ input.app-input::-webkit-input-placeholder {
 
 .payment-sections {
 	font-family: font(medium);
+}
+
+.wpwl-brand-DINERS {
+	height: 35px;
+	width: 85px;
+}
+
+.wpwl-label-cardNumber {
+	visibility: hidden;
+	text-decoration: none;
+}
+
+.wpwl-label-cardNumber::after {
+	content: "Numero de la Tarjeta:";
+	position: relative;
+    right: 80px;
+	visibility: visible;
+}
+
+.wpwl-label-expiry {
+	visibility: hidden;
+	text-decoration: none;	
+}
+
+.wpwl-label-expiry::after {
+	content: "Expira:";
+	position: relative;
+    right: 66px;
+	visibility: visible;
+}
+
+.wpwl-label-cardHolder {
+	visibility: hidden;
+	text-decoration: none;
+}
+
+.wpwl-label-cardHolder::before {
+	display: none;
+}
+
+
+.wpwl-label-cardHolder::after {
+	content: "Nom. (Igual que en la tarjeta)";
+	position: relative;
+    right: 66px;
+	visibility: visible;
+}
+
+.wpwl-label-brand {
+	visibility: hidden;
+	text-decoration: none;
+	width: 133px;
+}
+
+.wpwl-label-brand::after {
+	content: "Tipo de Tarjeta:";
+	position: relative;
+    right: 36px;
+	top: 5px;
+	visibility: visible;
+}
+
+.wpwl-label-brand, .wpwl-wrapper-brand, .wpwl-wrapper-registration-registrationId, .wpwl-wrapper-registration-brand, .wpwl-wrapper-registration-number, .wpwl-wrapper-registration-expiry {
+	padding: 0 !important;
+}
+
+.wpwl-form {
+	max-width: 32em;
+}
+
+.wpwl-control-brand {
+	width: 127px !important;
+}
+.application--wrap {
+	display: block;
 }
 </style>

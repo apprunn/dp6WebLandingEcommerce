@@ -23,8 +23,9 @@
 						<span>Fecha:</span>
 						{{row.dateTransaction | formatDate}}
 					</td>
-					<td class="date">
+					<td class="expirate">
 						<span v-if="row.dateExpiration">
+							Expira:
 							{{row.dateExpiration | formatDate}}
 						</span>
 						<span v-else>--</span>
@@ -175,6 +176,14 @@ export default {
 	}
 
 	.order-status {
+		grid-column: 4;
+		grid-row: 1;
+
+		@media (max-width: 600px) {
+			font-size: size(small);
+		}
+	}
+	.expirate {
 		grid-column: 3;
 		grid-row: 1;
 
@@ -194,7 +203,7 @@ export default {
 	}
 
 	.actions {
-		grid-column: 3;
+		grid-column: 4;
 		grid-row: 2;
 
 		@media (max-width: 600px) {

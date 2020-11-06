@@ -8,7 +8,22 @@
 				:key="product.id"
 			>
 				<div class="grid-product">
-					<span class="product-name">{{product.description}}</span>
+					<div
+						:class="[
+							'product-info',
+							{ 'show-description': currentProduct === product.id },
+						]"
+					>
+						<h3 class="product-name">
+							{{product.productName}}
+							<button
+								type="button"
+								class="more-info-btn"
+								@click="toogleDescription(product)"
+							>{{moreInfoContent(product)}}</button>
+						</h3>
+						<span class="product-description">{{product.description}}</span>
+					</div>
 					<span class="product-quantity">Cantidad: {{product.quantity}} / {{product.unitName}}</span>
 					<h3
 						:style="`color: ${globalColors.secondary};`"
@@ -22,6 +37,25 @@
 <script>
 import { mapGetters } from 'vuex';
 
+function toogleDescription({ id }) {
+	if (this.currentProduct) {
+		this.currentProduct = 0;
+	} else {
+		this.currentProduct = id;
+	}
+}
+
+function moreInfoContent({ id }) {
+	return this.currentProduct === id ? 'ver menos' : 'ver más';
+}
+
+function data() {
+	return {
+		currentProduct: 0,
+		showAndHide: false,
+	};
+}
+
 export default {
 	name: 'products-buyed',
 	computed: {
@@ -29,6 +63,11 @@ export default {
 			'getCurrencySymbol',
 			'getOrderDetails',
 		]),
+	},
+	data,
+	methods: {
+		moreInfoContent,
+		toogleDescription,
 	},
 };
 </script>
@@ -71,12 +110,22 @@ export default {
 		}
 	}
 
-	.product-name {
-		color: color(dark);
+	.product-info {
+		max-height: 2rem;
+		transition-duration: 200ms;
+		overflow: hidden;
 
 		@media (max-width: 600px) {
 			grid-column: 1/4;
 			grid-row: 1;
+		}
+		.product-name {
+			color: color(dark);
+	
+		}
+		.product-description {
+			font-family: font(regular);
+			font-size: size(small);
 		}
 	}
 
@@ -98,5 +147,14 @@ export default {
 
 	.list:first-child {
 		border-top: none;
+	}
+
+	.show-description {
+		max-height: 9rem;
+	}
+
+	.more-info-btn {
+		font-family: font(regular);
+		font-size: size(xsmall);
 	}
 </style>

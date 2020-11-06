@@ -1,8 +1,8 @@
 <template>
 	<div class="quantity-button">
-		<button class="item" @click="$emit('click', 'less')">-</button>
-		<div class="item item-number" :style="`color:${globalColors.title}`">{{number}}</div>
-		<button class="item" @click="$emit('click', 'more')">+</button>
+		<button data-cy="less-quantity" class="item" @click="$emit('click', 'less')">-</button>
+		<div data-cy="quantity-to-buy" class="item item-number" :style="`color:${globalColors.title}`">{{number}}</div>
+		<button data-cy="more-quantity" class="item" @click="$emit('click', 'more')">+</button>
 	</div>
 </template>
 <script>

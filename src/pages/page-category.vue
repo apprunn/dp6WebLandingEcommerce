@@ -65,6 +65,7 @@
 						</v-layout>
 				</section>
 			</div>
+			<p v-if="loadingProducts" class="not-products">Cargando productos...</p>
 			<section 
 				class="section-product-card"
 				v-if="listProducts.length"
@@ -76,7 +77,7 @@
 					:product="product"
 					/>
 			</section>
-			<p v-else class="not-products">No se encontrarón productos</p>
+			<p v-if="!loadingProducts && listProducts.length === 0" class="not-products">No se encontraron productos</p>
 			<section class="section-pagination-category container-end">
 				<p class="total-products" v-if="listProducts.length">{{listProducts.length}} productos</p>
 				<div class="text-xs-center" v-show="totalPages" v-if="lastPage > 1">
@@ -112,14 +113,10 @@ import helper from '@/shared/helper';
 const { setNewProperty } = lib;
 
 function mounted() {
+	this.loadingProducts = true;
 	this.selectCategory();
 	this.changeOpen();
-	this.loadAttributes();
 	window.addEventListener('resize', this.changeOpen);
-}
-
-function loadAttributes() {
-	this.$store.dispatch('LOAD_ATTRIBUTES', this);
 }
 
 async function loadProduct() {
@@ -142,6 +139,7 @@ async function loadProduct() {
 			),
 		);
 		this.lastPage = Number(headers['x-last-page']);
+		this.loadingProducts = false;
 	} catch (error) {
 		this.showGenericError();
 	}
@@ -252,6 +250,7 @@ function data() {
 		categoryId: null,
 		categorySelected: {},
 		currentSelect: {},
+		loadingProducts: false,
 		lastPage: 0,
 		listSubCategories: [],
 		listProducts: [],
@@ -282,6 +281,9 @@ export default {
 		...mapState({
 			attributes: state => state.catAttributes,
 		}),
+		...mapGetters('loading', [
+			'isLoading',
+		]),
 	},
 	methods: {
 		changeCategory,
@@ -289,7 +291,6 @@ export default {
 		closeOpen,
 		getCurrentcategory,
 		linkCategories,
-		loadAttributes,
 		loadProduct,
 		openCategory,
 		selectCategory,

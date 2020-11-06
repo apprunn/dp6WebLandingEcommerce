@@ -178,13 +178,12 @@ const asyncActions = {
 			commit('UPDATE_FILTERS', filters);
 		}
 	},
-	LOAD_FAVORITES_PRODUCTS: async ({ commit }, { context, params }) => {
+	LOAD_FAVORITES_PRODUCTS: async ({ commit, getters }, { context, params }) => {
 		const url = 'products/favorites?favorite=true';
 		const { data: favorites, headers } = await context.$httpProducts.get(url, { params });
-		const newFavorites = favorites.map(
-			lib.setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),
-		);
-		commit('SET_FAVORITES', newFavorites);
+		const commercePriceListId = getters.getCommerceData.settings.salPriceListId;
+		const setUpDateInProducts = updateProducts(favorites, commercePriceListId);
+		commit('SET_FAVORITES', setUpDateInProducts);
 		return Number(headers['x-last-page']);
 	},
 	LOAD_BANNERS: async ({ commit, getters }, context) => {
@@ -203,7 +202,7 @@ const asyncActions = {
 		const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
 		link.type = 'image/x-icon';
 		link.rel = 'shortcut icon';
-		link.href = commerceData.urlDomain;
+		link.href = commerceData.favicon.value;
 		link.sizes = '16x16';
 		document.getElementsByTagName('head')[0].appendChild(link);
 		const pageTitle = document.getElementsByTagName('title');
@@ -230,6 +229,11 @@ const asyncActions = {
 		const { data: response, headers } = await context.$httpSales.get(url, { params });
 		commit('SET_ONLINE_TRANSACTIONS', response);
 		return Number(headers['x-last-page']);
+	},
+	getCurrentTransactions: async (_, { context, gatewayCode }) => {
+		const url = `payment-gateway/${gatewayCode}/list-order`;
+		const { data: response } = await context.$httpSales.get(url);
+		return response;
 	},
 };
 

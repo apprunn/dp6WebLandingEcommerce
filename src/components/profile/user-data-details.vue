@@ -53,6 +53,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getDeeper, isEmpty, equality, find } from '@/shared/lib';
+import userDataValidation from '@/mixins/userDataValidation';
 
 function getGenderName(id) {
 	const { title } = find(equality('id', id), this.genders) || {};
@@ -103,6 +104,7 @@ export default {
 		]),
 		labelCountry,
 	},
+	mixins: [userDataValidation],
 	methods: {
 		departmentsHandler,
 		districtsHandler,

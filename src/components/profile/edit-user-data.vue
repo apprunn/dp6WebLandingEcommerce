@@ -2,9 +2,18 @@
 	<div>
 		<div class="form-container">
 			<form class="user-form">
-				<app-input class="user-name" placeholder="Nombre" v-model="userData.name"/>
-				<app-input class="user-lastname" placeholder="Apellido" v-model="userData.lastname"/>
-				<app-input class="user-dni" :placeholder="labelCountry" v-model="userData.dni"/>
+				<app-input class="user-name" placeholder="Nombre" v-model="userData.name">
+					<span v-if="!$v.userData.name.required">El nombre es requerido</span>
+					<span v-if="!$v.userData.name.onlyCharacters">Solo se permiten letras</span>
+				</app-input>
+				<app-input class="user-lastname" placeholder="Apellido" v-model="userData.lastname">
+					<span v-if="!$v.userData.lastname.required">El Apellido es requerido</span>
+					<span v-if="!$v.userData.lastname.onlyCharacters">Solo se permiten letras</span>
+				</app-input>
+				<app-input class="user-dni" :placeholder="labelCountry" v-model="userData.dni">
+					<span v-if="!$v.userData.dni.required">{{labelError}}.</span>
+					<span v-if="!$v.userData.dni.onlyNumbers">Solo se permiten números</span>
+				</app-input>
 				<app-input class="user-ruc" placeholder="RUC" v-model="userData.ruc"/>
 				<app-select
 					class="user-gender"
@@ -14,7 +23,13 @@
 					:items="genders"
 					v-model="userData.gender"
 				/>
-				<app-input class="user-phone" placeholder="Teléfono" v-model="userData.phone"/>
+				<app-input
+					class="user-phone"
+					placeholder="Teléfono"
+					v-model="userData.phone"
+				>
+					<span v-if="!$v.userData.phone.onlyNumbers">Solo se permiten números</span>
+				</app-input>
 				<app-select
 					class="user-department"
 					:placeholder="countryLabels.department"
@@ -47,6 +62,7 @@
 				<app-button
 					action="Guardar"
 					class="action-button save"
+					:disabled="$v.$invalid"
 					:background="globalColors.primary"
 					@click="saveUserInfo"
 				/>
@@ -68,9 +84,11 @@ import appSelect from '@/components/shared/inputs/app-select';
 import cameraComponent from '@/components/shared/icons/camera-component';
 import editComponent from '@/components/shared/icons/edit-component';
 import lib, { getDeeper } from '@/shared/lib';
+import { required } from 'vuelidate/lib/validators';
+import userDataValidation from '@/mixins/userDataValidation';
 
 function created() {
-	this.userData = this.user || this.userData;
+	this.userData = { ...this.user } || this.userData;
 }
 
 function goBack() {
@@ -127,6 +145,29 @@ function labelCountry() {
 	return getDeeper('company.country.countryCode')(this.user) === 'ECU' ? 'Cédula' : 'DNI';
 }
 
+function validations() {
+	return {
+		userData: {
+			dni: {
+				required,
+				onlyNumbers: this.onlyNumbers,
+			},
+			lastname: {
+				required,
+				onlyCharacters: this.onlyCharacters,
+			},
+			name: {
+				required,
+				onlyCharacters: this.onlyCharacters,
+			},
+			phone: {
+				required,
+				onlyNumbers: this.onlyNumbers,
+			},
+		},
+	};
+}
+
 function data() {
 	return {
 		userData: {
@@ -173,6 +214,8 @@ export default {
 		selectDepartment,
 		selectProvince,
 	},
+	mixins: [userDataValidation],
+	validations,
 };
 </script>
 <style lang="scss" scoped>

@@ -13,7 +13,11 @@
 				<img :src="data.webImage" :alt="data.title" class="mr-3" width="25">
 				<span>{{data.title}}</span>
 			</button>
-			<button @click="$emit('open-category', data.id)" v-if="data.detail.length">
+			<button
+				v-if="data.detail.length"
+				@click="$emit('open-category', data.id)"
+				class="simple-svg-container"
+			>
 				<simple-svg
 					filepath="/static/img/arrow-left.svg"
 					:fill="globalColors.primary"
@@ -37,7 +41,11 @@
 					return-object
 				>
 					<template slot="label" slot-scope="{ item }">
-						<button :style="idSelect(item.id) ? `color: ${globalColors.secondary}` : `color: ${globalColors.base}`">{{item.title}}</button>
+						<button
+							:style="`color:${idSelect(item.id) ? globalColors.secondary : globalColors.title}`"
+						>
+							{{item.title}}
+						</button>
 					</template>
 				</v-treeview>
 			</div>
@@ -129,5 +137,9 @@ export default {
 				transform: rotateZ(450deg);
 			}
 		}
+	}
+
+	.simple-svg-container {
+		width: 1rem;
 	}
 </style>

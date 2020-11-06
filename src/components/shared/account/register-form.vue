@@ -6,20 +6,34 @@
 					placeholder="Nombre"
 					:value="model.name"
 					@input="$emit('set-model', { model: 'name', value: $event })"
-				></app-input>
-				<span class="error-message" v-if="validatons.model.name.$invalid">
-					El nombre es requerido
-				</span>
+				>
+					<span class="error-message" v-if="!validatons.model.name.required">
+						El nombre es requerido
+					</span>
+					<span
+						class="error-message"
+						v-if="!validatons.model.name.onlyCharacters && validatons.model.name.required"
+					>
+						Solo se permiten letras
+					</span>
+				</app-input>
 			</v-flex>
 			<v-flex xs7 pb-4 text-xs-left>
 				<app-input
 					placeholder="Apellidos"
 					:value="model.lastname"
 					@input="$emit('set-model', { model: 'lastname', value: $event })"
-				></app-input>
-				<span class="error-message" v-if="validatons.model.lastname.$invalid">
-					El apellido es requerido
-				</span>
+				>
+					<span class="error-message" v-if="!validatons.model.lastname.required">
+						El apellido es requerido
+					</span>
+					<span
+						class="error-message"
+						v-if="!validatons.model.lastname.onlyCharacters && validatons.model.lastname.required"
+					>
+						Solo se permiten letras
+					</span>
+				</app-input>
 			</v-flex>
 			<v-flex xs12 pb-4 text-xs-left>
 				<app-input
@@ -80,54 +94,54 @@
 </template>
 
 <script>
-	import appInput from '@/components/shared/inputs/app-input';
-	import { mapState } from 'vuex';
+import appInput from '@/components/shared/inputs/app-input';
+import { mapState } from 'vuex';
 
-	/* eslint-disable arrow-body-style */
+/* eslint-disable arrow-body-style */
 
-	export default {
-		name: 'register-form',
-		components: {
-			appInput,
+export default {
+	name: 'register-form',
+	components: {
+		appInput,
+	},
+	computed: {
+		...mapState('login', {
+			noFacebookPass: state => !state.externalId,
+		}),
+	},
+	props: {
+		checkColor: String,
+		emailDisabled: {
+			default: false,
+			type: Boolean,
 		},
-		computed: {
-			...mapState('login', {
-				noFacebookPass: state => !state.externalId,
-			}),
+		flagTyc: {
+			default: null,
+			type: Boolean,
 		},
-		props: {
-			checkColor: String,
-			emailDisabled: {
-				default: false,
-				type: Boolean,
-			},
-			flagTyc: {
-				default: null,
-				type: Boolean,
-			},
-			model: {
-				default: () => {},
-				type: Object,
-			},
-			password: [Number, String],
-			passwordVerified: [Number, String],
-			validatons: {
-				default: () => {
-					return {
-						flagTyc: {},
-						model: {
-							email: {},
-							lastname: {},
-							name: {},
-							password: {},
-						},
-						passwordVerified: {},
-					};
-				},
-				type: Object,
-			},
+		model: {
+			default: () => {},
+			type: Object,
 		},
-	};
+		password: [Number, String],
+		passwordVerified: [Number, String],
+		validatons: {
+			default: () => {
+				return {
+					flagTyc: {},
+					model: {
+						email: {},
+						lastname: {},
+						name: {},
+						password: {},
+					},
+					passwordVerified: {},
+				};
+			},
+			type: Object,
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>

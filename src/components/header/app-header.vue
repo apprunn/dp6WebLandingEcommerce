@@ -39,15 +39,32 @@
 						@click-image="toogleSearch"/>
 				</div>
 			</div>
-			<div 
+			<div
+				data-cy="loginBtn"
 				class="flex container-button-image align-center"
 				:class="{'opacity' : isSearchMobile}">
-				<button-image 
-					:data="search" 
+				<button
 					class="icon-mobile"
-					@click-image="toogleSearch"/>
-				<UserSvg @click="openModalLogin" class="icon-desktop"/>
-				<HeartComponent @click="goToFavorites"/>
+					@click="toogleSearch"
+				>
+					<SearchIcon v-if="!indeterminate"/>
+				</button>
+				<UserSvg
+					class="icon-desktop"
+					@click="openModalLogin"
+				/>
+				<button 
+					class="icon-mobile" 
+					@click="goToFavorites">
+					<UserSvg
+						@click="openModalLogin"
+					/>
+				</button>
+					<button 
+					class="icon-desktop" 
+					@click="goToFavorites">
+					<HeartComponent @click="goToFavorites"/>
+				</button>
 				<CarComponent @click="goShopping" :count="totalProducts"/>
 			</div>
 		</div>
@@ -67,6 +84,7 @@ import modalLogin from '@/components/header/modal-login';
 import CarComponent from '@/components/shared/icons/car-component';
 import HeartComponent from '@/components/shared/icons/heart-component';
 import UserSvg from '@/components/shared/icons/user-svg';
+import SearchIcon from '@/components/shared/icons/search-component';
 
 function mounted() {
 	const ls = this.getLocalStorage(`${process.env.STORAGE_USER_KEY}::product-select`);
@@ -189,6 +207,7 @@ export default {
 		CarComponent,
 		HeartComponent,
 		modalLogin,
+		SearchIcon,
 		UserSvg,
 	},
 	computed: {
@@ -319,6 +338,7 @@ export default {
 		height: 100%;
 		margin: 0 1rem;
 		@media (max-width: 768px) {
+			flex-basis: 64%;
 			transform: translateX(0);
 			transition: transform 220ms ease-out;
 		}
@@ -327,7 +347,7 @@ export default {
 	.hide-logo {
 
 		@media (max-width: 768px) {
-			transform: translateX(-100%);
+			transform: translateX(-200%);
 		}
 	}
 
@@ -366,7 +386,12 @@ export default {
 		display: none;
 
 		@media (max-width: 764px) {
-			display: block;
+			align-items: center;
+			display: flex;
+			justify-content: center;
+			height: 25px;
+			margin-top: 5px;
+			width: auto;
 		}
 	}
 

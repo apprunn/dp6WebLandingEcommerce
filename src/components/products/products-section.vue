@@ -1,6 +1,10 @@
 <template>
 	<div>
-		<section  v-if="products.length > 0" class="product-section transition-product-section">
+		<section
+			v-if="products.length > 0"
+			class="product-section transition-product-section"
+			data-cy="productsSection"
+		>
 			<product-card
 				class="product-card"
 				v-for="product in products"

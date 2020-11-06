@@ -8,7 +8,9 @@
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
-    "lint": "eslint --ext .js,.vue src"
+    "lint": "eslint --ext .js,.vue src",
+    "test": "cypress run",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -44,6 +46,7 @@
     "copy-webpack-plugin": "4.6.0",
     "css-loader": "^0.28.11",
     "cssnano": "^3.10.0",
+    "cypress": "^4.12.1",
     "dotenv": "4.0.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^11.1.3",

@@ -12,9 +12,12 @@
 				<template slot-scope="{ row }">
 					<td class="row-date">{{row.createdAt}}</td>
 					<td class="row-order">
-						<span class="row-order-label">Nro. Orden: </span>{{row.number}}</td>
+						<span class="row-order-label">Nro. Orden: </span>{{row.number}}
+					</td>
+					<td class="row-date">{{getReferenceId(row)}}</td>
 					<td class="row-totalOrder">
-						<span class="row-totalOrder-label">Total: </span>{{row.total}}</td>
+						<span class="row-totalOrder-label">Total: </span>{{row.total}}
+					</td>
 					<td class="row-orderStatus">{{getValue('orderState.name', row)}}</td>
 					<td class="row-wayDelivery">{{row.pickUpName}}</td>
 					<td class="row-wayPayment">{{getValue('wayPayment.name', row)}}</td>
@@ -98,9 +101,8 @@ function statusChanged(id) {
 
 async function deleteOrder() {
 	const { id } = this.currentOrder;
-	const newOrdersArray = this.getOrders.filter(o => o.id !== id);
-	this.$store.commit('SET_ORDERS', newOrdersArray);
 	await this.CANCEL_ORDER({ context: this, id });
+	this.loadOrders();
 	this.closeModal();
 }
 
@@ -114,11 +116,17 @@ function closeModal() {
 	this.currentOrder = {};
 }
 
+function getReferenceId(order) {
+	const referenceId = getDeeper('additionalInformation.paymentGateway.referenceId')(order);
+	return referenceId || '--';
+}
+
 function data() {
 	return {
 		columns: [
 			{ value: 'date', title: 'Fecha de orden', responsive: true },
 			{ value: '', title: 'Número de orden', responsive: false },
+			{ value: '', title: 'Referencia', responsive: false },
 			{ value: '', title: 'Total Orden' },
 			{ value: 'orderStatus', title: 'Estado', responsive: true },
 			{ value: 'wayDelivery', title: 'Modo de entrega', responsive: false },
@@ -161,6 +169,7 @@ export default {
 		changePage,
 		closeModal,
 		deleteOrder,
+		getReferenceId,
 		getValue,
 		loadOrders,
 		openDeletingOrderModal,

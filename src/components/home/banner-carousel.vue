@@ -10,12 +10,18 @@
 					v-for="banner in banners" 
 					:key="banner.id"
 				>
-					<div :style="getBackground(banner)" class="img-carousel">
+					<div  class="img-carousel">
 						<a 
-							v-if="banner.webLink"
 							:href="banner.webLink"
 							target="_blank"
-							class="banner-link">
+							class="banner-link"
+						>
+							<div class="cover-all-container">
+								<picture>
+									<source :srcset="banner.webImage" media="(min-width: 600px)" class="cover-all-container">
+									<img :src="banner.mobileImage" class="cover-all-container">
+								</picture>
+							</div>
 						</a>
 					</div>
 				</swiper-slide>
@@ -86,9 +92,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 	.img-carousel {
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: cover;
+		// background-position: center;
+		// background-repeat: no-repeat;
+		// background-size: cover;
 		height: 616px;
     	width: 100%;
 		
@@ -153,6 +159,9 @@ export default {
 	.banner-height {
 		height: 616px;
 	}
+	.cover-all-container {
+		height: 100%;
+		object-fit: cover;
+		width: 100%;
+	}
 </style>
-
-

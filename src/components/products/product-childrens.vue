@@ -12,10 +12,11 @@
 			isLoading ? 'loading features' : 'product-childrens',
 		]">
 	  	<h3
+		  	v-if="feature.values && feature.values.length > 0"
 		  	:class="[ 'mx-2', { 'loading': isLoading } ]"
 			:style="`color:${globalColors.title}`"
 		>{{feature.name}}:</h3>
-		<div class="wrap-buttons">
+		<div class="wrap-buttons" v-if="feature.values && feature.values.length > 0">
 			<span
 				v-for="v in feature.values"
 				:key="v.value"

@@ -268,10 +268,22 @@ function clickQuantity(value) {
 	} else {
 		num = value === 'more' ? num += 1 : num -= 1;
 	}
-	this.$set(newProductdetail, 'quantity', num);
-	this.product = { ...newProductdetail };
-	this.productInstance.updateQuantity(num);
-	this.productDetails = { ...this.productInstance.getProductDetails() };
+	const validQuantity = this.checkValidQuantity(num);
+	if (validQuantity) {
+		this.$set(newProductdetail, 'quantity', num);
+		this.product = { ...newProductdetail };
+		this.productInstance.updateQuantity(num);
+		this.productDetails = { ...this.productInstance.getProductDetails() };
+	} else {
+		this.showNotification(`Cantidad: ${num} no disponible`, 'primary');
+	}
+}
+
+function checkValidQuantity(quantity) {
+	if (this.productInstance.isService) {
+		return true;
+	}
+	return this.productInstance.stock >= quantity;
 }
 
 async function openDialog() {
@@ -371,6 +383,7 @@ export default {
 			$loading: 'SET_LOADING_FLAG',
 		}),
 		assignProduct,
+		checkValidQuantity,
 		clearFeatures,
 		clickQuantity,
 		closeConfirmModal,

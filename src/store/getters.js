@@ -49,6 +49,11 @@ function getCurrencySymbol(state) {
 	return getDeeper('symbol')(currencyDefault) || '';
 }
 
+function getCurrencyISO(state) {
+	const { currencyDefault } = state;
+	return getDeeper('code')(currencyDefault) || '';
+}
+
 function getCategories(state) {
 	return state.categories;
 }
@@ -189,6 +194,7 @@ const methods = {
 	getFilters,
 	valoratingProductId,
 	windowLoaded,
+	getCurrencyISO,
 };
 
 export default methods;

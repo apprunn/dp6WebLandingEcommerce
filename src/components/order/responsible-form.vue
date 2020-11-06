@@ -1,6 +1,7 @@
 <template>
 	<form class="responsible">
 		<app-input
+			data-cy="responsible-name"
 			placeholder="Persona responsable de recibir"
 			class="mx-2 my-1 responsible-field"
 			v-model="responsible.name"
@@ -10,6 +11,7 @@
 			<span v-if="!$v.responsible.name.onlyCharacters">Solo se permiten letras</span>
 		</app-input>
 		<app-input
+			data-cy="responsible-lastname"
 			placeholder="Apellido responsable de recibir"
 			class="mx-2 my-1 responsible-field"
 			v-model="responsible.lastname"
@@ -19,6 +21,7 @@
 			<span v-if="!$v.responsible.lastname.onlyCharacters">Solo se permiten letras</span>
 		</app-input>
 		<app-input
+			data-cy="responsible-dni"
 			:placeholder="labelCountry"
 			class="mx-2 my-1 responsible-field"
 			v-model="responsible.dni"
@@ -28,6 +31,7 @@
 			<span v-if="!$v.responsible.dni.onlyNumbers">Solo se permiten números</span>
 		</app-input>
 		<app-input
+			data-cy="responsible-phone"
 			placeholder="Celular"
 			class="mx-2 my-1 responsible-field"
 			v-model="responsible.phone"
@@ -37,6 +41,7 @@
 			<span v-if="!$v.responsible.phone.onlyNumbers">Solo se permiten números</span>
 		</app-input>
 		<app-input
+			data-cy="responsible-email"
 			placeholder="Correo"
 			type="email"
 			class="mx-2 my-1 responsible-field"
@@ -53,6 +58,7 @@ import { required, email } from 'vuelidate/lib/validators';
 import { mapGetters } from 'vuex';
 import { getDeeper } from '@/shared/lib';
 import appInput from '@/components/shared/inputs/app-input';
+import userDataValidation from '@/mixins/userDataValidation';
 
 function mounted() {
 	if (getDeeper('responsiblePickUp')(this.getOrderInfo)) {
@@ -87,38 +93,25 @@ function labelError() {
 	return getDeeper('company.country.countryCode')(this.user) === 'ECU' ? 'El número de documento es requerido' : 'El DNI es requerido';
 }
 
-function onlyNumbers(val) {
-	return Number(val) > 0;
-}
-
-function onlyCharacters(char) {
-	if (char !== null) {
-		const trimedChar = char.split(' ').join('');
-		const noChar = /[^a-zA-ZáéíóúáéíóúÁÉÍÓÚ]/i.test(trimedChar);
-		return !noChar;
-	}
-	return false;
-}
-
 function validations() {
 	const validating = {
 		responsible: {
 			dni: {
 				required,
-				onlyNumbers,
+				onlyNumbers: this.onlyNumbers,
 			},
 			email: { email, required },
 			lastname: {
 				required,
-				onlyCharacters,
+				onlyCharacters: this.onlyCharacters,
 			},
 			name: {
 				required,
-				onlyCharacters,
+				onlyCharacters: this.onlyCharacters,
 			},
 			phone: {
 				required,
-				onlyNumbers,
+				onlyNumbers: this.onlyNumbers,
 			},
 		},
 	};
@@ -155,8 +148,8 @@ export default {
 	methods: {
 		setUserData,
 		validateForm,
-		onlyCharacters,
 	},
+	mixins: [userDataValidation],
 	mounted,
 	validations,
 	watch: {

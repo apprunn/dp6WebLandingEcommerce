@@ -7,7 +7,8 @@
 			:src="data.webImage"
 			:class="[
 				'img-menu',
-				{ 'active': data.select },
+				{ 'applying-filters': iconCategory },
+				{ 'active': data.select && iconCategory },
 			]"
 		>
 		<span 
@@ -17,8 +18,16 @@
 	</div>
 </template>
 <script>
+
+function iconCategory() {
+	const noIcon = process.env.NO_ICON_CATEGORY;
+	return !(noIcon && noIcon === 'true');
+}
 export default {
 	name: 'item-menu',
+	computed: {
+		iconCategory,
+	},
 	props: {
 		data: {
 			type: Object,
@@ -44,8 +53,11 @@ export default {
 		}
 	}
 
-	.img-menu {
+	.applying-filters {
 		filter: brightness(0) invert(0.28);
+	}
+
+	.img-menu {
 		height: 27px;
 		width: 27px;
 

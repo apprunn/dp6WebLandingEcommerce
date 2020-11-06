@@ -1,6 +1,6 @@
 <template>
 	<table>
-		<thead>
+		<thead class="table-head">
 			<tr class="grid-system">
 				<th
 					v-for="column in columns"
@@ -21,14 +21,16 @@
 				<slot v-bind:row="row"></slot>
 			</tr>
 		</tbody>
-		<tfoot v-if="pages > 1">
+		<tfoot :class="{ 'tfoot-hidden': tfootHidden }" v-if="pages > 1">
 			<tr>
 				<td class="pagination-container" :colspan="calculateColSpan">
 					<button
 						class="sub-page"
 						type="button"
 						@click="changePage(currentPage - 1)"
-					><</button>
+					>
+						<
+					</button>
 					<button
 						type="button"
 						:class="[
@@ -159,6 +161,10 @@ export default {
 			default: false,
 			type: Boolean,
 		},
+		tfootHidden: {
+			default: true,
+			type: Boolean,
+		},
 	},
 	watch: {
 		page,
@@ -177,6 +183,9 @@ export default {
 
 	thead {
 		background-color: color(border);
+		position: sticky;
+		top: 75px;
+		z-index: 7;
 
 		th {
 			font-family: font(bold);
@@ -220,8 +229,7 @@ export default {
 		text-align: center;
 	}
 
-	tfoot {
-
+	tfoot.tfoot-hidden {
 		@media (max-width: 600px) {
 			display: none;
 		}

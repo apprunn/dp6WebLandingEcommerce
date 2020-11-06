@@ -19,6 +19,10 @@ const salesInstance = axios.create({
 	baseURL: process.env.SALES_URL,
 });
 
+const updateTransactionIntance = axios.create({
+	baseURL: process.env.SALES_URL,
+});
+
 const salesPublicInstance = axios.create({
 	baseURL: process.env.SALES_URL,
 	headers: {
@@ -48,4 +52,5 @@ export default function (Vue) {
 	Vue.prototype.$httpUpLoad = uploadInstance;
 	Vue.prototype.$httpDocumentNumberValidating = documentNumberValidating;
 	Vue.prototype.$http2 = http2Instance;
+	Vue.prototype.$httpUpdateTransaction = updateTransactionIntance;
 }

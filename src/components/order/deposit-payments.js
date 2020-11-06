@@ -10,7 +10,7 @@ function yapeUrlImage() {
 }
 
 function yapeProps() {
-	const urlImage = this.yapeUrlImage;
+	const urlImage = this.yapeUrlImage || '';
 	const amount = (this.getTotalToBuy - this.discount) + this.getShippingCost;
 	return { urlImage, amount };
 }

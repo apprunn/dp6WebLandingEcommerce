@@ -1,10 +1,11 @@
 import { mapGetters } from 'vuex';
 import { LINK, BUTTON } from '@/shared/enums/paymentStrategy';
 import {
-	leadgods, visa, datafast, pagoplux, pagopluxLink, xchange, paymentez, placetopay,
+	leadgods, niubiz, datafast, pagoplux, pagopluxLink,
+	xchange, paymentez, placetopay, alignet, mercadopago, mercadopagoMp,
 } from '@/shared/enums/gatewayCodes';
 
-const VisaPeru = () => import('@/components/order/paymentsMethods/visa-payment');
+const Niubiz = () => import('@/components/order/paymentsMethods/niubiz');
 const Paymentez = () => import('@/components/order/paymentsMethods/paymentez');
 const DataFast = () => import('@/components/order/paymentsMethods/data-fast');
 const PagoPlux = () => import('@/components/order/paymentsMethods/pago-plux');
@@ -12,31 +13,14 @@ const PagoPluxLink = () => import('@/components/order/paymentsMethods/pago-plux-
 const Xchange = () => import('@/components/order/paymentsMethods/xchange');
 const LeadGods = () => import('@/components/order/paymentsMethods/leadgods');
 const PlaceToPay = () => import('@/components/order/paymentsMethods/place-to-pay');
-
-function created() {
-	this.getClientIp();
-}
-
-/**
- * getClientIp - obtiene el ip del computador del cliente
-*/
-async function getClientIp() {
-	try {
-		({ data: this.clientIp } = await this.$http.get('https://api.ipify.org'));
-	} catch (err) {
-		this.showNotification(
-			'Ocurrio un error con la ip de origen',
-			'error',
-		);
-	}
-}
+const Alignet = () => import('@/components/order/paymentsMethods/alignet');
+const MercadoPago = () => import('@/components/order/paymentsMethods/mercadopago');
 
 /**
  * @param {object-function} h render function
  * @param {array} gateway - arreglo con enlaces de pago configurados para el comercio
 */
-function paymentLinkCreator(h, gateway) {
-	const that = this;
+function paymentLinkCreator(h, gateway, ipAddress) {
 	if (this.getOrderInfo) {
 		const orderId = this.getOrderInfo.id;
 		const redirectUri = 'perfil/detalle-orden';
@@ -55,7 +39,7 @@ function paymentLinkCreator(h, gateway) {
 						categoryCode,
 						code,
 						imgLink: urlImage,
-						ipAddress: that.clientIp || '',
+						ipAddress,
 						orderId,
 						uri: redirectUri,
 					},
@@ -83,23 +67,27 @@ function paymentLinkCreator(h, gateway) {
  * @param {object-function} h render function
  * @param {array} gateway - arreglo con botones de pago configurados para el comercio
  */
-const paymentButtonCreator = (h, gateway) => {
+const paymentButtonCreator = (h, gateway, ipAddress) => {
 	const buttonOptions = {
-		[visa]: VisaPeru,
+		[niubiz]: Niubiz,
 		[paymentez]: Paymentez,
 		[datafast]: DataFast,
 		[pagoplux]: PagoPlux,
 		[xchange]: Xchange,
+		[alignet]: Alignet,
+		[mercadopago]: MercadoPago,
+		[mercadopagoMp]: MercadoPago,
 	};
 	let selectedButtons = [];
 	gateway.forEach((t) => {
-		const { code, urlImage } = t;
+		const { code, urlImage, code: gatewayCode } = t;
 		const paymentBtns = h(
 			buttonOptions[code],
 			{
 				props: {
+					code: gatewayCode,
 					img: urlImage,
-					ipAddress: this.clientIp,
+					ipAddress,
 				},
 			},
 		);
@@ -114,7 +102,7 @@ const paymentButtonCreator = (h, gateway) => {
 		},
 		selectedButtons,
 	);
-	const btnTitle = h('h3', { class: ['payment-sections'], style: { marginBottom: '1rem' } }, 'Paga ahora');
+	const btnTitle = h('h3', { style: { marginBottom: '1rem' } }, 'Paga ahora');
 	return h(
 		'div',
 		{
@@ -127,31 +115,21 @@ const paymentButtonCreator = (h, gateway) => {
 	);
 };
 
-function ipAddress() {
-	return this.clientIp;
-}
-
-function data() {
-	return {
-		clientIp: null,
-	};
-}
-
 export default {
 	computed: {
 		...mapGetters([
 			'getOrderInfo',
 		]),
-		ipAddress,
 	},
-	created,
-	data,
 	methods: {
-		getClientIp,
 		paymentButtonCreator,
 		paymentLinkCreator,
 	},
 	props: {
+		ip: {
+			required: true,
+			type: String,
+		},
 		paymentsTypes: {
 			required: true,
 			type: Array,
@@ -164,12 +142,12 @@ export default {
 		const paymentsMethos = [];
 		const link = this.paymentsTypes.find(p => p.code === LINK);
 		if (link) {
-			const l = this.paymentLinkCreator(h, link.gateway);
+			const l = this.paymentLinkCreator(h, link.gateway, this.ip);
 			paymentsMethos.push(l);
 		}
 		const button = this.paymentsTypes.find(p => p.code === BUTTON);
 		if (button) {
-			const b = this.paymentButtonCreator(h, button.gateway);
+			const b = this.paymentButtonCreator(h, button.gateway, this.ip);
 			paymentsMethos.push(b);
 		}
 		return h('div', paymentsMethos);

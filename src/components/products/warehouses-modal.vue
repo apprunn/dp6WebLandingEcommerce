@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<v-dialog 
+		<v-dialog
+			data-cy="warehouseModal"
 			v-model="dialogModal"  
 			max-width="766px"
 			@input="closeModal"

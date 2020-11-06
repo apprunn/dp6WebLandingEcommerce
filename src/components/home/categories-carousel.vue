@@ -7,6 +7,7 @@
 			/>
 		</div>
 		<div
+			data-cy="categories-home"
 			:class="[
 				indeterminate ? 'loading loading-categories' : 'categories-carousel-slider',
 			]"
@@ -25,8 +26,13 @@
 						>
 							<div 
 								:style="`background-image: url(${category.urlImage})`"
-								class="category-image">
-								<img 
+								:class="[
+									'category-image',
+									{ 'category-opacity': !applyBgOpacity },
+								]"
+							>
+								<img
+									v-if="!applyBgOpacity"
 									:src="category.webImage" 
 									:alt="category.name"
 									class="image">	
@@ -75,6 +81,11 @@ function goToCategory({ slug, id }) {
 	this.goTo('category', { params: { slug: slug || id, id } });
 }
 
+function applyBgOpacity() {
+	const opacity = process.env.NO_ICON_CATEGORY;
+	return opacity && opacity === 'true';
+}
+
 function data() {
 	return {
 		swiperOption: {
@@ -119,6 +130,7 @@ export default {
 		...mapGetters([
 			'indeterminate',
 		]),
+		applyBgOpacity,
 	},
 	methods: {
 		hoverCategory,
@@ -148,26 +160,27 @@ export default {
 		}
 	}
 
+	.category-opacity::before {
+		background-image: linear-gradient(to bottom, rgba(60, 60, 60, 0.89), rgba(60, 60, 60, 0.50));
+		border-radius: 9px;
+		bottom: 0;
+		content: '';
+		left: 0;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
 	.category-image {
 		align-items: center;
 		background-size: cover;
+		background-image: linear-gradient(to bottom, rgba(60, 60, 60, 0.89), rgba(60, 60, 60, 0.50));
 		border-radius: 9px;
 		display: flex;
 		height: 100%;
 		justify-content: center;
 		position: relative;
 		width: 100%;
-
-		&::before {
-			background-image: linear-gradient(to bottom, rgba(60, 60, 60, 0.89), rgba(60, 60, 60, 0.50));
-			border-radius: 9px;
-			bottom: 0;
-			content: '';
-			left: 0;
-			position: absolute;
-			right: 0;
-			top: 0;
-		}
 
 		.image {
 			filter: brightness(0) invert(1);

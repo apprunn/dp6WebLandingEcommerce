@@ -1,5 +1,6 @@
 <template>
 	<button
+		data-cy="add-to-cart"
 		type="button"
 		v-on="$listeners"
 		:style="activeStyle"

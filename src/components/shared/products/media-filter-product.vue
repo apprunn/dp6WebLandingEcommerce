@@ -4,7 +4,7 @@
 		:style="`border-right: ${borderRight ? `1px solid ${borderRight}` : null}`"
 		@click="$emit('click', filter)"
 	>
-			<div>
+			<div v-if="filter.urlImage">
 				<img :src="filter.urlImage" :alt="filter.title">
 			</div>
 			<div class="filter-title">

@@ -1,6 +1,7 @@
 <template>
 	<div class="address-container mx-2">
 		<app-select
+			data-cy="address-selection"
 			class="address-select"
 			v-bind="$attrs"
 			:items="options"

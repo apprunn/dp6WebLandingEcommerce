@@ -2,7 +2,8 @@
 	<div class="modal-login">
 		<div>
 			<span class="label-modal">¿Tienes una cuenta?</span>
-			<app-button 
+			<app-button
+				data-cy="appButtonLogin"
 				thin
 				class="mb-3"
 				action="Iniciar Sesión"
@@ -25,6 +26,8 @@
 import appButton from '@/components/shared/buttons/app-button';
 
 function goToLink(name) {
+	const { fullPath } = this.$route;
+	this.setLocalData('route-after-login', fullPath);
 	this.goTo(name);
 	this.$emit('close-modal');
 }

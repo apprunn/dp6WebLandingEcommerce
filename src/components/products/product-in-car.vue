@@ -14,6 +14,9 @@
 				>Producto</p>
 				<p
 					:style="`color: ${globalColors.title};`"
+					class="product-name">{{product.name}}</p>
+				<p
+					:style="`color: ${globalColors.subtitle};`"
 					class="product-content">{{product.description}}</p>
 				<p class="product-brand">{{product.brand}}</p>
 			</div>
@@ -237,14 +240,25 @@ export default {
 		margin-bottom: 0;
 	}
 
+	.product-name {
+		color: color(dark);
+		font-family: font(bold );
+		font-size: size(large);
+		font-weight: bold;
+		margin-bottom: 0px;
+		padding-right: 2rem;
+		text-align: left;
+		width: inherit;
+	}
 	.product-content {
 		color: color(dark);
 		font-family: font(regular);
-		font-size: size(large);
+		font-size: size(medium);
 		font-weight: bold;
-		margin-bottom: 5px;
+		margin-bottom: 0px;
 		padding-right: 2rem;
 		text-align: left;
+		text-transform: lowercase;
 		width: inherit;
 	}
 

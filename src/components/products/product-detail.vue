@@ -14,8 +14,13 @@
 					:class="[isLoading ? 'loading' : 'product-detail-name']"
 				>{{ data.name }}</p>
 				<p
+					v-if="data.description"
+					:class="[isLoading ? 'loading' : 'product-detail-description']"
+				>{{ data.description }}</p>
+				<p
+					v-if="data.getBrandName"
 					:class="[isLoading ? 'loading' : 'product-detail-brand']"
-				>{{ data.getBrandName || '--' }}</p>
+				>{{ data.getBrandName }}</p>
 			</div>
 			<div class="d-center container-code-rating">
 				<span
@@ -45,6 +50,7 @@
 		<div class="container-detail-bottom">
 			<div class="d-center">
 				<span
+					v-show="data.priceDiscount"
 					:class="[isLoading ? 'loading' : 'text-price-dis']"
 					:style="`color: ${globalColors.primary}`"
 				>
@@ -72,10 +78,12 @@
 			@clear="$emit('clear')"/>
 		<product-buy
 			:open-warehouse="openWarehouse"
+			:number="data.quantity"
+			:product="data"
 			@click="clickQuantity"
 			@add-to-car="addToCar"
 			@open-dialog="$emit('open-dialog')"
-			:number="data.quantity"/>
+		/>
 	</div>
 </template>
 <script>
@@ -109,8 +117,12 @@ function noStock() {
 	return !(stock && positiveStock);
 }
 
+function isService() {
+	return getDeeper('typeInfo.code')(this.data) === 'servicios';
+}
+
 function addToCar() {
-	if (!this.noStock) {
+	if (!this.noStock || this.isService) {
 		this.$store.dispatch('addProductToBuyCar', this.data);
 		this.$emit('open-confirm-modal');
 	} else {
@@ -141,6 +153,7 @@ export default {
 		...mapGetters('loading', [
 			'isLoading',
 		]),
+		isService,
 		noStock,
 	},
 	methods: {
@@ -171,8 +184,12 @@ export default {
 		font-family: font(demi);
 		font-size: size(xlarge);
 		margin: 20px 0 5px 0;
+		text-transform: uppercase;
 	}
 
+	.product-detail-description {
+		text-transform: lowercase;
+	}
 	.product-detail-code {
 		color: color(base);
 		flex: 1 1 30%;

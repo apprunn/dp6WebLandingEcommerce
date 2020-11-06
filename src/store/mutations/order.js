@@ -30,11 +30,13 @@ const orderMutation = {
 			const productId = p.productId || p.id;
 			return productId === id && p.unitSelected === unitSelected;
 		});
-		const { stock } = products[index];
-		if (quantity > stock) {
+		const { stock, typeInfo } = products[index];
+		products[index].quantity = quantity > stock ? stock : quantity;
+		if (typeInfo.code === 'servicios') {
+			products[index].quantity = quantity;
+		} else if (quantity > stock) {
 			context.showNotification(`Cantidad: ${quantity} no disponible`, 'primary');
 		}
-		products[index].quantity = quantity > stock ? stock : quantity;
 		Vue.set(state.order, 'products', [...products]);
 		localStorage.setItem('ecommerce::product-select', JSON.stringify([...products]));
 		orderMutation.UPDATE_ORDER_DETAILS_IF_EXIST(state, products);

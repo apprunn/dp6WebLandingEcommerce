@@ -20,7 +20,9 @@
 					<span class="label">Fecha de la Orden: </span><span class="order-info-data">{{getValue('createdAt', getOrderInfo)}}</span>
 				</div>
 				<div>
-					<span class="label">Estado pago: </span><span class="order-info-data">{{getValue('paymentStateName', getOrderInfo)}}</span>
+					<span class="label">Estado pago: </span><span class="order-info-data">
+						{{paymentState}}
+					</span>
 				</div>
 			</div>
 			<div class="order-payment" v-if="!rating">
@@ -30,15 +32,15 @@
 							<div class="link-container" v-if="pendingPayment">
 								<span>Paga ahora en {{gatewayName}}: </span>
 								<div class="link-wrapper">
-									<a
-										:href="paymentLink"
+									<button
+										type="button"
 										class="order-info-data"
 										:style="`color:${globalColors.primary}`"
-										target="_blank"
 										ref="link"
-									>{{paymentLink}}</a>
+										@click="openConfirmModal('goToLink')"
+									>{{paymentLink}}</button>
 								</div>
-								<button class="copy-button" type="button" @click="copyLink">copiar</button>
+								<button class="copy-button" type="button" @click="openConfirmModal('copy')">copiar</button>
 							</div>
 							<div>
 								ID de transacción: <span class="label">{{transactionPaymentLinkId}}</span>
@@ -95,12 +97,25 @@
 					:rows="details"
 				>
 					<template slot-scope="{ row }">
-						<td class="row-product">
+						<td class="row-product row-product-name">
 							<div class="product-info-container">
 								<img :src="row.productImage" alt="imagen del producto" class="product-img"/>
 								<div class="text-xs-left">
-									<h4 class="product-name">{{row.productName}}</h4>
-									<span class="product-description">{{row.description}}</span>
+									<div class="product-name-mobile">
+										<template v-if="row.productName.length > 24">
+											<v-tooltip top>
+												<h4 slot="activator" class="product-name">{{ row.productName | limitTo(23) }}</h4>
+												<span>{{ row.productName }}</span>
+											</v-tooltip>
+										</template>
+										<template v-else>
+											<h4 class="product-name">{{ row.productName }}</h4>
+										</template>
+									</div>
+									<div class="product-name-desktop">
+										<h4 class="product-name">{{ row.productName }}</h4>
+									</div>
+									<span class="product-description">{{ row.description }}</span>
 								</div>
 							</div>
 						</td>
@@ -119,6 +134,26 @@
 				</responsive-table>
 			</section>
 		</transition-group>
+		<modal-component v-model="showConfirm">
+			<div class="slot-modal-wrapper">
+				<section class="modal-content">
+					<h3>Este enlace tiene una transacción de pago en proceso con referencia: {{transactionPaymentLinkId}}</h3>
+					<h4>¿Desea continuar?</h4>
+				</section>
+				<div class="modal-btns">
+					<button
+						type="button"
+						:style="`background-color:${globalColors.secondary}`"
+						@click="closeConfirmModal"
+					>Cancelar</button>
+					<button
+						type="button"
+						:style="`background-color:${globalColors.primary}`"
+						@click="accept"
+					>Aceptar</button>
+				</div>
+			</div>
+		</modal-component>
 	</div>
 </template>
 <script>
@@ -133,9 +168,32 @@ import productRating from '@/components/profile/product-rating';
 import helper from '@/shared/helper';
 import { deposit } from '@/shared/enums/wayPayment';
 import * as gatewayCodes from '@/shared/enums/gatewayCodes';
+import modalComponent from '@/components/shared/modal/modal-component';
 
 async function created() {
 	({ id: this.orderId } = this.$route.params);
+	const { gatewayCode } = this.$route.query;
+	if (gatewayCode === gatewayCodes.placetopay) {
+		this.updatePaymentStatus();
+	} else {
+		this.loadData();
+	}
+}
+
+async function updatePaymentStatus() {
+	const url = 'payment-gateway/status';
+	const params = { orderId: this.orderId };
+	const headers = {
+		Authorization: `Bearer ${this.$store.state.token}`,
+	};
+	try {
+		await this.$httpUpdateTransaction.get(url, { params, headers });
+	} finally {
+		this.loadData();
+	}
+}
+
+async function loadData() {
 	await this.$store.dispatch('LOAD_ORDER_DETAILS', { context: this, orderId: this.orderId });
 	if (!isEmpty(this.getOrderInfo)) {
 		const { additionalInfo, sessionGateway, additionalInformation } = this.getOrderInfo;
@@ -178,7 +236,13 @@ function gatewayName() {
 }
 
 function pendingPayment() {
-	return this.getValue('paymentStateName', this.getOrderInfo) === 'Pendiente';
+	return this.paymentState === 'Pendiente' || this.paymentState === 'pendiente';
+}
+
+function paymentState() {
+	const paymentStateGateway = this.getValue('paymentStateGateway', this.getOrderInfo);
+	const paymentStateName = this.getValue('paymentStateName', this.getOrderInfo);
+	return paymentStateGateway || paymentStateName;
 }
 
 function updateColumns() {
@@ -228,6 +292,7 @@ function copyLink() {
 	const linkContainer = this.$refs.link;
 	helper.copyFn(linkContainer);
 	this.showNotification('Enlace copiado al porta papeles', 'primary');
+	this.closeConfirmModal();
 }
 
 function isPaymentez() {
@@ -255,6 +320,27 @@ function refund() {
 	};
 }
 
+function openConfirmModal(flag) {
+	this.action = flag;
+	this.showConfirm = true;
+}
+
+function closeConfirmModal() {
+	this.showConfirm = false;
+}
+
+function accept() {
+	const opt = {
+		copy: this.copyLink,
+		goToLink: this.goToLink,
+	};
+	opt[this.action].call();
+}
+
+function goToLink() {
+	window.open(this.paymentLink);
+}
+
 function data() {
 	return {
 		additionalInformation: null,
@@ -269,6 +355,7 @@ function data() {
 		orderId: 0,
 		rating: false,
 		sessionGateway: null,
+		showConfirm: false,
 	};
 }
 
@@ -279,6 +366,7 @@ export default {
 		formOpinion,
 		leftComponent,
 		loadPayment,
+		modalComponent,
 		productRating,
 		responsiveTable,
 	},
@@ -296,6 +384,7 @@ export default {
 		isPaymentLink,
 		orderStatusIsGiven,
 		paymentezData,
+		paymentState,
 		paymentLink,
 		pendingPayment,
 		refund,
@@ -305,11 +394,17 @@ export default {
 	data,
 	methods: {
 		addPaymentInfo,
+		accept,
 		copyLink,
+		closeConfirmModal,
 		getValue,
 		goTo,
+		goToLink,
+		loadData,
 		onRating,
+		openConfirmModal,
 		updateColumns,
+		updatePaymentStatus,
 	},
 };
 </script>
@@ -317,11 +412,16 @@ export default {
 	.details-main-container {
 		font-family: font(regular);
 	}
+
 	.product-info-container {
 		align-items: center;
 		display: grid;
 		grid-column-gap: 20px;
-		grid-template-columns: 50px 1fr;
+		grid-template-columns: auto;
+
+		@media (min-width: 601px) {
+			grid-template-columns: 50px 1fr;
+		}
 	}
 
 	.row-product {
@@ -591,6 +691,51 @@ export default {
 			display: flex;
 			justify-content: space-evenly;
 			opacity: 0.8;
+		}
+	}
+	.slot-modal-wrapper {
+		background-color: white;
+		border-radius: 0.75rem;
+		padding: 2rem;
+
+		.modal-content,
+		.modal-btns {
+			align-items: center;
+			display: flex;
+			justify-content: center;
+			margin: 1rem 0;
+		}
+		.modal-content {
+			flex-direction: column;
+		}
+		.modal-btns {
+			button {
+				color: white;
+				margin: 0 1rem;
+				padding: 0.5rem 1rem;
+			}
+		}
+	}
+
+	.product-name-desktop {
+		display: none;
+
+		@media (min-width: 601px) {
+			display: initial;
+		}
+	}
+
+	.product-name-mobile {
+		@media (min-width: 601px) {
+			display: none;
+		}
+	}
+
+	.row-product-name {
+		padding: 4px 10px !important;
+
+		@media (min-width: 601px) {
+			padding: 10px 30px !important;
 		}
 	}
 </style>

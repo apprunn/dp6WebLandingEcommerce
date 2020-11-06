@@ -9,7 +9,7 @@
 		<p v-if="isHtml"
 		v-html="content"></p>
 		<p v-else>{{content}}</p>
-		<div class="img-help-container">
+		<div class="img-help-container" v-if="image">
 			<img :src="image" alt="imagen" class="img-help">
 		</div>
 	</div>
