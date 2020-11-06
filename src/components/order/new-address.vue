@@ -53,7 +53,7 @@
 			class="mx-2 my-1 number-field field"
 			v-model="newAddress.number"
 		>
-			<span v-if="$v.newAddress.number.$invalid">El número es requerido</span>
+			<span v-if="$v.newAddress.number.$invalid">campo requerido</span>
 		</app-input>
 		<app-input
 			placeholder="Referencia"
@@ -206,7 +206,7 @@ export default {
 
 	.name-field,
 	.department-field {
-		flex: 1 1 48%;
+		flex: 1 1 40%;
 	}
 	
 	.district-field,
