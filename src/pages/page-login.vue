@@ -57,7 +57,7 @@
 				const filterSelectedId = this.getFilters[0] ? this.getFilters[0].id : null;
 				this.$store.dispatch('UPDATE_PRODUCT_FILTER', filterSelectedId);
 				this.$store.dispatch('LOAD_PRODUCTS', { context: this });
-				this.goTo('page-home');
+				this.redirect();
 			}
 		} catch (err) {
 			if (err.status === 401) {

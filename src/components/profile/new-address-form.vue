@@ -46,6 +46,20 @@
 		>
 			<span v-if="$v.newAddress.addressLine1.$invalid">La dirección es requerida</span>
 		</app-input>
+		<app-input
+			placeholder="Dpto. - Ofic."
+			class="mx-1 my-1 address-number addres-field"
+			v-model="newAddress.number"
+		>
+			<span v-if="$v.newAddress.number.$invalid">campo requerido</span>
+		</app-input>
+		<app-input
+			placeholder="Referencia"
+			class="mx-1 my-1 address-reference addres-field"
+			v-model="newAddress.reference"
+		>
+			<span v-if="$v.newAddress.reference.$invalid">campo requerido</span>
+		</app-input>
 		<plus-component @click="addNewAddress" class="add-new-address-btn"/>
 	</form>	
 </template>
@@ -84,8 +98,10 @@ function validations() {
 			addressLine1: { required },
 			cityId: { required },
 			name: { required },
+			number: { required },
 			parishId: { required },
 			provinceId: { required },
+			reference: { required },
 		},
 	};
 }
@@ -93,10 +109,13 @@ function validations() {
 function clearNewAddressForm() {
 	this.newAddress = {
 		addressLine1: '',
+		addressLine2: '',
 		cityId: null,
 		name: '',
+		number: null,
 		parishId: null,
 		provinceId: null,
+		reference: null,
 	};
 }
 
@@ -104,10 +123,13 @@ function data() {
 	return {
 		newAddress: {
 			addressLine1: '',
+			addressLine2: '',
 			cityId: null,
 			name: '',
+			number: null,
 			parishId: null,
 			provinceId: null,
+			reference: null,
 		},
 	};
 }
@@ -165,6 +187,14 @@ export default {
 		flex: 1 1 56%;
 	}
 
+	.address-number {
+		flex: 1 1 30%;
+	}
+
+	.address-reference {
+		flex: 1 1 60%;
+	}
+
 	.add-new-address-btn {
 		flex: 1 1 5%;
 		margin-top: 7px;
@@ -180,11 +210,11 @@ export default {
 		}
 
 		.address-district {
-			order: 3;
+			order: 4;
 		}
 
 		.address-province {
-			order: 4;
+			order: 3;
 		}
 
 		.address-location,

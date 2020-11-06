@@ -40,7 +40,8 @@ class MercadoPago {
 				this.getIssuers.call(this, this.paymentMethod.id);
 			} else {
 				document.getElementById('issuerInput').classList.add('hidden');
-				MercadoPago.getInstallments.call(this, [paymentMethod.id, document.getElementById('amount').value]);
+				MercadoPago.getInstallments.call(this,
+					[paymentMethod.id, document.getElementById('amount').value]);
 			}
 		} else {
 			alert(`payment method info error: ${response}`);

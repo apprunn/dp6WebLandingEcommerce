@@ -330,4 +330,8 @@ export default {
 		grid-template-columns: 0.45fr 0.45fr 0.6fr;
 	}
 }
+
+.hidden {
+	display: none !important;
+}
 </style>

@@ -71,7 +71,7 @@
 		padding: 19.9px 30px 15.4px;
 
 		@media (min-width: 768px) {
-			padding: 16px 36px 30px;
+			padding: 16px 36px 15px;
 		}
 
 		.flex {
