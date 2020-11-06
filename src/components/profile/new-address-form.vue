@@ -210,11 +210,11 @@ export default {
 		}
 
 		.address-district {
-			order: 3;
+			order: 4;
 		}
 
 		.address-province {
-			order: 4;
+			order: 3;
 		}
 
 		.address-location,
