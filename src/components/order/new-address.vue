@@ -1,11 +1,11 @@
 <template>
 	<form class="new-address-form" @input="setCustomerAddress">
 		<app-input
-			placeholder="Alias"
+			placeholder="Tipo de Vivienda (mi casa, mi oficina, etc)"
 			class="mx-2 my-1 name-field field"
 			v-model="newAddress.name"
 		>
-			<span v-if="$v.newAddress.name.$invalid">El alias es requerido</span>
+			<span v-if="$v.newAddress.name.$invalid">Este campo es requerido</span>
 		</app-input>
 		<app-select
 			item-text="name"
@@ -49,11 +49,11 @@
 			<span v-if="$v.newAddress.addressLine1.$invalid">La dirección es requerida</span>
 		</app-input>
 		<app-input
-			placeholder="Nro"
+			placeholder="Nro Dpto/Oficina"
 			class="mx-2 my-1 number-field field"
 			v-model="newAddress.number"
 		>
-			<span v-if="$v.newAddress.number.$invalid">campo requerido</span>
+			<span v-if="$v.newAddress.number.$invalid">Este campo requerido</span>
 		</app-input>
 		<app-input
 			placeholder="Referencia"
@@ -207,6 +207,10 @@ export default {
 	.name-field,
 	.department-field {
 		flex: 1 1 40%;
+
+		@media (max-width: 925px) {
+			flex: 1 1 100%;
+		}
 	}
 	
 	.district-field,
@@ -215,11 +219,15 @@ export default {
 	}
 
 	.address-field {
-		flex: 1 1 75%;
+		flex: 1 1 60%;
 	}
 
 	.number-field {
 		flex: 1 1 20%;
+
+		@media (max-width: 925px) {
+			flex: 1 1 100%;
+		}
 	}
 
 	.reference-field {
