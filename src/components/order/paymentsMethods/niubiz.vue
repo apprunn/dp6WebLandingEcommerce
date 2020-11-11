@@ -1,6 +1,20 @@
 <template>
 	<div>
-		<button type="button" @click="checkout" class="niubiz-btn" style="padding:1rem">
+		<div class="conditions">
+			<v-checkbox
+				class="check"
+				v-model="checkbox"
+			>
+			</v-checkbox>
+			<span>Acepto los <button type="button" @click="conditionsAndTermsLink">términos y condiciones</button></span>
+		</div>
+		<button
+			type="button"
+			class="niubiz-btn"
+			style="padding:1rem"
+			:disabled="!checkbox"
+			@click="checkout"
+		>
 			<img :src="img" alt="logo_Niubiz">
 		</button>
 		<form
@@ -11,7 +25,7 @@
 	</div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 function createScript() {
 	if (process.browser && this.merchantId) {
@@ -74,11 +88,30 @@ function redirect() {
 	return `${this.apiSales}/payment-gateway/validation?${orderId}&${successUri}&${errorUri}`;
 }
 
+function conditionsAndTermsLink() {
+	const findIt = this.help.find((h) => {
+		const name = this.normalize(h.name);
+		return name === 'terminos y condiciones';
+	});
+	const [item] = findIt.section;
+	const link = findIt;
+	const newItem = item.name.split(' ').join('-');
+	const newLink = link.name.split(' ').join('-');
+	this.$router.push(`/ayuda/apartado/${newItem}/seccion/${newLink}`);
+}
+
+function normalize(str) {
+	return str.toLowerCase().normalize('NFD')
+		.replace(/([aeio])\u0301|(u)[\u0301\u0308]/gi, '$1$2')
+		.normalize();
+}
+
 function data() {
 	return {
 		amount: 0,
 		apiSales: process.env.SALES_URL,
 		companyLogo: process.env.COMPANY_LOGO,
+		checkbox: false,
 		currency: 'PEN',
 		dev: 'https://static-content-qas.vnforapps.com/v2/js/checkout.js?qa=true',
 		expirationTime: null,
@@ -101,13 +134,18 @@ export default {
 			'token',
 			'getCommerceData',
 		]),
+		...mapState({
+			help: state => state.commerce.helperCenter,
+		}),
 		orderTotal,
 		redirect,
 	},
 	data,
 	methods: {
 		checkout,
+		conditionsAndTermsLink,
 		createScript,
+		normalize,
 	},
 	props: {
 		img: {
@@ -150,6 +188,21 @@ export default {
 		&[disabled] {
 			opacity: 0.3;
 			cursor: not-allowed;
+		}
+	}
+
+	.conditions {
+		align-items: center;
+		display: flex;
+
+		.check {
+			margin-right: 1rem;
+			max-width: 2rem;
+		}
+
+		button {
+			color: color(terciary);
+			text-decoration: underline;
 		}
 	}
 </style>
