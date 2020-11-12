@@ -88,9 +88,7 @@ class ProductDetails {
 		const selectedUnitId = this.unitId;
 		if (baseUnitId === selectedUnitId) {
 			const imgsWithoutUnitId = isEmpty(allImgs) ? [] : allImgs.filter(img => !img.unitId);
-			const productUrlImage = this.getProductDetails().urlImage || this.pictureNotFound;
-			const mainImg = { urlImage: productUrlImage, select: false };
-			return [].concat(mainImg, imgsWithoutUnitId);
+			return imgsWithoutUnitId;
 		}
 		return [{ urlImage: this.pictureNotFound, select: false }];
 	}
