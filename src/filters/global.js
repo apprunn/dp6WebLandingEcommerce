@@ -31,7 +31,7 @@ function exactDate(date, formatter = 'DD-MM-YYYY', splitBy = 'T') {
 function currencyFormat(val) {
 	const newVal = val ? Number(val.toFixed(2)) : 0;
 	if (!newVal) {
-		return '--';
+		return '0.00';
 	}
 	const [integer, decimals] = String(newVal).split('.');
 	if (!decimals) {

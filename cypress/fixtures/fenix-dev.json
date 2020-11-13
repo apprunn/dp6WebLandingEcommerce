@@ -3,10 +3,11 @@
 	"password": 123456,
 	"token": "Bearer $2y$10$tNJmuXZKGwi0l38A.SxUVemGrFJiyLunyqkOqOTE7LHsrSwMEmEBi",
 	"products": {
-		"lowStock": 1090512,
+		"lowStock": 1095997,
 		"service": 1095225,
 		"noStock": 1092910,
-		"greatStock": 1093035
+		"greatStock": 1093035,
+		"labial": 1095993
 	},
 	"responsible": {
 		"name": "José Juan",
@@ -14,5 +15,16 @@
 		"dni": "16006652",
 		"phone": "970121334",
 		"email": "root30@mail.com"
+	},
+	"shippingCost": {
+		"provinceName": "COTOPAXI",
+		"provinceId": 189,
+		"provinceCost": "$. 11.20",
+		"cityName": "LATACUNGA",
+		"cityId": 251,
+		"cityCost": "$. 0.10",
+		"parishCost": "$. 2.00",
+		"parishId": 691,
+		"parishName": "JUAN MONTALVO (SAN SEBASTIÁN)"
 	}
 }
