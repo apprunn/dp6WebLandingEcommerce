@@ -1,14 +1,4 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
+
 // -- This is a parent command --
 // Cypress.Commands.add("login", (email, password) => { ... })
 //
@@ -28,7 +18,7 @@ Cypress.Commands.add('login', () => {
 		cy.get('[data-cy="loginBtn"]')
 			.should('exist')
 			.find('.icon-desktop')
-			.click();
+			.click({ multiple: true });
 		cy.get('[data-cy="appButtonLogin"]')
 			.should('exist')
 			.click({ force: true });
@@ -45,12 +35,18 @@ Cypress.Commands.add('login', () => {
 });
 
 Cypress.Commands.add('SelectRandomProduct', () => {
+	let productsLength = 0;
 	cy.visit('localhost:9010');
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
 		.its('length')
 		.should('be.gt', 0);
-	const random = Math.floor(Math.random() * 10);
+	cy.get('[data-cy="productsSection"]')
+		.should('exist')
+		.children().then(($prod) => {
+			productsLength = $prod.length;
+		})
+	const random = Math.floor(Math.random() * productsLength);
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
 		.children()
@@ -73,7 +69,7 @@ Cypress.Commands.add('ProductsDetailPage', (productId) => {
 
 Cypress.Commands.add('AddProductWithStock', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.lowStock); // gelatina
+		cy.ProductsDetailPage(products.service);
 		cy.get('@ProductDetail').its('body').then(() => {
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
@@ -174,4 +170,34 @@ Cypress.Commands.add('SelectFirstCategory', () => {
 		.children()
 		.eq(0)
 		.click();
+})
+
+Cypress.Commands.add('SelectProvinceInNewDirection', (shippingCost) => {
+	cy.get('[data-cy="province"]')
+		.should('exist')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains(shippingCost.provinceName)
+		.click();
+})
+
+Cypress.Commands.add('SelectCityInNewDirection', (shippingCost) => {
+	cy.get('[data-cy="city"]')
+		.should('exist')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains(shippingCost.cityName)
+		.click();
+})
+
+Cypress.Commands.add('SelectParishInNewDirection', (shippingCost) => {
+	cy.get('[data-cy="city"]')
+		.should('exist')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains(shippingCost.parishName)
+		.click({ force: true });
 })

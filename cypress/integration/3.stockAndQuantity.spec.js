@@ -23,7 +23,7 @@ context('VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 	 */
 	it('Verificar que la cantidad no supere Stock en producto terminado', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
-			cy.ProductsDetailPage(products.lowStock); // SHAMPOO HYS  ALIVIO INSTANTANEO 400ML
+			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
 				const { stockWarehouse } = res;
 				expect(stockWarehouse).to.be.gt(0);

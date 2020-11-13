@@ -10,8 +10,9 @@
 		<app-select
 			item-text="name"
 			item-value="id"
-			:placeholder="countryLabels.department"
 			class="mx-2 my-1 department-field field"
+			data-cy="province"
+			:placeholder="countryLabels.department"
 			:items="departments"
 			v-model="newAddress.department"
 			@input="selectDepartment"
@@ -21,8 +22,9 @@
 		<app-select
 			item-text="name"
 			item-value="id"
-			:placeholder="countryLabels.province"
 			class="mx-2 my-1 province-field field"
+			data-cy="city"
+			:placeholder="countryLabels.province"
 			:items="provinces"
 			:disabled="!newAddress.department"
 			@input="selectProvince"
@@ -33,11 +35,13 @@
 		<app-select
 			item-text="name"
 			item-value="id"
-			:placeholder="countryLabels.district"
 			class="mx-2 my-1 district-field field"
+			data-cy="parish"
+			:placeholder="countryLabels.district"
 			:items="districts"
 			:disabled="!newAddress.department"
 			v-model="newAddress.district"
+			@input="selectDistrict"
 		>
 			<span v-if="$v.newAddress.district.$invalid">El {{countryLabels.district}} es requerido</span>
 		</app-select>
@@ -75,26 +79,44 @@ function created() {
 	this.$store.dispatch('LOAD_DEPARTMENTS', this);
 }
 
-function selectDepartment(id) {
+function selectDepartment(provinceId) {
 	this.newAddress.province = null;
 	this.newAddress.district = null;
 	this.$store.commit('SET_PROVINCES', []);
 	this.$store.commit('SET_DISTRICTS', []);
-	this.calculateShippingCost(id);
-	this.$store.dispatch('LOAD_PROVINCES', { context: this, provinceId: id });
+	this.calculateShippingCost({
+		provinceId,
+		cityId: null,
+		parishId: null,
+	});
+	this.$store.dispatch('LOAD_PROVINCES', { context: this, provinceId });
 	this.setCustomerAddress();
 }
 
-function selectProvince(id) {
+function selectProvince(cityId) {
 	this.newAddress.districts = null;
 	this.$store.commit('SET_DISTRICTS', []);
-	this.$store.dispatch('LOAD_DISTRICTS', { context: this, cityId: id });
+	this.calculateShippingCost({
+		provinceId: this.newAddress.provinceId,
+		cityId,
+		parishId: null,
+	});
+	this.$store.dispatch('LOAD_DISTRICTS', { context: this, cityId });
 	this.setCustomerAddress();
 }
 
-async function calculateShippingCost(provinceId) {
+function selectDistrict(parishId) {
+	this.calculateShippingCost({
+		provinceId: this.newAddress.provinceId,
+		cityId: this.newAddress.cityId,
+		parishId,
+	});
+	this.setCustomerAddress();
+}
+
+async function calculateShippingCost(locationId, location) {
 	const url = '/weight/price';
-	const body = this.buildBody(provinceId);
+	const body = this.buildBody(locationId, location);
 	try {
 		const { data: amount } = await this.$httpProducts.post(url, body);
 		this.$store.dispatch('setShippingCost', amount);
@@ -106,7 +128,13 @@ async function calculateShippingCost(provinceId) {
 	}
 }
 
-function buildBody(provinceId) {
+/**
+ * @param { object } geoLocation - objeto con provincia, ciudad y parroquia
+ * @param { number } geoLocation.provinceId - id de la provincia seleccionada
+ * @param { number } geoLocation.cityId - id de la ciudad seleccionada
+ * @param { number } geoLocation.parishId - id de la parroquia seleccionada
+ */
+function buildBody(geoLocation) {
 	const details = this.getProductToBuy.map((p) => {
 		const newP = {};
 		newP.weight = p.weigth || 0;
@@ -115,7 +143,7 @@ function buildBody(provinceId) {
 	});
 	return {
 		details,
-		provinceId,
+		...geoLocation,
 	};
 }
 
@@ -185,6 +213,7 @@ export default {
 		buildBody,
 		calculateShippingCost,
 		selectDepartment,
+		selectDistrict,
 		selectProvince,
 		setCustomerAddress,
 	},
