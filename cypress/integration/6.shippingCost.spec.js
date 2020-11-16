@@ -33,4 +33,18 @@ context('COSTO DE ENVÍO', () => {
 				.should('contain', shippingCost.parishCost);
 		})
 	})
+
+	it('Verificar costo de envío: DIRECCIÓN EXISTENTE', () => {
+		cy.fixture('fenix-dev.json').then(({ shippingCost }) => {
+			cy.get('[data-cy="address-selection"]')
+				.should('exist')
+				.click({ force: true });
+			cy.get('.menuable__content__active')
+				.should('exist');
+			cy.contains(shippingCost.fenixDirection)
+				.click({ force: true });
+			cy.get('[data-cy="shipping"]')
+				.should('contain', shippingCost.fenixDirectionShippingCost);
+		})
+	})
 })

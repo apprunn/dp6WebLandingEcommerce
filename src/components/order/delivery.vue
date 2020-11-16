@@ -42,6 +42,7 @@
 		<responsible-form/>
 		<div v-if="getFlagPickUp === house.value && atHouse">
 			<address-component
+				data-cy="select-address-saved"
 				hide-map-button
 				placeholder="Seleccione una dirección"
 				item-text="name"
@@ -208,9 +209,9 @@ function favoriteDirection() {
 
 async function calculateShippingCost(location) {
 	if (location && location.provinceId) {
-		const { provinceId } = location;
+		const { cityId, parishId, provinceId } = location;
 		const url = '/weight/price';
-		const body = this.buildBody(provinceId);
+		const body = this.buildBody(cityId, parishId, provinceId);
 		try {
 			const { data: amount } = await this.$httpProducts.post(url, body);
 			this.$store.dispatch('setShippingCost', amount);
@@ -223,7 +224,7 @@ async function calculateShippingCost(location) {
 	}
 }
 
-function buildBody(provinceId) {
+function buildBody(cityId, parishId, provinceId) {
 	const details = this.getProductToBuy.map((p) => {
 		const newP = {};
 		newP.weight = p.weigth || 0;
@@ -231,7 +232,9 @@ function buildBody(provinceId) {
 		return newP;
 	});
 	return {
+		cityId,
 		details,
+		parishId,
 		provinceId,
 	};
 }
