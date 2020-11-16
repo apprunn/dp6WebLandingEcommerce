@@ -25,6 +25,8 @@
 		"cityCost": "$. 0.10",
 		"parishCost": "$. 2.00",
 		"parishId": 691,
-		"parishName": "JUAN MONTALVO (SAN SEBASTIÁN)"
+		"parishName": "JUAN MONTALVO (SAN SEBASTIÁN)",
+		"fenixDirection": "Oficina Fenix",
+		"fenixDirectionShippingCost": "$. 2.00"
 	}
 }
