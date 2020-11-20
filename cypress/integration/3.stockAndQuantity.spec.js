@@ -91,4 +91,36 @@ context('VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 			});
 		});
 	});
+
+	/**
+	 * Intentar agregar más cantidad que el stock y depués disminuir la cantidad
+	 * hasta que sea menor al stock y poder agregar el producto al carrito de compras
+	 */
+	it('Cantidad mayor al stock y luego disminuye por debajo del stock', () => {
+		cy.fixture('fenix-dev.json').then(({ products }) => {
+			cy.ProductsDetailPage(products.lowStock);
+			cy.get('@ProductDetail').its('body').then((res) => {
+				const { stockWarehouse } = res;
+				expect(stockWarehouse).to.be.gt(0);
+
+				if (stockWarehouse) {
+					for (let i = 0; i <= stockWarehouse + 1; i += 1) {
+						cy.get('[data-cy="more-quantity"]')
+							.should('exist')
+							.click();
+					}
+				}
+				cy.get('[data-cy="quantity-to-buy"]').should('contain', stockWarehouse);
+			});
+			cy.get('[data-cy="less-quantity"]')
+				.should('exist')
+				.click();
+			cy.get('[data-cy="add-to-cart"]')
+				.should('exist')
+				.click({ force: true });
+			cy.get('[data-cy="go-to-cart"]')
+				.should('exist')
+				.click({ force: true });
+		});
+	})
 });
