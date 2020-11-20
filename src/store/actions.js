@@ -89,7 +89,6 @@ function setShippingCostFromOrder({ commit }, order) {
 		price: costShipping - costShippingTaxAmount,
 
 	};
-	// commit('SET_SHIPPING_COST', costShippingObject.price);
 	commit('SET_SHIPPING_COST_OBJECT', costShippingObject);
 }
 
@@ -107,11 +106,15 @@ function setShippingCost({ commit }, shippingCost) {
 function setNoShippingCost({ commit }) {
 	const shippingCost = {
 		flagTax: false,
-		price: 0,
+		price: null,
 		tax: 0,
 		taxAmount: 0,
 	};
 	commit('SET_SHIPPING_COST_OBJECT', shippingCost);
+}
+
+function setShippingCostError({ commit }, val) {
+	commit('SET_SHIPPING_ERROR', val);
 }
 
 function removeProductFromLS() {
@@ -241,6 +244,7 @@ const methods = {
 	setFlagGrouper,
 	setNoShippingCost,
 	setShippingCost,
+	setShippingCostError,
 	setShippingCostFromOrder,
 	SET_ECOMMERCE_THEME,
 	SET_DEFAULT_VALUES,

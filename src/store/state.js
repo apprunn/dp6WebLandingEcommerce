@@ -64,6 +64,7 @@ export default {
 			tax: 0,
 			taxAmount: 0,
 		},
+		shippingCostError: false,
 		status: [],
 		total: null,
 		waysPayments: null,
