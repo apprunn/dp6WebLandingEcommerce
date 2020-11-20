@@ -172,32 +172,32 @@ Cypress.Commands.add('SelectFirstCategory', () => {
 		.click();
 })
 
-Cypress.Commands.add('SelectProvinceInNewDirection', (shippingCost) => {
+Cypress.Commands.add('SelectProvinceInNewDirection', (provinceName) => {
 	cy.get('[data-cy="province"]')
 		.should('exist')
 		.click({ force: true });
 	cy.get('.menuable__content__active')
 		.should('exist');
-	cy.contains(shippingCost.provinceName)
+	cy.contains(provinceName)
 		.click();
 })
 
-Cypress.Commands.add('SelectCityInNewDirection', (shippingCost) => {
+Cypress.Commands.add('SelectCityInNewDirection', (cityName) => {
 	cy.get('[data-cy="city"]')
 		.should('exist')
 		.click({ force: true });
 	cy.get('.menuable__content__active')
 		.should('exist');
-	cy.contains(shippingCost.cityName)
+	cy.contains(cityName)
 		.click();
 })
 
-Cypress.Commands.add('SelectParishInNewDirection', (shippingCost) => {
+Cypress.Commands.add('SelectParishInNewDirection', (parishName) => {
 	cy.get('[data-cy="city"]')
 		.should('exist')
 		.click({ force: true });
 	cy.get('.menuable__content__active')
 		.should('exist');
-	cy.contains(shippingCost.parishName)
+	cy.contains(parishName)
 		.click({ force: true });
 })

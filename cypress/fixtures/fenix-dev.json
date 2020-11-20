@@ -26,6 +26,18 @@
 		"parishCost": "$. 2.00",
 		"parishId": 691,
 		"parishName": "JUAN MONTALVO (SAN SEBASTIÁN)",
+		"errorProvinceName": "BOLIVAR",
+		"errorProvinceId": 186,
+		"errorCityName": "GUARANDA",
+		"errorCityId": 231,
+		"errorParishName": "GUANUJO",
+		"errorParishId": 576,
+		"newAddress": {
+			"alias": "mi apto",
+			"apto": "201",
+			"direction": "Calle Araguaney, casa 25",
+			"ref": "Al lado de la bodega"
+		},
 		"fenixDirection": "Oficina Fenix",
 		"fenixDirectionShippingCost": "$. 2.00"
 	}

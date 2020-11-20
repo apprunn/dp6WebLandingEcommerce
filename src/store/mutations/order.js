@@ -51,6 +51,9 @@ const orderMutation = {
 	SET_SHIPPING_COST(state, price) {
 		Vue.set(state.order.shippingCost, 'price', price);
 	},
+	SET_SHIPPING_ERROR(state, val) {
+		Vue.set(state.order, 'shippingCostError', val);
+	},
 	SET_SHIPPING_COST_OBJECT(state, costShippingObject) {
 		Vue.set(state.order, 'shippingCost', costShippingObject);
 	},

@@ -1,6 +1,7 @@
 <template>
 	<form class="new-address-form" @input="setCustomerAddress">
 		<app-input
+			data-cy="alias"
 			placeholder="Tipo de Vivienda (mi casa, mi oficina, etc)"
 			class="mx-2 my-1 name-field field"
 			v-model="newAddress.name"
@@ -46,6 +47,7 @@
 			<span v-if="$v.newAddress.district.$invalid">El {{countryLabels.district}} es requerido</span>
 		</app-select>
 		<app-input
+			data-cy="direccion"
 			placeholder="Dirección"
 			class="mx-2 my-1 address-field field"
 			v-model="newAddress.addressLine1"
@@ -53,6 +55,7 @@
 			<span v-if="$v.newAddress.addressLine1.$invalid">La dirección es requerida</span>
 		</app-input>
 		<app-input
+			data-cy="apto"
 			placeholder="Nro Dpto/Oficina"
 			class="mx-2 my-1 number-field field"
 			v-model="newAddress.number"
@@ -60,6 +63,7 @@
 			<span v-if="$v.newAddress.number.$invalid">Este campo es requerido</span>
 		</app-input>
 		<app-input
+			data-cy="ref"
 			placeholder="Referencia"
 			type="email"
 			class="mx-2 my-1 reference-field field"
@@ -120,8 +124,10 @@ async function calculateShippingCost(locationId, location) {
 	try {
 		const { data: amount } = await this.$httpProducts.post(url, body);
 		this.$store.dispatch('setShippingCost', amount);
+		this.$store.dispatch('setNoShippingCostError', false);
 	} catch (error) {
 		if (error.data.message === 'PRICE_NOT_CONFIGURATION') {
+			this.$store.dispatch('setShippingCostError', true);
 			this.$store.dispatch('setNoShippingCost');
 			this.showNotification('No es posible hacer envios a ese destino.', 'error');
 		}

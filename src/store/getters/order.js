@@ -47,6 +47,7 @@ const getters = {
 			flagBill,
 			bill,
 			shippingCost,
+			shippingCostError,
 			flagPickUp,
 			customerAddress,
 		} = state.order;
@@ -57,7 +58,7 @@ const getters = {
 		const invalidBill = flagBill ? isEmpty(bill) : false;
 		let invalidShippingCost = false;
 		if (flagPickUp === 1) {
-			invalidShippingCost = shippingCost >= 0;
+			invalidShippingCost = shippingCost >= 0 || shippingCostError;
 		}
 		return lib.atLeastOneTrue(
 			invalidResponsible,

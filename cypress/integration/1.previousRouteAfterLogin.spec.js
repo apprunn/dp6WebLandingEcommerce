@@ -5,6 +5,7 @@ context('REGRESAR A PANTALLA PREVIA AL INICIO DE SESIÓN', () => {
 		cy.visit('localhost:9010');
 		let route = null;
 		cy.SelectRandomProduct();
+		cy.wait(1500);
 		cy.location('pathname').then((pathname) => {
 			route = pathname;
 			cy.login();
@@ -19,7 +20,7 @@ context('REGRESAR A PANTALLA PREVIA AL INICIO DE SESIÓN', () => {
 		cy.visit('localhost:9010');
 		let route = null;
 		cy.SelectFirstCategory();
-		cy.wait(500);
+		cy.wait(1500);
 		cy.location('pathname').then((pathname) => {
 			route = pathname;
 			cy.login();
