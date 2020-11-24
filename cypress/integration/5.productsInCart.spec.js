@@ -9,6 +9,7 @@ context('COMPRAR DOS PRODUCTOS - ENVIO A DOMICILIO', () => {
 		cy.CheckIfThereIsProductServices();
 		cy.AddProductWithStock();
 		cy.AddProductService();
+		cy.AddProductVariation();
 		cy.get('[data-cy="make-order"]')
 			.click();
 		cy.login();

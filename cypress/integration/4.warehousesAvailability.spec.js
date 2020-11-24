@@ -3,7 +3,7 @@
 context('BOTÓN TIENDAS DISPONIBLES EN DETALLE DE PRODUCTO', () => {
 	it('Se muestra para productos Terminados', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
-			cy.ProductsDetailPage(products.lowStock); // servicio prueba
+			cy.ProductsDetailPage(products.terminado);
 			cy.get('[data-cy="see-available-warehouse"]')
 				.should('exist')
 				.click();
@@ -15,7 +15,7 @@ context('BOTÓN TIENDAS DISPONIBLES EN DETALLE DE PRODUCTO', () => {
 
 	it('Oculto para productos tipo servicio', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
-			cy.ProductsDetailPage(products.service); // servicio prueba
+			cy.ProductsDetailPage(products.service);
 			cy.get('[data-cy="see-available-warehouse"]')
 				.should('not.exist');
 			cy.get('.v-dialog__content--active')

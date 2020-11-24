@@ -48,9 +48,8 @@ Cypress.Commands.add('SelectRandomProduct', () => {
 	cy.visit('localhost:9010');
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
-		.its('length')
-		.should('be.gt', 0);
-	const random = Math.floor(Math.random() * 10);
+		.should('have.length.gte', 0);
+	const random = Math.floor(Math.random() * 4);
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
 		.children()
@@ -107,6 +106,23 @@ Cypress.Commands.add('AddProductService', () => {
 			const { type, typeInfo } = res;
 			expect(type).to.equal(2);
 			expect(typeInfo.code).to.equal('servicios');
+			cy.get('[data-cy="add-to-cart"]')
+				.should('exist')
+				.click({ force: true });
+			cy.get('[data-cy="go-to-cart"]')
+				.should('exist')
+				.click();
+		});
+	})
+})
+
+Cypress.Commands.add('AddProductVariation', () => {
+	cy.fixture('fenix-dev.json').then(({ products }) => {
+		cy.ProductsDetailPage(products.variacion);
+		cy.get('@ProductDetail').its('body').then((res) => {
+			const { type, typeInfo } = res;
+			expect(type).to.equal(5);
+			expect(typeInfo.code).to.equal('variantes');
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
 				.click({ force: true });

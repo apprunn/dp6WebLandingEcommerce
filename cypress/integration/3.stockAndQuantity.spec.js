@@ -21,20 +21,23 @@ context('VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 	 * la segunda vez con cantidad 2. La cantidad a mostrar en el carrito de compras
 	 * debe ser la del stock
 	 */
-	it('Verificar que la cantidad no supere Stock en producto terminado', () => {
+	it.only('Verificar que la cantidad no supere Stock en producto terminado', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
-			cy.ProductsDetailPage(products.lowStock); // SHAMPOO HYS  ALIVIO INSTANTANEO 400ML
+			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
-				const { stockWarehouse } = res;
-				expect(stockWarehouse).to.be.gt(0);
-				if (stockWarehouse) {
-					for (let i = 0; i <= stockWarehouse + 1; i += 1) {
+				const { stockWarehouse, stock } = res;
+				const finalStock = stockWarehouse || stock;
+				expect(finalStock).to.be.gt(0);
+				if (finalStock) {
+					for (let i = 0; i <= finalStock + 1; i += 1) {
 						cy.get('[data-cy="more-quantity"]')
 							.should('exist')
-							.click();
+							.click({ force: true });
 					}
 				}
-				cy.get('[data-cy="quantity-to-buy"]').should('contain', stockWarehouse);
+				cy.get('[data-cy="quantity-to-buy"]').then(($q) => {
+					expect($q).to.be.equal(finalStock);
+				})
 			});
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
@@ -46,7 +49,7 @@ context('VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 			let stockWarehouse = null;
 			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
-				stockWarehouse = res.stockWarehouse;
+				stockWarehouse = res.stockWarehouse || res.stock;
 				cy.get('[data-cy="more-quantity"]')
 					.should('exist')
 					.click()
