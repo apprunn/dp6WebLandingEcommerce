@@ -8,7 +8,8 @@
 		"noStock": 1092910,
 		"greatStock": 1093035,
 		"variacion": 1096065,
-		"terminado": 1094774
+		"terminado": 1094774,
+		"labial": 1095993
 	},
 	"responsible": {
 		"name": "José Juan",
@@ -16,5 +17,30 @@
 		"dni": "16006652",
 		"phone": "970121334",
 		"email": "root30@mail.com"
+	},
+	"shippingCost": {
+		"provinceName": "COTOPAXI",
+		"provinceId": 189,
+		"provinceCost": "$. 11.20",
+		"cityName": "LATACUNGA",
+		"cityId": 251,
+		"cityCost": "$. 0.10",
+		"parishCost": "$. 2.00",
+		"parishId": 691,
+		"parishName": "JUAN MONTALVO (SAN SEBASTIÁN)",
+		"errorProvinceName": "BOLIVAR",
+		"errorProvinceId": 186,
+		"errorCityName": "GUARANDA",
+		"errorCityId": 231,
+		"errorParishName": "GUANUJO",
+		"errorParishId": 576,
+		"newAddress": {
+			"alias": "mi apto",
+			"apto": "201",
+			"direction": "Calle Araguaney, casa 25",
+			"ref": "Al lado de la bodega"
+		},
+		"fenixDirection": "Oficina Fenix",
+		"fenixDirectionShippingCost": "$. 2.00"
 	}
 }

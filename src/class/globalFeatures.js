@@ -5,6 +5,18 @@ class GlobalFeatures {
 		this.products = products;
 		this.features = [];
 	}
+	alphabeticalOrder(features) {
+		const len = features.length;
+		for (let i = 0; i < len; i += 1) {
+			const { values } = features[i];
+			if (values && values.length > 0) {
+				const orderedValues = values.sort((a, b) => (a.value > b.value ? 1 : -1));
+				this.features[i].values = [...orderedValues];
+			} else {
+				this.features[i].values = [];
+			}
+		}
+	}
 	allAvailable() {
 		this.features = l.map(
 			l.setNewProperty(
@@ -38,6 +50,7 @@ class GlobalFeatures {
 			this.features = getDeeper('category.features')(this.products[0]) || [];
 		}
 		this.products.forEach(this.setFeaturesValuesToGlobalFeatures.bind(this));
+		this.alphabeticalOrder(this.features);
 	}
 	static isVariationType(product) {
 		const { typeInfo: { code } } = product;

@@ -74,7 +74,7 @@
 			:conversions="data.conversions"
 			@unit-selection="unitSelection"
 		/>
-		<product-childrens 
+		<product-childrens
 			:features="features"
 			@selected="selecFeature"
 			@clear="$emit('clear')"/>

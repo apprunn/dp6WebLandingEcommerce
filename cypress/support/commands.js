@@ -1,14 +1,4 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
+
 // -- This is a parent command --
 // Cypress.Commands.add("login", (email, password) => { ... })
 //
@@ -45,11 +35,17 @@ Cypress.Commands.add('login', () => {
 });
 
 Cypress.Commands.add('SelectRandomProduct', () => {
+	let productsLength = 0;
 	cy.visit('localhost:9010');
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
-		.should('have.length.gte', 0);
-	const random = Math.floor(Math.random() * 4);
+		.should('be.have.gte', 0);
+	cy.get('[data-cy="productsSection"]')
+		.should('exist')
+		.children().then(($prod) => {
+			productsLength = $prod.length;
+		})
+	const random = Math.floor(Math.random() * productsLength);
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
 		.children()
@@ -190,4 +186,34 @@ Cypress.Commands.add('SelectFirstCategory', () => {
 		.children()
 		.eq(0)
 		.click();
+})
+
+Cypress.Commands.add('SelectProvinceInNewDirection', (provinceName) => {
+	cy.get('[data-cy="province"]')
+		.should('exist')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains(provinceName)
+		.click();
+})
+
+Cypress.Commands.add('SelectCityInNewDirection', (cityName) => {
+	cy.get('[data-cy="city"]')
+		.should('exist')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains(cityName)
+		.click();
+})
+
+Cypress.Commands.add('SelectParishInNewDirection', (parishName) => {
+	cy.get('[data-cy="city"]')
+		.should('exist')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains(parishName)
+		.click({ force: true });
 })

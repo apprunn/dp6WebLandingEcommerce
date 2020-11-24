@@ -30,11 +30,11 @@ context('COMPRAR DOS PRODUCTOS - ENVIO A DOMICILIO', () => {
 			});
 		cy.get('[data-cy="shipping"]')
 			.should((el) => {
-				[shipping] = /[0-9]+/i.exec(el[0].innerText);
+				[shipping] = /[0-9]+/i.exec(el[0].innerText) || 0;
 			});
 		cy.get('[data-cy="total"]')
 			.should((el) => {
-				[total] = /[0-9]+/i.exec(el[0].innerText);
+				[total] = /[0-9]+/i.exec(el[0].innerText) || 0;
 			});
 
 		cy.get('[data-cy="go-pay"]')

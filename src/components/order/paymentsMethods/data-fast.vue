@@ -79,8 +79,11 @@ function loadingFn() {
 
 function insertTiposDeCredito(dtc) {
 	const tipocredito = document.createElement('div');
+	const imgElement = document.createElement('img');
 	tipocredito.setAttribute('class', 'wpwl-wrapper wpwl-wrapper-custom');
 	tipocredito.setAttribute('style', 'margin-top: 10px;flex-direction: column;display: flex');
+	imgElement.setAttribute('src', 'https://www.datafast.com.ec/images/verified.png');
+	imgElement.setAttribute('style', 'display:block;margin:20px 0px 0px auto; width:100%;');
 	const divContent = document.createTextNode('Tipo de crédito:');
 	tipocredito.appendChild(divContent);
 	const newSelect = document.createElement('select');
@@ -96,6 +99,7 @@ function insertTiposDeCredito(dtc) {
 	tipocredito.appendChild(newSelect);
 	const formCard = document.querySelector('form.wpwl-form-card').querySelector('.wpwl-wrapper-submit');
 	formCard.appendChild(tipocredito);
+	formCard.appendChild(imgElement);
 }
 
 function insertDiferidos() {
