@@ -11,10 +11,12 @@
 		<div class="container-detail-information">
 			<div class="container-detail-name">
 				<p
+					data-cy="product-name"
 					:class="[isLoading ? 'loading' : 'product-detail-name']"
 				>{{ data.name }}</p>
 				<p
 					v-if="data.description"
+					data-cy="product-description"
 					:class="[isLoading ? 'loading' : 'product-detail-description']"
 				>{{ data.description }}</p>
 				<p

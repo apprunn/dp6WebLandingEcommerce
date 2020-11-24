@@ -123,11 +123,17 @@ class ProductDetails {
 		if (isEmpty(this.childrens)) {
 			this.updateSelectedProducts([product]);
 		} else {
-			this.productSelected(product);
+			const productSelected = ProductDetails.isVariationType(product)
+				? this.childrens[0] : product;
+			this.productSelected(productSelected);
 		}
 		this.updateUnitId.call(this, unitId);
 		this.updateQuantity.call(this, 1);
 		this.setImagePresentation.call(this, product.urlImage);
+	}
+	static isVariationType(product) {
+		const { typeInfo: { code } } = product;
+		return code === 'variantes';
 	}
 	productSelected(product) {
 		if (product.features.length > 0) {

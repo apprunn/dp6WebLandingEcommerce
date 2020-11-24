@@ -6,7 +6,9 @@
 		"lowStock": 1090512,
 		"service": 1095225,
 		"noStock": 1092910,
-		"greatStock": 1093035
+		"greatStock": 1093035,
+		"variacion": 1096065,
+		"terminado": 1094774
 	},
 	"responsible": {
 		"name": "José Juan",

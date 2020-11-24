@@ -28,7 +28,7 @@ Cypress.Commands.add('login', () => {
 		cy.get('[data-cy="loginBtn"]')
 			.should('exist')
 			.find('.icon-desktop')
-			.click();
+			.click({ force: true, multiple: true });
 		cy.get('[data-cy="appButtonLogin"]')
 			.should('exist')
 			.click({ force: true });
@@ -73,7 +73,7 @@ Cypress.Commands.add('ProductsDetailPage', (productId) => {
 
 Cypress.Commands.add('AddProductWithStock', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.lowStock); // gelatina
+		cy.ProductsDetailPage(products.terminado); // mango
 		cy.get('@ProductDetail').its('body').then(() => {
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')

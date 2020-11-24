@@ -24,7 +24,8 @@ context('COMPRAR DOS PRODUCTOS - ENVIO A DOMICILIO', () => {
 			});
 		cy.get('[data-cy="discount"]')
 			.should((el) => {
-				[discount] = /[0-9]+/i.exec(el[0].innerText);
+				const result = /[0-9]+/i.exec(el[0].innerText);
+				discount = result || 0;
 			});
 		cy.get('[data-cy="shipping"]')
 			.should((el) => {
