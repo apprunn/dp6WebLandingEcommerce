@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('COMPRAR DOS PRODUCTOS - ENVIO A DOMICILIO', () => {
+context('COMPRAR TRES PRODUCTOS - ENVIO A DOMICILIO', () => {
 	it('Producto terminado y producto tipo servicio - Sin factura - Pago al recibir', () => {
 		let subtotal = 0;
 		let discount = 0;
@@ -9,6 +9,7 @@ context('COMPRAR DOS PRODUCTOS - ENVIO A DOMICILIO', () => {
 		cy.CheckIfThereIsProductServices();
 		cy.AddProductWithStock();
 		cy.AddProductService();
+		cy.AddProductVariation();
 		cy.get('[data-cy="make-order"]')
 			.click();
 		cy.login();
@@ -24,15 +25,16 @@ context('COMPRAR DOS PRODUCTOS - ENVIO A DOMICILIO', () => {
 			});
 		cy.get('[data-cy="discount"]')
 			.should((el) => {
-				[discount] = /[0-9]+/i.exec(el[0].innerText);
+				const result = /[0-9]+/i.exec(el[0].innerText);
+				discount = result || 0;
 			});
 		cy.get('[data-cy="shipping"]')
 			.should((el) => {
-				[shipping] = /[0-9]+/i.exec(el[0].innerText);
+				[shipping] = /[0-9]+/i.exec(el[0].innerText) || 0;
 			});
 		cy.get('[data-cy="total"]')
 			.should((el) => {
-				[total] = /[0-9]+/i.exec(el[0].innerText);
+				[total] = /[0-9]+/i.exec(el[0].innerText) || 0;
 			});
 
 		cy.get('[data-cy="go-pay"]')

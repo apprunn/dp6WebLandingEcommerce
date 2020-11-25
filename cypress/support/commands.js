@@ -1,14 +1,4 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
+
 // -- This is a parent command --
 // Cypress.Commands.add("login", (email, password) => { ... })
 //
@@ -28,7 +18,7 @@ Cypress.Commands.add('login', () => {
 		cy.get('[data-cy="loginBtn"]')
 			.should('exist')
 			.find('.icon-desktop')
-			.click();
+			.click({ force: true, multiple: true });
 		cy.get('[data-cy="appButtonLogin"]')
 			.should('exist')
 			.click({ force: true });
@@ -45,12 +35,17 @@ Cypress.Commands.add('login', () => {
 });
 
 Cypress.Commands.add('SelectRandomProduct', () => {
+	let productsLength = 0;
 	cy.visit('localhost:9010');
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
-		.its('length')
-		.should('be.gt', 0);
-	const random = Math.floor(Math.random() * 10);
+		.should('have.length.gte', 1);
+	cy.get('[data-cy="productsSection"]')
+		.should('exist')
+		.children().then(($prod) => {
+			productsLength = $prod.length;
+		})
+	const random = Math.floor(Math.random() * productsLength);
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
 		.children()
@@ -73,7 +68,7 @@ Cypress.Commands.add('ProductsDetailPage', (productId) => {
 
 Cypress.Commands.add('AddProductWithStock', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.lowStock); // gelatina
+		cy.ProductsDetailPage(products.terminado); // mango
 		cy.get('@ProductDetail').its('body').then(() => {
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
@@ -117,6 +112,23 @@ Cypress.Commands.add('AddProductService', () => {
 	})
 })
 
+Cypress.Commands.add('AddProductVariation', () => {
+	cy.fixture('fenix-dev.json').then(({ products }) => {
+		cy.ProductsDetailPage(products.variacion);
+		cy.get('@ProductDetail').its('body').then((res) => {
+			const { type, typeInfo } = res;
+			expect(type).to.equal(5);
+			expect(typeInfo.code).to.equal('variantes');
+			cy.get('[data-cy="add-to-cart"]')
+				.should('exist')
+				.click({ force: true });
+			cy.get('[data-cy="go-to-cart"]')
+				.should('exist')
+				.click();
+		});
+	})
+})
+
 Cypress.Commands.add('FillResponsibleForm', () => {
 	cy.fixture('fenix-dev.json').then(({ responsible }) => {
 		const { name, lastname, phone, email, dni } = responsible;
@@ -135,7 +147,7 @@ Cypress.Commands.add('SelectAddress', () => {
 	cy.get('.menuable__content__active')
 		.children()
 		.children()
-		.contains('papa')
+		.contains('Oficina Fenix')
 		.click();
 })
 
@@ -174,4 +186,34 @@ Cypress.Commands.add('SelectFirstCategory', () => {
 		.children()
 		.eq(0)
 		.click();
+})
+
+Cypress.Commands.add('SelectProvinceInNewDirection', (provinceName) => {
+	cy.get('[data-cy="province"]')
+		.should('exist')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains(provinceName)
+		.click();
+})
+
+Cypress.Commands.add('SelectCityInNewDirection', (cityName) => {
+	cy.get('[data-cy="city"]')
+		.should('exist')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains(cityName)
+		.click();
+})
+
+Cypress.Commands.add('SelectParishInNewDirection', (parishName) => {
+	cy.get('[data-cy="city"]')
+		.should('exist')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains(parishName)
+		.click({ force: true });
 })

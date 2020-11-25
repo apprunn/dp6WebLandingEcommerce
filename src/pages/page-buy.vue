@@ -180,6 +180,8 @@ export default {
 		flex: 0 0 20%;
 		height: 100%;
 		margin: 0 auto;
+		position: sticky;
+		top: 8rem;
 	}
 
 	.footter-products-buy {

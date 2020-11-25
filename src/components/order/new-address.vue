@@ -1,17 +1,19 @@
 <template>
 	<form class="new-address-form" @input="setCustomerAddress">
 		<app-input
-			placeholder="Alias"
+			data-cy="alias"
+			placeholder="Tipo de Vivienda (mi casa, mi oficina, etc)"
 			class="mx-2 my-1 name-field field"
 			v-model="newAddress.name"
 		>
-			<span v-if="$v.newAddress.name.$invalid">El alias es requerido</span>
+			<span v-if="$v.newAddress.name.$invalid">Este campo es requerido</span>
 		</app-input>
 		<app-select
 			item-text="name"
 			item-value="id"
-			:placeholder="countryLabels.department"
 			class="mx-2 my-1 department-field field"
+			data-cy="province"
+			:placeholder="countryLabels.department"
 			:items="departments"
 			v-model="newAddress.department"
 			@input="selectDepartment"
@@ -21,8 +23,9 @@
 		<app-select
 			item-text="name"
 			item-value="id"
-			:placeholder="countryLabels.province"
 			class="mx-2 my-1 province-field field"
+			data-cy="city"
+			:placeholder="countryLabels.province"
 			:items="provinces"
 			:disabled="!newAddress.department"
 			@input="selectProvince"
@@ -33,15 +36,18 @@
 		<app-select
 			item-text="name"
 			item-value="id"
-			:placeholder="countryLabels.district"
 			class="mx-2 my-1 district-field field"
+			data-cy="parish"
+			:placeholder="countryLabels.district"
 			:items="districts"
 			:disabled="!newAddress.department"
 			v-model="newAddress.district"
+			@input="selectDistrict"
 		>
 			<span v-if="$v.newAddress.district.$invalid">El {{countryLabels.district}} es requerido</span>
 		</app-select>
 		<app-input
+			data-cy="direccion"
 			placeholder="Dirección"
 			class="mx-2 my-1 address-field field"
 			v-model="newAddress.addressLine1"
@@ -49,13 +55,15 @@
 			<span v-if="$v.newAddress.addressLine1.$invalid">La dirección es requerida</span>
 		</app-input>
 		<app-input
-			placeholder="Nro"
+			data-cy="apto"
+			placeholder="Nro Dpto/Oficina"
 			class="mx-2 my-1 number-field field"
 			v-model="newAddress.number"
 		>
-			<span v-if="$v.newAddress.number.$invalid">campo requerido</span>
+			<span v-if="$v.newAddress.number.$invalid">Este campo es requerido</span>
 		</app-input>
 		<app-input
+			data-cy="ref"
 			placeholder="Referencia"
 			type="email"
 			class="mx-2 my-1 reference-field field"
@@ -75,38 +83,64 @@ function created() {
 	this.$store.dispatch('LOAD_DEPARTMENTS', this);
 }
 
-function selectDepartment(id) {
+function selectDepartment(provinceId) {
 	this.newAddress.province = null;
 	this.newAddress.district = null;
 	this.$store.commit('SET_PROVINCES', []);
 	this.$store.commit('SET_DISTRICTS', []);
-	this.calculateShippingCost(id);
-	this.$store.dispatch('LOAD_PROVINCES', { context: this, provinceId: id });
+	this.calculateShippingCost({
+		provinceId,
+		cityId: null,
+		parishId: null,
+	});
+	this.$store.dispatch('LOAD_PROVINCES', { context: this, provinceId });
 	this.setCustomerAddress();
 }
 
-function selectProvince(id) {
+function selectProvince(cityId) {
 	this.newAddress.districts = null;
 	this.$store.commit('SET_DISTRICTS', []);
-	this.$store.dispatch('LOAD_DISTRICTS', { context: this, cityId: id });
+	this.calculateShippingCost({
+		provinceId: this.newAddress.provinceId,
+		cityId,
+		parishId: null,
+	});
+	this.$store.dispatch('LOAD_DISTRICTS', { context: this, cityId });
 	this.setCustomerAddress();
 }
 
-async function calculateShippingCost(provinceId) {
+function selectDistrict(parishId) {
+	this.calculateShippingCost({
+		provinceId: this.newAddress.provinceId,
+		cityId: this.newAddress.cityId,
+		parishId,
+	});
+	this.setCustomerAddress();
+}
+
+async function calculateShippingCost(locationId, location) {
 	const url = '/weight/price';
-	const body = this.buildBody(provinceId);
+	const body = this.buildBody(locationId, location);
 	try {
 		const { data: amount } = await this.$httpProducts.post(url, body);
 		this.$store.dispatch('setShippingCost', amount);
+		this.$store.dispatch('setNoShippingCostError', false);
 	} catch (error) {
 		if (error.data.message === 'PRICE_NOT_CONFIGURATION') {
+			this.$store.dispatch('setShippingCostError', true);
 			this.$store.dispatch('setNoShippingCost');
 			this.showNotification('No es posible hacer envios a ese destino.', 'error');
 		}
 	}
 }
 
-function buildBody(provinceId) {
+/**
+ * @param { object } geoLocation - objeto con provincia, ciudad y parroquia
+ * @param { number } geoLocation.provinceId - id de la provincia seleccionada
+ * @param { number } geoLocation.cityId - id de la ciudad seleccionada
+ * @param { number } geoLocation.parishId - id de la parroquia seleccionada
+ */
+function buildBody(geoLocation) {
 	const details = this.getProductToBuy.map((p) => {
 		const newP = {};
 		newP.weight = p.weigth || 0;
@@ -115,7 +149,7 @@ function buildBody(provinceId) {
 	});
 	return {
 		details,
-		provinceId,
+		...geoLocation,
 	};
 }
 
@@ -185,6 +219,7 @@ export default {
 		buildBody,
 		calculateShippingCost,
 		selectDepartment,
+		selectDistrict,
 		selectProvince,
 		setCustomerAddress,
 	},
@@ -207,6 +242,10 @@ export default {
 	.name-field,
 	.department-field {
 		flex: 1 1 40%;
+
+		@media (max-width: 925px) {
+			flex: 1 1 100%;
+		}
 	}
 	
 	.district-field,
@@ -215,11 +254,15 @@ export default {
 	}
 
 	.address-field {
-		flex: 1 1 75%;
+		flex: 1 1 60%;
 	}
 
 	.number-field {
 		flex: 1 1 20%;
+
+		@media (max-width: 925px) {
+			flex: 1 1 100%;
+		}
 	}
 
 	.reference-field {
