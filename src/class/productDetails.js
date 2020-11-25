@@ -52,7 +52,7 @@ class ProductDetails {
 		return this.selectedProduct.rating;
 	}
 	get stock() {
-		return this.selectedProduct.stockWarehouse;
+		return this.selectedProduct.stockWarehouse || this.selectedProduct.stock;
 	}
 	get total() {
 		return Number((this.quantity * this.price).toFixed(2));
@@ -121,11 +121,17 @@ class ProductDetails {
 		if (isEmpty(this.childrens)) {
 			this.updateSelectedProducts([product]);
 		} else {
-			this.productSelected(product);
+			const productSelected = ProductDetails.isVariationType(product)
+				? this.childrens[0] : product;
+			this.productSelected(productSelected);
 		}
 		this.updateUnitId.call(this, unitId);
 		this.updateQuantity.call(this, 1);
 		this.setImagePresentation.call(this, product.urlImage);
+	}
+	static isVariationType(product) {
+		const { typeInfo: { code } } = product;
+		return code === 'variantes';
 	}
 	productSelected(product) {
 		if (product.features.length > 0) {

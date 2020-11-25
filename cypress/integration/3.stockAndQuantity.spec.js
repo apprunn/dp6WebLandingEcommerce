@@ -25,16 +25,19 @@ context('VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
 			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
-				const { stockWarehouse } = res;
-				expect(stockWarehouse).to.be.gt(0);
-				if (stockWarehouse) {
-					for (let i = 0; i <= stockWarehouse + 1; i += 1) {
+				const { stockWarehouse, stock } = res;
+				const finalStock = stockWarehouse || stock;
+				expect(finalStock).to.be.gt(0);
+				if (finalStock) {
+					for (let i = 0; i <= finalStock + 1; i += 1) {
 						cy.get('[data-cy="more-quantity"]')
 							.should('exist')
-							.click();
+							.click({ force: true });
 					}
 				}
-				cy.get('[data-cy="quantity-to-buy"]').should('contain', stockWarehouse);
+				cy.get('[data-cy="quantity-to-buy"]').then(($q) => {
+					expect($q).to.contain(finalStock);
+				})
 			});
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
@@ -46,7 +49,7 @@ context('VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 			let stockWarehouse = null;
 			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
-				stockWarehouse = res.stockWarehouse;
+				stockWarehouse = res.stockWarehouse || res.stock;
 				cy.get('[data-cy="more-quantity"]')
 					.should('exist')
 					.click()
@@ -100,17 +103,18 @@ context('VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
 			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
-				const { stockWarehouse } = res;
-				expect(stockWarehouse).to.be.gt(0);
+				const { stockWarehouse, stock } = res;
+				const finalStock = stockWarehouse || stock;
+				expect(finalStock).to.be.gt(0);
 
-				if (stockWarehouse) {
-					for (let i = 0; i <= stockWarehouse + 1; i += 1) {
+				if (finalStock) {
+					for (let i = 0; i <= finalStock + 1; i += 1) {
 						cy.get('[data-cy="more-quantity"]')
 							.should('exist')
 							.click();
 					}
 				}
-				cy.get('[data-cy="quantity-to-buy"]').should('contain', stockWarehouse);
+				cy.get('[data-cy="quantity-to-buy"]').should('contain', finalStock);
 			});
 			cy.get('[data-cy="less-quantity"]')
 				.should('exist')

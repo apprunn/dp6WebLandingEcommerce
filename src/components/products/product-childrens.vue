@@ -1,5 +1,6 @@
 <template>
   <div 
+	data-cy="features-container"
   	:class="[
   		'my-4',
 		{ 'border-bottom': features.length > 0 }

@@ -43,10 +43,18 @@ class GlobalFeatures {
 		return this.features;
 	}
 	init(product) {
-		this.products = [].concat(product, this.products);
-		this.features = getDeeper('category.features')(this.products[0]) || [];
+		if (GlobalFeatures.isVariationType(product)) {
+			this.features = getDeeper('features')(this.products[0]) || [];
+		} else {
+			this.products = [].concat(product, this.products);
+			this.features = getDeeper('category.features')(this.products[0]) || [];
+		}
 		this.products.forEach(this.setFeaturesValuesToGlobalFeatures.bind(this));
 		this.alphabeticalOrder(this.features);
+	}
+	static isVariationType(product) {
+		const { typeInfo: { code } } = product;
+		return code === 'variantes';
 	}
 	setFeaturesValuesToGlobalFeatures({ features }) {
 		const self = this;

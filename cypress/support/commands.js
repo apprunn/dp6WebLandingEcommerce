@@ -18,7 +18,7 @@ Cypress.Commands.add('login', () => {
 		cy.get('[data-cy="loginBtn"]')
 			.should('exist')
 			.find('.icon-desktop')
-			.click({ multiple: true });
+			.click({ force: true, multiple: true });
 		cy.get('[data-cy="appButtonLogin"]')
 			.should('exist')
 			.click({ force: true });
@@ -39,8 +39,7 @@ Cypress.Commands.add('SelectRandomProduct', () => {
 	cy.visit('localhost:9010');
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
-		.its('length')
-		.should('be.gt', 0);
+		.should('have.length.gte', 1);
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
 		.children().then(($prod) => {
@@ -69,7 +68,7 @@ Cypress.Commands.add('ProductsDetailPage', (productId) => {
 
 Cypress.Commands.add('AddProductWithStock', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.service);
+		cy.ProductsDetailPage(products.terminado); // mango
 		cy.get('@ProductDetail').its('body').then(() => {
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
@@ -113,6 +112,23 @@ Cypress.Commands.add('AddProductService', () => {
 	})
 })
 
+Cypress.Commands.add('AddProductVariation', () => {
+	cy.fixture('fenix-dev.json').then(({ products }) => {
+		cy.ProductsDetailPage(products.variacion);
+		cy.get('@ProductDetail').its('body').then((res) => {
+			const { type, typeInfo } = res;
+			expect(type).to.equal(5);
+			expect(typeInfo.code).to.equal('variantes');
+			cy.get('[data-cy="add-to-cart"]')
+				.should('exist')
+				.click({ force: true });
+			cy.get('[data-cy="go-to-cart"]')
+				.should('exist')
+				.click();
+		});
+	})
+})
+
 Cypress.Commands.add('FillResponsibleForm', () => {
 	cy.fixture('fenix-dev.json').then(({ responsible }) => {
 		const { name, lastname, phone, email, dni } = responsible;
@@ -131,7 +147,7 @@ Cypress.Commands.add('SelectAddress', () => {
 	cy.get('.menuable__content__active')
 		.children()
 		.children()
-		.contains('papa')
+		.contains('Oficina Fenix')
 		.click();
 })
 
