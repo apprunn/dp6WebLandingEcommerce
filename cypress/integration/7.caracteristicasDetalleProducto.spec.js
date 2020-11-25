@@ -105,10 +105,10 @@ context('DETALLE DE PRODUCTO: Tipo Terminado', () => {
 				.should('have.css', 'background-color', 'rgb(255, 255, 255)');
 
 			cy.get('[data-cy="product-name"]')
-				.should('contain', 'mango');
+				.should('contain', 'MANGO');
 
 			cy.get('[data-cy="product-description"]')
-				.should('contain', 'Mango Dulce');
+				.should('contain', 'TOYOTA, 2010, F150');
 		})
 	})
 })

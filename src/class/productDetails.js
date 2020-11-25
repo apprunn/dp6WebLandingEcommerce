@@ -86,11 +86,13 @@ class ProductDetails {
 	getImgsWithoutUnitId(allImgs) {
 		const baseUnitId = this.getProductDetails().unitId;
 		const selectedUnitId = this.unitId;
+		const defaultImage = [{ urlImage: this.pictureNotFound, select: false }];
 		if (baseUnitId === selectedUnitId) {
-			const imgsWithoutUnitId = isEmpty(allImgs) ? [] : allImgs.filter(img => !img.unitId);
+			const imgsWithoutUnitId = isEmpty(allImgs)
+				? defaultImage : allImgs.filter(img => !img.unitId);
 			return imgsWithoutUnitId;
 		}
-		return [{ urlImage: this.pictureNotFound, select: false }];
+		return defaultImage;
 	}
 	getProductDetails() {
 		return { ...this.selectedProduct };

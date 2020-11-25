@@ -35,12 +35,14 @@ import AppSelect from '@/components/shared/inputs/app-select';
 import { mapGetters } from 'vuex';
 import l from '@/shared/lib';
 
-
 function conversionsChanges(conversions) {
-	const conversionsFormatted = l.map(
-		k => l.setNewProperty('id', Number(k))(conversions[k]),
-		Object.keys(conversions),
-	);
+	let conversionsFormatted = [];
+	if (conversions) {
+		conversionsFormatted = l.map(
+			k => l.setNewProperty('id', Number(k))(conversions[k]),
+			Object.keys(conversions),
+		);
+	}
 	this.conversionsComputed = [].concat(this.defaultUnit, conversionsFormatted);
 	this.conversionsComputed = this.conversionsComputed.map((p, index) => {
 		const newP = { ...p };
