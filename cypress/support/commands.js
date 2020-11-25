@@ -39,7 +39,7 @@ Cypress.Commands.add('SelectRandomProduct', () => {
 	cy.visit('localhost:9010');
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
-		.should('be.have.gte', 0);
+		.should('have.length.gte', 1);
 	cy.get('[data-cy="productsSection"]')
 		.should('exist')
 		.children().then(($prod) => {
@@ -147,7 +147,7 @@ Cypress.Commands.add('SelectAddress', () => {
 	cy.get('.menuable__content__active')
 		.children()
 		.children()
-		.contains('papa')
+		.contains('Oficina Fenix')
 		.click();
 })
 

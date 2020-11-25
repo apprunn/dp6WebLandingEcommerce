@@ -9,35 +9,32 @@ context('DETALLE DE PRODUCTO: Tipo variación', () => {
 				.eq(0)
 				.find('button')
 				.then(($btns) => {
-					expect($btns[0]).to.have.css('color', 'rgb(255, 255, 255)');
-					expect($btns[1]).to.have.css('background-color', 'rgb(255, 255, 255)');
+					expect($btns[0]).to.have.css('background-color', 'rgb(255, 255, 255)');
+					expect($btns[1]).to.have.css('color', 'rgb(255, 255, 255)');
 				});
 		})
 	})
 
-	it('Seleccionar segunda característica', () => {
+	it('Seleccionar primera característica', () => {
 		cy.fixture('fenix-dev').then(({ products }) => {
 			cy.ProductsDetailPage(products.variacion);
+			/**
+			 * verificar que el primer botón esté deshabilitado
+			 * y presionarlo
+			 */
 			cy.get('[data-cy="features-container"]')
 				.should('exist')
 				.children()
 				.should('have.length.gte', 0)
 				.eq(0)
 				.find('button')
-				.eq(1)
+				.eq(0)
 				.should('have.css', 'background-color', 'rgb(255, 255, 255)')
 				.click();
 
-			cy.get('[data-cy="features-container"]')
-				.should('exist')
-				.children()
-				.should('have.length.gte', 0)
-				.eq(0)
-				.find('button')
-				.eq(1)
-				.should('have.css', 'color', 'rgb(255, 255, 255)')
-				.click();
-
+			/**
+			 * Verificar que el primer botón está activado
+			 */
 			cy.get('[data-cy="features-container"]')
 				.should('exist')
 				.children()
@@ -45,7 +42,7 @@ context('DETALLE DE PRODUCTO: Tipo variación', () => {
 				.eq(0)
 				.find('button')
 				.eq(0)
-				.should('have.css', 'background-color', 'rgb(255, 255, 255)');
+				.should('have.css', 'color', 'rgb(255, 255, 255)');
 		})
 	})
 })
@@ -68,15 +65,25 @@ context('DETALLE DE PRODUCTO: Tipo Terminado', () => {
 				.eq(0)
 				.find('button')
 				.then(($btns) => {
-					expect($btns[0]).to.have.css('color', 'rgb(255, 255, 255)');
-					expect($btns[1]).to.have.css('background-color', 'rgb(255, 255, 255)');
+					expect($btns[0]).to.have.css('background-color', 'rgb(255, 255, 255)');
+					expect($btns[1]).to.have.css('color', 'rgb(255, 255, 255)');
 				});
 		})
 	})
 
-	it('Seleccionar segunda característica', () => {
+	it('Seleccionar primera característica', () => {
 		cy.fixture('fenix-dev').then(({ products }) => {
 			cy.ProductsDetailPage(products.terminado);
+
+			cy.get('[data-cy="features-container"]')
+				.should('exist')
+				.children()
+				.should('have.length.gte', 0)
+				.eq(0)
+				.find('button')
+				.eq(0)
+				.should('have.css', 'background-color', 'rgb(255, 255, 255)')
+				.click();
 
 			cy.get('[data-cy="features-container"]')
 				.should('exist')
@@ -94,24 +101,14 @@ context('DETALLE DE PRODUCTO: Tipo Terminado', () => {
 				.should('have.length.gte', 0)
 				.eq(0)
 				.find('button')
-				.eq(1)
-				.should('have.css', 'color', 'rgb(255, 255, 255)')
-				.click();
-
-			cy.get('[data-cy="features-container"]')
-				.should('exist')
-				.children()
-				.should('have.length.gte', 0)
-				.eq(0)
-				.find('button')
 				.eq(0)
 				.should('have.css', 'background-color', 'rgb(255, 255, 255)');
 
 			cy.get('[data-cy="product-name"]')
-				.should('contain', 'MANGO');
+				.should('contain', 'mango');
 
 			cy.get('[data-cy="product-description"]')
-				.should('contain', 'TOYOTA, 2000, F150');
+				.should('contain', 'Mango Dulce');
 		})
 	})
 })

@@ -215,8 +215,10 @@ async function calculateShippingCost(location) {
 		try {
 			const { data: amount } = await this.$httpProducts.post(url, body);
 			this.$store.dispatch('setShippingCost', amount);
+			this.$store.dispatch('setShippingCostError', false);
 		} catch (error) {
 			if (error.data.message === 'PRICE_NOT_CONFIGURATION') {
+				this.$store.dispatch('setShippingCostError', true);
 				this.$store.dispatch('setNoShippingCost');
 				this.showNotification('No es posible hacer envios a ese destino.', 'error');
 			}

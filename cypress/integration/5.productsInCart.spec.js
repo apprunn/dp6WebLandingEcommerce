@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('COMPRAR DOS PRODUCTOS - ENVIO A DOMICILIO', () => {
+context('COMPRAR TRES PRODUCTOS - ENVIO A DOMICILIO', () => {
 	it('Producto terminado y producto tipo servicio - Sin factura - Pago al recibir', () => {
 		let subtotal = 0;
 		let discount = 0;

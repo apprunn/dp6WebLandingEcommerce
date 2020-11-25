@@ -114,8 +114,8 @@ function clickQuantity(value) {
 }
 
 function noStock() {
-	const stock = !!this.data.stock;
-	const positiveStock = this.data.stock > 0;
+	const stock = this.data.stockWarehouse || this.data.stock;
+	const positiveStock = stock > 0;
 	return !(stock && positiveStock);
 }
 

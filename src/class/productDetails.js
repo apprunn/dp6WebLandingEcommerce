@@ -52,7 +52,7 @@ class ProductDetails {
 		return this.selectedProduct.rating;
 	}
 	get stock() {
-		return this.selectedProduct.stockWarehouse;
+		return this.selectedProduct.stockWarehouse || this.selectedProduct.stock;
 	}
 	get total() {
 		return Number((this.quantity * this.price).toFixed(2));

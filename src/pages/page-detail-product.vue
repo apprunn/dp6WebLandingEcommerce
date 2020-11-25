@@ -283,7 +283,8 @@ function checkValidQuantity(quantity) {
 	if (this.productInstance.isService) {
 		return true;
 	}
-	return this.productInstance.stock >= quantity;
+	const { stock } = this.productInstance;
+	return stock >= quantity;
 }
 
 async function openDialog() {

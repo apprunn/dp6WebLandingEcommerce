@@ -3,7 +3,7 @@
 context('BOTÓN TIENDAS DISPONIBLES EN DETALLE DE PRODUCTO', () => {
 	it('Se muestra para productos Terminados', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
-			cy.ProductsDetailPage(products.terminado);
+			cy.ProductsDetailPage(products.lowStock);
 			cy.get('[data-cy="see-available-warehouse"]')
 				.should('exist')
 				.click();
