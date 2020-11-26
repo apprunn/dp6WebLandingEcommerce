@@ -141,19 +141,40 @@ Cypress.Commands.add('FillResponsibleForm', () => {
 })
 
 Cypress.Commands.add('SelectAddress', () => {
-	cy.get('[data-cy="address-selection"]')
-		.should('exist')
-		.click({ force: true });
-	cy.get('.menuable__content__active')
-		.children()
-		.children()
-		.contains('Oficina Fenix')
-		.click();
+	cy.fixture('fenix-dev').then(({ delivery }) => {
+		cy.get('[data-cy="address-selection"]')
+			.should('exist')
+			.click({ force: true });
+		cy.get('.menuable__content__active')
+			.children()
+			.children()
+			.contains(delivery.name)
+			.click();
+	})
+})
+
+Cypress.Commands.add('SelectWarehouse', () => {
+	cy.fixture('fenix-dev').then(({ warehouse }) => {
+		cy.get('[data-cy="address-selection"]')
+			.should('exist')
+			.click({ force: true });
+		cy.get('.menuable__content__active')
+			.children()
+			.children()
+			.contains(warehouse.name)
+			.click();
+	})
 })
 
 Cypress.Commands.add('SelectDeliveryHome', () => {
 	cy.get('[data-cy="delivery-buttons"]')
 		.contains('Envío a Domicilio')
+		.click({ force: true });
+})
+
+Cypress.Commands.add('SelectWarehousePickUp', () => {
+	cy.get('[data-cy="delivery-buttons"]')
+		.contains('Recoger en Tienda')
 		.click({ force: true });
 })
 

@@ -78,10 +78,19 @@ function created() {
 	]).then(() => {
 		if (that.noOrder) {
 			that.setDefaultDelivery();
+			that.lonleyWarehouse();
 		} else {
 			that.setOrderInfoByDefault();
 		}
 	});
+}
+
+function lonleyWarehouse() {
+	if (this.getWarehouses.length === 2) {
+		const warehouse = this.getWarehouses[1];
+		this.selectedWarehouse = warehouse;
+		this.warehouseSelected(warehouse.id);
+	}
 }
 
 function setDefaultDelivery() {
@@ -339,6 +348,7 @@ export default {
 		clearSelectedWarehouse,
 		directionSelected,
 		handlerOrderInfo,
+		lonleyWarehouse,
 		selected,
 		setDefaultDelivery,
 		setDeliveryPlaceByDefault,
