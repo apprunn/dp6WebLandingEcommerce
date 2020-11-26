@@ -42,5 +42,11 @@
 		},
 		"fenixDirection": "Oficina Fenix",
 		"fenixDirectionShippingCost": "$. 2.00"
+	},
+	"warehouse": {
+		"name": "KILL"
+	},
+	"delivery": {
+		"name": "Oficina Fenix"
 	}
 }
