@@ -5,23 +5,11 @@ context('DETALLE DE PRODUCTO: Imagen', () => {
 			cy.ProductsDetailPage(products.terminado)
 				.its('body').then((res) => {
 					parentUrl = res.urlImage;
+					cy.ProductsChildren(products.terminado)
+					cy.PresentationImage('[data-cy="presentation-img"]', parentUrl);
+					cy.AddToCart();
+					cy.ImgInAddToCartModal(parentUrl);
 				});
-			cy.ProductsChildren(products.terminado);
-			cy.get('[data-cy="presentation-img"]')
-				.eq(0)
-				.should('exist')
-				.find('img')
-				.then(($img) => {
-					expect($img).to.have.attr('src', parentUrl);
-				});
-			cy.get('[data-cy="add-to-cart"]')
-				.should('exist')
-				.click();
-			cy.get('[data-cy="modal-add-to-cart-img"]')
-				.should('exist')
-				.then(($img) => {
-					expect($img).to.have.attr('src', parentUrl);
-				})
 		})
 	});
 
@@ -34,21 +22,10 @@ context('DETALLE DE PRODUCTO: Imagen', () => {
 					const [firstProduct] = res;
 					const firstImg = firstProduct.images.find(i => i.order === 1);
 					parentUrl = firstImg.urlImage;
+					cy.PresentationImage('[data-swiper-slide-index="0"]', parentUrl);
+					cy.AddToCart();
+					cy.ImgInAddToCartModal(parentUrl);
 				});
-			cy.get('[data-swiper-slide-index="0"]')
-				.should('exist')
-				.find('img')
-				.then(($img) => {
-					expect($img).to.have.attr('src', parentUrl);
-				});
-			cy.get('[data-cy="add-to-cart"]')
-				.should('exist')
-				.click();
-			cy.get('[data-cy="modal-add-to-cart-img"]')
-				.should('exist')
-				.then(($img) => {
-					expect($img).to.have.attr('src', parentUrl);
-				})
 		})
 	})
 })

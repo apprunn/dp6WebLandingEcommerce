@@ -251,3 +251,36 @@ Cypress.Commands.add('SelectParishInNewDirection', (parishName) => {
 	cy.contains(parishName)
 		.click({ force: true });
 })
+
+Cypress.Commands.add('AddToCart', () => {
+	cy.get('[data-cy="add-to-cart"]')
+		.should('exist')
+		.click();
+})
+
+Cypress.Commands.add('ImgInAddToCartModal', (parentUrl) => {
+	cy.get('[data-cy="modal-add-to-cart-img"]')
+		.should('exist')
+		.then(($img) => {
+			expect($img).to.have.attr('src', parentUrl);
+		})
+})
+
+Cypress.Commands.add('PresentationImage', (selector, parentUrl) => {
+	cy.get(selector)
+		.eq(0)
+		.should('exist')
+		.find('img')
+		.then(($img) => {
+			expect($img).to.have.attr('src', parentUrl);
+		});
+})
+
+Cypress.Commands.add('PressNiubiz', () => {
+	cy.get('[data-cy="niubiz-check"]')
+		.should('exist')
+		.click({ multiple: true, force: true });
+	cy.get('[data-cy="niubiz-btn"]')
+		.should('exist')
+		.click();
+})
