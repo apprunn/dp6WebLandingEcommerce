@@ -66,6 +66,19 @@ Cypress.Commands.add('ProductsDetailPage', (productId) => {
 	});
 })
 
+Cypress.Commands.add('ProductsChildren', (productId) => {
+	cy.fixture('fenix-dev.json').then(({ token }) => {
+		cy.visit(`http://localhost:9010/${productId}/detalle-producto`);
+		cy.request({
+			method: 'get',
+			url: `https://products2.perudatos.com/products-public/${productId}/children`,
+			headers: {
+				Authorization: token,
+			},
+		}).as('ProductChildren');
+	});
+})
+
 Cypress.Commands.add('AddProductWithStock', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
 		cy.ProductsDetailPage(products.terminado); // mango

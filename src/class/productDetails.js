@@ -122,14 +122,21 @@ class ProductDetails {
 		this.globalFeatures.init(product);
 		if (isEmpty(this.childrens)) {
 			this.updateSelectedProducts([product]);
+			this.setImagePresentation.call(this, product.urlImage);
 		} else {
-			const productSelected = ProductDetails.isVariationType(product)
-				? this.childrens[0] : product;
-			this.productSelected(productSelected);
+			const isVariationType = ProductDetails.isVariationType(product);
+			if (isVariationType) {
+				const child = this.childrens[0];
+				this.productSelected(child);
+				const img = child.images[0].urlImage;
+				this.setImagePresentation.call(this, img);
+			} else {
+				this.productSelected(product);
+				this.setImagePresentation.call(this, product.urlImage);
+			}
 		}
 		this.updateUnitId.call(this, unitId);
 		this.updateQuantity.call(this, 1);
-		this.setImagePresentation.call(this, product.urlImage);
 	}
 	static isVariationType(product) {
 		const { typeInfo: { code } } = product;

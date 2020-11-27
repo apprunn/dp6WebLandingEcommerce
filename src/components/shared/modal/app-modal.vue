@@ -7,7 +7,11 @@
 			<h3 class="header-text" :style="`color:${globalColors.title}`">Se añadió al carrito</h3>
 		</section>
 		<section class="modal-content">
-			<img :src="product.imagePresentation" alt="imagen del producto">
+			<img
+				data-cy="modal-add-to-cart-img"
+				:src="product.imagePresentation"
+				alt="imagen del producto"
+			>
 			<p class="product-information">
 				<span class="product-name">{{ product.name }}</span>
 				<span>{{ product.description | cuttingWord(62) }}</span>
