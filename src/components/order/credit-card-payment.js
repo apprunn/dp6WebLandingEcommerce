@@ -106,6 +106,7 @@ const paymentButtonCreator = (h, gateway, ipAddress) => {
 	return h(
 		'div',
 		{
+			'data-cy': 'online-payments',
 			style: {
 				borderTop: '1px solid #e6e6e6',
 				paddingTop: '1rem',

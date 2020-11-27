@@ -117,7 +117,11 @@
 				</div>
 			</div>
 		</section>
-		<section v-if="isNiubiz" class="card-data-niubiz">
+		<section
+			v-if="isNiubiz && isOnlinePayment"
+			class="card-data-niubiz"
+			data-cy="online-payment-info"
+		>
 			<h4>Pago realizado con tarjeta: <span>{{niubizGateway.cardBrand}}</span>, nro: <span>{{niubizGateway.cardNumber}}</span></h4>
 			<h5>el día <span>{{niubizGateway.createdAt | formatDate}}</span></h5>
 		</section>

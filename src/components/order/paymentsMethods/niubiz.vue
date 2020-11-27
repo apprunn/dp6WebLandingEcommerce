@@ -2,6 +2,7 @@
 	<div>
 		<div class="conditions">
 			<v-checkbox
+				data-cy="niubiz-check"
 				class="check"
 				v-model="checkbox"
 			>
@@ -10,6 +11,7 @@
 		</div>
 		<button
 			type="button"
+			data-cy="niubiz-btn"
 			class="niubiz-btn"
 			style="padding:1rem"
 			:disabled="!checkbox"

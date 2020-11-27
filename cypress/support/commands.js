@@ -275,3 +275,12 @@ Cypress.Commands.add('PresentationImage', (selector, parentUrl) => {
 			expect($img).to.have.attr('src', parentUrl);
 		});
 })
+
+Cypress.Commands.add('PressNiubiz', () => {
+	cy.get('[data-cy="niubiz-check"]')
+		.should('exist')
+		.click({ multiple: true, force: true });
+	cy.get('[data-cy="niubiz-btn"]')
+		.should('exist')
+		.click();
+})
