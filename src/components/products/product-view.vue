@@ -20,7 +20,7 @@
 				<swiper-slide 
 					v-for="image in localImages" 
 					:key="image.id">
-					<div class="wrapper-image">
+					<div class="wrapper-image" data-cy="presentation-img">
 						<img 
 							:src="image.urlImage" 
 							:alt="image.name"
