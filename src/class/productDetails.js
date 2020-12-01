@@ -128,7 +128,7 @@ class ProductDetails {
 			if (isVariationType) {
 				const child = this.childrens[0];
 				this.productSelected(child);
-				const img = child.images[0].urlImage;
+				const img = child.images[0] ? child.images[0].urlImage : this.pictureNotFound;
 				this.setImagePresentation.call(this, img);
 			} else {
 				this.productSelected(product);
