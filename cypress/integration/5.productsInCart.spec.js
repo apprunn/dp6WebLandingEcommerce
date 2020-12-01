@@ -90,7 +90,7 @@ context('COMPRAR TRES PRODUCTOS - ENVIO A DOMICILIO', () => {
 })
 
 context('COMPRAR TRES PRODUCTOS - Recojo en tienda', () => {
-	it.only('Producto terminado, producto tipo servicio y tipo variación - Recojo en tienda - Sin factura - Pago al recibir', () => {
+	it('Producto terminado, producto tipo servicio y tipo variación - Recojo en tienda - Sin factura - Pago al recibir', () => {
 		let subtotal = 0;
 		let discount = 0;
 		let shipping = 0;
