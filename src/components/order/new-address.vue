@@ -101,7 +101,7 @@ function selectProvince(cityId) {
 	this.newAddress.districts = null;
 	this.$store.commit('SET_DISTRICTS', []);
 	this.calculateShippingCost({
-		provinceId: this.newAddress.provinceId,
+		provinceId: this.newAddress.department,
 		cityId,
 		parishId: null,
 	});
@@ -111,8 +111,8 @@ function selectProvince(cityId) {
 
 function selectDistrict(parishId) {
 	this.calculateShippingCost({
-		provinceId: this.newAddress.provinceId,
-		cityId: this.newAddress.cityId,
+		provinceId: this.newAddress.department,
+		cityId: this.newAddress.province,
 		parishId,
 	});
 	this.setCustomerAddress();

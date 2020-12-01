@@ -81,7 +81,7 @@ Cypress.Commands.add('ProductsChildren', (productId) => {
 
 Cypress.Commands.add('AddProductWithStock', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.terminado); // mango
+		cy.ProductsDetailPage(products.labial); // mango
 		cy.get('@ProductDetail').its('body').then(() => {
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
