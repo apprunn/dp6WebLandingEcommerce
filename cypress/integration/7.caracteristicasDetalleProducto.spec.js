@@ -9,8 +9,8 @@ context('DETALLE DE PRODUCTO: Tipo variación', () => {
 				.eq(0)
 				.find('button')
 				.then(($btns) => {
-					expect($btns[0]).to.have.css('background-color', 'rgb(255, 255, 255)');
-					expect($btns[1]).to.have.css('color', 'rgb(255, 255, 255)');
+					expect($btns[1]).to.have.css('background-color', 'rgb(255, 255, 255)');
+					expect($btns[0]).to.have.css('color', 'rgb(255, 255, 255)');
 				});
 		})
 	})
@@ -29,7 +29,7 @@ context('DETALLE DE PRODUCTO: Tipo variación', () => {
 				.eq(0)
 				.find('button')
 				.eq(0)
-				.should('have.css', 'background-color', 'rgb(255, 255, 255)')
+				.should('have.css', 'color', 'rgb(255, 255, 255)')
 				.click();
 
 			/**

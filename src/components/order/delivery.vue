@@ -94,8 +94,8 @@ function lonleyWarehouse() {
 }
 
 function setDefaultDelivery() {
-	const delivery = this.favoriteDirection || this.selectedDirection;
-	this.$store.commit('SET_DELIVERY_PLACE', delivery);
+	this.selectedDirection = this.favoriteDirection || this.selectedDirection;
+	this.$store.commit('SET_DELIVERY_PLACE', this.selectedDirection);
 }
 
 function noOrder() {

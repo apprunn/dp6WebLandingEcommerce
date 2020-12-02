@@ -16,7 +16,7 @@ context('DETALLE DE PRODUCTO: Imagen', () => {
 	it('Producto tipo variación', () => {
 		let parentUrl = null;
 		cy.fixture('fenix-dev').then(({ products }) => {
-			cy.ProductsDetailPage(products.variacion)
+			cy.ProductsDetailPage(products.variacion);
 			cy.ProductsChildren(products.variacion)
 				.its('body').then((res) => {
 					const [firstProduct] = res;
