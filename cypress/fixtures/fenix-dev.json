@@ -3,7 +3,7 @@
 	"password": 123456,
 	"token": "Bearer $2y$10$tNJmuXZKGwi0l38A.SxUVemGrFJiyLunyqkOqOTE7LHsrSwMEmEBi",
 	"products": {
-		"lowStock": 1095997,
+		"lowStock": 1096067,
 		"service": 1095225,
 		"noStock": 1092910,
 		"greatStock": 1093035,
@@ -41,7 +41,8 @@
 			"ref": "Al lado de la bodega"
 		},
 		"fenixDirection": "Oficina Fenix",
-		"fenixDirectionShippingCost": "$. 2.00"
+		"fenixDirectionShippingCost": "$. 2.00",
+		"noConfigParishName": "LA MATRIZ"
 	},
 	"warehouse": {
 		"name": "KILL"

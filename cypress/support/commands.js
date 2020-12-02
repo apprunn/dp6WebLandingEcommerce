@@ -81,7 +81,7 @@ Cypress.Commands.add('ProductsChildren', (productId) => {
 
 Cypress.Commands.add('AddProductWithStock', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.labial); // mango
+		cy.ProductsDetailPage(products.lowStock);
 		cy.get('@ProductDetail').its('body').then(() => {
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
@@ -110,7 +110,7 @@ Cypress.Commands.add('AddProductWithOutStock', () => {
 
 Cypress.Commands.add('AddProductService', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.service); // servicio prueba
+		cy.ProductsDetailPage(products.service);
 		cy.get('@ProductDetail').its('body').then((res) => {
 			const { type, typeInfo } = res;
 			expect(type).to.equal(2);
@@ -181,7 +181,15 @@ Cypress.Commands.add('SelectWarehouse', () => {
 
 Cypress.Commands.add('SelectDeliveryHome', () => {
 	cy.get('[data-cy="delivery-buttons"]')
-		.contains('Envío a Domicilio')
+		.click({ force: true });
+})
+
+Cypress.Commands.add('NewDirection', () => {
+	cy.get('[data-cy="address-selection"]')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains('Nueva dirección')
 		.click({ force: true });
 })
 
