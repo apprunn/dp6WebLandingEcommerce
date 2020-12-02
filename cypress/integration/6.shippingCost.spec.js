@@ -1,4 +1,4 @@
-context('COSTO DE ENVÍO', () => {
+context('COSTO DE ENVÍO SOLO PROVINCIA', () => {
 	beforeEach(() => {
 		cy.AddProductWithStock();
 		cy.get('[data-cy="make-order"]').click();
@@ -8,180 +8,178 @@ context('COSTO DE ENVÍO', () => {
 		cy.NewDirection();
 	})
 
-	it('Verificar costos de envío: SOLO PROVINCIA', () => {
+	it('Ciudad y Parroquia no configurada: Muestro precio de provincia', () => {
 		cy.fixture('fenix-dev.json').then(({ shippingCost }) => {
-			const { newAddress: { alias, apto, direction, ref } } = shippingCost;
+			const { newAddress: { alias, apto, direction, ref }, onlyProvince } = shippingCost;
 
-			cy.get('[data-cy="alias"]')
-				.type(alias);
-			cy.SelectProvinceInNewDirection(shippingCost.provinceName);
-			cy.get('[data-cy="shipping"]')
-				.should('contain', shippingCost.provinceCost);
-			cy.get('[data-cy="direccion"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(direction);
-			cy.get('[data-cy="ref"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(ref);
-			cy.get('[data-cy="apto"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(apto);
+			cy.NewDirectionDataWithoutUbigeo({
+				alias, direction, ref, apto,
+			});
+
+			cy.SelectProvinceInNewDirection(onlyProvince.provinceName);
 			cy.get('[data-cy="go-pay"]').then(($el) => {
 				expect($el).to.have.attr('disabled', 'disabled');
 			})
-		})
-	})
 
-	it('Verificar costos de envío: PROVINCIA Y CIUDAD', () => {
-		cy.fixture('fenix-dev.json').then(({ shippingCost }) => {
-			const { newAddress: { alias, apto, direction, ref } } = shippingCost;
-
-			cy.get('[data-cy="alias"]')
-				.type(alias);
-			cy.SelectProvinceInNewDirection(shippingCost.provinceName);
-			cy.SelectCityInNewDirection(shippingCost.cityName);
-			cy.get('[data-cy="shipping"]')
-				.should('contain', shippingCost.cityCost);
-			cy.get('[data-cy="direccion"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(direction);
-			cy.get('[data-cy="ref"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(ref);
-			cy.get('[data-cy="apto"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(apto);
+			cy.SelectCityInNewDirection(onlyProvince.cityName);
 			cy.get('[data-cy="go-pay"]').then(($el) => {
 				expect($el).to.have.attr('disabled', 'disabled');
 			})
+
+			cy.SelectParishInNewDirection(onlyProvince.parishName);
+
+
+			cy.get('[data-cy="shipping"]')
+				.should('contain', onlyProvince.cost);
+
+			cy.get('[data-cy="go-pay"]').then(($el) => {
+				expect($el).to.not.have.attr('disabled');
+			})
 		})
 	})
+})
 
-	it('Verificar costos de envío: PROVINCIA, CIUDAD Y PARROQUIA', () => {
+context('COSTO DE ENVÍO PROVINCIA Y CIUDAD', () => {
+	beforeEach(() => {
+		cy.AddProductWithStock();
+		cy.get('[data-cy="make-order"]').click();
+		cy.login();
+		cy.get('[data-cy="make-order"]').click();
+		cy.SelectDeliveryHome();
+		cy.NewDirection();
+	})
+
+	it.only('Parroquia no configurada: Muestro precio de Ciudad', () => {
 		cy.fixture('fenix-dev.json').then(({ shippingCost }) => {
-			const { newAddress: { alias, apto, direction, ref } } = shippingCost;
+			const { newAddress: { alias, apto, direction, ref }, provinceAndCity } = shippingCost;
 
-			cy.get('[data-cy="alias"]')
-				.type(alias);
-			cy.get('[data-cy="direccion"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(direction);
-			cy.get('[data-cy="ref"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(ref);
-			cy.get('[data-cy="apto"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(apto);
+			cy.NewDirectionDataWithoutUbigeo({
+				alias, direction, ref, apto,
+			});
 
-			cy.SelectProvinceInNewDirection(shippingCost.provinceName);
+			cy.SelectProvinceInNewDirection(provinceAndCity.provinceName);
+			cy.get('[data-cy="go-pay"]').then(($el) => {
+				expect($el).to.have.attr('disabled', 'disabled');
+			})
+
+			cy.SelectCityInNewDirection(provinceAndCity.cityName);
+			cy.get('[data-cy="go-pay"]').then(($el) => {
+				expect($el).to.have.attr('disabled', 'disabled');
+			})
+
+			cy.SelectParishInNewDirection(provinceAndCity.parishName);
+
+			cy.get('[data-cy="shipping"]')
+				.should('contain', provinceAndCity.cost);
+
+			cy.get('[data-cy="go-pay"]').then(($el) => {
+				expect($el).to.not.have.attr('disabled');
+			})
+		})
+	})
+})
+
+context('COSTO DE ENVÍO PROVINCIA, CIUDAD Y DISTRITO', () => {
+	beforeEach(() => {
+		cy.AddProductWithStock();
+		cy.get('[data-cy="make-order"]').click();
+		cy.login();
+		cy.get('[data-cy="make-order"]').click();
+		cy.SelectDeliveryHome();
+		cy.NewDirection();
+	})
+
+	it('Todo configurado: muestro precio de parroquia', () => {
+		cy.fixture('fenix-dev.json').then(({ shippingCost }) => {
+			const {
+				newAddress: { alias, apto, direction, ref },
+				provinceAndCityAndParish } = shippingCost;
+
+			cy.NewDirectionDataWithoutUbigeo({
+				alias, direction, ref, apto,
+			});
+
+			cy.SelectProvinceInNewDirection(provinceAndCityAndParish.provinceName);
 			cy.get('[data-cy="go-pay"]').then(($el) => {
 				expect($el).to.have.attr('disabled');
 			})
 
-			cy.SelectCityInNewDirection(shippingCost.cityName);
+			cy.SelectCityInNewDirection(provinceAndCityAndParish.cityName);
 			cy.get('[data-cy="go-pay"]').then(($el) => {
 				expect($el).to.have.attr('disabled');
 			})
 
-			cy.SelectParishInNewDirection(shippingCost.parishName);
+			cy.SelectParishInNewDirection(provinceAndCityAndParish.parishName);
 			cy.get('[data-cy="go-pay"]').then(($el) => {
 				expect($el).to.not.have.attr('disabled');
 			})
 
 			cy.get('[data-cy="shipping"]')
-				.should('contain', shippingCost.parishCost);
+				.should('contain', provinceAndCityAndParish.cost);
 		})
+	})
+})
+
+context('COSTO DE ENVÍO EN DIRECCIÓN EXISTENTE', () => {
+	beforeEach(() => {
+		cy.AddProductWithStock();
+		cy.get('[data-cy="make-order"]').click();
+		cy.login();
+		cy.get('[data-cy="make-order"]').click();
+		cy.SelectDeliveryHome();
+		cy.NewDirection();
 	})
 
 	it('Verificar costo de envío: DIRECCIÓN EXISTENTE', () => {
 		cy.fixture('fenix-dev.json').then(({ shippingCost }) => {
+			const { fenixData: { name, cost } } = shippingCost;
+
 			cy.get('[data-cy="address-selection"]')
 				.should('exist')
 				.click({ force: true });
 			cy.get('.menuable__content__active')
 				.should('exist');
-			cy.contains(shippingCost.fenixDirection)
+			cy.contains(name)
 				.click({ force: true });
 			cy.get('[data-cy="shipping"]')
-				.should('contain', shippingCost.fenixDirectionShippingCost);
+				.should('contain', cost);
 		})
+	})
+
+})
+
+context('COSTO DE ENVÍO NO CONFIGURADO', () => {
+	beforeEach(() => {
+		cy.AddProductWithStock();
+		cy.get('[data-cy="make-order"]').click();
+		cy.login();
+		cy.get('[data-cy="make-order"]').click();
+		cy.SelectDeliveryHome();
+		cy.NewDirection();
 	})
 
 	it('BOTÓN PAGO: Envío no configurado no lo habilita', () => {
 		cy.fixture('fenix-dev.json').then(({ shippingCost }) => {
-			const { newAddress: { alias, apto, direction, ref } } = shippingCost;
+			const { newAddress: { alias, apto, direction, ref }, noConfig } = shippingCost;
 
-			cy.get('[data-cy="alias"]')
-				.type(alias);
-			cy.SelectProvinceInNewDirection(shippingCost.errorProvinceName);
-			cy.SelectCityInNewDirection(shippingCost.errorCityName);
-			cy.SelectParishInNewDirection(shippingCost.errorParishName);
-			cy.get('[data-cy="direccion"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(direction);
-			cy.get('[data-cy="ref"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(ref);
-			cy.get('[data-cy="apto"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(apto);
+			cy.NewDirectionDataWithoutUbigeo({
+				alias, direction, ref, apto,
+			});
+
+			cy.SelectProvinceInNewDirection(noConfig.provinceName);
 			cy.get('[data-cy="go-pay"]').then(($el) => {
 				expect($el).to.have.attr('disabled', 'disabled');
 			})
-		})
-	})
 
-	it('Verificar costos de envío: PROVINCIA, CIUDAD Y PARROQUIA', () => {
-		cy.fixture('fenix-dev.json').then(({ shippingCost }) => {
-			const { newAddress: { alias, apto, direction, ref } } = shippingCost;
-
-			cy.get('[data-cy="alias"]')
-				.type(alias);
-			cy.get('[data-cy="direccion"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(direction);
-			cy.get('[data-cy="ref"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(ref);
-			cy.get('[data-cy="apto"]')
-				.should('exist')
-				.focus({ force: true })
-				.type(apto);
-
-			cy.SelectProvinceInNewDirection(shippingCost.provinceName);
+			cy.SelectCityInNewDirection(noConfig.cityName);
 			cy.get('[data-cy="go-pay"]').then(($el) => {
-				expect($el).to.have.attr('disabled');
+				expect($el).to.have.attr('disabled', 'disabled');
 			})
 
-			cy.SelectCityInNewDirection(shippingCost.cityName);
+			cy.SelectParishInNewDirection(noConfig.parishName);
+			cy.wait(1000);
 			cy.get('[data-cy="go-pay"]').then(($el) => {
-				expect($el).to.have.attr('disabled');
-			})
-
-			cy.SelectParishInNewDirection(shippingCost.noConfigParishName);
-			cy.get('[data-cy="go-pay"]').then(($el) => {
-				expect($el).to.not.have.attr('disabled');
-			})
-
-			cy.get('[data-cy="shipping"]')
-				.should('contain', shippingCost.cityCost);
-
-			cy.get('[data-cy="go-pay"]').then(($el) => {
-				expect($el).to.not.have.attr('disabled');
+				expect($el).to.have.attr('disabled', 'disabled');
 			})
 		})
 	})

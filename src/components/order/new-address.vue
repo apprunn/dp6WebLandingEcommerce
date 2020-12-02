@@ -88,11 +88,7 @@ function selectDepartment(provinceId) {
 	this.newAddress.district = null;
 	this.$store.commit('SET_PROVINCES', []);
 	this.$store.commit('SET_DISTRICTS', []);
-	this.calculateShippingCost({
-		provinceId,
-		cityId: null,
-		parishId: null,
-	});
+	// this.calculateShippingCost({ provinceId });
 	this.$store.dispatch('LOAD_PROVINCES', { context: this, provinceId });
 	this.setCustomerAddress();
 }
@@ -100,11 +96,10 @@ function selectDepartment(provinceId) {
 function selectProvince(cityId) {
 	this.newAddress.districts = null;
 	this.$store.commit('SET_DISTRICTS', []);
-	this.calculateShippingCost({
-		provinceId: this.newAddress.department,
-		cityId,
-		parishId: null,
-	});
+	// this.calculateShippingCost({
+	// 	provinceId: this.newAddress.department,
+	// 	cityId,
+	// });
 	this.$store.dispatch('LOAD_DISTRICTS', { context: this, cityId });
 	this.setCustomerAddress();
 }

@@ -19,29 +19,43 @@
 		"email": "root30@mail.com"
 	},
 	"shippingCost": {
-		"provinceName": "COTOPAXI",
+		"onlyProvince": {
+			"provinceName": "CARCHI",
+			"cityName": "ESPEJO",
+			"parishName": "SAN ISIDRO",
+			"cost": "$. 2.24"
+		},
+		"provinceAndCity": {
+			"provinceName": "PASTAZA",
+			"cityName": "MERA",
+			"parishName": "MADRE TIERRA",
+			"cost": "$. 7.84"
+		},
+		"provinceAndCityAndParish": {
+			"provinceName": "COTOPAXI",
+			"cityName": "LATACUNGA",
+			"parishName": "JUAN MONTALVO (SAN SEBASTIÁN)",
+			"cost": "$. 2.00"
+		},
 		"provinceId": 189,
 		"provinceCost": "$. 11.20",
-		"cityName": "LATACUNGA",
 		"cityId": 251,
 		"cityCost": "$. 0.10",
-		"parishCost": "$. 2.00",
-		"parishId": 691,
-		"parishName": "JUAN MONTALVO (SAN SEBASTIÁN)",
-		"errorProvinceName": "BOLIVAR",
-		"errorProvinceId": 186,
-		"errorCityName": "GUARANDA",
-		"errorCityId": 231,
-		"errorParishName": "GUANUJO",
-		"errorParishId": 576,
+		"noConfig": {
+			"provinceName": "BOLIVAR",
+			"cityName": "GUARANDA",
+			"parishName": "GUANUJO"
+		},
 		"newAddress": {
 			"alias": "mi apto",
 			"apto": "201",
 			"direction": "Calle Araguaney, casa 25",
 			"ref": "Al lado de la bodega"
 		},
-		"fenixDirection": "Oficina Fenix",
-		"fenixDirectionShippingCost": "$. 2.00",
+		"fenixData": {
+			"name": "Oficina Fenix",
+			"cost": "$. 2.00"
+		},
 		"noConfigParishName": "LA MATRIZ"
 	},
 	"warehouse": {

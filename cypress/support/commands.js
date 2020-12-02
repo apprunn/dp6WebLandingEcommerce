@@ -81,7 +81,7 @@ Cypress.Commands.add('ProductsChildren', (productId) => {
 
 Cypress.Commands.add('AddProductWithStock', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.lowStock);
+		cy.ProductsDetailPage(products.terminado);
 		cy.get('@ProductDetail').its('body').then(() => {
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
@@ -291,4 +291,21 @@ Cypress.Commands.add('PressNiubiz', () => {
 	cy.get('[data-cy="niubiz-btn"]')
 		.should('exist')
 		.click();
+})
+
+Cypress.Commands.add('NewDirectionDataWithoutUbigeo', ({ alias, direction, ref, apto }) => {
+	cy.get('[data-cy="alias"]')
+		.type(alias);
+	cy.get('[data-cy="direccion"]')
+		.should('exist')
+		.focus({ force: true })
+		.type(direction);
+	cy.get('[data-cy="ref"]')
+		.should('exist')
+		.focus({ force: true })
+		.type(ref);
+	cy.get('[data-cy="apto"]')
+		.should('exist')
+		.focus({ force: true })
+		.type(apto);
 })
