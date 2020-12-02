@@ -90,9 +90,11 @@
 											:key="bankAccount.id"
 										>
 											<div class="bankAccount-container">
-												<h4>{{bankAccount.bank.name}}</h4>
+												<h4>{{bankAccount.bank && bankAccount.bank.name}}</h4>
 												<div class="bankAccount-data">
-													<span>A nombre de:{{bankAccount.additionalInformation.personName}}</span>
+													<span>
+														A nombre de:{{bankAccount.additionalInformation && bankAccount.additionalInformation.personName}}
+													</span>
 													<span>Nro. Cta: {{bankAccount.accountNumber}}</span>
 												</div>
 											</div>
