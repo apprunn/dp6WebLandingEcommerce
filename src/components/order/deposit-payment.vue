@@ -36,9 +36,15 @@
 							<h3>{{account.accountNumber}}</h3>
 						</div>
 						<div class="person-name-info">
-							<h4>A Nombre de: <span>{{account.additionalInformation.personName}}</span></h4>
-							<h4>Documento de identidad: <span>{{account.additionalInformation.personDocumentNumber}}</span></h4>
-							<h4>Correo: <span>{{account.additionalInformation.documentEmail}}</span></h4>
+							<h4>A Nombre de: <span>
+								{{account.additionalInformation && account.additionalInformation.personName}}
+							</span></h4>
+							<h4>Documento de identidad: <span>
+								{{account.additionalInformation && account.additionalInformation.personDocumentNumber}}
+							</span></h4>
+							<h4>Correo: <span>
+								{{account.additionalInformation && account.additionalInformation.documentEmail}}
+							</span></h4>
 						</div>
 					</li>
 				</ul>
