@@ -226,7 +226,7 @@ function insertForm(dtc) {
 	el.appendChild(dataFastForm);
 	setTimeout(() => {
 		this.insertDiferidos();
-		this.insertTiposDeCredito(dtc.typesCredit.options);
+		this.insertTiposDeCredito(dtc.typesCredit);
 	}, 5000);
 }
 
@@ -248,8 +248,8 @@ async function datafastAdditionals({ code }) {
 		const { data: datafastResponse } = await this.$httpSales.get(
 			url, { params });
 
-		const creditCards = getDeeper('creditCards.options')(datafastResponse) || [];
-		const typesCredit = getDeeper('typesCredit.options')(datafastResponse) || [];
+		const creditCards = getDeeper('creditCards')(datafastResponse) || [];
+		const typesCredit = getDeeper('typesCredit')(datafastResponse) || [];
 
 		this.datafastData.creditCards = creditCards.filter(cc => cc.active);
 		this.datafastData.typesCredit = typesCredit.filter(tc => tc.flagActive);
