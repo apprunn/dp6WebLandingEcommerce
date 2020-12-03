@@ -66,9 +66,22 @@ Cypress.Commands.add('ProductsDetailPage', (productId) => {
 	});
 })
 
+Cypress.Commands.add('ProductsChildren', (productId) => {
+	cy.fixture('fenix-dev.json').then(({ token }) => {
+		cy.visit(`http://localhost:9010/${productId}/detalle-producto`);
+		cy.request({
+			method: 'get',
+			url: `https://products2.perudatos.com/products-public/${productId}/children`,
+			headers: {
+				Authorization: token,
+			},
+		}).as('ProductChildren');
+	});
+})
+
 Cypress.Commands.add('AddProductWithStock', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.terminado); // mango
+		cy.ProductsDetailPage(products.terminado);
 		cy.get('@ProductDetail').its('body').then(() => {
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
@@ -97,7 +110,7 @@ Cypress.Commands.add('AddProductWithOutStock', () => {
 
 Cypress.Commands.add('AddProductService', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.service); // servicio prueba
+		cy.ProductsDetailPage(products.service);
 		cy.get('@ProductDetail').its('body').then((res) => {
 			const { type, typeInfo } = res;
 			expect(type).to.equal(2);
@@ -141,19 +154,48 @@ Cypress.Commands.add('FillResponsibleForm', () => {
 })
 
 Cypress.Commands.add('SelectAddress', () => {
-	cy.get('[data-cy="address-selection"]')
-		.should('exist')
-		.click({ force: true });
-	cy.get('.menuable__content__active')
-		.children()
-		.children()
-		.contains('Oficina Fenix')
-		.click();
+	cy.fixture('fenix-dev').then(({ delivery }) => {
+		cy.get('[data-cy="address-selection"]')
+			.should('exist')
+			.click({ force: true });
+		cy.get('.menuable__content__active')
+			.children()
+			.children()
+			.contains(delivery.name)
+			.click();
+	})
+})
+
+Cypress.Commands.add('SelectWarehouse', () => {
+	cy.fixture('fenix-dev').then(({ warehouse }) => {
+		cy.get('[data-cy="address-selection"]')
+			.should('exist')
+			.click({ force: true });
+		cy.get('.menuable__content__active')
+			.children()
+			.children()
+			.contains(warehouse.name)
+			.click();
+	})
 })
 
 Cypress.Commands.add('SelectDeliveryHome', () => {
 	cy.get('[data-cy="delivery-buttons"]')
-		.contains('Envío a Domicilio')
+		.click({ force: true });
+})
+
+Cypress.Commands.add('NewDirection', () => {
+	cy.get('[data-cy="address-selection"]')
+		.click({ force: true });
+	cy.get('.menuable__content__active')
+		.should('exist');
+	cy.contains('Nueva dirección')
+		.click({ force: true });
+})
+
+Cypress.Commands.add('SelectWarehousePickUp', () => {
+	cy.get('[data-cy="delivery-buttons"]')
+		.contains('Recoger en Tienda')
 		.click({ force: true });
 })
 
@@ -216,4 +258,54 @@ Cypress.Commands.add('SelectParishInNewDirection', (parishName) => {
 		.should('exist');
 	cy.contains(parishName)
 		.click({ force: true });
+})
+
+Cypress.Commands.add('AddToCart', () => {
+	cy.get('[data-cy="add-to-cart"]')
+		.should('exist')
+		.click();
+})
+
+Cypress.Commands.add('ImgInAddToCartModal', (parentUrl) => {
+	cy.get('[data-cy="modal-add-to-cart-img"]')
+		.should('exist')
+		.then(($img) => {
+			expect($img).to.have.attr('src', parentUrl);
+		})
+})
+
+Cypress.Commands.add('PresentationImage', (selector, parentUrl) => {
+	cy.get(selector)
+		.eq(0)
+		.should('exist')
+		.find('img')
+		.then(($img) => {
+			expect($img).to.have.attr('src', parentUrl);
+		});
+})
+
+Cypress.Commands.add('PressNiubiz', () => {
+	cy.get('[data-cy="niubiz-check"]')
+		.should('exist')
+		.click({ multiple: true, force: true });
+	cy.get('[data-cy="niubiz-btn"]')
+		.should('exist')
+		.click();
+})
+
+Cypress.Commands.add('NewDirectionDataWithoutUbigeo', ({ alias, direction, ref, apto }) => {
+	cy.get('[data-cy="alias"]')
+		.type(alias);
+	cy.get('[data-cy="direccion"]')
+		.should('exist')
+		.focus({ force: true })
+		.type(direction);
+	cy.get('[data-cy="ref"]')
+		.should('exist')
+		.focus({ force: true })
+		.type(ref);
+	cy.get('[data-cy="apto"]')
+		.should('exist')
+		.focus({ force: true })
+		.type(apto);
 })

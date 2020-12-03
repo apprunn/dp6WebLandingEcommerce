@@ -88,11 +88,7 @@ function selectDepartment(provinceId) {
 	this.newAddress.district = null;
 	this.$store.commit('SET_PROVINCES', []);
 	this.$store.commit('SET_DISTRICTS', []);
-	this.calculateShippingCost({
-		provinceId,
-		cityId: null,
-		parishId: null,
-	});
+	// this.calculateShippingCost({ provinceId });
 	this.$store.dispatch('LOAD_PROVINCES', { context: this, provinceId });
 	this.setCustomerAddress();
 }
@@ -100,19 +96,18 @@ function selectDepartment(provinceId) {
 function selectProvince(cityId) {
 	this.newAddress.districts = null;
 	this.$store.commit('SET_DISTRICTS', []);
-	this.calculateShippingCost({
-		provinceId: this.newAddress.provinceId,
-		cityId,
-		parishId: null,
-	});
+	// this.calculateShippingCost({
+	// 	provinceId: this.newAddress.department,
+	// 	cityId,
+	// });
 	this.$store.dispatch('LOAD_DISTRICTS', { context: this, cityId });
 	this.setCustomerAddress();
 }
 
 function selectDistrict(parishId) {
 	this.calculateShippingCost({
-		provinceId: this.newAddress.provinceId,
-		cityId: this.newAddress.cityId,
+		provinceId: this.newAddress.department,
+		cityId: this.newAddress.province,
 		parishId,
 	});
 	this.setCustomerAddress();
@@ -124,7 +119,7 @@ async function calculateShippingCost(locationId, location) {
 	try {
 		const { data: amount } = await this.$httpProducts.post(url, body);
 		this.$store.dispatch('setShippingCost', amount);
-		this.$store.dispatch('setNoShippingCostError', false);
+		this.$store.dispatch('setShippingCostError', false);
 	} catch (error) {
 		if (error.data.message === 'PRICE_NOT_CONFIGURATION') {
 			this.$store.dispatch('setShippingCostError', true);

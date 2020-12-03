@@ -23,10 +23,8 @@
 					alt="logo_yape"
 				>
 				<ol>
-					<li>
-						<span class="bold">Escanea</span> el QR.</li>
-					<li>
-						<span class="bold">Ingresa</span> el monto a pagar y listo.</li>
+					<li><span class="bold">Escanea</span> el QR.</li>
+					<li><span class="bold">Ingresa</span> el monto a pagar y listo.</li>
 				</ol>
 			</div>
 			<div class="modal-amount" v-if="!successTransaction">

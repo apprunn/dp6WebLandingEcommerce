@@ -90,9 +90,11 @@
 											:key="bankAccount.id"
 										>
 											<div class="bankAccount-container">
-												<h4>{{bankAccount.bank.name}}</h4>
+												<h4>{{bankAccount.bank && bankAccount.bank.name}}</h4>
 												<div class="bankAccount-data">
-													<span>A nombre de:{{bankAccount.additionalInformation.personName}}</span>
+													<span>
+														A nombre de:{{bankAccount.additionalInformation && bankAccount.additionalInformation.personName}}
+													</span>
 													<span>Nro. Cta: {{bankAccount.accountNumber}}</span>
 												</div>
 											</div>
@@ -117,7 +119,11 @@
 				</div>
 			</div>
 		</section>
-		<section v-if="isNiubiz" class="card-data-niubiz">
+		<section
+			v-if="isNiubiz && isOnlinePayment"
+			class="card-data-niubiz"
+			data-cy="online-payment-info"
+		>
 			<h4>Pago realizado con tarjeta: <span>{{niubizGateway.cardBrand}}</span>, nro: <span>{{niubizGateway.cardNumber}}</span></h4>
 			<h5>el día <span>{{niubizGateway.createdAt | formatDate}}</span></h5>
 		</section>

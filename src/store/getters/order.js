@@ -58,7 +58,7 @@ const getters = {
 		const invalidBill = flagBill ? isEmpty(bill) : false;
 		let invalidShippingCost = false;
 		if (flagPickUp === 1) {
-			invalidShippingCost = shippingCost >= 0 || shippingCostError;
+			invalidShippingCost = shippingCost.price < 0 || shippingCostError;
 		}
 		return lib.atLeastOneTrue(
 			invalidResponsible,

@@ -86,11 +86,13 @@ class ProductDetails {
 	getImgsWithoutUnitId(allImgs) {
 		const baseUnitId = this.getProductDetails().unitId;
 		const selectedUnitId = this.unitId;
+		const defaultImage = [{ urlImage: this.pictureNotFound, select: false }];
 		if (baseUnitId === selectedUnitId) {
-			const imgsWithoutUnitId = isEmpty(allImgs) ? [] : allImgs.filter(img => !img.unitId);
+			const imgsWithoutUnitId = isEmpty(allImgs)
+				? defaultImage : allImgs.filter(img => !img.unitId);
 			return imgsWithoutUnitId;
 		}
-		return [{ urlImage: this.pictureNotFound, select: false }];
+		return defaultImage;
 	}
 	getProductDetails() {
 		return { ...this.selectedProduct };
@@ -120,14 +122,21 @@ class ProductDetails {
 		this.globalFeatures.init(product);
 		if (isEmpty(this.childrens)) {
 			this.updateSelectedProducts([product]);
+			this.setImagePresentation.call(this, product.urlImage);
 		} else {
-			const productSelected = ProductDetails.isVariationType(product)
-				? this.childrens[0] : product;
-			this.productSelected(productSelected);
+			const isVariationType = ProductDetails.isVariationType(product);
+			if (isVariationType) {
+				const child = this.childrens[0];
+				this.productSelected(child);
+				const img = child.images[0] ? child.images[0].urlImage : this.pictureNotFound;
+				this.setImagePresentation.call(this, img);
+			} else {
+				this.productSelected(product);
+				this.setImagePresentation.call(this, product.urlImage);
+			}
 		}
 		this.updateUnitId.call(this, unitId);
 		this.updateQuantity.call(this, 1);
-		this.setImagePresentation.call(this, product.urlImage);
 	}
 	static isVariationType(product) {
 		const { typeInfo: { code } } = product;

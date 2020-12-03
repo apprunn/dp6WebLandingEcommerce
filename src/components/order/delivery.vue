@@ -78,15 +78,24 @@ function created() {
 	]).then(() => {
 		if (that.noOrder) {
 			that.setDefaultDelivery();
+			that.lonleyWarehouse();
 		} else {
 			that.setOrderInfoByDefault();
 		}
 	});
 }
 
+function lonleyWarehouse() {
+	if (this.getWarehouses.length === 2) {
+		const warehouse = this.getWarehouses[1];
+		this.selectedWarehouse = warehouse;
+		this.warehouseSelected(warehouse.id);
+	}
+}
+
 function setDefaultDelivery() {
-	const delivery = this.favoriteDirection || this.selectedDirection;
-	this.$store.commit('SET_DELIVERY_PLACE', delivery);
+	this.selectedDirection = this.favoriteDirection || this.selectedDirection;
+	this.$store.commit('SET_DELIVERY_PLACE', this.selectedDirection);
 }
 
 function noOrder() {
@@ -339,6 +348,7 @@ export default {
 		clearSelectedWarehouse,
 		directionSelected,
 		handlerOrderInfo,
+		lonleyWarehouse,
 		selected,
 		setDefaultDelivery,
 		setDeliveryPlaceByDefault,
