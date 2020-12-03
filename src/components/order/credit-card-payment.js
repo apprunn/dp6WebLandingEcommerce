@@ -69,14 +69,14 @@ function paymentLinkCreator(h, gateway, ipAddress) {
  */
 const paymentButtonCreator = (h, gateway, ipAddress) => {
 	const buttonOptions = {
-		[niubiz]: Niubiz,
-		[paymentez]: Paymentez,
-		[datafast]: DataFast,
-		[pagoplux]: PagoPlux,
-		[xchange]: Xchange,
 		[alignet]: Alignet,
+		[datafast]: DataFast,
 		[mercadopago]: MercadoPago,
 		[mercadopagoMp]: MercadoPago,
+		[niubiz]: Niubiz,
+		[pagoplux]: PagoPlux,
+		[paymentez]: Paymentez,
+		[xchange]: Xchange,
 	};
 	let selectedButtons = [];
 	gateway.forEach((t) => {
@@ -86,6 +86,7 @@ const paymentButtonCreator = (h, gateway, ipAddress) => {
 			{
 				props: {
 					code: gatewayCode,
+					gateway,
 					img: urlImage,
 					ipAddress,
 				},

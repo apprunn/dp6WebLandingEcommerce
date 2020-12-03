@@ -1,35 +1,72 @@
 <template>
-	<div class="data-fast-container">
-		<button
-			:disabled="disabledButtonDataFast"
-			class="data-fast-btn"
-			type="button"
-			@click="checkout"
-		>
-			<img :src="img" alt="logo_data_fast">
-		</button>
-		<button
-			class="data-fast-btn-details"
-			type="button"
-		>
-			<img src="/static/icons/information.svg" alt="" height="26" />
-			<span class="tooltip">
-				Haz clic en el botón para ver las tarjetas con las que puedes pagar en DATAFAST
-			</span>
-		</button>
-		<modal v-model="showModal" max-width="520px" @input="closeModal">
-			<div ref="data-fast" class="modal-data-fast" v-if="showModal">
-				<h3 v-if="loading">Cargando...</h3>
+	<div>
+		<div class="data-fast-container">
+			<button
+				:disabled="disabledButtonDataFast"
+				class="data-fast-btn"
+				type="button"
+				@click="checkout"
+			>
+				<img :src="img" alt="logo_data_fast">
+			</button>
+			<button
+				class="data-fast-btn-details"
+				type="button"
+			>
+				<img src="/static/icons/information.svg" alt="" height="26" />
+				<span class="tooltip">
+					Haz clic en el botón para ver las tarjetas con las que puedes pagar en DATAFAST
+				</span>
+			</button>
+			<modal v-model="showModal" max-width="520px" @input="closeModal">
+				<div ref="data-fast" class="modal-data-fast" v-if="showModal">
+					<h3 v-if="loading">Cargando...</h3>
+				</div>
+			</modal>
+		</div>
+		<div class="details-collapse component-container">
+			<div class="details-collapse-title payment-sections">
+				Tarjetas con las que puedes pagar en DATAFAST
+				<button
+					class="details-collapse-title-btn"
+					type="button"
+					@click="openDetails"
+				>
+					<template v-if="open">OCULTAR</template>
+					<template v-else>VER</template>
+				</button>
 			</div>
-		</modal>
+			<div v-if="open" class="details-collapse-container">
+				<div class="details-collapse-items">
+					<div
+						class="details-collapse-item"
+						v-for="card in datafastData.creditCards"
+						:key="card.code"
+					>
+						<template v-if="card.active">
+								<div>
+									<img :src="card.urlImage" height="24" />
+								</div>
+								<div class="name-tarjet">
+									{{ card.name }}
+								</div>
+						</template>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
 import modal from '@/components/shared/modal/modal-component';
+import { getDeeper } from '@/shared/lib';
+import { datafast } from '@/shared/enums/gatewayCodes';
 
 function created() {
 	this.getClientIp();
+	const dataFastGateway = this.gateway.find(g => g.code === datafast);
+	this.datafastAdditionals(dataFastGateway);
 }
 
 async function getClientIp() {
@@ -59,14 +96,13 @@ function createDataFastForm(response) {
 	const testENV = `https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=${response.id}`;
 	const prodENV = `https://oppwa.com/v1/paymentWidgets.js?checkoutId=${response.id}`;
 	const src = response.payboxProduction ? prodENV : testENV;
-	const datafastTypesCredit = JSON.parse(localStorage.getItem('datafast-types-credit')) || [];
 	const dataFastScript = document.createElement('script');
 	dataFastScript.setAttribute('src', src);
 	this.showModal = true;
 	setTimeout(() => {
 		const el = this.$refs['data-fast'];
 		el.appendChild(dataFastScript);
-		this.insertForm(datafastTypesCredit);
+		this.insertForm(response.additionalInformation);
 	});
 	this.loadingFn();
 }
@@ -77,7 +113,26 @@ function loadingFn() {
 	}, 2200);
 }
 
-function insertTiposDeCredito(dtc) {
+function updateDiferidos(ev) {
+	const diferidoTime = this.getDiferidos(ev);
+
+	const select = document.getElementById('diferidos');
+	const len = select.length;
+
+	for (let i = len - 1; i >= 0; i -= 1) {
+		select.options[i].remove();
+	}
+
+	diferidoTime.forEach((item) => {
+		const newOption = document.createElement('option');
+		newOption.setAttribute('value', item);
+		const newOptionContent = document.createTextNode(item);
+		newOption.appendChild(newOptionContent);
+		select.appendChild(newOption);
+	});
+}
+
+function insertTiposDeCredito(dtcOptions) {
 	const tipocredito = document.createElement('div');
 	const imgElement = document.createElement('img');
 	tipocredito.setAttribute('class', 'wpwl-wrapper wpwl-wrapper-custom');
@@ -87,9 +142,10 @@ function insertTiposDeCredito(dtc) {
 	const divContent = document.createTextNode('Tipo de crédito:');
 	tipocredito.appendChild(divContent);
 	const newSelect = document.createElement('select');
+	newSelect.addEventListener('change', this.updateDiferidos);
 	newSelect.setAttribute('style', 'background-color: white;padding: 3.75px 0 3.75px 10px; border: 1px solid #ccc;border-radius: 4px; width: 258px;');
 	newSelect.setAttribute('name', 'customParameters[SHOPPER_TIPOCREDITO]');
-	dtc.forEach(({ id, name }) => {
+	dtcOptions.forEach(({ id, name }) => {
 		const newOption = document.createElement('option');
 		newOption.setAttribute('value', id);
 		const newOptionContent = document.createTextNode(name);
@@ -111,19 +167,32 @@ function insertDiferidos() {
 	divSelect.setAttribute('class', 'wpwl-wrapper wpwl-wrapper-custom');
 	divSelect.setAttribute('style', 'display:inline-block');
 	const newSelect = document.createElement('select');
+	newSelect.setAttribute('id', 'diferidos');
 	newSelect.setAttribute('style', 'background-color: white;width: 258px;border-radius: 4px;border: 1px solid #ccc;padding: 3.75px 0 3.75px 10px;outline: none;');
 	newSelect.setAttribute('name', 'recurring.numberOfInstallments');
-	[0, 3, 6, 12].forEach((item) => {
+
+	this.defaultDiferidos.forEach((item) => {
 		const newOption = document.createElement('option');
 		newOption.setAttribute('value', item);
 		const newOptionContent = document.createTextNode(item);
 		newOption.appendChild(newOptionContent);
 		newSelect.appendChild(newOption);
 	});
+
 	divSelect.appendChild(newSelect);
 	const formCard = document.querySelector('form.wpwl-form-card').querySelector('.wpwl-wrapper-submit');
 	formCard.appendChild(divTitle);
 	formCard.appendChild(divSelect);
+}
+
+function getDiferidos(ev) {
+	const { target: { value } } = ev;
+	const diferidoItem = this.datafastData.typesCredit.find(d => d.id === value);
+	if (diferidoItem && diferidoItem.children && diferidoItem.children.options) {
+		const { children: { options } } = diferidoItem;
+		return options.length ? options.map(o => o.id) : this.defaultDiferidos;
+	}
+	return this.defaultDiferidos;
 }
 
 function insertForm(dtc) {
@@ -157,7 +226,7 @@ function insertForm(dtc) {
 	el.appendChild(dataFastForm);
 	setTimeout(() => {
 		this.insertDiferidos();
-		this.insertTiposDeCredito(dtc);
+		this.insertTiposDeCredito(dtc.typesCredit.options);
 	}, 5000);
 }
 
@@ -172,11 +241,53 @@ function closeModal(val) {
 	this.disabledButtonDataFast = false;
 }
 
+async function datafastAdditionals({ code }) {
+	const params = { commerceCode: this.getCommerceData.code };
+	const url = `payment-gateway/${code}/additionals`;
+	try {
+		const { data: datafastResponse } = await this.$httpSales.get(
+			url, { params });
+
+		const creditCards = getDeeper('creditCards.options')(datafastResponse) || [];
+		const typesCredit = getDeeper('typesCredit.options')(datafastResponse) || [];
+
+		this.datafastData.creditCards = creditCards.filter(cc => cc.active);
+		this.datafastData.typesCredit = typesCredit.filter(tc => tc.flagActive);
+
+		if (creditCards.length) {
+			const datafastStringify = JSON.stringify(this.datafastData.creditCards);
+			localStorage.setItem('datafast-cards', datafastStringify);
+		} else {
+			localStorage.removeItem('datafast-cards');
+		}
+		if (typesCredit.length) {
+			const datafastStringify = JSON.stringify(this.datafastData.typesCredit);
+			localStorage.setItem('datafast-types-credit', datafastStringify);
+		} else {
+			localStorage.removeItem('datafast-types-credit');
+		}
+	} catch (err) {
+		if (err.status === 500) {
+			this.showGenericError();
+		}
+	}
+}
+
+function openDetails() {
+	if (this.datafastData.creditCards && this.datafastData.creditCards.length > 0) {
+		this.open = !this.open;
+	}
+}
+
 function data() {
 	return {
-		disabledButtonDataFast: false,
 		clientIp: null,
+		datafastData: {},
+		defaultDiferidos: [0, 3, 6, 12],
+		disabledButtonDataFast: false,
+		flagDataFast: null,
 		loading: true,
+		open: false,
 		show: false,
 		showModal: false,
 	};
@@ -200,21 +311,25 @@ export default {
 		checkout,
 		closeModal,
 		createDataFastForm,
+		datafastAdditionals,
 		getClientIp,
+		getDiferidos,
 		insertDiferidos,
 		insertTiposDeCredito,
 		insertForm,
 		loadingFn,
+		openDetails,
+		updateDiferidos,
 	},
 	props: {
+		gateway: {
+			default: () => [],
+			type: Array,
+		},
 		img: {
 			type: String,
 			required: true,
 		},
-		// ipAddress: {
-		// 	type: String,
-		// 	required: true,
-		// },
 	},
 };
 </script>
@@ -280,4 +395,58 @@ export default {
 	margin: 0 14px;
 	position: relative;
 }
+
+	.details-collapse-title {
+		align-items: center;
+		border-bottom: 1px solid rgb(230, 230, 230);
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		font-family: font(bold);
+		font-size: size(medium);
+		justify-content: space-between;
+		padding-bottom: 3px;
+
+		&-btn {
+			border: 1px solid black;
+			border-radius: 6px;
+			font-family: font(demi);
+			font-size: size(minmedium);
+			margin-left: 10px;
+			padding: 4px 5px 0px;
+		}
+	}
+
+	.details-collapse-items {
+		align-items: flex-start;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		margin-top: 10px;
+	}
+
+	.details-collapse-item {
+		align-items: center;
+		border: 1px solid color(black);
+		border-radius: 6px;
+		display: flex;
+		flex-direction: column;
+		font-family: font(bold);
+		margin: 5px 8px;
+		padding: 10px 15px 5px;
+		text-transform: uppercase;
+		width: 205px;
+	}
+
+	.name-tarjet {
+		font-size: 11px;
+		margin-top: 5px;
+		text-align: center;
+	}
+
+	.component-container {
+		margin-top: 15px;
+		padding: 0 1rem;
+	}
 </style>
