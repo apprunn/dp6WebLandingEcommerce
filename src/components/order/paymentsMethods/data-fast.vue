@@ -133,6 +133,7 @@ function updateDiferidos(ev) {
 }
 
 function insertTiposDeCredito(dtcOptions) {
+	const dtcOnlyActive = dtcOptions.filter(d => d.flagActive);
 	const tipocredito = document.createElement('div');
 	const imgElement = document.createElement('img');
 	tipocredito.setAttribute('class', 'wpwl-wrapper wpwl-wrapper-custom');
@@ -145,7 +146,7 @@ function insertTiposDeCredito(dtcOptions) {
 	newSelect.addEventListener('change', this.updateDiferidos);
 	newSelect.setAttribute('style', 'background-color: white;padding: 3.75px 0 3.75px 10px; border: 1px solid #ccc;border-radius: 4px; width: 258px;');
 	newSelect.setAttribute('name', 'customParameters[SHOPPER_TIPOCREDITO]');
-	dtcOptions.forEach(({ id, name }) => {
+	dtcOnlyActive.forEach(({ id, name }) => {
 		const newOption = document.createElement('option');
 		newOption.setAttribute('value', id);
 		const newOptionContent = document.createTextNode(name);
