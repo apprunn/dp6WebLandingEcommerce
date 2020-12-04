@@ -104,7 +104,7 @@ function saveUserInfo() {
 		this.showNotification('Actualización exitosa');
 		this.$router.push({ name: 'user-data-details' });
 	} catch (error) {
-		this.showGenericError('No fue posible actualizar los datos');
+		this.showGenericError('No fue posible actualizar los datos', 50000);
 	}
 }
 

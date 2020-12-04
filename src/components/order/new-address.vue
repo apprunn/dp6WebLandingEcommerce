@@ -124,7 +124,7 @@ async function calculateShippingCost(locationId, location) {
 		if (error.data.message === 'PRICE_NOT_CONFIGURATION') {
 			this.$store.dispatch('setShippingCostError', true);
 			this.$store.dispatch('setNoShippingCost');
-			this.showNotification('No es posible hacer envios a ese destino.', 'error');
+			this.showNotification('No es posible hacer envios a ese destino.', 'error', null, false, 8000);
 		}
 	}
 }

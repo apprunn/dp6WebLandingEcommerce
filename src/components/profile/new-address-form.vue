@@ -80,7 +80,7 @@ async function addNewAddress() {
 		this.showNotification('Nueva dirección agregada');
 		this.clearNewAddressForm();
 	} catch (error) {
-		this.showGenericError('No fue posible agregar la nueva dirección. Verifique la información');
+		this.showGenericError('No fue posible agregar la nueva dirección. Verifique la información', 80000);
 	}
 }
 

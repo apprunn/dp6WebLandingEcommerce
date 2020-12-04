@@ -40,6 +40,10 @@
 							<span class="delivery-title">Estado del pago:</span>
 							<span class="delivery-result">{{order.paymentStateName}}</span>
 						</div>
+						<div class="payment-reference" v-if="showReference">
+							<span class="delivery-title">Su pedido ha sido pagado sobre la referencia:</span>
+							<span class="delivery-result">{{showReference}}</span>
+						</div>
 						<div class="subtotal-container">
 							<span class="delivery-title">Subtotal:</span>
 							<span class="delivery-result">{{currency}}{{order.subtotal | currencyFormat}}</span>
@@ -264,6 +268,10 @@ function niubizGateway() {
 	};
 }
 
+function showReference() {
+	return getDeeper('additionalInformation.paymentGateway.referenceId')(this.order);
+}
+
 function data() {
 	return {
 		swiperOption: {
@@ -309,6 +317,7 @@ export default {
 		link,
 		niubizGateway,
 		wayPayment,
+		showReference,
 	},
 	created,
 	data,
@@ -418,7 +427,8 @@ export default {
 			.payment-status-container,
 			.discount-container,
 			.subtotal-container,
-			.shipping-cost-container {
+			.shipping-cost-container,
+			.payment-reference {
 				font-family: font(heavy);
 				font-family: font(heavy);
 

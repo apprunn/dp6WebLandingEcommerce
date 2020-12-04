@@ -32,7 +32,7 @@
 	<form-bulletin />
 	<app-footer></app-footer>
 	<v-snackbar
-			:timeout="5000"
+			:timeout="snackbar.timeout"
 			:color="snackbar.color"
 			top
 			right

@@ -73,10 +73,10 @@
 		} catch (err) {
 			if (err.status === 401) {
 				if (err.data.message === 'TOKEN_NOT_FOUND') {
-					this.showGenericError('Token no encontrado');
+					this.showGenericError('Token no encontrado', 50000);
 				}
 				if (err.data.message === 'TOKEN_INVALITED') {
-					this.showGenericError('Token invalido');
+					this.showGenericError('Token invalido', 50000);
 				}
 			} else {
 				this.$message.error({ message: err, showClose: true });

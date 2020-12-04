@@ -12,6 +12,7 @@
 			id="mercadopago-modal"
 			max-width="32rem"
 			v-model="showModal"
+			persistent
 		>
 			<div class="modal">
 				<div class="modal-close-btn-container">
@@ -147,6 +148,7 @@ function clickOnButton() {
 }
 
 function closeModal() {
+	this.showNotification('Recarge su pantalla por favor', 'info', null, false, 5000);
 	this.showModal = false;
 	this.loading = true;
 }

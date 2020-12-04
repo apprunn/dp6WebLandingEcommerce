@@ -64,12 +64,12 @@ function replaceString(word, selectionStart, newWord) {
 	return newWord;
 }
 
-function showNotification(text, color = 'success', html = null, isBtn = false) {
-	this.$store.dispatch('showSnackBar', { text, color, html, isBtn });
+function showNotification(text, color = 'success', html = null, isBtn = false, timeout = 60000) {
+	this.$store.dispatch('showSnackBar', { text, color, html, isBtn, timeout });
 }
 
-function showGenericError(text = 'Ups, ocurrió algún problema') {
-	this.showNotification(text, 'error');
+function showGenericError(text = 'Ups, ocurrió algún problema', timeout = 10000) {
+	this.showNotification(text, 'error', null, false, timeout);
 }
 
 function showRow(columns, columnId) {
