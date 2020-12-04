@@ -76,4 +76,4 @@ npm run build
 ## Payments Methods
 1. VisaNet: Requiere dos variables de entorno: `VISA_MERCHAN_ID` y `COMMERCE_CODE`.
 2. Paymentez: Requiere dos variables de entorno: `PAYMENTEZ_CLIENT` y `PAYMENTEZ_KEY`.
-3. DataFast: Requiere ? variables de entorno: 
+3. DataFast: Requiere ? variables de entorno:
