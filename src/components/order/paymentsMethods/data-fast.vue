@@ -61,6 +61,12 @@
 	</div>
 </template>
 <script>
+const wpwlOptions = {
+	locale: 'es',
+};
+console.log(wpwlOptions);
+</script>
+<script>
 import { mapGetters } from 'vuex';
 import modal from '@/components/shared/modal/modal-component';
 import { getDeeper } from '@/shared/lib';
@@ -233,6 +239,7 @@ function insertForm(dtc) {
 	dataFastForm.setAttribute('method', 'get');
 	dataFastForm.setAttribute('data-brands', dataBrands);
 	dataFastForm.setAttribute('id', 'datafast-form');
+	dataFastForm.setAttribute('locale', 'es');
 	dataFastForm.setAttribute('class', 'paymentWidgets');
 	const el = this.$refs['data-fast'];
 	el.appendChild(dataFastForm);

@@ -120,6 +120,7 @@ function selected(val) {
 		this.calculateShippingCost(delivery);
 	} else {
 		this.$store.dispatch('setNoShippingCost');
+		this.lonleyWarehouse();
 	}
 	this.$store.commit('SET_DELIVERY_PLACE', delivery);
 	this.$store.commit('SET_FLAG_PICKUP', val.value);
