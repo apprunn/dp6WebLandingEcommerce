@@ -60,12 +60,7 @@
 		</div>
 	</div>
 </template>
-<script>
-const wpwlOptions = {
-	locale: 'es',
-};
-console.log(wpwlOptions);
-</script>
+
 <script>
 import { mapGetters } from 'vuex';
 import modal from '@/components/shared/modal/modal-component';
