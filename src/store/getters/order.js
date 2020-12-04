@@ -52,10 +52,14 @@ const getters = {
 			customerAddress,
 		} = state.order;
 		const invalidResponsible = isEmpty(responsible);
+
 		const invalidDelivery = isEmpty(delivery);
+
 		const invalidNewDelvery = getDeeper('id')(delivery) === 0
 			? isEmpty(customerAddress) : false;
+
 		const invalidBill = flagBill ? isEmpty(bill) : false;
+
 		let invalidShippingCost = false;
 		if (flagPickUp === 1) {
 			invalidShippingCost = shippingCost.price < 0 || shippingCostError;
