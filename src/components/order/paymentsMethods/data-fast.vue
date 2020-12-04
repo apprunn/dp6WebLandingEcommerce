@@ -24,7 +24,10 @@
 				</div>
 			</modal>
 		</div>
-		<div class="details-collapse component-container">
+		<div
+			v-if="datafastData.creditCards.length"
+			class="details-collapse component-container"
+		>
 			<div class="details-collapse-title payment-sections">
 				Tarjetas con las que puedes pagar en DATAFAST
 				<button
@@ -191,7 +194,15 @@ function getDiferidos(ev) {
 	const diferidoItem = this.datafastData.typesCredit.find(d => d.id === value);
 	if (diferidoItem && diferidoItem.children && diferidoItem.children.options) {
 		const { children: { options } } = diferidoItem;
-		return options.length ? options.map(o => o.id) : this.defaultDiferidos;
+
+		const onlyActive = (acc, item) => {
+			if (item.flagActive) {
+				return acc.concat(item.id);
+			}
+			return acc;
+		};
+
+		return options.length ? options.reduce(onlyActive, []) : this.defaultDiferidos;
 	}
 	return this.defaultDiferidos;
 }
@@ -283,8 +294,10 @@ function openDetails() {
 function data() {
 	return {
 		clientIp: null,
-		datafastData: {},
-		defaultDiferidos: [0, 3, 6, 12],
+		datafastData: {
+			creditCards: [],
+		},
+		defaultDiferidos: [0, 3, 6, 9, 12],
 		disabledButtonDataFast: false,
 		flagDataFast: null,
 		loading: true,
