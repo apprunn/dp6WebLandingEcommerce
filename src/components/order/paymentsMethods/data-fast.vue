@@ -137,7 +137,7 @@ function updateDiferidos(ev) {
 }
 
 function insertTiposDeCredito(dtcOptions) {
-	const dtcOnlyActive = dtcOptions.filter(d => d.flagActive);
+	const dtcOnlyActive = dtcOptions.options.filter(d => d.flagActive);
 	const tipocredito = document.createElement('div');
 	const imgElement = document.createElement('img');
 	tipocredito.setAttribute('class', 'wpwl-wrapper wpwl-wrapper-custom');
@@ -262,8 +262,8 @@ async function datafastAdditionals({ code }) {
 		const { data: datafastResponse } = await this.$httpSales.get(
 			url, { params });
 
-		const creditCards = getDeeper('creditCards')(datafastResponse) || [];
-		const typesCredit = getDeeper('typesCredit')(datafastResponse) || [];
+		const creditCards = getDeeper('creditCards.options')(datafastResponse) || [];
+		const typesCredit = getDeeper('typesCredit.options')(datafastResponse) || [];
 
 		this.datafastData.creditCards = creditCards.filter(cc => cc.active);
 		this.datafastData.typesCredit = typesCredit.filter(tc => tc.flagActive);
