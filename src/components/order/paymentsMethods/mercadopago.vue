@@ -148,7 +148,6 @@ function clickOnButton() {
 }
 
 function closeModal() {
-	this.showNotification('Recarge su pantalla por favor', 'info', null, false, 5000);
 	this.showModal = false;
 	this.loading = true;
 }
