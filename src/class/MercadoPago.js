@@ -173,7 +173,7 @@ class MercadoPago {
 		} catch (err) {
 			const message = err.data.paymentGateway ? err.data.paymentGateway.statusDetailsMessage : 'Ups, ocurrió algún problema';
 			this.closeModal();
-			this.showGenericError(message, 300000);
+			this.showNotification(message, 'error', null, false, 300000);
 		}
 	}
 }
