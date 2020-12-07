@@ -992,4 +992,8 @@ input.app-input::-webkit-input-placeholder {
 .application--wrap {
 	display: block;
 }
+
+.v-snack__content {
+	height: auto !important;
+}
 </style>
