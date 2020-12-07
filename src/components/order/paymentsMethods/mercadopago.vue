@@ -147,9 +147,12 @@ function clickOnButton() {
 	this.mountMercadoPagoScrip();
 }
 
-function closeModal() {
+function closeModal(message) {
 	this.showModal = false;
-	this.loading = true;
+	this.loading = false;
+	if (message) {
+		this.showGenericError(message, 300000);
+	}
 }
 
 function mountMercadoPagoScrip() {
