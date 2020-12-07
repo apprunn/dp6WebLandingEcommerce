@@ -72,7 +72,7 @@
 								indeterminate ? 'loading text-field' : 'product-price-discount'
 							]"
 						>
-							{{ product.priceDiscount | currencyFormat }}
+							{{getCurrencySymbol}} {{ product.priceDiscount | currencyFormat }}
 						</h3>
 						<small
 							v-if="product.price"
@@ -81,7 +81,7 @@
 							]"
 							:style="`color: ${indeterminate ? 'transparent' : globalColors.primary};`"
 						>
-							{{ product.price | currencyFormat }}
+							{{getCurrencySymbol}} {{ product.price | currencyFormat }}
 						</small>
 					</div>
 				</section>
@@ -165,6 +165,7 @@ export default {
 	},
 	computed: {
 		...mapGetters([
+			'getCurrencySymbol',
 			'getProductsParams',
 			'indeterminate',
 		]),
