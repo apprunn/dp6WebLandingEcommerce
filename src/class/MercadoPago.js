@@ -172,7 +172,8 @@ class MercadoPago {
 			this.$router.push({ name: 'buy-summary', params: { orderId: this.orderId } });
 		} catch (err) {
 			const message = err.data.paymentGateway ? err.data.paymentGateway.statusDetailsMessage : 'Ups, ocurrió algún problema';
-			this.closeModal(`${message}`);
+			this.closeModal();
+			this.showGenericError(message, 300000);
 		}
 	}
 }
