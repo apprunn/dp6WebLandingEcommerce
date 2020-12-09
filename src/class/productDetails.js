@@ -97,6 +97,12 @@ class ProductDetails {
 	getProductDetails() {
 		return { ...this.selectedProduct };
 	}
+	// getWebImages() {
+	// 	return this.getImages().filter(img => img.fromApp === 0);
+	// }
+	// getMovilImages() {
+	// 	return this.getImages().filter(img => img.fromApp === 1);
+	// }
 	featureSelected(feature) {
 		if (isEmpty(this.selectedFeatures)) {
 			this.globalFeatures.features = this.globalFeatures.features.filter(f =>
