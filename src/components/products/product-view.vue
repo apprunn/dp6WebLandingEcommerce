@@ -1,24 +1,43 @@
 <template>
   <div class="product-view">
-		<div class="btns-product-view" v-if="localImages.length > 0">
+		<div class="btns-product-view" v-if="webLocalImages.length > 0">
 			<button 
-				v-for="(image, index) in localImages" 
+				v-for="(image, index) in webLocalImages" 
 				:key="image.id"
 				class="btn-product-view"
 				:class="{'select' : image.select, 'not-select' : !image.select}"
 				:style="{'border-color': image.select ? globalColors.secondary : null}"
 				@click="goToSlider(index, image)"
 			>
-				<img 
-					:src="image.urlImage" 
-					:alt="image.name" 
-					class="image-slider">
+				<picture>
+					<img 
+						:src="image.urlImage" 
+						:alt="image.name" 
+						class="image-slider"
+					>
+				</picture>
 			</button>
 		</div>
-		<div class="slider-product-view" v-if="images && images.length">
+		<div class="slider-product-view-web" v-if="webLocalImages && webLocalImages.length">
 			<swiper ref="mySwiper" :options="swiperOption">
 				<swiper-slide 
-					v-for="image in localImages" 
+					v-for="image in webLocalImages" 
+					:key="image.id">
+					<div class="wrapper-image" data-cy="presentation-img">
+						<img 
+							:src="image.urlImage" 
+							:alt="image.name"
+							class="image-product-slider"
+						>
+					</div>
+				</swiper-slide>
+				<div class="pagination-carousel swiper-pagination" slot="pagination"></div>
+			</swiper>
+		</div>
+		<div class="slider-product-view-movil" v-if="movilLocalImages && movilLocalImages.length">
+			<swiper ref="mySwiper" :options="swiperOption">
+				<swiper-slide 
+					v-for="image in movilLocalImages" 
 					:key="image.id">
 					<div class="wrapper-image" data-cy="presentation-img">
 						<img 
@@ -37,7 +56,7 @@
 	</div>
 </template>
 <script>
-import { isEmpty } from '@/shared/lib';
+import { isEmpty, map, setNewProperty } from '@/shared/lib';
 
 function swiper() {
 	return this.$refs.mySwiper.swiper;
@@ -45,17 +64,25 @@ function swiper() {
 
 function goToSlider(index, image) {
 	this.swiper.slideTo(index + 1, 1000, false);
-	this.localImages = this.localImages.map((i) => {
-		const newImage = { ...i };
-		newImage.select = i.id === image.id;
-		return newImage;
-	});
+	this.webLocalImages = map(
+		setNewProperty('select', img => img.id === image.id),
+		this.webLocalImages,
+	);
 }
 
 function imagesHandler(newImages) {
 	if (!isEmpty(newImages)) {
-		this.localImages = [...newImages];
-		this.$set(this.localImages[0], 'select', true);
+		this.movilLocalImages = [];
+		this.webLocalImages = [];
+
+		newImages.forEach((img) => {
+			if (img.fromApp === 0) {
+				this.webLocalImages.push(img);
+			} else {
+				this.movilLocalImages.push(img);
+			}
+		});
+		this.$set(this.webLocalImages[0], 'select', true);
 	}
 }
 
@@ -63,6 +90,7 @@ function imagesHandler(newImages) {
 function data() {
 	return {
 		localImages: [],
+		movilLocalImages: [],
 		swiperOption: {
 			allowTouchMove: false,
 			breakpoints: {
@@ -77,6 +105,7 @@ function data() {
 			loop: true,
 			width: 362,
 		},
+		webLocalImages: [],
 	};
 }
 export default {
@@ -123,13 +152,13 @@ export default {
 	}
 
 	.btns-product-view {
-		display: flex;
+		display: none;
 		flex-direction: column;
 		margin-right: 20px;
 		width: 94px;
 
-		@media screen and (max-width: 996px) {
-			display: none;
+		@media screen and (min-width: 768px) {
+			display: flex;
 		}
 	}
 
@@ -138,19 +167,29 @@ export default {
 		justify-content: center;
 	}
 
-	.slider-product-view {
-		background: color(white);
-		border-radius: 7px;
-		box-shadow: 0 2px 4px 0 rgba(213, 213, 213, 0.5);
-		padding: 0 19px;
-		width: 400px;
+	.slider-product-view-web {
+		display: none;
 
-		@media screen and (max-width: 996px) {
-			background: transparent;
-			box-shadow: none;
-			height: 217px;
-			padding: 0;
-			width: 298px;
+		@media screen and (min-width: 996px) {
+			background: color(white);
+			border-radius: 7px;
+			box-shadow: 0 2px 4px 0 rgba(213, 213, 213, 0.5);
+			display: flex;
+			padding: 0 19px;
+			width: 400px;
+		}
+	}
+
+	.slider-product-view-movil {
+		background: transparent;
+		box-shadow: none;
+		display: flex;
+		height: 217px;
+		padding: 0;
+		width: 298px;
+
+		@media screen and (min-width: 996px) {
+			display: none;
 		}
 	}
 
