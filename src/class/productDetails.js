@@ -1,4 +1,4 @@
-import l, { isEmpty } from '@/shared/lib';
+import l, { isEmpty, setNewProperty } from '@/shared/lib';
 import GlobalFeatures from '@/class/globalFeatures';
 
 class ProductDetails {
@@ -97,12 +97,6 @@ class ProductDetails {
 	getProductDetails() {
 		return { ...this.selectedProduct };
 	}
-	// getWebImages() {
-	// 	return this.getImages().filter(img => img.fromApp === 0);
-	// }
-	// getMovilImages() {
-	// 	return this.getImages().filter(img => img.fromApp === 1);
-	// }
 	featureSelected(feature) {
 		if (isEmpty(this.selectedFeatures)) {
 			this.globalFeatures.features = this.globalFeatures.features.filter(f =>
@@ -195,7 +189,7 @@ class ProductDetails {
 		const newFeatures = features.map((feature) => {
 			const selectedFeatures = Object.values(this.selectedFeatures);
 			const isSelected = selectedFeatures.some(f => f.value === feature.value);
-			return l.setNewProperty('isSelected', isSelected)(feature);
+			return setNewProperty('isSelected', isSelected)(feature);
 		});
 		this.filteredFeatures = [...newFeatures];
 	}

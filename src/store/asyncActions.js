@@ -1,12 +1,12 @@
-import lib, { isEmpty } from '@/shared/lib';
+import lib, { isEmpty, setNewProperty, map } from '@/shared/lib';
 import helper from '@/shared/helper';
 
 function updateProducts(products, priceListId) {
 	return products.map(
 		lib.compose(
-			lib.setNewProperty('price', product => helper.setPrices(product, priceListId, 'price')),
-			lib.setNewProperty('priceDiscount', product => helper.setPrices(product, priceListId, 'priceDiscount')),
-			lib.setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),
+			setNewProperty('price', product => helper.setPrices(product, priceListId, 'price')),
+			setNewProperty('priceDiscount', product => helper.setPrices(product, priceListId, 'priceDiscount')),
+			setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),
 		),
 	);
 }
@@ -137,7 +137,7 @@ const asyncActions = {
 		const url = 'orders';
 		const { data: orders, headers } = await context.$httpSales.get(url, { params });
 		const setUpDateInOrders = orders.map(
-			lib.setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),
+			setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),
 		);
 		commit('SET_ORDERS', setUpDateInOrders);
 		return Number(headers['x-last-page']);
@@ -172,7 +172,7 @@ const asyncActions = {
 		if (filters.length > 0) {
 			const allFilter = { id: null, title: 'Todos', urlImage: filters[0].urlImage };
 			const newFilters = [].concat(allFilter, filters);
-			const updatedFilters = lib.map(lib.setNewProperty('select', (filter, index) => index === 0), newFilters);
+			const updatedFilters = map(setNewProperty('select', (filter, index) => index === 0), newFilters);
 			commit('UPDATE_FILTERS', updatedFilters);
 		} else {
 			commit('UPDATE_FILTERS', filters);

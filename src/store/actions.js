@@ -1,4 +1,4 @@
-import lib from '@/shared/lib';
+import { setNewProperty } from '@/shared/lib';
 import waysDeliveries from '@/shared/enums/waysDeliveries';
 
 function clearUser(context) {
@@ -30,7 +30,7 @@ function setUser(context, user) {
 }
 
 function addProductToBuyCar(context, product) {
-	const newProduct = product.quantity ? product : lib.setNewProperty('quantity', 1)(product);
+	const newProduct = product.quantity ? product : setNewProperty('quantity', 1)(product);
 	const productsSelected = JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
 	const index = productsSelected.findIndex(
 		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
