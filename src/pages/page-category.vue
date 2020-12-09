@@ -107,10 +107,8 @@ import buttonImage from '@/components/shared/buttons/app-button-image';
 import menuCategory from '@/components/shared/category/menu-category';
 import productCard from '@/components/products/product-card';
 import productsSection from '@/components/products/products-section';
-import lib from '@/shared/lib';
+import lib, { setNewProperty } from '@/shared/lib';
 import helper from '@/shared/helper';
-
-const { setNewProperty } = lib;
 
 function mounted() {
 	this.loadingProducts = true;
@@ -133,9 +131,9 @@ async function loadProduct() {
 		const commercePriceListId = this.getCommerceData.settings.salPriceListId;
 		this.listProducts = products.map(
 			lib.compose(
-				lib.setNewProperty('price', product => helper.setPrices(product, commercePriceListId, 'price')),
-				lib.setNewProperty('priceDiscount', product => helper.setPrices(product, commercePriceListId, 'priceDiscount')),
-				lib.setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),
+				setNewProperty('price', product => helper.setPrices(product, commercePriceListId, 'price')),
+				setNewProperty('priceDiscount', product => helper.setPrices(product, commercePriceListId, 'priceDiscount')),
+				setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),
 			),
 		);
 		this.lastPage = Number(headers['x-last-page']);

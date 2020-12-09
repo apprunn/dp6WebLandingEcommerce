@@ -49,7 +49,7 @@ context('COSTO DE ENVÍO PROVINCIA Y CIUDAD', () => {
 		cy.NewDirection();
 	})
 
-	it.only('Parroquia no configurada: Muestro precio de Ciudad', () => {
+	it('Parroquia no configurada: Muestro precio de Ciudad', () => {
 		cy.fixture('fenix-dev.json').then(({ shippingCost }) => {
 			const { newAddress: { alias, apto, direction, ref }, provinceAndCity } = shippingCost;
 

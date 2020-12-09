@@ -38,7 +38,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import lib, { getDeeper } from '@/shared/lib';
+import { getDeeper, setNewProperty } from '@/shared/lib';
 import newAddressForm from '@/components/profile/new-address-form';
 import deleteComponent from '@/components/shared/icons/delete-component';
 import responsiveTable from '@/components/shared/table/respondive-table';
@@ -52,11 +52,11 @@ function created() {
 function updateColumns() {
 	this.columns = this.columns.map((col) => {
 		if (col.value === 'district') {
-			return lib.setNewProperty('title', this.countryLabels.district)(col);
+			return setNewProperty('title', this.countryLabels.district)(col);
 		} else if (col.value === 'province') {
-			return lib.setNewProperty('title', this.countryLabels.province)(col);
+			return setNewProperty('title', this.countryLabels.province)(col);
 		} else if (col.value === 'department') {
-			return lib.setNewProperty('title', this.countryLabels.department)(col);
+			return setNewProperty('title', this.countryLabels.department)(col);
 		}
 		return col;
 	});

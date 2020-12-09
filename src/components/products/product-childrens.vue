@@ -19,11 +19,12 @@
 		>{{feature.name}}:</h3>
 		<div class="wrap-buttons" v-if="feature.values && feature.values.length > 0">
 			<span
+				class="ml-2"
 				v-for="v in feature.values"
 				:key="v.value"
 			>
 				<AppFeatureButton
-					class="ml-2 feature-button"
+					class="feature-button"
 					v-show="!isLoading"
 					:feature="v"
 					:is-selected="v.isSelected"
@@ -86,7 +87,6 @@ export default {
 		justify-content: flex-start;
 
 		@media (max-width: 996px) {
-			flex-wrap: nowrap;
 			overflow: auto;
 			padding: 10px 0;
 		}

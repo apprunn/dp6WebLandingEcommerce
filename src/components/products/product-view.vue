@@ -78,7 +78,10 @@ function imagesHandler(newImages) {
 		newImages.forEach((img) => {
 			if (img.fromApp === 0) {
 				this.webLocalImages.push(img);
+			} else if (img.fromApp === 1) {
+				this.movilLocalImages.push(img);
 			} else {
+				this.webLocalImages.push(img);
 				this.movilLocalImages.push(img);
 			}
 		});
