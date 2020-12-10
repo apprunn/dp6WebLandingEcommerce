@@ -3,6 +3,7 @@
 		:max-width="maxWidth"
 		:value="value"
 		@input="showModal"
+		:persistent="persistent"
 	>
 		<slot></slot>
 	</v-dialog>	
@@ -24,6 +25,10 @@ export default {
 			type: String,
 		},
 		value: null,
+		persistent: {
+			type: Boolean,
+			default: false,
+		},
 	},
 };
 </script>

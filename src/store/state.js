@@ -8,6 +8,7 @@ export default {
 			isVisible: false,
 			color: 'primary',
 			isBtn: false,
+			timeout: 10000,
 		},
 	},
 	banners: [],

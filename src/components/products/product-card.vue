@@ -99,8 +99,7 @@ function productFavo() {
 		this.$store.dispatch('SET_FAVORITE_FLAG', { context: this, product: this.product });
 		this.$set(this.product, 'flagFavorite', !this.product.flagFavorite);
 	} else {
-		const text = 'Debe iniciar sesión para seleccionar producto como favorito';
-		this.$store.dispatch('showSnackBar', { text, color: 'error' });
+		this.showGenericError('Debe iniciar sesión para seleccionar producto como favorito', 50000);
 	}
 }
 

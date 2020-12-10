@@ -57,7 +57,7 @@ function disabledBtn() {
 
 async function sendOpinion() {
 	if (!this.token) {
-		this.showGenericError('Para realizar una opinión tiene que registrarse');
+		this.showGenericError('Para realizar una opinión tiene que registrarse', 80000);
 	} else {
 		const idProduct = this.valoratingProductId;
 		const body = {

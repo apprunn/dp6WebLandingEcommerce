@@ -79,7 +79,7 @@
 		} catch (err) {
 			if (err.status === 400) {
 				if (err.data.message === 'CUSTOMER_NOT_FOUND') {
-					this.showGenericError('El usuario no existe');
+					this.showGenericError('El usuario no existe', 50000);
 				}
 			} else {
 				this.showGenericError();

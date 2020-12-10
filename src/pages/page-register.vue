@@ -108,7 +108,7 @@ async function createAccount() {
 	} catch (err) {
 		if (err.status === 400) {
 			if (err.data.message === 'CUSTOMER_EXIST_ERROR' || err.data.message === 'ACL_REGISTER_USER_ERROR') {
-				this.showGenericError('El email ya ha sido registrado.');
+				this.showGenericError('El email ya ha sido registrado.', 50000);
 			}
 		} else if (err.status === 500) {
 			this.showGenericError();

@@ -128,7 +128,7 @@ function addToCar() {
 		this.$store.dispatch('addProductToBuyCar', this.data);
 		this.$emit('open-confirm-modal');
 	} else {
-		this.showGenericError('Producto sin stock');
+		this.showGenericError('Producto sin stock', 80000);
 	}
 }
 

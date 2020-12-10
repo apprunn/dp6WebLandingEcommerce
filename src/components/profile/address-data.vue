@@ -89,7 +89,7 @@ async function favoriteAddress(address) {
 		this.loadAddress();
 		this.showNotification('Dirección actualizada como favorita');
 	} catch (error) {
-		this.showGenericError('No fue posible seleccionar como favorita esa dirección');
+		this.showGenericError('No fue posible seleccionar como favorita esa dirección', 80000);
 	}
 }
 
@@ -99,7 +99,7 @@ async function deleteAddress({ id, name }) {
 		this.showNotification(`Dirección ${name.toUpperCase()} eliminada con éxito`);
 		this.loadAddress();
 	} catch (error) {
-		this.showGenericError('Esta dirección es usada actualmente en un Pedido');
+		this.showGenericError('Esta dirección es usada actualmente en un Pedido', 80000);
 	}
 }
 

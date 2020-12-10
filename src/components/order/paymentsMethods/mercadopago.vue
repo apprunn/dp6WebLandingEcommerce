@@ -12,6 +12,7 @@
 			id="mercadopago-modal"
 			max-width="32rem"
 			v-model="showModal"
+			persistent
 		>
 			<div class="modal">
 				<div class="modal-close-btn-container">
@@ -148,7 +149,7 @@ function clickOnButton() {
 
 function closeModal() {
 	this.showModal = false;
-	this.loading = true;
+	this.loading = false;
 }
 
 function mountMercadoPagoScrip() {

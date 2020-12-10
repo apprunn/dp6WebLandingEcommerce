@@ -95,7 +95,7 @@ function onBlur(val) {
 }
 
 async function validatingDocumentNumber(val) {
-	this.showNotification('Validando documento', 'info');
+	this.showNotification('Validando documento', 'info', null, false, 8000);
 	const countryCode = this.getLocalStorage('ecommerce::country');
 	const url = `${this.billing.documentType}/${val}?codeCountry=${countryCode}`;
 	try {

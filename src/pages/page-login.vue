@@ -75,7 +75,7 @@
 				({ email: this.model.email } = params);
 				this.model.password = null;
 			} else if (err.data.code === 1008) {
-				this.showGenericError('Correo o password incorrecto');
+				this.showGenericError('Correo o password incorrecto', 50000);
 			}
 		}
 	}
@@ -143,7 +143,7 @@
 				{ headers },
 			);
 			if (response.code === 1008) {
-				this.showGenericError('Correo o password incorrecto.');
+				this.showGenericError('Correo o password incorrecto.', 50000);
 			} else if (response.data) {
 				const { token } = response.data;
 				localStorage.clear();
@@ -197,7 +197,7 @@
 				this.showGenericError();
 			} else if (err.status === 401) {
 				if (err.data.message === 'TOKEN_HAS_EXPIRED') {
-					this.showGenericError('El enlace ha expirado. Se le ha enviado un nuevo enlace al correo.');
+					this.showGenericError('El enlace ha expirado. Se le ha enviado un nuevo enlace al correo.', 80000);
 				}
 			}
 		}

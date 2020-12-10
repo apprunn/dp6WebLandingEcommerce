@@ -121,17 +121,23 @@ class MercadoPago {
 		} else {
 			const { cause } = response;
 			if (cause.find(c => c.code === 'E302')) {
-				this.showNotification('Código de seguridad inválido', 'error');
+				this.showNotification('Código de seguridad inválido', 'error', null, false, 100000);
 			} else if (cause.find(c => c.code === '205')) {
-				this.showNotification('Debe introducir un número de tarjeta', 'error');
+				this.showNotification('Debe introducir un número de tarjeta', 'error', null, false, 100000);
 			} else if (cause.find(c => c.code === '208' || c.code === '209')) {
-				this.showNotification('Debe introducir un tiempo de expiración', 'error');
+				this.showNotification('Debe introducir un tiempo de expiración', 'error', null, false, 100000);
 			} else if (cause.find(c => c.code === '221')) {
-				this.showNotification('El titular de la tarjeta es requerido', 'error');
+				this.showNotification('El titular de la tarjeta es requerido', 'error', null, false, 100000);
 			} else if (cause.find(c => c.code === '214')) {
-				this.showNotification('El número de documento es requerido', 'error');
+				this.showNotification('El número de documento es requerido', 'error', null, false, 100000);
+			} else if (cause.find(c => c.code === '324')) {
+				this.showNotification('El número de documento es inválido', 'error', null, false, 100000);
+			} else if (cause.find(c => c.code === '325') || cause.find(c => c.code === '326')) {
+				this.showNotification('La fecha de vencimiento es inválido', 'error', null, false, 100000);
+			} else if (cause.find(c => c.code === 'E302')) {
+				this.showNotification('El número de tarjeta es inválido', 'error', null, false, 100000);
 			} else {
-				this.showNotification('Complete los datos en el formulario', 'error');
+				this.showNotification('Complete los datos en el formulario', 'error', null, false, 100000);
 			}
 		}
 	}
@@ -164,10 +170,10 @@ class MercadoPago {
 		try {
 			await this.$httpSales.post('payment-gateway/validation', body);
 			this.$router.push({ name: 'buy-summary', params: { orderId: this.orderId } });
-		} catch (error) {
-			const message = error.data.status;
-			this.showNotification(message, 'error');
+		} catch (err) {
+			const message = err.data.paymentGateway ? err.data.paymentGateway.statusDetailsMessage : 'Ups, ocurrió algún problema';
 			this.closeModal();
+			this.showNotification(message, 'error', null, false, 300000);
 		}
 	}
 }

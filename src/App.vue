@@ -32,7 +32,7 @@
 	<form-bulletin />
 	<app-footer></app-footer>
 	<v-snackbar
-			:timeout="5000"
+			:timeout="snackbar.timeout"
 			:color="snackbar.color"
 			top
 			right
@@ -991,5 +991,9 @@ input.app-input::-webkit-input-placeholder {
 }
 .application--wrap {
 	display: block;
+}
+
+.v-snack__content {
+	height: auto !important;
 }
 </style>

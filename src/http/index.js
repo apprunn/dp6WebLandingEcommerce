@@ -49,6 +49,6 @@ export function httpResponseInterceptor(error) {
 	} else if (status === 500) {
 		text = 'No se logró completar la acción, intente de nuevo.';
 	}
-	store.dispatch('showSnackBar', { text, color: 'error' });
+	store.dispatch('showSnackBar', { text, color: 'error', html: null, isBtn: false, timeout: 10000 });
 	return Promise.reject(error.response);
 }
