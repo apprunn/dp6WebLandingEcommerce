@@ -120,18 +120,42 @@ class MercadoPago {
 			this.pay.call(this, form, response.id);
 		} else {
 			const { cause } = response;
+			if (cause.find(c => c.code === '011')) {
+				this.showNotification('No se pudo actualizar el token de seguridad de la tarjeta', 'warning');
+				this.showNotification('Recargue la pantalla e intente nuevamente', 'info');
+			}
+			if (cause.find(c => c.code === 'E301')) {
+				this.showNotification('Número de tarjeta inválido', 'error');
+			}
 			if (cause.find(c => c.code === 'E302')) {
 				this.showNotification('Código de seguridad inválido', 'error');
-			} else if (cause.find(c => c.code === '205')) {
+			}
+			if (cause.find(c => c.code === '205')) {
 				this.showNotification('Debe introducir un número de tarjeta', 'error');
-			} else if (cause.find(c => c.code === '208' || c.code === '209')) {
+			}
+			if (cause.find(c => c.code === '208' || c.code === '209')) {
 				this.showNotification('Debe introducir un tiempo de expiración', 'error');
-			} else if (cause.find(c => c.code === '221')) {
+			}
+			if (cause.find(c => c.code === '221')) {
 				this.showNotification('El titular de la tarjeta es requerido', 'error');
-			} else if (cause.find(c => c.code === '214')) {
+			}
+			if (cause.find(c => c.code === '214')) {
 				this.showNotification('El número de documento es requerido', 'error');
+			}
+			if (cause.find(c => c.code === '316')) {
+				this.showNotification('Titular de tarjeta inválido');
+			}
+			if (cause.find(c => c.code === '324')) {
+				this.showNotification('El Número de documento es inválido');
+			}
+			if (cause.find(c => c.code === '325')) {
+				this.showNotification('El MES de expiración es inválido');
+			}
+			if (cause.find(c => c.code === '326')) {
+				this.showNotification('El AÑO de expiración es inválido');
 			} else {
-				this.showNotification('Complete los datos en el formulario', 'error');
+				console.log('response', response);
+				this.showNotification('Complete los datos en el formulario');
 			}
 		}
 	}
@@ -163,10 +187,23 @@ class MercadoPago {
 		};
 		try {
 			await this.$httpSales.post('payment-gateway/validation', body);
+			this.showNotification('Su pago fue procesado con éxito', 'success');
 			this.$router.push({ name: 'buy-summary', params: { orderId: this.orderId } });
 		} catch (error) {
-			const message = error.data.status;
-			this.showNotification(message, 'error');
+			const { status, data } = error.response;
+			if (status === 400) {
+				const { paymentGateway } = data;
+				if (paymentGateway) {
+					this.showNotification('La validación del pago fue rechazada');
+					setTimeout(() => {
+						this.showNotification('Recargue la pantalla e inténtenlo nuevamente', 'info');
+					}, 750);
+				} else {
+					this.notification.error('Su pago no pudo ser procesado');
+				}
+			} else {
+				this.showNotification('Su pago no pudo ser procesado');
+			}
 			this.closeModal();
 		}
 	}
