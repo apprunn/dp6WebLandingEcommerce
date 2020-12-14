@@ -37,4 +37,7 @@ module.exports = {
 	PAYMENTEZ_KEY: `'${process.env.PAYMENTEZ_KEY}'`,
 	SALES_URL_HTTP2: `'${process.env.SALES_URL_HTTP2}'`,
 	NO_ICON_CATEGORY: `'${process.env.NO_ICON_CATEGORY}'`,
+	PAGE_DESCRIPTION: `'${process.env.PAGE_DESCRIPTION}'`,
+	PAGE_KEYWORD: `'${process.env.PAGE_KEYWORD}'`,
+	PAGE_TITLE: `'${process.env.PAGE_TITLE}'`,
 };

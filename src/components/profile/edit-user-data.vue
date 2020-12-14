@@ -83,7 +83,7 @@ import appInput from '@/components/shared/inputs/app-input';
 import appSelect from '@/components/shared/inputs/app-select';
 import cameraComponent from '@/components/shared/icons/camera-component';
 import editComponent from '@/components/shared/icons/edit-component';
-import lib, { getDeeper } from '@/shared/lib';
+import lib, { getDeeper, setNewProperty } from '@/shared/lib';
 import { required } from 'vuelidate/lib/validators';
 import userDataValidation from '@/mixins/userDataValidation';
 
@@ -110,20 +110,20 @@ function saveUserInfo() {
 
 function buildBody(userData) {
 	return lib.compose(
-		lib.setNewProperty('name', userData.name),
-		lib.setNewProperty('lastname', userData.lastname),
-		lib.setNewProperty('rzSocial', userData.rzSocial),
-		lib.setNewProperty('address', userData.address),
-		lib.setNewProperty('phone', userData.phone),
-		lib.setNewProperty('phoneNumbers', userData.phoneNumbers),
-		lib.setNewProperty('ruc', userData.ruc),
-		lib.setNewProperty('dni', userData.dni),
-		lib.setNewProperty('gender', userData.gender),
-		lib.setNewProperty('postalCode', userData.postalCode),
-		lib.setNewProperty('provinceId', userData.provinceId),
-		lib.setNewProperty('cityId', userData.cityId),
-		lib.setNewProperty('countryId', userData.countryId),
-		lib.setNewProperty('parishId', userData.parishId),
+		setNewProperty('name', userData.name),
+		setNewProperty('lastname', userData.lastname),
+		setNewProperty('rzSocial', userData.rzSocial),
+		setNewProperty('address', userData.address),
+		setNewProperty('phone', userData.phone),
+		setNewProperty('phoneNumbers', userData.phoneNumbers),
+		setNewProperty('ruc', userData.ruc),
+		setNewProperty('dni', userData.dni),
+		setNewProperty('gender', userData.gender),
+		setNewProperty('postalCode', userData.postalCode),
+		setNewProperty('provinceId', userData.provinceId),
+		setNewProperty('cityId', userData.cityId),
+		setNewProperty('countryId', userData.countryId),
+		setNewProperty('parishId', userData.parishId),
 	)({});
 }
 

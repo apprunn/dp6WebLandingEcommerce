@@ -33,6 +33,7 @@ module.exports = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
+      title: config.dev.env.PAGE_TITLE,
       inject: true,
     }),
     new PreloadWebpackPlugin({

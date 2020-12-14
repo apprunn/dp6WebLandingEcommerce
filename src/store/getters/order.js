@@ -1,12 +1,12 @@
-import lib, { isEmpty, getDeeper } from '@/shared/lib';
+import lib, { isEmpty, getDeeper, setNewProperty, map } from '@/shared/lib';
 
 const twoDecimals = lib.decimals(2);
 
 const getters = {
 	getProductToBuy(state) {
 		if (state.order.products) {
-			const products = lib.map(
-				lib.setNewProperty(
+			const products = map(
+				setNewProperty(
 					'total',
 					({ price, salePrice, priceDiscount, quantity }) =>
 						twoDecimals(quantity * (salePrice || priceDiscount || price)),
