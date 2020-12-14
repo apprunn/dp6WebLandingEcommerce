@@ -33,13 +33,13 @@
 <script>
 import AppSelect from '@/components/shared/inputs/app-select';
 import { mapGetters } from 'vuex';
-import l from '@/shared/lib';
+import { setNewProperty, map } from '@/shared/lib';
 
 function conversionsChanges(conversions) {
 	let conversionsFormatted = [];
 	if (conversions) {
-		conversionsFormatted = l.map(
-			k => l.setNewProperty('id', Number(k))(conversions[k]),
+		conversionsFormatted = map(
+			k => setNewProperty('id', Number(k))(conversions[k]),
 			Object.keys(conversions),
 		);
 	}

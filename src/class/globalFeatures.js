@@ -1,4 +1,4 @@
-import l, { getDeeper, isEmpty, equality, find } from '@/shared/lib';
+import l, { getDeeper, isEmpty, equality, find, setNewProperty, map } from '@/shared/lib';
 
 class GlobalFeatures {
 	constructor(products) {
@@ -18,24 +18,24 @@ class GlobalFeatures {
 		}
 	}
 	allAvailable() {
-		this.features = l.map(
-			l.setNewProperty(
+		this.features = map(
+			setNewProperty(
 				'values',
-				item => l.map(
+				item => map(
 					l.compose(
-						l.setNewProperty('isSelected', el => !!el.isSelected),
-						l.setNewProperty('notAllowed', false),
+						setNewProperty('isSelected', el => !!el.isSelected),
+						setNewProperty('notAllowed', false),
 					), getDeeper('values')(item)),
 			), this.features);
 	}
 	allUnSelected() {
-		this.features = l.map(
-			l.setNewProperty(
+		this.features = map(
+			setNewProperty(
 				'values',
-				item => l.map(
+				item => map(
 					l.compose(
-						l.setNewProperty('isSelected', false),
-						l.setNewProperty('notAllowed', false),
+						setNewProperty('isSelected', false),
+						setNewProperty('notAllowed', false),
 					), getDeeper('values')(item)),
 			), this.features);
 	}
@@ -81,19 +81,19 @@ class GlobalFeatures {
 				const current = find(equality('value', v.value), incomingFeatures);
 				if (isEmpty(current)) {
 					return l.compose(
-						l.setNewProperty('isSelected', false),
-						l.setNewProperty('notAllowed', true),
+						setNewProperty('isSelected', false),
+						setNewProperty('notAllowed', true),
 					)(v);
 				}
 				if (current.isSelected) {
-					return l.setNewProperty('isSelected', current.isSelected)(v);
+					return setNewProperty('isSelected', current.isSelected)(v);
 				}
 				return l.compose(
-					l.setNewProperty('isSelected', false),
-					l.setNewProperty('notAllowed', false),
+					setNewProperty('isSelected', false),
+					setNewProperty('notAllowed', false),
 				)(v);
 			});
-			return l.setNewProperty('values', newValues)(feature);
+			return setNewProperty('values', newValues)(feature);
 		});
 	}
 }
