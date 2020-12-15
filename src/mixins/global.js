@@ -133,7 +133,9 @@ function scrollTo(element, duration, fit) {
 
 function updateDescriptionTag(description) {
 	const metaDescription = document.getElementById('myDescription');
-	metaDescription.content = description;
+	if (metaDescription) {
+		metaDescription.content = description;
+	}
 }
 
 function updatePageTitle(title) {

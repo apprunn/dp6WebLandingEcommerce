@@ -1,6 +1,8 @@
 import lib, { isEmpty, setNewProperty, map } from '@/shared/lib';
 import helper from '@/shared/helper';
 
+const PAGE_TITLE = process.env.PAGE_TITLE;
+
 function updateProducts(products, priceListId) {
 	return products.map(
 		lib.compose(
@@ -206,7 +208,8 @@ const asyncActions = {
 		link.sizes = '16x16';
 		document.getElementsByTagName('head')[0].appendChild(link);
 		const pageTitle = document.getElementsByTagName('title');
-		const title = process.env.PAGE_TITLE || commerceData.name || 'AppRunn SAC';
+		const backUp = 	commerceData.name || 'AppRunn SAC';
+		const title = PAGE_TITLE === 'undefined' ? backUp : PAGE_TITLE;
 		pageTitle[0].innerHTML = title;
 	},
 	MAKE_ORDER: async ({ dispatch, getters }, { flagFinish, context }) => {

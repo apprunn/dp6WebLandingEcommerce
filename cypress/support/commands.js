@@ -293,6 +293,12 @@ Cypress.Commands.add('PressNiubiz', () => {
 		.click();
 })
 
+Cypress.Commands.add('PressMercadoPago', () => {
+	cy.get('[data-cy="mercadopago-btn"]')
+		.should('exist')
+		.click({ multiple: true, force: true });
+})
+
 Cypress.Commands.add('NewDirectionDataWithoutUbigeo', ({ alias, direction, ref, apto }) => {
 	cy.get('[data-cy="alias"]')
 		.type(alias);
