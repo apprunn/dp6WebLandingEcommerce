@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<button
+			data-cy="mercadopago-btn"
 			type="button"
 			class="mercado-pago-btn"
 			:disabled="loading"

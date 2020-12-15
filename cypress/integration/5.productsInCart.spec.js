@@ -49,7 +49,8 @@ context('COMPRAR TRES PRODUCTOS - ENVIO A DOMICILIO', () => {
 		cy.get('[data-cy="Tarjeta de crédito o débito"]')
 			.click();
 
-		cy.PressNiubiz();
+		cy.PressMercadoPago();
+		// cy.PressNiubiz();
 
 		cy.get('[data-cy="Pago al recibir"]')
 			.should('exist')
