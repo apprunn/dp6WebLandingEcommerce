@@ -95,7 +95,8 @@ export default {
 		// background-position: center;
 		// background-repeat: no-repeat;
 		// background-size: cover;
-		height: 616px;
+		// height: 616px;
+		height: 50vh;
     	width: 100%;
 		
 		@media (max-width: 764px) {
@@ -104,7 +105,7 @@ export default {
 
 		picture {
 			height: 100%;
-			object-fit: cover;
+			// object-fit: cover;
 			width: 100%;
 		}
 	}
@@ -161,7 +162,7 @@ export default {
 	}
 	.cover-all-container {
 		height: 100%;
-		object-fit: cover;
+		// object-fit: cover;
 		width: 100%;
 	}
 </style>

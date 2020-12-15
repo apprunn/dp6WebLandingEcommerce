@@ -74,9 +74,10 @@ export default {
 		align-items: center;
 		display: grid;
 		flex-wrap: wrap;
+		grid-gap: 2rem;
 		grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
 		margin: 42px auto;
-		max-width: 1070px;
+		max-width: 1280px;
 	}
 
 	.see-more-btn {

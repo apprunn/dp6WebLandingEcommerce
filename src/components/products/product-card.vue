@@ -201,12 +201,12 @@ export default {
 		height: auto;
 		transform: perspective(0px) rotateY(deg) rotateX(0deg) scale3d(0, 0, 0);
   		transition: all 120ms ease;
-
+	
 		@media (min-width: 500px) {
 			border: 3px solid color(border);
 			border-radius: 5px;
 			height: 328px;
-			margin: 3px;
+			margin: 3px auto;
 			max-width: 202px;
 		}
 
