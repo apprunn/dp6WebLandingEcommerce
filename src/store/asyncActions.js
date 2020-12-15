@@ -206,7 +206,8 @@ const asyncActions = {
 		link.sizes = '16x16';
 		document.getElementsByTagName('head')[0].appendChild(link);
 		const pageTitle = document.getElementsByTagName('title');
-		pageTitle[0].innerHTML = commerceData.name || 'AppRunn SAC';
+		const title = process.env.PAGE_TITLE || commerceData.name || 'AppRunn SAC';
+		pageTitle[0].innerHTML = title;
 	},
 	MAKE_ORDER: async ({ dispatch, getters }, { flagFinish, context }) => {
 		const body = helper.buildOrderBody(flagFinish, getters);

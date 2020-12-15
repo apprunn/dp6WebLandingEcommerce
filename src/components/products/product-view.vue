@@ -34,6 +34,12 @@
 				<div class="pagination-carousel swiper-pagination" slot="pagination"></div>
 			</swiper>
 		</div>
+		<div
+			v-else
+			class="slider-product-view-one"
+		>
+			<img :src="data.urlImage" :alt="data.name" class="image-product-slider">
+		</div>
 		<div class="slider-product-view-movil" v-if="movilLocalImages && movilLocalImages.length">
 			<swiper ref="mySwiper" :options="swiperOption">
 				<swiper-slide 
@@ -50,7 +56,10 @@
 				<div class="pagination-carousel swiper-pagination" slot="pagination"></div>
 			</swiper>
 		</div>
-		<div v-else class="slider-product-view-one">
+		<div
+			v-else
+			class="slider-product-view-one-movil"
+		>
 			<img :src="data.urlImage" :alt="data.name" class="image-product-slider">
 		</div>
 	</div>
@@ -162,6 +171,9 @@ export default {
 
 		@media screen and (min-width: 768px) {
 			display: flex;
+			height: fit-content;
+			position: sticky;
+			top: 135px;
 		}
 	}
 
@@ -178,7 +190,10 @@ export default {
 			border-radius: 7px;
 			box-shadow: 0 2px 4px 0 rgba(213, 213, 213, 0.5);
 			display: flex;
+			height: fit-content;
 			padding: 0 19px;
+			position: sticky;
+			top: 135px;
 			width: 400px;
 		}
 	}
@@ -190,6 +205,14 @@ export default {
 		height: 217px;
 		padding: 0;
 		width: 298px;
+
+		@media screen and (min-width: 996px) {
+			display: none;
+		}
+	}
+
+	.slider-product-view-one-movil {
+		width: 70%;
 
 		@media screen and (min-width: 996px) {
 			display: none;
@@ -217,20 +240,19 @@ export default {
 		}
 	}
 
-	.slider-product-view-one {
-		align-items: center;
-		background: color(white);
-		border-radius: 7px;
-		box-shadow: 0 2px 4px 0 rgba(213, 213, 213, 0.5);
-		display: flex;
-		height: 487px;
-		justify-content: center;
-		padding: 0 19px;
-		width: 80%;
+	.slider-product-view-one-web {
+		display: none;
 
-		@media screen and (max-width: 764px) {
-			height: 217px;
-			width: 70%;
+		@media screen and (min-width: 996px) {
+			align-items: center;
+			background: color(white);
+			border-radius: 7px;
+			box-shadow: 0 2px 4px 0 rgba(213, 213, 213, 0.5);
+			display: flex;
+			height: 487px;
+			justify-content: center;
+			padding: 0 19px;
+			width: 80%;
 		}
 	}
 
