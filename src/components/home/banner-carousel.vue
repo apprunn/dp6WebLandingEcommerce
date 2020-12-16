@@ -92,15 +92,27 @@ export default {
 </script>
 <style lang="scss" scoped>
 	.img-carousel {
-		// background-position: center;
-		// background-repeat: no-repeat;
-		// background-size: cover;
-		// height: 616px;
-		height: 50vh;
+		height: auto;
     	width: 100%;
 		
-		@media (max-width: 764px) {
-			height: 505px;
+		@media (min-width: 600px) {
+			height: 44vh;
+		}
+
+		@media (min-width: 700px) {
+			height: 50vh;
+		}
+
+		@media (min-width: 768px) {
+			height: 54vh;
+		}
+
+		@media (min-width: 900px) {
+			height: 64vh;
+		}
+
+		@media (min-width: 1280px) {
+			height: 68vh;
 		}
 
 		picture {
