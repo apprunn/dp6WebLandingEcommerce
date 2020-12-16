@@ -92,7 +92,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 	.img-carousel {
-		height: auto;
+		height: 48vh;
     	width: 100%;
 		
 		@media (min-width: 600px) {
