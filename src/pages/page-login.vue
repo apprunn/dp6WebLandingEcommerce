@@ -156,7 +156,12 @@
 				this.redirect();
 			}
 		} catch (err) {
-			if (err.status === 500) {
+			if (err.data.message === 'USER_NOT_ACTIVATED_BY_EMAIL') {
+				this.showNotification(
+					'Su cuenta no está activada. Le hemos enviado un correo para que lo pueda hacer',
+					'accent',
+				);
+			} else if (err.status === 500) {
 				this.showGenericError();
 			}
 		} finally {
