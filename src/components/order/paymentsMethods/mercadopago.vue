@@ -59,10 +59,13 @@
 										type="text"
 										placeholder="MM"
 										id="cardExpirationMonth"
+										ref="cardExpirationMonth"
+										maxlength="2"
 										data-checkout="cardExpirationMonth"
 										onselectstart="return false" onpaste="return false"
 										oncopy="return false" oncut="return false"
 										ondrag="return false" ondrop="return false" autocomplete=off
+										@keyup="autotab('cardExpirationMonth', 'cardExpirationYear')"
 									>
 									<span class="date-separator">/</span>
 									<input
@@ -70,10 +73,14 @@
 										type="text"
 										placeholder="YY"
 										id="cardExpirationYear"
+										ref="cardExpirationYear"
+										maxlength="2"
 										data-checkout="cardExpirationYear"
 										onselectstart="return false" onpaste="return false"
 										oncopy="return false" oncut="return false"
-										ondrag="return false" ondrop="return false" autocomplete=off>
+										ondrag="return false" ondrop="return false" autocomplete=off
+										@keyup="autotab('cardExpirationYear', 'cardNumber')"
+									>
 								</div>
 							</div>
 						</div>
@@ -84,16 +91,22 @@
 									class="input-field"
 									type="text"
 									id="cardNumber"
+									ref="cardNumber"
+									maxlength="16"
 									data-checkout="cardNumber"
 									onselectstart="return false" onpaste="return false"
 									oncopy="return false" oncut="return false"
-									ondrag="return false" ondrop="return false" autocomplete=off>
+									ondrag="return false" ondrop="return false" autocomplete=off
+									@keyup="autotab('cardNumber', 'securityCode')"
+								>
 							</div>
 							<div>
 								<label class="input-label" for="securityCode">Código de seguridad</label>
 								<input
 									class="input-field"
 									id="securityCode"
+									ref="securityCode"
+									maxlength="4"
 									data-checkout="securityCode"
 									type="text"
 									onselectstart="return false"
@@ -182,6 +195,14 @@ async function checkout() {
 	this.productionEnv = res.payboxProduction;
 }
 
+function autotab(fromRef, toRef) {
+	const from = this.$refs[fromRef];
+	const to = this.$refs[toRef];
+	if (from.value.length === Number(from.getAttribute('maxlength'))) {
+		to.focus();
+	}
+}
+
 function data() {
 	return {
 		amount: 0,
@@ -207,6 +228,7 @@ export default {
 	},
 	data,
 	methods: {
+		autotab,
 		checkout,
 		clickOnButton,
 		closeModal,
