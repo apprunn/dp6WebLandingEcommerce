@@ -31,7 +31,6 @@
 						>
 					</div>
 				</swiper-slide>
-				<div class="pagination-carousel swiper-pagination" slot="pagination"></div>
 			</swiper>
 		</div>
 		<div
@@ -85,9 +84,9 @@ function imagesHandler(newImages) {
 		this.webLocalImages = [];
 
 		newImages.forEach((img) => {
-			if (img.fromApp === 0) {
+			if (img.fromApp === 1) {
 				this.webLocalImages.push(img);
-			} else if (img.fromApp === 1) {
+			} else if (img.fromApp === 0) {
 				this.movilLocalImages.push(img);
 			} else {
 				this.webLocalImages.push(img);
@@ -116,6 +115,9 @@ function data() {
 			},
 			loop: true,
 			width: 362,
+			pagination: {
+				el: '.swiper-pagination',
+			},
 		},
 		webLocalImages: [],
 	};
@@ -258,6 +260,14 @@ export default {
 
 	.image-slider {
 		height: 70%;
+	}
+
+	.slider-product-view-one {
+		display: none;
+
+		@media screen and (min-width: 996px) {
+			display: block;
+		}
 	}
 </style>
 
