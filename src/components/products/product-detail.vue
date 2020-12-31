@@ -114,7 +114,7 @@ function clickQuantity(value) {
 }
 
 function noStock() {
-	const stock = this.data.stockWarehouse || this.data.stock;
+	const stock = this.data.stockVirtual || this.data.stock;
 	const positiveStock = stock > 0;
 	return !(stock && positiveStock);
 }
@@ -323,5 +323,3 @@ export default {
 		width: 100%;
 	}
 </style>
-
-
