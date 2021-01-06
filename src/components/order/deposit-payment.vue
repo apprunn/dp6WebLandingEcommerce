@@ -7,10 +7,11 @@
 				class="deposit-content"
 			>Tienes hasta 24 horas para efectuar el pago en cualquiera de nuestros bancos afiliados con tu número de pedido.</p>
 		</div>
+
 		<div class="deposit-wrapper" v-else>
+			<online-deposits class="mb-4" :deposits="filtered"/>
 			<h2 v-if="thereAreNoBanksAccounts">No existen cuentas bancarias configuradas</h2>
 			<div v-else>
-				<online-deposits :deposits="filtered"/>
 				<v-radio-group  v-model="selectedBank" row class="mt-4">
 					<v-radio
 						:color="`${globalColors.primary}`"
@@ -60,7 +61,9 @@ import { getDeeper } from '@/shared/lib';
 
 
 function created() {
-	this.selectedBank = this.getBankAccounts[0].bankId;
+	if (this.getBankAccounts.length) {
+		this.selectedBank = this.getBankAccounts[0].bankId;
+	}
 	this.getDeposits();
 }
 

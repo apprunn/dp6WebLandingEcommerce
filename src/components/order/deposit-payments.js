@@ -1,37 +1,24 @@
 
 import { Yape } from '@/shared/enums/depositPayment';
 import { mapGetters } from 'vuex';
+import { getDeeper } from '@/shared/lib';
 
 const YapeComponent = () => import('@/components/order/yape-component');
 
 function yapeUrlImage() {
-	const { urlImage } = this.deposits.find(d => d.name === Yape) || {};
-	return urlImage;
-}
-
-function yapeProps() {
-	const urlImage = this.yapeUrlImage || '';
-	const amount = (this.getTotalToBuy - this.discount) + this.getShippingCost;
-	return { urlImage, amount };
-}
-
-function discount() {
-	const percentage = this.user.discount;
-	const amount = this.getTotalToBuy * (Number(percentage) / 100);
-	return Number(amount.toFixed(2));
+	return getDeeper('settings.billeters.yape.imageQR')(this.getCommerceData);
 }
 
 export default {
 	name: 'deposit-payments',
 	computed: {
 		...mapGetters([
+			'getCommerceData',
 			'getShippingCost',
 			'getTotalToBuy',
 			'user',
 		]),
-		discount,
 		yapeUrlImage,
-		yapeProps,
 	},
 	props: {
 		deposits: {
@@ -41,7 +28,7 @@ export default {
 	},
 	render(h) {
 		const options = {
-			[Yape]: h(YapeComponent, { props: this.yapeProps }),
+			[Yape]: h(YapeComponent, { props: { urlImage: this.yapeUrlImage } }),
 		};
 		let selectedPaymentMethods = [];
 		this.deposits.forEach((t) => {
@@ -52,7 +39,7 @@ export default {
 			'div',
 			{
 				style: {
-					display: 'grid',
+					display: 'block',
 					gridGap: '10px',
 					gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 180px))',
 				},

@@ -1,85 +1,28 @@
 <template>
-<div>
-	<button
-		type="button"
-		class="yape-btn"
-		:style="`border:1px solid ${globalColors.base}`"
-		@click="show = !show"
-	>
-		<span class="yape-btn-content">Pague con: </span>
-		<img
-			src="https://lh3.googleusercontent.com/y5S3ZIz-ohg3FirlISnk3ca2yQ6cd825OpA0YK9qklc5W8MLSe0NEIEqoV-pZDvO0A8=s180-rw"
-			alt="logo_yape"
-		>
-	</button>
-	<modal v-model="show" max-width="fit-content">
-		<div class="yape-modal-container">
-			<div class="modal-close">
-				<button type="button" @click="closeModal">X</button>
-			</div>
-			<div class="modal-header">
+	<div class="yape-main-container">
+			<button
+				type="button"
+				class="yape-btn"
+				:style="`border:1px solid ${globalColors.base}`"
+				@click="show = !show"
+			>
+				<span class="yape-btn-content">Pague con: </span>
 				<img
 					src="https://lh3.googleusercontent.com/y5S3ZIz-ohg3FirlISnk3ca2yQ6cd825OpA0YK9qklc5W8MLSe0NEIEqoV-pZDvO0A8=s180-rw"
 					alt="logo_yape"
 				>
-				<ol>
-					<li><span class="bold">Escanea</span> el QR.</li>
-					<li><span class="bold">Ingresa</span> el monto a pagar y listo.</li>
-				</ol>
-			</div>
-			<div class="modal-amount" v-if="!successTransaction">
-				<span class="amount-title">Monto a pagar</span>
-				<output
-					class="amount"
-					:style="`color:${globalColors.title}`"
-				>S/ {{amount | currencyFormat}}</output>
-			</div>
-			<div v-if="successTransaction">
-				<div class="modal-success">
-					<success-icon class="success-icon" />
-					<h3>¡ Listo !</h3>
-				</div>
-				<p class="thanks">Gracias por comprar con nosotros, en unos momentos te enviaremos la confirmación de tu compra a tu correo electrónico</p>
-			</div>
-			<div v-else>
+			</button>
+			<div class="yape-modal-container">
 				<div class="modal-qr">
 					<img :src="urlImage" alt="yape_qr">
 				</div>
-				<div class="modal-send">
-					<app-input
-						placeholder="Número de celular"
-						class="mx-2 phone-number"
-						v-model="phone"
-					>
-						<small
-							v-if="!phone"
-							class="validate-text"
-						>El número de celular es requerido</small>
-					</app-input>
-					<button
-						type="button"
-						:disabled="!phone"
-						:style="`background-color:${globalColors.secondary}`"
-						@click="successTransaction = true"
-					>Enviar</button>
-				</div>
 			</div>
-		</div>
-	</modal>
+		
+	</div>
 </div>
 </template>
 <script>
-import modal from '@/components/shared/modal/modal-component';
 import appInput from '@/components/shared/inputs/app-input';
-import successIcon from '@/components/svg/success';
-
-function closeModal() {
-	this.show = false;
-	this.phone = '';
-	setTimeout(() => {
-		this.successTransaction = false;
-	}, 200);
-}
 
 function data() {
 	return {
@@ -92,18 +35,9 @@ export default {
 	name: 'yape-component',
 	components: {
 		appInput,
-		modal,
-		successIcon,
 	},
 	data,
-	methods: {
-		closeModal,
-	},
 	props: {
-		amount: {
-			required: true,
-			type: Number,
-		},
 		urlImage: {
 			required: true,
 			type: String,
@@ -270,5 +204,11 @@ export default {
 
 .bold {
 	font-family: font(bold);
+}
+.yape-main-container {
+	align-items: flex-start;
+	display: flex;
+	justify-content: space-evenly;
+	margin-top: 3rem;
 }
 </style>
