@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('BOTÓN TIENDAS DISPONIBLES EN DETALLE DE PRODUCTO', () => {
+context('4 BOTÓN TIENDAS DISPONIBLES EN DETALLE DE PRODUCTO', () => {
 	it('Se muestra para productos Terminados', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
 			cy.ProductsDetailPage(products.lowStock);

@@ -1,4 +1,4 @@
-context('DETALLE DE PRODUCTO: Imagen', () => {
+context('8 DETALLE DE PRODUCTO: Imagen', () => {
 	it('Producto tipo Terminado', () => {
 		let parentUrl = null;
 		cy.fixture('fenix-dev').then(({ products }) => {

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
+context('3 VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 	/**
 	 * Probar que ningun producto vaya al carrito de compras con cantidad CERO
 	 */

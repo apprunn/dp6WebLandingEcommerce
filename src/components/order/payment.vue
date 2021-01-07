@@ -31,13 +31,13 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import appButton from '@/components/shared/buttons/app-button';
 import { isEmpty, curry, equality, find } from '@/shared/lib';
+import { creditCard, transfer } from '@/shared/enums/wayPayment';
+import appButton from '@/components/shared/buttons/app-button';
 import depositPayment from '@/components/order/deposit-payment';
 import productsBuyed from '@/components/order/products-buyed';
 import recievedPayment from '@/components/order/recieved-payment';
 import VisaByCountry from '@/components/order/credit-card-payment';
-import { creditCard, transfer } from '@/shared/enums/wayPayment';
 
 function created() {
 	this.getClientIp();

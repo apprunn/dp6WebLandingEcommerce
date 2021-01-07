@@ -1,4 +1,4 @@
-context('COSTO DE ENVÍO SOLO PROVINCIA', () => {
+context('6 COSTO DE ENVÍO SOLO PROVINCIA', () => {
 	beforeEach(() => {
 		cy.AddProductWithStock();
 		cy.get('[data-cy="make-order"]').click();
@@ -39,7 +39,7 @@ context('COSTO DE ENVÍO SOLO PROVINCIA', () => {
 	})
 })
 
-context('COSTO DE ENVÍO PROVINCIA Y CIUDAD', () => {
+context('6 COSTO DE ENVÍO PROVINCIA Y CIUDAD', () => {
 	beforeEach(() => {
 		cy.AddProductWithStock();
 		cy.get('[data-cy="make-order"]').click();
@@ -79,7 +79,7 @@ context('COSTO DE ENVÍO PROVINCIA Y CIUDAD', () => {
 	})
 })
 
-context('COSTO DE ENVÍO PROVINCIA, CIUDAD Y DISTRITO', () => {
+context('6 COSTO DE ENVÍO PROVINCIA, CIUDAD Y DISTRITO', () => {
 	beforeEach(() => {
 		cy.AddProductWithStock();
 		cy.get('[data-cy="make-order"]').click();
@@ -120,7 +120,7 @@ context('COSTO DE ENVÍO PROVINCIA, CIUDAD Y DISTRITO', () => {
 	})
 })
 
-context('COSTO DE ENVÍO EN DIRECCIÓN EXISTENTE', () => {
+context('6 COSTO DE ENVÍO EN DIRECCIÓN EXISTENTE', () => {
 	beforeEach(() => {
 		cy.AddProductWithStock();
 		cy.get('[data-cy="make-order"]').click();
@@ -148,7 +148,7 @@ context('COSTO DE ENVÍO EN DIRECCIÓN EXISTENTE', () => {
 
 })
 
-context('COSTO DE ENVÍO NO CONFIGURADO', () => {
+context('6 COSTO DE ENVÍO NO CONFIGURADO', () => {
 	beforeEach(() => {
 		cy.AddProductWithStock();
 		cy.get('[data-cy="make-order"]').click();
