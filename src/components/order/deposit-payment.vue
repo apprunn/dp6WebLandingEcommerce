@@ -14,11 +14,11 @@
 			<div v-else>
 				<v-radio-group  v-model="selectedBank" row class="mt-4">
 					<v-radio
+						v-for="bank in getBankAccounts"
+						class="my-2"
 						:color="`${globalColors.primary}`"
 						:label="bank.bank.name" 
 						:value="bank.bankId"
-						v-for="bank in getBankAccounts"
-						class="my-2"
 						:key="bank.id">
 					</v-radio>
 				</v-radio-group>

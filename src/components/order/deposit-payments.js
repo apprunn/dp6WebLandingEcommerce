@@ -5,8 +5,24 @@ import { getDeeper } from '@/shared/lib';
 
 const YapeComponent = () => import('@/components/order/yape-component');
 
-function yapeUrlImage() {
-	return getDeeper('settings.billeters.yape.imageQR')(this.getCommerceData);
+function yapeData() {
+	return getDeeper('settings.billeters.yape')(this.getCommerceData);
+}
+
+function buildProps(name, code) {
+	const propsOptions = {
+		[Yape.name]: this.yapeProps.bind(this, code),
+	};
+	return propsOptions[name].call();
+}
+
+function yapeProps(code) {
+	return {
+		code,
+		urlImage: this.yapeData.imageQR,
+		yapeName: this.yapeData.name,
+		yapePhone: this.yapeData.phone,
+	};
 }
 
 export default {
@@ -18,7 +34,11 @@ export default {
 			'getTotalToBuy',
 			'user',
 		]),
-		yapeUrlImage,
+		yapeData,
+	},
+	methods: {
+		buildProps,
+		yapeProps,
 	},
 	props: {
 		deposits: {
@@ -28,12 +48,17 @@ export default {
 	},
 	render(h) {
 		const options = {
-			[Yape]: h(YapeComponent, { props: { urlImage: this.yapeUrlImage } }),
+			[Yape.name]: YapeComponent,
 		};
 		let selectedPaymentMethods = [];
+		const that = this;
 		this.deposits.forEach((t) => {
-			const { name } = t;
-			selectedPaymentMethods = selectedPaymentMethods.concat(options[name]);
+			const { name, code } = t;
+			const props = that.buildProps(name, code);
+
+			selectedPaymentMethods = selectedPaymentMethods.concat(
+				h(options[name], { props }),
+			);
 		});
 		return h(
 			'div',

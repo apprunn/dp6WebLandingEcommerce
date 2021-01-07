@@ -123,6 +123,15 @@
 				</div>
 			</div>
 		</section>
+
+		<section v-if="isYape.exist">
+			<YapeComponent
+				:yape-name="isYape.name"
+				:yape-phone="isYape.phone"
+				:url-image="isYape.urlImage"
+			/>
+		</section>
+
 		<section
 			v-if="isNiubiz && isOnlinePayment"
 			class="card-data-niubiz"
@@ -131,22 +140,26 @@
 			<h4>Pago realizado con tarjeta: <span>{{niubizGateway.cardBrand}}</span>, nro: <span>{{niubizGateway.cardNumber}}</span></h4>
 			<h5>el día <span>{{niubizGateway.createdAt | formatDate}}</span></h5>
 		</section>
+
 		<section class="summary-btns">
 			<button :style="`background-color:${globalColors.primary}`" type="button" @click="seeOrder">Ver pedido</button>
 			<button :style="`background-color:${globalColors.primary}`" type="button" @click="cancelOrder">Cancelar pedido</button>
 		</section>
+
 	</div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import deliveryWays from '@/shared/enums/waysDeliveries';
-import { niubiz } from '@/shared/enums/gatewayCodes';
-import productInSummary from '@/components/products/product-in-summary';
 import { getDeeper, isEmpty } from '@/shared/lib';
-import helper from '@/shared/helper';
+import { niubiz } from '@/shared/enums/gatewayCodes';
 import { creditCard, deposit, reciveAndPay } from '@/shared/enums/wayPayment';
+import deliveryWays from '@/shared/enums/waysDeliveries';
+import productInSummary from '@/components/products/product-in-summary';
+import helper from '@/shared/helper';
 import ArrowLeft from '@/components/svg/ArrowLeft';
 import ArrowRight from '@/components/svg/ArrowRight';
+import YapeComponent from '@/components/order/yape-component';
+import { Yape } from '@/shared/enums/depositPayment';
 
 const { store, house } = deliveryWays;
 
@@ -172,7 +185,7 @@ function isStore() {
 }
 
 function addressDel() {
-	const { address, name, addressLine1, parish, city, province } = this.addressObject;
+	const { address, name, addressLine1, parish, city, province } = this.addressObject || {};
 	if (this.isStore) {
 		return `${name}, ${address}.`;
 	}
@@ -272,6 +285,25 @@ function showReference() {
 	return getDeeper('additionalInformation.paymentGateway.referenceId')(this.order);
 }
 
+function isYape() {
+	const yapeCode = getDeeper('wayPaymentDetailCode')(this.order);
+	if (yapeCode === Yape.code) {
+		const { walletNumber, walletQR } = getDeeper('additionalInfo')(this.order) || {};
+		return {
+			exist: true,
+			name: '',
+			phone: walletNumber,
+			urlImage: walletQR,
+		};
+	}
+	return {
+		exist: false,
+		name: '',
+		phone: '',
+		urlImage: '',
+	};
+}
+
 function data() {
 	return {
 		swiperOption: {
@@ -294,6 +326,7 @@ export default {
 		ArrowLeft,
 		ArrowRight,
 		productInSummary,
+		YapeComponent,
 	},
 	computed: {
 		...mapGetters({
@@ -314,6 +347,7 @@ export default {
 		isOnlinePayment,
 		isReciveAndPay,
 		isStore,
+		isYape,
 		link,
 		niubizGateway,
 		wayPayment,

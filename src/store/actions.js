@@ -221,6 +221,20 @@ function topLocationOfModal({ commit }, h) {
 	commit('SET_TOP_LOCATION_OF_MODAL', h);
 }
 
+function setAdditionalInformation({ commit }, additionalInformation) {
+	commit(
+		'SET_ADDITIONAL_INFORMATION',
+		{
+			...additionalInformation,
+			flagVoucherState: 1,
+		},
+	);
+}
+
+function setWayPaymentDetailCode({ commit }, wayPaymentDetailCode) {
+	commit('SET_WAYPAYMENT_DETAIL_CODE', wayPaymentDetailCode);
+}
+
 const methods = {
 	addProductToBuyCar,
 	addService,
@@ -255,6 +269,8 @@ const methods = {
 	SET_WINDOW_LOADED_TO_TRUE,
 	START_PAGINATION,
 	topLocationOfModal,
+	setAdditionalInformation,
+	setWayPaymentDetailCode,
 };
 
 export default methods;

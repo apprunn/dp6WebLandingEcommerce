@@ -94,6 +94,7 @@ function buildOrderBody(flagFinish, getters) {
 	const placeAddress = getCustomerAddressId ? getDeliveryAddress : getCustomerAddress;
 	const deliveryAddress = isStore ? storeAddress : placeAddress;
 	const body = {
+		additionalInfo: getters.getAdditionalInformation,
 		costShipping: getters.getShippingCost,
 		costShippingFlagTax: getters.getShippingFlagTax,
 		costShippingTax: getters.getShippingTax,
@@ -108,6 +109,7 @@ function buildOrderBody(flagFinish, getters) {
 		warehouseId: id,
 		warehouseName: name,
 		warehouseAddress: address,
+		wayPaymentDetailCode: getters.getWayPaymentDetailCode,
 	};
 	if (getters.getOrderId && getters.getOrderStatus) {
 		body.orderStateId = getters.getOrderStatus;

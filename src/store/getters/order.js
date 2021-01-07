@@ -155,6 +155,14 @@ const getters = {
 	getPaymentLink(state) {
 		return state.order.paymentLink;
 	},
+	getAdditionalInformation(state) {
+		const { order: { additionalInformation } } = state;
+		return additionalInformation || null;
+	},
+	getWayPaymentDetailCode(state) {
+		const { order: { wayPaymentDetailCode } } = state;
+		return wayPaymentDetailCode || '';
+	},
 };
 
 export default getters;
