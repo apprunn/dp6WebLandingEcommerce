@@ -1,5 +1,6 @@
 {
 	"email": "root30@mail.com",
+	"commerceCode": "fenixday",
 	"password": 123456,
 	"token": "Bearer $2y$10$tNJmuXZKGwi0l38A.SxUVemGrFJiyLunyqkOqOTE7LHsrSwMEmEBi",
 	"products": {

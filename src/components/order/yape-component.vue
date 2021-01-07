@@ -9,6 +9,7 @@
 
 		<button
 			v-if="isPaymentPage"
+			data-cy="yape-button"
 			type="button"
 			class="yape-btn"
 			:style="`border:1px solid ${globalColors.base}`"
@@ -20,7 +21,7 @@
 				alt="logo_yape"
 			>
 		</button>
-		<div v-else class="yape-logo-message">
+		<div v-else class="yape-logo-message" data-cy="yape-in-summary">
 			<div class="logo-yape">
 				<img
 					src="https://lh3.googleusercontent.com/y5S3ZIz-ohg3FirlISnk3ca2yQ6cd825OpA0YK9qklc5W8MLSe0NEIEqoV-pZDvO0A8=s180-rw"
@@ -34,16 +35,20 @@
 				class="yape-logo-message-voucher-loading"
 			>Visita tu: Perfil de usuario, Mis Pedidos, busca este pedido y carga el comprobante</h3>
 		</div>
-			<div :class="['yape-modal-container', { active: show }]">
-				<div class="modal-qr">
-					<img :src="urlImage" alt="yape_qr">
-				</div>
-				<div v-if="yapeName || yapePhone" class="yape-data">
-					<h3 :style="`color: ${globalColors.primary}`">Datos YAPE:</h3>
-					<span v-if="yapeName">Nombre: {{yapeName}}</span>
-					<span v-if="yapePhone">Telefono: {{yapePhone}}</span>
-				</div>
+
+		<div
+			:class="['yape-modal-container', { active: show }]"
+			data-cy="yape-qr-container"
+		>
+			<div class="modal-qr">
+				<img :src="urlImage" alt="yape_qr">
 			</div>
+			<div v-if="yapeName || yapePhone" class="yape-data">
+				<h3 :style="`color: ${globalColors.primary}`">Datos YAPE:</h3>
+				<span v-if="yapeName">Nombre: {{yapeName}}</span>
+				<span v-if="yapePhone">Telefono: {{yapePhone}}</span>
+			</div>
+		</div>
 		
 	</div>
 </div>

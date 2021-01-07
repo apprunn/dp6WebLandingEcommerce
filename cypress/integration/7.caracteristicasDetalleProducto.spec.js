@@ -1,4 +1,4 @@
-context('DETALLE DE PRODUCTO: Tipo variación', () => {
+context('7 DETALLE DE PRODUCTO: Tipo variación', () => {
 	it('Características seleccionadas', () => {
 		cy.fixture('fenix-dev').then(({ products }) => {
 			cy.ProductsDetailPage(products.variacion);
@@ -47,7 +47,7 @@ context('DETALLE DE PRODUCTO: Tipo variación', () => {
 	})
 })
 
-context('DETALLE DE PRODUCTO: Tipo Terminado', () => {
+context('7 DETALLE DE PRODUCTO: Tipo Terminado', () => {
 	it('Características seleccionadas', () => {
 		cy.fixture('fenix-dev').then(({ products }) => {
 			cy.ProductsDetailPage(products.terminado);

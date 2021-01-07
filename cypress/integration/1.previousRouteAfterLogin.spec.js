@@ -1,6 +1,4 @@
-/// <reference types="cypress" />
-
-context('REGRESAR A PANTALLA PREVIA AL INICIO DE SESIÓN', () => {
+context('1 REGRESAR A PANTALLA PREVIA AL INICIO DE SESIÓN', () => {
 	it('Iniciar sesión desde detalle de producto y regresar', () => {
 		cy.visit('localhost:9010');
 		let route = null;
