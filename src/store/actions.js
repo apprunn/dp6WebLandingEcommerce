@@ -136,6 +136,8 @@ function SET_DEFAULT_VALUES({ commit, dispatch }) {
 	dispatch('setNoShippingCost');
 	commit('SET_ORDER_STATUS', null);
 	commit('SET_FLAG_STATUS_ORDER', null);
+	dispatch('setAdditionalInformation', null);
+	dispatch('setWayPaymentDetailCode', null);
 }
 
 function UPDATE_ORDER_FROM_LOCAL_STORAGE({ commit }, orderInfo) {
