@@ -38,12 +38,12 @@
 		</div>
 		<div
 			v-else
-			class="slider-product-view-one"
+			:class="['slider-product-view-one', { 'sold-out': noStock }]"
 		>
 			<img
 				:src="data.urlImage"
 				:alt="data.name"
-				:class="['image-product-slider', { 'sold-out': noStock }]"
+				class="image-product-slider"
 			>
 		</div>
 		<div class="slider-product-view-movil" v-if="movilLocalImages && movilLocalImages.length">
@@ -51,7 +51,10 @@
 				<swiper-slide 
 					v-for="image in movilLocalImages" 
 					:key="image.id">
-					<div class="wrapper-image" data-cy="presentation-img">
+					<div
+						:class="['wrapper-image', { 'sold-out': noStock }]"
+						data-cy="presentation-img"
+					>
 						<img 
 							:src="image.urlImage" 
 							:alt="image.name"
@@ -64,9 +67,12 @@
 		</div>
 		<div
 			v-else
-			class="slider-product-view-one-movil"
+			:class="['slider-product-view-one-movil', { 'sold-out': noStock }]"
 		>
-			<img :src="data.urlImage" :alt="data.name" class="image-product-slider">
+			<img
+				:src="data.urlImage"
+				:alt="data.name"
+				class="image-product-slider">
 		</div>
 	</div>
 </template>
@@ -91,17 +97,16 @@ function imagesHandler(newImages) {
 		this.webLocalImages = [];
 
 		newImages.forEach((img) => {
-			if (img.fromApp === 1) {
+			if (img.fromApp === 0) {
 				this.webLocalImages.push(img);
-				this.$set(this.webLocalImages[0], 'select', true);
-			} else if (img.fromApp === 0) {
+			} else if (img.fromApp === 1) {
 				this.movilLocalImages.push(img);
 			} else {
 				this.webLocalImages.push(img);
 				this.movilLocalImages.push(img);
-				this.$set(this.webLocalImages[0], 'select', true);
 			}
 		});
+		this.$set(this.webLocalImages[0], 'select', true);
 	}
 }
 
@@ -299,7 +304,7 @@ export default {
 			color: white;
 			content: 'Agotado';
 			display: flex;
-			font-size: 30px;
+			font-size: 20px;
 			font-family: font(bold);
 			height: 60px;
 			justify-content: center;
@@ -309,6 +314,10 @@ export default {
 			transform: rotate(-45deg);
 			width: 100%;
 			z-index: 99;
+
+			@media screen and (min-width: 996px) {
+				font-size: 30px;
+			}
 		}
 	}
 </style>
