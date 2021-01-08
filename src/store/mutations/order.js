@@ -106,5 +106,11 @@ const orderMutation = {
 	SET_PAYMENT_LINK(state, link) {
 		Vue.set(state.order, 'paymentLink', link);
 	},
+	SET_ADDITIONAL_INFORMATION(state, additionalInformation) {
+		Vue.set(state.order, 'additionalInformation', additionalInformation);
+	},
+	SET_WAYPAYMENT_DETAIL_CODE(state, wayPaymentDetailCode) {
+		Vue.set(state.order, 'wayPaymentDetailCode', wayPaymentDetailCode);
+	},
 };
 export default orderMutation;

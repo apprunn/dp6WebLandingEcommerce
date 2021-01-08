@@ -8,6 +8,7 @@ class MercadoPago {
 		this.$router = context.$router;
 		this.orderId = context.getOrderInfo.id;
 		this.closeModal = context.closeModal;
+		this.duration = 100000;
 	}
 	init(publicKey, hash) {
 		this.hash = hash;
@@ -44,7 +45,13 @@ class MercadoPago {
 					[paymentMethod.id, document.getElementById('amount').value]);
 			}
 		} else {
-			alert(`payment method info error: ${response}`);
+			this.showNotification(
+				'Número de tarjeta inválido',
+				'error',
+				null,
+				false,
+				this.duration,
+			);
 		}
 	}
 
@@ -72,6 +79,7 @@ class MercadoPago {
 				issuerSelect.value,
 			);
 		} else {
+			debugger;
 			alert(`issuers method info error: ${response}`);
 		}
 	}
@@ -94,6 +102,7 @@ class MercadoPago {
 				document.getElementById('installments').appendChild(opt);
 			});
 		} else {
+			debugger;
 			alert(`installments method info error: ${response}`);
 		}
 	}
@@ -110,6 +119,23 @@ class MercadoPago {
 		if (!this.doSubmit) {
 			const $form = document.getElementById('paymentForm');
 			window.Mercadopago.createToken($form, this.setCardTokenAndPay.bind(this));
+		} else {
+			this.showNotification(
+				'La sesión de seguridad ha caducado.',
+				'warning',
+				null,
+				false,
+				this.duration,
+			);
+			setTimeout(() => {
+				this.showNotification(
+					'Por favor recargue la pantalla e intentelo nuevamente',
+					'info',
+					null,
+					false,
+					this.duration,
+				);
+			}, 500);
 		}
 	}
 
@@ -120,22 +146,101 @@ class MercadoPago {
 			this.pay.call(this, form, response.id);
 		} else {
 			const { cause } = response;
-			if (cause.find(c => c.code === 'E302')) {
-				this.showNotification('Código de seguridad inválido', 'error', null, false, 100000);
+			if (cause.find(c => c.code === '011')) {
+				this.showNotification(
+					'No se pudo actualizar el token de seguridad de la tarjeta',
+					'warning',
+					null,
+					false,
+					this.duration,
+				);
+				this.showNotification(
+					'Recargue la pantalla e intente nuevamente',
+					'info',
+					null,
+					false,
+					this.duration,
+				);
 			} else if (cause.find(c => c.code === '205')) {
-				this.showNotification('Debe introducir un número de tarjeta', 'error', null, false, 100000);
+				this.showNotification(
+					'Debe introducir un número de tarjeta',
+					'error',
+					null,
+					false,
+					this.duration,
+				);
 			} else if (cause.find(c => c.code === '208' || c.code === '209')) {
-				this.showNotification('Debe introducir un tiempo de expiración', 'error', null, false, 100000);
+				this.showNotification(
+					'Debe introducir un tiempo de expiración',
+					'error',
+					null,
+					false,
+					this.duration,
+				);
 			} else if (cause.find(c => c.code === '221')) {
-				this.showNotification('El titular de la tarjeta es requerido', 'error', null, false, 100000);
+				this.showNotification(
+					'El titular de la tarjeta es requerido',
+					'error',
+					null,
+					false,
+					this.duration,
+				);
 			} else if (cause.find(c => c.code === '214')) {
-				this.showNotification('El número de documento es requerido', 'error', null, false, 100000);
+				this.showNotification(
+					'El número de documento es requerido',
+					'error',
+					null,
+					false,
+					this.duration,
+				);
+			} else if (cause.find(c => c.code === '316')) {
+				this.showNotification(
+					'Titular de tarjeta inválido',
+					'error',
+					null,
+					false,
+					this.duration,
+				);
 			} else if (cause.find(c => c.code === '324')) {
-				this.showNotification('El número de documento es inválido', 'error', null, false, 100000);
-			} else if (cause.find(c => c.code === '325') || cause.find(c => c.code === '326')) {
-				this.showNotification('La fecha de vencimiento es inválido', 'error', null, false, 100000);
+				this.showNotification(
+					'El número de documento es inválido',
+					'error',
+					null,
+					false,
+					this.duration,
+				);
+			} else if (cause.find(c => c.code === '325')) {
+				this.showNotification(
+					'MES de expiración es inválido',
+					'error',
+					null,
+					false,
+					this.duration,
+				);
+			} else if (cause.find(c => c.code === '326')) {
+				this.showNotification(
+					'AÑO de expiración inválido',
+					'error',
+					null,
+					false,
+					this.duration,
+				);
+			} else if (cause.find(c => c.code === 'E301')) {
+				this.showNotification(
+					'Número de tarjeta inválido',
+					'error',
+					null,
+					false,
+					this.duration,
+				);
 			} else if (cause.find(c => c.code === 'E302')) {
-				this.showNotification('El número de tarjeta es inválido', 'error', null, false, 100000);
+				this.showNotification(
+					'Código de seguridad inválido',
+					'error',
+					null,
+					false,
+					this.duration,
+				);
 			} else {
 				this.showNotification('Complete los datos en el formulario', 'error', null, false, 100000);
 			}

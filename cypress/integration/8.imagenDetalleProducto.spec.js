@@ -1,12 +1,12 @@
-context('DETALLE DE PRODUCTO: Imagen', () => {
+context('8 DETALLE DE PRODUCTO: Imagen', () => {
 	it('Producto tipo Terminado', () => {
 		let parentUrl = null;
 		cy.fixture('fenix-dev').then(({ products }) => {
 			cy.ProductsDetailPage(products.terminado)
 				.its('body').then((res) => {
-					parentUrl = res.urlImage;
+					parentUrl = res.images[0].urlImage;
 					cy.ProductsChildren(products.terminado);
-					cy.PresentationImage('[data-cy="presentation-img"]', parentUrl);
+					cy.PresentationImage('.swiper-slide-active', parentUrl);
 					cy.AddToCart();
 					cy.ImgInAddToCartModal(parentUrl);
 				});

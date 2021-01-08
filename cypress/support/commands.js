@@ -66,6 +66,18 @@ Cypress.Commands.add('ProductsDetailPage', (productId) => {
 	});
 })
 
+Cypress.Commands.add('PublicService', () => {
+	cy.fixture('fenix-dev.json').then(({ commerceCode, token }) => {
+		cy.request({
+			method: 'get',
+			url: `https://sales.perudatos.com/com-ecommerce-companies/${commerceCode}/public`,
+			headers: {
+				Authorization: token,
+			},
+		}).as('Public');
+	});
+})
+
 Cypress.Commands.add('ProductsChildren', (productId) => {
 	cy.fixture('fenix-dev.json').then(({ token }) => {
 		cy.visit(`http://localhost:9010/${productId}/detalle-producto`);
@@ -247,7 +259,7 @@ Cypress.Commands.add('SelectCityInNewDirection', (cityName) => {
 	cy.get('.menuable__content__active')
 		.should('exist');
 	cy.contains(cityName)
-		.click();
+		.click({ force: true });
 })
 
 Cypress.Commands.add('SelectParishInNewDirection', (parishName) => {
@@ -297,6 +309,44 @@ Cypress.Commands.add('PressMercadoPago', () => {
 	cy.get('[data-cy="mercadopago-btn"]')
 		.should('exist')
 		.click({ multiple: true, force: true });
+})
+
+Cypress.Commands.add('PressYape', (urlImage) => {
+	cy.get('[data-cy="yape-qr-container"]')
+		.should('exist')
+		.should('have.class', 'yape-modal-container')
+		.should('not.have.class', 'active');
+
+	cy.get('[data-cy="yape-button"]')
+		.should('exist')
+		.click();
+
+	cy.get('[data-cy="yape-qr-container"]')
+		.should('exist')
+		.should('have.class', 'active')
+		.children()
+		.should('have.length', 2)
+		.find('img').then(($el) => {
+			expect($el).to.have.attr('src', urlImage);
+		});
+})
+
+Cypress.Commands.add('YapeInSummary', (urlImage) => {
+	cy.wait(1000);
+	cy.get('[data-cy="yape-in-summary"]')
+		.should('exist')
+		.should('have.class', 'yape-logo-message')
+		.children()
+		.should('have.length', 3);
+
+	cy.get('[data-cy="yape-qr-container"]')
+		.should('exist')
+		.should('have.class', 'active')
+		.children()
+		.should('have.length', 2)
+		.find('img').then(($el) => {
+			expect($el).to.have.attr('src', urlImage);
+		});
 })
 
 Cypress.Commands.add('NewDirectionDataWithoutUbigeo', ({ alias, direction, ref, apto }) => {

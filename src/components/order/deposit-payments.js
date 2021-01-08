@@ -1,36 +1,43 @@
 
 import { Yape } from '@/shared/enums/depositPayment';
 import { mapGetters } from 'vuex';
+import { getDeeper } from '@/shared/lib';
 
 const YapeComponent = () => import('@/components/order/yape-component');
 
-function yapeUrlImage() {
-	const { urlImage } = this.deposits.find(d => d.name === Yape) || {};
-	return urlImage;
+function yapeData() {
+	return getDeeper('settings.billeters.yape')(this.getCommerceData);
 }
 
-function yapeProps() {
-	const urlImage = this.yapeUrlImage || '';
-	const amount = (this.getTotalToBuy - this.discount) + this.getShippingCost;
-	return { urlImage, amount };
+function buildProps(name, code) {
+	const propsOptions = {
+		[Yape.name]: this.yapeProps.bind(this, code),
+	};
+	return propsOptions[name].call();
 }
 
-function discount() {
-	const percentage = this.user.discount;
-	const amount = this.getTotalToBuy * (Number(percentage) / 100);
-	return Number(amount.toFixed(2));
+function yapeProps(code) {
+	return {
+		code,
+		urlImage: this.yapeData.imageQR,
+		yapeName: this.yapeData.name,
+		yapePhone: this.yapeData.phone,
+	};
 }
 
 export default {
 	name: 'deposit-payments',
 	computed: {
 		...mapGetters([
+			'getCommerceData',
 			'getShippingCost',
 			'getTotalToBuy',
 			'user',
 		]),
-		discount,
-		yapeUrlImage,
+		yapeData,
+	},
+	methods: {
+		buildProps,
 		yapeProps,
 	},
 	props: {
@@ -41,18 +48,23 @@ export default {
 	},
 	render(h) {
 		const options = {
-			[Yape]: h(YapeComponent, { props: this.yapeProps }),
+			[Yape.name]: YapeComponent,
 		};
 		let selectedPaymentMethods = [];
+		const that = this;
 		this.deposits.forEach((t) => {
-			const { name } = t;
-			selectedPaymentMethods = selectedPaymentMethods.concat(options[name]);
+			const { name, code } = t;
+			const props = that.buildProps(name, code);
+
+			selectedPaymentMethods = selectedPaymentMethods.concat(
+				h(options[name], { props }),
+			);
 		});
 		return h(
 			'div',
 			{
 				style: {
-					display: 'grid',
+					display: 'block',
 					gridGap: '10px',
 					gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 180px))',
 				},

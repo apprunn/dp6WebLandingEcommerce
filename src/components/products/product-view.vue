@@ -34,21 +34,27 @@
 						>
 					</div>
 				</swiper-slide>
-				<div class="pagination-carousel swiper-pagination" slot="pagination"></div>
 			</swiper>
 		</div>
 		<div
 			v-else
-			class="slider-product-view-one"
+			:class="['slider-product-view-one', { 'sold-out': noStock }]"
 		>
-			<img :src="data.urlImage" :alt="data.name" class="image-product-slider">
+			<img
+				:src="data.urlImage"
+				:alt="data.name"
+				class="image-product-slider"
+			>
 		</div>
 		<div class="slider-product-view-movil" v-if="movilLocalImages && movilLocalImages.length">
 			<swiper ref="mySwiper" :options="swiperOption">
 				<swiper-slide 
 					v-for="image in movilLocalImages" 
 					:key="image.id">
-					<div class="wrapper-image" data-cy="presentation-img">
+					<div
+						:class="['wrapper-image', { 'sold-out': noStock }]"
+						data-cy="presentation-img"
+					>
 						<img 
 							:src="image.urlImage" 
 							:alt="image.name"
@@ -61,9 +67,12 @@
 		</div>
 		<div
 			v-else
-			class="slider-product-view-one-movil"
+			:class="['slider-product-view-one-movil', { 'sold-out': noStock }]"
 		>
-			<img :src="data.urlImage" :alt="data.name" class="image-product-slider">
+			<img
+				:src="data.urlImage"
+				:alt="data.name"
+				class="image-product-slider">
 		</div>
 	</div>
 </template>
@@ -102,11 +111,14 @@ function imagesHandler(newImages) {
 }
 
 function noStock() {
-	const { stock, stockVirtual, typeInfo } = this.data;
-	if (typeInfo.code === 'servicios') {
-		return false;
+	if (this.data.typeInfo) {
+		const { stock, stockVirtual, typeInfo } = this.data;
+		if (typeInfo.code === 'servicios') {
+			return false;
+		}
+		return !(stock || stockVirtual);
 	}
-	return !(stock || stockVirtual);
+	return false;
 }
 
 function data() {
@@ -126,6 +138,9 @@ function data() {
 			},
 			loop: true,
 			width: 362,
+			pagination: {
+				el: '.swiper-pagination',
+			},
 		},
 		webLocalImages: [],
 	};
@@ -270,6 +285,15 @@ export default {
 	.image-slider {
 		height: 70%;
 	}
+
+	.slider-product-view-one {
+		display: none;
+
+		@media screen and (min-width: 996px) {
+			display: block;
+		}
+	}
+
 	.sold-out {
 		overflow: hidden;
 		position: relative;		
@@ -280,7 +304,7 @@ export default {
 			color: white;
 			content: 'Agotado';
 			display: flex;
-			font-size: 30px;
+			font-size: 20px;
 			font-family: font(bold);
 			height: 60px;
 			justify-content: center;
@@ -290,6 +314,10 @@ export default {
 			transform: rotate(-45deg);
 			width: 100%;
 			z-index: 99;
+
+			@media screen and (min-width: 996px) {
+				font-size: 30px;
+			}
 		}
 	}
 </style>
