@@ -259,7 +259,7 @@ Cypress.Commands.add('SelectCityInNewDirection', (cityName) => {
 	cy.get('.menuable__content__active')
 		.should('exist');
 	cy.contains(cityName)
-		.click();
+		.click({ force: true });
 })
 
 Cypress.Commands.add('SelectParishInNewDirection', (parishName) => {
