@@ -10,11 +10,16 @@
 				@page-changed="changePage"
 			>
 				<template slot-scope="{ row }">
-					<td class="row-date">{{row.createdAt}}</td>
+					<td class="row-date">
+						{{row.createdAt}}
+						<small v-if="yapeExist(row)" class="yape-icon-container">
+							<img src="https://lh3.googleusercontent.com/y5S3ZIz-ohg3FirlISnk3ca2yQ6cd825OpA0YK9qklc5W8MLSe0NEIEqoV-pZDvO0A8=s180-rw">
+						</small>
+					</td>
 					<td class="row-order">
 						<span class="row-order-label">Nro. Orden: </span>{{row.number}}
 					</td>
-					<td class="row-date">{{getReferenceId(row)}}</td>
+					<td class="row-ref">{{getReferenceId(row)}}</td>
 					<td class="row-totalOrder">
 						<span class="row-totalOrder-label">Total: </span>{{row.total}}
 					</td>
@@ -66,6 +71,7 @@ import detailsComponent from '@/components/shared/icons/details-component';
 import profileTab from '@/components/shared/tabs/profile-tab';
 import responsiveTable from '@/components/shared/table/respondive-table';
 import modalComponent from '@/components/shared/modal/modal-component';
+import { Yape } from '@/shared/enums/depositPayment';
 
 function created() {
 	this.$store.dispatch('LOAD_ORDERS_STATUS', this);
@@ -119,6 +125,10 @@ function closeModal() {
 function getReferenceId(order) {
 	const referenceId = getDeeper('additionalInformation.paymentGateway.referenceId')(order);
 	return referenceId || '--';
+}
+
+function yapeExist(order) {
+	return getDeeper('wayPaymentDetailCode')(order) === Yape.code;
 }
 
 function data() {
@@ -175,6 +185,7 @@ export default {
 		openDeletingOrderModal,
 		seeDetails,
 		statusChanged,
+		yapeExist,
 	},
 };
 </script>
@@ -200,6 +211,7 @@ export default {
 	}
 
 	.row-order {
+		font-family: font(bold);
 		grid-column: 1/2;
 		grid-row: 1/2;
 
@@ -214,21 +226,44 @@ export default {
 	.row-date {
 		grid-column: 1/2;
 		grid-row: 2/3;
+		position: relative;
 
 		@media (max-width: 600px) {
 			background-color: color(background);
 			font-size: size(small);
 			line-height: 45px;
 		}
+
+		.yape-icon-container {
+			border-radius: 50%;
+			display: flex;
+			height: 1.3rem;
+			left: 0;
+			overflow: hidden;
+			position: absolute;
+			top: 2px;
+			width: 1.3rem;
+			z-index: 99;
+
+			@media (min-width: 600px) {
+				left: -13px;
+			}
+
+			img {
+				height: 100%;
+				object-fit: cover;
+				width: 100%;
+			}
+		}
 	}
 
 	.row-totalOrder {
+		font-family: font(bold);
 		grid-column: 2/3;
 		grid-row: 1/2;
 
 		@media (max-width: 600px) {
 			border: none;
-			font-family: font(bold);
 			font-size: size(small);
 			line-height: 45px;
 		}
@@ -265,6 +300,14 @@ export default {
 			font-size: size(small);
 			line-height: 45px;
 			overflow: hidden;
+		}
+	}
+
+	.row-ref {
+		display: none;
+
+		@media (min-width: 600px) {
+			display: table-cell;
 		}
 	}
 

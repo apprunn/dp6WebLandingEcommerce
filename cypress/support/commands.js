@@ -332,6 +332,7 @@ Cypress.Commands.add('PressYape', (urlImage) => {
 })
 
 Cypress.Commands.add('YapeInSummary', (urlImage) => {
+	cy.wait(1000);
 	cy.get('[data-cy="yape-in-summary"]')
 		.should('exist')
 		.should('have.class', 'yape-logo-message')

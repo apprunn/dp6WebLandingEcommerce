@@ -224,7 +224,7 @@ export default {
 	td {
 		border-bottom: 1px solid color(border);
 		font-family: font(regular);
-		font-size: size(medium);
+		font-size: size(small);
 		height: 45px;
 		text-align: center;
 	}

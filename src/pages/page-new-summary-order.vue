@@ -143,7 +143,12 @@
 
 		<section class="summary-btns">
 			<button :style="`background-color:${globalColors.primary}`" type="button" @click="seeOrder">Ver pedido</button>
-			<button :style="`background-color:${globalColors.primary}`" type="button" @click="cancelOrder">Cancelar pedido</button>
+			<button
+				data-cy="cancel-order"
+				:style="`background-color:${globalColors.primary}`"
+				type="button"
+				@click="cancelOrder"
+			>Cancelar pedido</button>
 		</section>
 
 	</div>

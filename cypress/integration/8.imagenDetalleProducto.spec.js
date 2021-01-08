@@ -4,9 +4,9 @@ context('8 DETALLE DE PRODUCTO: Imagen', () => {
 		cy.fixture('fenix-dev').then(({ products }) => {
 			cy.ProductsDetailPage(products.terminado)
 				.its('body').then((res) => {
-					parentUrl = res.urlImage;
-					cy.ProductsChildren(products.terminado)
-					cy.PresentationImage('[data-cy="presentation-img"]', parentUrl);
+					parentUrl = res.images[0].urlImage;
+					cy.ProductsChildren(products.terminado);
+					cy.PresentationImage('.swiper-slide-active', parentUrl);
 					cy.AddToCart();
 					cy.ImgInAddToCartModal(parentUrl);
 				});

@@ -8,7 +8,7 @@
 	>
 
 		<button
-			v-if="isPaymentPage"
+			v-show="isPaymentPage"
 			data-cy="yape-button"
 			type="button"
 			class="yape-btn"
@@ -21,7 +21,7 @@
 				alt="logo_yape"
 			>
 		</button>
-		<div v-else class="yape-logo-message" data-cy="yape-in-summary">
+		<div v-show="yapeSelectedForPay" class="yape-logo-message" data-cy="yape-in-summary">
 			<div class="logo-yape">
 				<img
 					src="https://lh3.googleusercontent.com/y5S3ZIz-ohg3FirlISnk3ca2yQ6cd825OpA0YK9qklc5W8MLSe0NEIEqoV-pZDvO0A8=s180-rw"
@@ -55,10 +55,23 @@
 </template>
 <script>
 import appInput from '@/components/shared/inputs/app-input';
+import { getDeeper } from '@/shared/lib';
+import { mapGetters } from 'vuex';
 
 function created() {
-	this.isPaymentPage = this.$route.meta.step === 3;
+	this.updateShow();
+}
+
+function updateShow() {
 	this.show = !this.isPaymentPage;
+}
+
+function isPaymentPage() {
+	return this.$route.meta.step === 3;
+}
+
+function yapeSelectedForPay() {
+	return !!getDeeper('additionalInfo.walletQR')(this.getOrderInfo);
 }
 
 function selectYape() {
@@ -80,7 +93,6 @@ function selectYape() {
 
 function data() {
 	return {
-		isPaymentPage: false,
 		show: false,
 	};
 }
@@ -89,10 +101,18 @@ export default {
 	components: {
 		appInput,
 	},
+	computed: {
+		...mapGetters([
+			'getOrderInfo',
+		]),
+		isPaymentPage,
+		yapeSelectedForPay,
+	},
 	created,
 	data,
 	methods: {
 		selectYape,
+		updateShow,
 	},
 	props: {
 		code: {

@@ -1,6 +1,4 @@
-/// <reference types="cypress" />
-
-context('3 VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
+context('3.VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 	/**
 	 * Probar que ningun producto vaya al carrito de compras con cantidad CERO
 	 */
@@ -25,8 +23,8 @@ context('3 VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
 			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
-				const { stockWarehouse, stock } = res;
-				const finalStock = stockWarehouse || stock;
+				const { stockVirtual, stock } = res;
+				const finalStock = stockVirtual || stock;
 				expect(finalStock).to.be.gt(0);
 				if (finalStock) {
 					for (let i = 0; i <= finalStock + 1; i += 1) {
@@ -49,7 +47,7 @@ context('3 VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 			let stockWarehouse = null;
 			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
-				stockWarehouse = res.stockWarehouse || res.stock;
+				stockWarehouse = res.stockVirtual || res.stock;
 				cy.get('[data-cy="more-quantity"]')
 					.should('exist')
 					.click()
@@ -103,8 +101,8 @@ context('3 VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
 			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
-				const { stockWarehouse, stock } = res;
-				const finalStock = stockWarehouse || stock;
+				const { stockVirtual, stock } = res;
+				const finalStock = stockVirtual || stock;
 				expect(finalStock).to.be.gt(0);
 
 				if (finalStock) {
@@ -127,4 +125,31 @@ context('3 VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 				.click({ force: true });
 		});
 	})
+});
+
+context('cintillo AGOTADO', () => {
+	it('Mostrar cintillo de AGOTADO cuando el stock es CERO producto terminado', () => {
+		cy.fixture('fenix-dev.json').then(({ products }) => {
+			cy.ProductsDetailPage(products.noStock);
+			cy.get('@ProductDetail').its('body').then((res) => {
+				const { stockVirtual, stock } = res;
+				const finalStock = stockVirtual || stock;
+				expect(finalStock).to.be.equal(0);
+			});
+			cy.get('[data-cy="presentation-img"]')
+				.should('exist')
+				.should('have.class', 'wrapper-image')
+				.should('have.class', 'sold-out');
+		});
+	});
+
+	it('Producto tipo SERVICIO no muestra cintillo de AGOTADO', () => {
+		cy.fixture('fenix-dev.json').then(({ products }) => {
+			cy.ProductsDetailPage(products.service);
+			cy.get('[data-cy="presentation-img"]')
+				.should('exist')
+				.should('have.class', 'wrapper-image')
+				.should('not.have.class', 'sold-out');
+		});
+	});
 });
