@@ -128,7 +128,7 @@ context('3.VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 });
 
 context('cintillo AGOTADO', () => {
-	it.only('Mostrar cintillo de AGOTADO cuando el stock es CERO producto terminado', () => {
+	it('Mostrar cintillo de AGOTADO cuando el stock es CERO producto terminado', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
 			cy.ProductsDetailPage(products.noStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
