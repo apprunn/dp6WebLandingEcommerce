@@ -5,7 +5,7 @@ context('8 DETALLE DE PRODUCTO: Imagen', () => {
 			cy.ProductsDetailPage(products.terminado)
 				.its('body').then((res) => {
 					parentUrl = res.urlImage;
-					cy.ProductsChildren(products.terminado)
+					cy.ProductsChildren(products.terminado);
 					cy.PresentationImage('[data-cy="presentation-img"]', parentUrl);
 					cy.AddToCart();
 					cy.ImgInAddToCartModal(parentUrl);

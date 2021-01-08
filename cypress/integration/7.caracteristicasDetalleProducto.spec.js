@@ -1,4 +1,4 @@
-context('7 DETALLE DE PRODUCTO: Tipo variación', () => {
+context('7.DETALLE DE PRODUCTO: Tipo variación', () => {
 	it('Características seleccionadas', () => {
 		cy.fixture('fenix-dev').then(({ products }) => {
 			cy.ProductsDetailPage(products.variacion);
@@ -47,7 +47,7 @@ context('7 DETALLE DE PRODUCTO: Tipo variación', () => {
 	})
 })
 
-context('7 DETALLE DE PRODUCTO: Tipo Terminado', () => {
+context('7.DETALLE DE PRODUCTO: Tipo Terminado', () => {
 	it('Características seleccionadas', () => {
 		cy.fixture('fenix-dev').then(({ products }) => {
 			cy.ProductsDetailPage(products.terminado);
@@ -105,10 +105,10 @@ context('7 DETALLE DE PRODUCTO: Tipo Terminado', () => {
 				.should('have.css', 'background-color', 'rgb(255, 255, 255)');
 
 			cy.get('[data-cy="product-name"]')
-				.should('contain', 'MANGO');
+				.should('contain', 'mango');
 
 			cy.get('[data-cy="product-description"]')
-				.should('contain', 'TOYOTA, 2010, F150');
-		})
-	})
-})
+				.should('contain', 'Mango Dulce');
+		});
+	});
+});

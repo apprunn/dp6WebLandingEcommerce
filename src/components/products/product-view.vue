@@ -23,7 +23,10 @@
 				<swiper-slide 
 					v-for="image in webLocalImages" 
 					:key="image.id">
-					<div class="wrapper-image" data-cy="presentation-img">
+					<div
+						:class="['wrapper-image', { 'sold-out': noStock }]"
+						data-cy="presentation-img"
+					>
 						<img 
 							:src="image.urlImage" 
 							:alt="image.name"
@@ -37,7 +40,11 @@
 			v-else
 			class="slider-product-view-one"
 		>
-			<img :src="data.urlImage" :alt="data.name" class="image-product-slider">
+			<img
+				:src="data.urlImage"
+				:alt="data.name"
+				:class="['image-product-slider', { 'sold-out': noStock }]"
+			>
 		</div>
 		<div class="slider-product-view-movil" v-if="movilLocalImages && movilLocalImages.length">
 			<swiper ref="mySwiper" :options="swiperOption">
@@ -97,6 +104,13 @@ function imagesHandler(newImages) {
 	}
 }
 
+function noStock() {
+	const { stock, stockVirtual, typeInfo } = this.data;
+	if (typeInfo.code === 'servicios') {
+		return false;
+	}
+	return !(stock || stockVirtual);
+}
 
 function data() {
 	return {
@@ -125,6 +139,7 @@ function data() {
 export default {
 	name: 'product-view',
 	computed: {
+		noStock,
 		swiper,
 	},
 	data,
@@ -269,6 +284,27 @@ export default {
 			display: block;
 		}
 	}
+
+	.sold-out {
+		overflow: hidden;
+		position: relative;		
+
+		&::after {
+			align-items: center;
+			background-color: rgba(0,0,0,0.6);
+			color: white;
+			content: 'Agotado';
+			display: flex;
+			font-size: 30px;
+			font-family: font(bold);
+			height: 60px;
+			justify-content: center;
+			position: absolute;
+			right: 34%;
+			top: 5%;
+			transform: rotate(-45deg);
+			width: 100%;
+			z-index: 99;
+		}
+	}
 </style>
-
-

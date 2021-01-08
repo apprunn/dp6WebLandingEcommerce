@@ -1,6 +1,4 @@
-/// <reference types="cypress" />
-
-context('5 COMPRAR TRES PRODUCTOS - ENVIO A DOMICILIO', () => {
+context('5.COMPRAR TRES PRODUCTOS - ENVIO A DOMICILIO', () => {
 	it('Producto terminado, producto tipo servicio y variación - Sin factura - Pago al recibir', () => {
 		let subtotal = 0;
 		let discount = 0;
@@ -90,7 +88,7 @@ context('5 COMPRAR TRES PRODUCTOS - ENVIO A DOMICILIO', () => {
 	});
 })
 
-context('5 COMPRAR TRES PRODUCTOS - Recojo en tienda', () => {
+context('5.COMPRAR TRES PRODUCTOS - Recojo en tienda', () => {
 	it('Producto terminado, producto tipo servicio y tipo variación - Recojo en tienda - Sin factura - Pago al recibir', () => {
 		let subtotal = 0;
 		let discount = 0;
@@ -147,7 +145,7 @@ context('5 COMPRAR TRES PRODUCTOS - Recojo en tienda', () => {
 })
 
 context('5 PAGO CON YAPE', () => {
-	it.only('Producto terminado, producto tipo servicio y tipo variación - Recojo en tienda - Sin factura', () => {
+	it('Producto terminado, producto tipo servicio y tipo variación - Recojo en tienda - Sin factura', () => {
 		let subtotal = 0;
 		let discount = 0;
 		let shipping = 0;
