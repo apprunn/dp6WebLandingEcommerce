@@ -93,23 +93,27 @@ function imagesHandler(newImages) {
 		newImages.forEach((img) => {
 			if (img.fromApp === 1) {
 				this.webLocalImages.push(img);
+				this.$set(this.webLocalImages[0], 'select', true);
 			} else if (img.fromApp === 0) {
 				this.movilLocalImages.push(img);
 			} else {
 				this.webLocalImages.push(img);
 				this.movilLocalImages.push(img);
+				this.$set(this.webLocalImages[0], 'select', true);
 			}
 		});
-		this.$set(this.webLocalImages[0], 'select', true);
 	}
 }
 
 function noStock() {
-	const { stock, stockVirtual, typeInfo } = this.data;
-	if (typeInfo.code === 'servicios') {
-		return false;
+	if (this.data.typeInfo) {
+		const { stock, stockVirtual, typeInfo } = this.data;
+		if (typeInfo.code === 'servicios') {
+			return false;
+		}
+		return !(stock || stockVirtual);
 	}
-	return !(stock || stockVirtual);
+	return false;
 }
 
 function data() {
