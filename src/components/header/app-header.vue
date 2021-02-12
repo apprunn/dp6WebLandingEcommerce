@@ -328,13 +328,7 @@ export default {
 		}
 	}
 
-	.link-logo {
-		display: block;
-		height: 100%;
-	}
-
 	.app-header-logo {
-		flex-basis: 24%;
 		height: 100%;
 		margin: 0 1rem;
 		@media (max-width: 768px) {
@@ -404,9 +398,9 @@ export default {
 	}
 
 	.logo-image {
-		height: 100%;
+		height: 67px;
 		object-fit: contain;
-		width: 100%;
+		width: 103px;
 	}
 
 	.app-modal-login {
