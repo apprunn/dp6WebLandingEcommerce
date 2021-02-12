@@ -184,12 +184,9 @@ export default {
 
 		.image {
 			filter: brightness(0) invert(1);
-			height: 67px;
+			height: 80px;
 			position: absolute;
-
-			@media (max-width: 860px) {
-				height: 46px;
-			}
+			width: 80px;
 		}
 
 		@media (max-width: 860px) {
