@@ -56,6 +56,6 @@ export const curry = (fn) => {
 	};
 };
 
-export const { getDeeper, isEmpty, find, equality, setNewProperty, map } = methods;
+export const { getDeeper, isEmpty, find, equality, setNewProperty, map, compose } = methods;
 
 export default methods;

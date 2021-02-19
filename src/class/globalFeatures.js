@@ -1,4 +1,4 @@
-import l, { getDeeper, isEmpty, equality, find, setNewProperty, map } from '@/shared/lib';
+import { compose, getDeeper, isEmpty, equality, find, setNewProperty, map } from '@/shared/lib';
 
 class GlobalFeatures {
 	constructor(products) {
@@ -22,7 +22,7 @@ class GlobalFeatures {
 			setNewProperty(
 				'values',
 				item => map(
-					l.compose(
+					compose(
 						setNewProperty('isSelected', el => !!el.isSelected),
 						setNewProperty('notAllowed', false),
 					), getDeeper('values')(item)),
@@ -33,7 +33,7 @@ class GlobalFeatures {
 			setNewProperty(
 				'values',
 				item => map(
-					l.compose(
+					compose(
 						setNewProperty('isSelected', false),
 						setNewProperty('notAllowed', false),
 					), getDeeper('values')(item)),
@@ -80,7 +80,7 @@ class GlobalFeatures {
 			const newValues = feature.values.map((v) => {
 				const current = find(equality('value', v.value), incomingFeatures);
 				if (isEmpty(current)) {
-					return l.compose(
+					return compose(
 						setNewProperty('isSelected', false),
 						setNewProperty('notAllowed', true),
 					)(v);
@@ -88,7 +88,7 @@ class GlobalFeatures {
 				if (current.isSelected) {
 					return setNewProperty('isSelected', current.isSelected)(v);
 				}
-				return l.compose(
+				return compose(
 					setNewProperty('isSelected', false),
 					setNewProperty('notAllowed', false),
 				)(v);

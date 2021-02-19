@@ -365,3 +365,63 @@ Cypress.Commands.add('NewDirectionDataWithoutUbigeo', ({ alias, direction, ref, 
 		.focus({ force: true })
 		.type(apto);
 })
+
+Cypress.Commands.add('WhoIsResponsible', () => {
+	cy.fixture('fenix-dev.json').then(({ responsible }) => {
+		// Verificar estilos de los botones
+		cy.get('[data-cy="me-responsible"]')
+			.should(($btn) => {
+				expect($btn).to.have.attr('style', 'background-color: rgb(44, 64, 74); border: 1px solid rgb(44, 64, 74); color: white;');
+			});
+
+		cy.get('[data-cy="other-responsible"]')
+			.should(($btn) => {
+				expect($btn).to.have.attr('style', 'background-color: white; border: 1px solid rgb(44, 64, 74); color: rgb(44, 64, 74);');
+			});
+
+		// Verificar que el campo Name tenga el nombre del usuario
+		cy.get('[data-cy="responsible-name"]')
+			.should(($input) => {
+				expect($input).to.have.value(responsible.name);
+			});
+
+		// Cambiar a Otro Recogera
+		cy.get('[data-cy="other-responsible"]')
+			.click();
+
+		// Verificar estilos de los botones
+		cy.get('[data-cy="me-responsible"]')
+			.should(($btn) => {
+				expect($btn).to.have.attr('style', 'background-color: white; border: 1px solid rgb(44, 64, 74); color: rgb(44, 64, 74);');
+			});
+
+		cy.get('[data-cy="other-responsible"]')
+			.should(($btn) => {
+				expect($btn).to.have.attr('style', 'background-color: rgb(44, 64, 74); border: 1px solid rgb(44, 64, 74); color: white;');
+			});
+
+		// Verificar que el formulario del responsable este vacio
+		cy.get('[data-cy="responsible-name"]')
+			.should('contain', '');
+		cy.get('[data-cy="responsible-lastname"]')
+			.should('contain', '');
+		cy.get('[data-cy="responsible-dni"]')
+			.should('contain', '');
+		cy.get('[data-cy="responsible-phone"]')
+			.should('contain', '');
+
+		// Cambiar a Yo Recogere
+		cy.get('[data-cy="me-responsible"]')
+			.click();
+
+		// Verificar que el campo Name tenga el nombre del usuario
+		cy.get('[data-cy="responsible-name"]')
+			.should(($input) => {
+				expect($input).to.have.value(responsible.name);
+			});
+		cy.get('[data-cy="responsible-lastname"]')
+			.should(($input) => {
+				expect($input).to.have.value(responsible.lastname);
+			});
+	})
+})

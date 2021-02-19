@@ -1,11 +1,11 @@
-import lib, { isEmpty, setNewProperty, map } from '@/shared/lib';
+import { compose, isEmpty, setNewProperty, map } from '@/shared/lib';
 import helper from '@/shared/helper';
 
 const PAGE_TITLE = process.env.PAGE_TITLE;
 
 function updateProducts(products, priceListId) {
 	return products.map(
-		lib.compose(
+		compose(
 			setNewProperty('price', product => helper.setPrices(product, priceListId, 'price')),
 			setNewProperty('priceDiscount', product => helper.setPrices(product, priceListId, 'priceDiscount')),
 			setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),

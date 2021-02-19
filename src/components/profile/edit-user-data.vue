@@ -83,7 +83,7 @@ import appInput from '@/components/shared/inputs/app-input';
 import appSelect from '@/components/shared/inputs/app-select';
 import cameraComponent from '@/components/shared/icons/camera-component';
 import editComponent from '@/components/shared/icons/edit-component';
-import lib, { getDeeper, setNewProperty } from '@/shared/lib';
+import { compose, getDeeper, setNewProperty } from '@/shared/lib';
 import { required } from 'vuelidate/lib/validators';
 import userDataValidation from '@/mixins/userDataValidation';
 
@@ -109,7 +109,7 @@ function saveUserInfo() {
 }
 
 function buildBody(userData) {
-	return lib.compose(
+	return compose(
 		setNewProperty('name', userData.name),
 		setNewProperty('lastname', userData.lastname),
 		setNewProperty('rzSocial', userData.rzSocial),
