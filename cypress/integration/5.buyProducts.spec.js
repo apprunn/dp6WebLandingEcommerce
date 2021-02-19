@@ -270,3 +270,25 @@ context('5 BANCA POR INTERNET O DEPOSITO - NO YAPE EN RESUMEN', () => {
 			.click();
 	});
 })
+
+context('¿QUIEN RECOJE EL PEDIDO? - OTRA PERSONA O YO', () => {
+	it('Producto terminado, producto tipo servicio y tipo variación - Recojo en tienda - Validacion de responsable', () => {
+		let subtotal = 0;
+		let discount = 0;
+		let shipping = 0;
+		let total = 0;
+
+		cy.CheckIfThereIsProductServices();
+		cy.AddProductWithStock();
+		cy.AddProductService();
+		cy.AddProductVariation();
+		cy.get('[data-cy="make-order"]')
+			.click();
+		cy.login();
+		cy.get('[data-cy="make-order"]')
+			.click();
+		cy.SelectWarehousePickUp();
+		cy.SelectWarehouse();
+		cy.WhoIsResponsible();
+	});
+});

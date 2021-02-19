@@ -3,11 +3,13 @@
 		<section class="responsible-pickup-container">
 			<button
 				type="button"
+				data-cy="me-responsible"
 				:class="['pickup-responsible']"
 				:style="activeStyleMe"
 				@click="setResponsible('meResponsible')"
 			>Yo recogere</button>
 			<button
+				data-cy="other-responsible"
 				type="button"
 				:class="['pickup-responsible']"
 				:style="activeStyleOther"
@@ -69,30 +71,30 @@
 			</app-input>
 		</form>
 
-		<modalComponent v-model="open" maxWidth="40%">
+		<modalComponent
+			persistent
+			v-model="open"
+			maxWidth="40%"
+		>
 			<div class="update-customer-dni-modal">
+				<h4 class="update-customer-dni-title">Estimado usuario, debe actualizar su documento de identidad para continuar</h4>
 				<form>
 					<label for="customer-dni">Introduzca su {{labelCountry}}</label>
 					<app-input
 						id="customer-dni"
 						data-cy="update-customer-dni"
+						type="number"
 						:placeholder="labelCountry"
 						class="mx-2 my-1 responsible-field"
 						v-model="customerDni"
 						@input="validateForm"
 					>
-						<span v-if="!$v.responsible.dni.required">{{labelError}}.</span>
-						<span v-if="!$v.responsible.dni.onlyNumbers">Solo se permiten números</span>
 					</app-input>
 
 					<section class="update-customer-dni-buttons-container">
 						<button
 							type="button"
-							:style="cancelButtonStyle"
-							@click="closeModal"
-						>Cancelar</button>
-						<button
-							type="button"
+							:disabled="!customerDni"
 							:style="saveCustomerDniButtonStyle"
 							@click="updateCustomerDni"
 						>Aceptar</button>
@@ -355,7 +357,17 @@ export default {
 				font-family: font(bold);
 				margin: 0.5rem;
 				padding: 0.5rem 1rem;
+
+				&[disabled] {
+					cursor: not-allowed;
+					opacity: 0.5;
+				}
 			}
+		}
+
+		.update-customer-dni-title {
+			text-align: center;
+			margin-bottom: 20px;
 		}
 	}
 </style>

@@ -2,8 +2,8 @@
 	<v-dialog
 		:max-width="maxWidth"
 		:value="value"
-		@input="showModal"
 		:persistent="persistent"
+		@input="showModal"
 	>
 		<slot></slot>
 	</v-dialog>	
