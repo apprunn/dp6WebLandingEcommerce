@@ -3,7 +3,7 @@ function onlyNumbers(val) {
 }
 
 function onlyCharacters(char) {
-	if (char !== null) {
+	if (char && char !== null) {
 		const trimedChar = char.split(' ').join('');
 		const noChar = /[^a-zA-ZáéíóúáéíóúÁÉÍÓÚñÑ]/i.test(trimedChar);
 		return !noChar;
