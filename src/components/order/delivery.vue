@@ -4,6 +4,7 @@
 			<img :src="logo.section" alt="logo del método de pago">
 			<h2 class="payment-section-title">¿COMÓ QUIERES RECIBIR TU PRODUCTO?</h2>
 		</div>
+
 		<section class="delivery" data-cy="delivery-buttons">
 			<app-button-order
 				v-if="atHouse"
@@ -24,6 +25,7 @@
 				<coffee-svg :active="getFlagPickUp === store.value"/>
 			</app-button-order>
 		</section>
+
 		<address-component
 			v-if="getFlagPickUp === store.value && atStore"
 			class="mt-4"
@@ -39,7 +41,9 @@
 			:value="selectedWarehouse.id"
 			@input="warehouseSelected"
 		/>
+
 		<responsible-form/>
+
 		<div v-if="getFlagPickUp === house.value && atHouse">
 			<address-component
 				data-cy="select-address-saved"
@@ -53,6 +57,7 @@
 			/>
 			<new-address v-if="selectedDirection.id === 0"/>
 		</div>
+
 		<section class="billing-section">
 			<billing/>
 		</section>
@@ -420,4 +425,5 @@ export default {
 	.main-container-delivery {
 		margin-top: 60px;
 	}
+
 </style>

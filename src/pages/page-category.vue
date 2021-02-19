@@ -107,7 +107,7 @@ import buttonImage from '@/components/shared/buttons/app-button-image';
 import menuCategory from '@/components/shared/category/menu-category';
 import productCard from '@/components/products/product-card';
 import productsSection from '@/components/products/products-section';
-import lib, { setNewProperty } from '@/shared/lib';
+import { compose, setNewProperty } from '@/shared/lib';
 import helper from '@/shared/helper';
 
 function mounted() {
@@ -130,7 +130,7 @@ async function loadProduct() {
 		const { data: products, headers } = await this.$httpProductsPublic.get(url, { params });
 		const commercePriceListId = this.getCommerceData.settings.salPriceListId;
 		this.listProducts = products.map(
-			lib.compose(
+			compose(
 				setNewProperty('price', product => helper.setPrices(product, commercePriceListId, 'price')),
 				setNewProperty('priceDiscount', product => helper.setPrices(product, commercePriceListId, 'priceDiscount')),
 				setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),

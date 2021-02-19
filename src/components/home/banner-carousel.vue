@@ -95,10 +95,6 @@ export default {
 		height: 62vh;
     	width: 100%;
 		
-		// @media (min-width: 600px) {
-		// 	height: 44vh;
-		// }
-
 		@media (min-width: 700px) {
 			height: 50vh;
 		}
