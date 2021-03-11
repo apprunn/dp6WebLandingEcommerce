@@ -79,7 +79,6 @@ class MercadoPago {
 				issuerSelect.value,
 			);
 		} else {
-			debugger;
 			alert(`issuers method info error: ${response}`);
 		}
 	}
@@ -102,7 +101,6 @@ class MercadoPago {
 				document.getElementById('installments').appendChild(opt);
 			});
 		} else {
-			debugger;
 			alert(`installments method info error: ${response}`);
 		}
 	}
