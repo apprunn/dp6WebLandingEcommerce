@@ -15,6 +15,7 @@ const loadMinified = require('./load-minified')
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 
 const env = config.build.env
+const pageTitle = env.PAGE_TITLE;
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -57,6 +58,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       filename: config.build.index,
       template: 'index.html',
+      title: pageTitle,
       inject: true,
       minify: {
         removeComments: true,
