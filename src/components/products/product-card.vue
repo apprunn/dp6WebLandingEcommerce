@@ -1,6 +1,5 @@
 <template>
 	<div
-		v-if="product.price || product.priceDiscount"
 		class="product-container"
 		:class="{ 'small': small }"
 		@click="goToProduct(product)"
