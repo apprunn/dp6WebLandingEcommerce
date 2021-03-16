@@ -55,6 +55,10 @@ function disabledBtn() {
 	return !(this.model.description && this.value);
 }
 
+function getUserImage() {
+	return this.user.image || this.user.logo || this.user.urlImage || process.env.DEFAULT_AVATAR;
+}
+
 async function sendOpinion() {
 	if (!this.token) {
 		this.showGenericError('Para realizar una opinión tiene que registrarse', 80000);
@@ -65,7 +69,7 @@ async function sendOpinion() {
 			typeQuestionAnswer: 3,
 			rating: this.value,
 			additionalInformation: {
-				customerImage: this.user.urlImage,
+				customerImage: this.getUserImage,
 				name: `${this.user.name} ${this.user.lastname}`,
 			},
 		};
@@ -101,6 +105,7 @@ export default {
 			'user',
 			'valoratingProductId',
 		]),
+		getUserImage,
 	},
 	methods: {
 		cancelOpinion,
