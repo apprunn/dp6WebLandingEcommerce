@@ -1,6 +1,6 @@
 <template>
   <div class="product-buy">
-		<div class="container-btn-open">
+		<!-- <div class="container-btn-open" v-if="false">
 			<p class="warehouse-null" v-if="openWarehouse">No hay tiendas disponibles</p>
 			<button
 				data-cy="see-available-warehouse"
@@ -10,7 +10,7 @@
 				]"
 				@click="$emit('open-dialog')"
 			>Ver tiendas disponibles</button>
-		</div>
+		</div> -->
 		<div class="container-buttons">
 			<quantityButton
 				:class="[
