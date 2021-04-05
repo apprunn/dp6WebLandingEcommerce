@@ -94,8 +94,8 @@ function created() {
 }
 
 function lonleyWarehouse() {
-	if (this.getWarehouses.length === 2) {
-		const warehouse = this.getWarehouses[1];
+	if (this.getWarehousesFilter.length === 2) {
+		const warehouse = this.getWarehousesFilter[1];
 		this.selectedWarehouse = warehouse;
 		this.warehouseSelected(warehouse.id);
 	}
@@ -137,7 +137,7 @@ function selected(val) {
 }
 
 function warehousesMarkers() {
-	const warehousesLocation = this.getWarehouses.reduce((list, w) => {
+	const warehousesLocation = this.getWarehousesFilter.reduce((list, w) => {
 		const { name, id, location } = w;
 		if (location) {
 			const { x, y } = location;
@@ -186,8 +186,8 @@ function disableMapButtonByWarehouse() {
 }
 
 function warehouseSelected(id) {
-	const index = this.getWarehouses.findIndex(war => war.id === id);
-	const w = this.getWarehouses[index];
+	const index = this.getWarehousesFilter.findIndex(war => war.id === id);
+	const w = this.getWarehousesFilter[index];
 	if (w.location) {
 		const { x, y } = w.location;
 		w.location = { lat: x, lng: y };
