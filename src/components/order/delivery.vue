@@ -36,7 +36,7 @@
 			:center="warehouesesCenter"
 			:disable-map="disableMapButtonByWarehouse"
 			:markers="singleOrMultiMarkersOnWarehouses"
-			:options="getWarehouses"
+			:options="getWarehousesFilter"
 			:zoom="warehousesZoom"
 			:value="selectedWarehouse.id"
 			@input="warehouseSelected"
@@ -80,6 +80,7 @@ function created() {
 	Promise.all([
 		this.$store.dispatch('LOAD_DIRECTIONS', this),
 		this.$store.dispatch('LOAD_WAREHOUSES', this),
+		this.$store.dispatch('LOAD_WAREHOUSES_FILTER', this),
 	]).then(() => {
 		if (that.noOrder) {
 			that.setDefaultDelivery();
@@ -336,6 +337,7 @@ export default {
 			'getOrderInfo',
 			'getProductToBuy',
 			'getWarehouses',
+			'getWarehousesFilter',
 		]),
 		atHouse,
 		atStore,

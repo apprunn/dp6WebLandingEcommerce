@@ -79,7 +79,6 @@ class MercadoPago {
 				issuerSelect.value,
 			);
 		} else {
-			debugger;
 			alert(`issuers method info error: ${response}`);
 		}
 	}

@@ -70,6 +70,10 @@ function getWarehouses(state) {
 	return state.warehouses;
 }
 
+function getWarehousesFilter(state) {
+	return state.warehousesFilter;
+}
+
 function genders(state) {
 	return state.genders;
 }
@@ -174,6 +178,7 @@ const methods = {
 	getPromotionalDetailsBanner,
 	getWaypaymentsByCommerce,
 	getWarehouses,
+	getWarehousesFilter,
 	flagAddVoucher,
 	indeterminate,
 	isCreditCard,
