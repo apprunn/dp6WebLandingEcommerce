@@ -336,7 +336,6 @@ export default {
 			'getFlagPickUp',
 			'getOrderInfo',
 			'getProductToBuy',
-			'getWarehouses',
 			'getWarehousesFilter',
 		]),
 		atHouse,

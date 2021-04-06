@@ -101,7 +101,6 @@ class MercadoPago {
 				document.getElementById('installments').appendChild(opt);
 			});
 		} else {
-			debugger;
 			alert(`installments method info error: ${response}`);
 		}
 	}
