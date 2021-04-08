@@ -92,6 +92,8 @@
 import { mapGetters } from 'vuex';
 import heartComponent from '@/components/shared/icons/heart-component';
 import { getDeeper } from '@/shared/lib';
+import TypeProduct from '@/shared/enums/typeProduct';
+import helper from '@/shared/helper';
 
 function productFavo() {
 	if (this.token) {
@@ -137,13 +139,22 @@ function onCard(v) {
 }
 
 function noStock() {
-	const { stockVirtual, stock } = this.product;
-	const stockCero = stockVirtual || stock || 0;
-	const productService = getDeeper('typeInfo.code')(this.product) === 'servicios';
-	if (productService) {
-		return false;
-	}
-	return stockCero === 0;
+	return helper.noStock(this.product);
+}
+
+function isVariation() {
+	const variationCode = getDeeper('typeInfo.code')(this.product);
+	return variationCode === TypeProduct.variation;
+}
+
+function isComposed() {
+	const composeCode = getDeeper('typeInfo.code')(this.product);
+	return composeCode === TypeProduct.compose;
+}
+
+function isService() {
+	const serviceCode = getDeeper('typeInfo.code')(this.product);
+	return serviceCode === TypeProduct.service;
 }
 
 function data() {
@@ -169,14 +180,17 @@ export default {
 		]),
 		animatingCard,
 		discountPercentage,
+		isComposed,
+		isService,
+		isVariation,
 		noStock,
 	},
 	data,
 	methods: {
 		buyProduct,
-		productFavo,
 		goToProduct,
 		onCard,
+		productFavo,
 	},
 	props: {
 		small: {

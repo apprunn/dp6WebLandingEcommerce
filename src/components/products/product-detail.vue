@@ -95,6 +95,8 @@ import heartComponent from '@/components/shared/icons/heart-component';
 import productChildrens from '@/components/products/product-childrens';
 import productBuy from '@/components/products/product-buy';
 import ProductConversions from '@/components/products/product-conversions';
+import TypeProduct from '@/shared/enums/typeProduct';
+import helper from '@/shared/helper';
 
 function stopClick() {
 	return false;
@@ -114,17 +116,26 @@ function clickQuantity(value) {
 }
 
 function noStock() {
-	const stock = this.data.stockVirtual || this.data.stock;
-	const positiveStock = stock > 0;
-	return !(stock && positiveStock);
+	return helper.stockGreaterThanCero(this.data);
+}
+
+function isVariation() {
+	const variationCode = getDeeper('typeInfo.code')(this.data);
+	return variationCode === TypeProduct.variation;
+}
+
+function isComposed() {
+	const composeCode = getDeeper('typeInfo.code')(this.data);
+	return composeCode === TypeProduct.compose;
 }
 
 function isService() {
-	return getDeeper('typeInfo.code')(this.data) === 'servicios';
+	const serviceCode = getDeeper('typeInfo.code')(this.data);
+	return serviceCode === TypeProduct.service;
 }
 
 function addToCar() {
-	if (!this.noStock || this.isService) {
+	if (!this.noStock) {
 		this.$store.dispatch('addProductToBuyCar', this.data);
 		this.$emit('open-confirm-modal');
 	} else {
@@ -155,7 +166,9 @@ export default {
 		...mapGetters('loading', [
 			'isLoading',
 		]),
+		isComposed,
 		isService,
+		isVariation,
 		noStock,
 	},
 	methods: {

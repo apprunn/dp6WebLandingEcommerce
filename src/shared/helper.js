@@ -1,6 +1,54 @@
 import { format } from 'date-fns';
 import { getDeeper, isEmpty } from '@/shared/lib';
 import waysDeliveries from '@/shared/enums/waysDeliveries';
+import TypeProduct from '@/shared/enums/typeProduct';
+
+function isComposed(product) {
+	const composeCode = getDeeper('typeInfo.code')(product);
+	return composeCode === TypeProduct.compose;
+}
+
+function isService(product) {
+	const serviceode = getDeeper('typeInfo.code')(product);
+	return serviceode === TypeProduct.service;
+}
+
+function isVariation(product) {
+	const variationCode = getDeeper('typeInfo.code')(product);
+	return variationCode === TypeProduct.variation;
+}
+
+function noStock(product) {
+	if (isComposed(product)) {
+		const { stockComposite } = product;
+		return stockComposite === 0;
+	}
+	if (isService(product)) {
+		return false;
+	}
+	if (isVariation(product)) {
+		const { stockVirtual } = product;
+		return stockVirtual === 0;
+	}
+	const { stock } = product;
+	return stock === 0;
+}
+
+function stockGreaterThanCero(product) {
+	if (isComposed(product)) {
+		const { stockComposite } = product;
+		return stockComposite === 0;
+	}
+	if (isService(product)) {
+		return false;
+	}
+	if (isVariation(product)) {
+		const { stockVirtual } = product;
+		return stockVirtual === 0;
+	}
+	const { stock } = product;
+	return stock === 0;
+}
 
 function exactDate(date, formatter = 'DD-MM-YYYY', splitBy = 'T') {
 	if (date) {
@@ -207,10 +255,13 @@ const methods = {
 	getLocalData,
 	getLocalStorage,
 	getLocalToken,
+	isComposed,
+	noStock,
 	removeLocalData,
 	setLocalData,
 	setPrices,
 	showDownloadDialog,
+	stockGreaterThanCero,
 	updateOrderDetailsInLocalStorage,
 };
 

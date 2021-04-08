@@ -18,3 +18,7 @@ yarn-error.log*
 .vscode
 .env
 .editorconfig
+*.vue~
+*.js~
+*.json~
+.gitignore~

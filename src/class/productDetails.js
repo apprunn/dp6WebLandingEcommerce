@@ -1,5 +1,6 @@
 import l, { isEmpty, setNewProperty } from '@/shared/lib';
 import GlobalFeatures from '@/class/globalFeatures';
+import TypeProduct from '@/shared/enums/typeProduct';
 
 class ProductDetails {
 	constructor(childrens, priceListSelectedId) {
@@ -52,7 +53,13 @@ class ProductDetails {
 		return this.selectedProduct.rating;
 	}
 	get stock() {
-		return this.selectedProduct.stockWarehouse || this.selectedProduct.stock;
+		if (ProductDetails.isComposedType(this.selectedProduct)) {
+			return this.selectedProduct.stockComposite;
+		}
+		if (ProductDetails.isVariationType(this.selectedProduct)) {
+			return this.selectedProduct.stockWarehouse;
+		}
+		return this.selectedProduct.stock;
 	}
 	get total() {
 		return Number((this.quantity * this.price).toFixed(2));
@@ -138,9 +145,13 @@ class ProductDetails {
 		this.updateUnitId.call(this, unitId);
 		this.updateQuantity.call(this, 1);
 	}
+	static isComposedType(product) {
+		const { typeInfo: { code } } = product;
+		return code === TypeProduct.compose;
+	}
 	static isVariationType(product) {
 		const { typeInfo: { code } } = product;
-		return code === 'variantes';
+		return code === TypeProduct.variation;
 	}
 	productSelected(product) {
 		if (product.features.length > 0) {

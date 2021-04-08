@@ -1,5 +1,5 @@
 context('5.COMPRAR TRES PRODUCTOS - ENVIO A DOMICILIO', () => {
-	it('Producto terminado, producto tipo servicio y variación - Sin factura - Pago al recibir', () => {
+	it.only('Producto terminado, producto tipo servicio, variación y compuesto - Sin factura - Pago al recibir', () => {
 		let subtotal = 0;
 		let discount = 0;
 		let shipping = 0;
@@ -8,6 +8,7 @@ context('5.COMPRAR TRES PRODUCTOS - ENVIO A DOMICILIO', () => {
 		cy.AddProductWithStock();
 		cy.AddProductService();
 		cy.AddProductVariation();
+		cy.AddProductCompuesto();
 		cy.get('[data-cy="make-order"]')
 			.click();
 		cy.login();

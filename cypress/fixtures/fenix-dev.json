@@ -4,13 +4,17 @@
 	"password": 123456,
 	"token": "Bearer $2y$10$tNJmuXZKGwi0l38A.SxUVemGrFJiyLunyqkOqOTE7LHsrSwMEmEBi",
 	"products": {
-		"lowStock": 1096067,
-		"service": 1095225,
-		"noStock": 1093081,
+		"compuesto": 1096270,
 		"greatStock": 1093035,
-		"variacion": 1096065,
+		"labial": 1095993,
+		"lowStock": 1096067,
+		"lowStockComposed": 1096270,
+		"noStockFinishedProduct": 1093081,
+		"noStockComposedProduct": 1096284,
+		"noStockVariationProduct": 1096065,
+		"service": 1095225,
 		"terminado": 1094774,
-		"labial": 1095993
+		"variacion": 1096065
 	},
 	"responsible": {
 		"name": "José Juan",
