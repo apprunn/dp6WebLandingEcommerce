@@ -77,7 +77,9 @@
 	</div>
 </template>
 <script>
-import { isEmpty, map, setNewProperty } from '@/shared/lib';
+import { getDeeper, isEmpty, map, setNewProperty } from '@/shared/lib';
+import TypeProduct from '@/shared/enums/typeProduct';
+import helper from '@/shared/helper';
 
 function swiper() {
 	return this.$refs.mySwiper.swiper;
@@ -111,14 +113,22 @@ function imagesHandler(newImages) {
 }
 
 function noStock() {
-	if (this.data.typeInfo) {
-		const { stock, stockVirtual, typeInfo } = this.data;
-		if (typeInfo.code === 'servicios') {
-			return false;
-		}
-		return !(stock || stockVirtual);
-	}
-	return false;
+	return helper.noStock(this.data);
+}
+
+function isVariation() {
+	const variationCode = getDeeper('typeInfo.code')(this.data);
+	return variationCode === TypeProduct.variation;
+}
+
+function isComposed() {
+	const composeCode = getDeeper('typeInfo.code')(this.data);
+	return composeCode === TypeProduct.compose;
+}
+
+function isService() {
+	const serviceCode = getDeeper('typeInfo.code')(this.data);
+	return serviceCode === TypeProduct.service;
 }
 
 function data() {
@@ -148,6 +158,9 @@ function data() {
 export default {
 	name: 'product-view',
 	computed: {
+		isComposed,
+		isService,
+		isVariation,
 		noStock,
 		swiper,
 	},
