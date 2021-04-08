@@ -1,5 +1,6 @@
 import { setNewProperty } from '@/shared/lib';
 import waysDeliveries from '@/shared/enums/waysDeliveries';
+import helper from '@/shared/helper';
 
 function clearUser(context) {
 	context.commit('clearUser');
@@ -37,8 +38,9 @@ function addProductToBuyCar(context, product) {
 	);
 	if (index > -1) {
 		const currentProduct = productsSelected[index];
-		const { stock, stockWarehouse } = currentProduct;
-		const finalStock = stockWarehouse || stock;
+		const { stock, stockWarehouse, stockComposite } = currentProduct;
+		const finalStock = helper.isComposed(currentProduct) ?
+			stockComposite : (stockWarehouse || stock);
 		let quantity = currentProduct.quantity + newProduct.quantity;
 		quantity = finalStock > quantity ? quantity : finalStock;
 		productsSelected[index].quantity = quantity;

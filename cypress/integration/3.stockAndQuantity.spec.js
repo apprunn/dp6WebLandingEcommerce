@@ -23,18 +23,17 @@ context('3.VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
 			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
-				const { stockVirtual, stock } = res;
-				const finalStock = stockVirtual || stock;
-				expect(finalStock).to.be.gt(0);
-				if (finalStock) {
-					for (let i = 0; i <= finalStock + 1; i += 1) {
+				const { stock } = res;
+				expect(stock).to.be.gt(0);
+				if (stock) {
+					for (let i = 0; i <= stock + 1; i += 1) {
 						cy.get('[data-cy="more-quantity"]')
 							.should('exist')
 							.click({ force: true });
 					}
 				}
 				cy.get('[data-cy="quantity-to-buy"]').then(($q) => {
-					expect($q).to.contain(finalStock);
+					expect($q).to.contain(stock);
 				})
 			});
 			cy.get('[data-cy="add-to-cart"]')
@@ -47,7 +46,53 @@ context('3.VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 			let stockWarehouse = null;
 			cy.ProductsDetailPage(products.lowStock);
 			cy.get('@ProductDetail').its('body').then((res) => {
-				stockWarehouse = res.stockVirtual || res.stock;
+				stockWarehouse = res.stock;
+				cy.get('[data-cy="more-quantity"]')
+					.should('exist')
+					.click()
+					.click();
+				cy.get('[data-cy="add-to-cart"]')
+					.should('exist')
+					.click({ force: true });
+				cy.get('[data-cy="go-to-cart"]')
+					.should('exist')
+					.click({ force: true });
+				cy.get('[data-cy="product-in-car"]')
+					.eq(0)
+					.find('[data-cy="quantity-to-buy"]')
+					.contains(stockWarehouse);
+			});
+		});
+	});
+
+	it('Verificar que la cantidad no supere Stock en producto compuesto', () => {
+		cy.fixture('fenix-dev.json').then(({ products }) => {
+			cy.ProductsDetailPage(products.lowStockComposed);
+			cy.get('@ProductDetail').its('body').then((res) => {
+				const { stockComposite } = res;
+				expect(stockComposite).to.be.gt(0);
+				if (stockComposite) {
+					for (let i = 0; i <= stockComposite + 1; i += 1) {
+						cy.get('[data-cy="more-quantity"]')
+							.should('exist')
+							.click({ force: true });
+					}
+				}
+				cy.get('[data-cy="quantity-to-buy"]').then(($q) => {
+					expect($q).to.contain(stockComposite);
+				})
+			});
+			cy.get('[data-cy="add-to-cart"]')
+				.should('exist')
+				.click({ force: true });
+			cy.get('[data-cy="go-to-cart"]')
+				.should('exist')
+				.click({ force: true });
+
+			let stockWarehouse = null;
+			cy.ProductsDetailPage(products.lowStockComposed);
+			cy.get('@ProductDetail').its('body').then((res) => {
+				stockWarehouse = res.stockComposite;
 				cy.get('[data-cy="more-quantity"]')
 					.should('exist')
 					.click()
@@ -74,8 +119,9 @@ context('3.VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
 			cy.ProductsDetailPage(products.service); // servicio prueba
 			cy.get('@ProductDetail').its('body').then((res) => {
-				const { type } = res;
+				const { type, typeInfo: { code } } = res;
 				expect(type).to.be.equal(2);
+				expect(code).to.be.equal('servicios');
 				const random = Math.floor((Math.random() * 10) + 1);
 				for (let i = 1; i <= random; i += 1) {
 					cy.get('[data-cy="more-quantity"]')
@@ -130,11 +176,25 @@ context('3.VERIFICAR CANTIDAD Y STOCK DISPONIBLE', () => {
 context('cintillo AGOTADO', () => {
 	it('Mostrar cintillo de AGOTADO cuando el stock es CERO producto terminado', () => {
 		cy.fixture('fenix-dev.json').then(({ products }) => {
-			cy.ProductsDetailPage(products.noStock);
+			cy.ProductsDetailPage(products.noStockFinishedProduct);
 			cy.get('@ProductDetail').its('body').then((res) => {
 				const { stockVirtual, stock } = res;
 				const finalStock = stockVirtual || stock;
 				expect(finalStock).to.be.equal(0);
+			});
+			cy.get('[data-cy="presentation-img"]')
+				.should('exist')
+				.should('have.class', 'wrapper-image')
+				.should('have.class', 'sold-out');
+		});
+	});
+
+	it('Mostrar cintillo de AGOTADO cuando el stock es CERO producto compuesto', () => {
+		cy.fixture('fenix-dev.json').then(({ products }) => {
+			cy.ProductsDetailPage(products.noStockComposedProduct);
+			cy.get('@ProductDetail').its('body').then((res) => {
+				const { stockComposite } = res;
+				expect(stockComposite).to.be.equal(0);
 			});
 			cy.get('[data-cy="presentation-img"]')
 				.should('exist')

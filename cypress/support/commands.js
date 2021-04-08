@@ -44,13 +44,14 @@ Cypress.Commands.add('SelectRandomProduct', () => {
 		.should('exist')
 		.children().then(($prod) => {
 			productsLength = $prod.length;
+
+			const random = Math.floor(Math.random() * productsLength);
+			cy.get('[data-cy="productsSection"]')
+				.should('exist')
+				.children()
+				.eq(random)
+				.click();
 		})
-	const random = Math.floor(Math.random() * productsLength);
-	cy.get('[data-cy="productsSection"]')
-		.should('exist')
-		.children()
-		.eq(random)
-		.click();
 });
 
 Cypress.Commands.add('ProductsDetailPage', (productId) => {
@@ -105,12 +106,45 @@ Cypress.Commands.add('AddProductWithStock', () => {
 	});
 });
 
-Cypress.Commands.add('AddProductWithOutStock', () => {
+Cypress.Commands.add('AddProductFinishedWithOutStock', () => {
 	cy.fixture('fenix-dev.json').then(({ products }) => {
-		cy.ProductsDetailPage(products.noStock); // sun7 producto sin stock
+		cy.ProductsDetailPage(products.noStockFinishedProduct); // sun7 producto sin stock
 		cy.get('@ProductDetail').its('body').then((res) => {
-			const { stockWarehouse } = res;
-			expect(stockWarehouse).to.be.eq(0);
+			const { stock, typeInfo: { code } } = res;
+			expect(code).to.be.eq('productos-terminados');
+			expect(stock).to.be.eq(0);
+		});
+		cy.get('[data-cy="add-to-cart"]')
+			.should('exist')
+			.click({ force: true });
+		cy.get('[data-cy="go-to-cart"]')
+			.should('not.exist');
+	});
+});
+
+Cypress.Commands.add('AddProductCompositeWithOutStock', () => {
+	cy.fixture('fenix-dev.json').then(({ products }) => {
+		cy.ProductsDetailPage(products.noStockComposedProduct);
+		cy.get('@ProductDetail').its('body').then((res) => {
+			const { stockComposite, typeInfo: { code } } = res;
+			expect(code).to.be.eq('composed');
+			expect(stockComposite).to.be.eq(0);
+		});
+		cy.get('[data-cy="add-to-cart"]')
+			.should('exist')
+			.click({ force: true });
+		cy.get('[data-cy="go-to-cart"]')
+			.should('not.exist');
+	});
+});
+
+Cypress.Commands.add('AddProductVariationWithOutStock', () => {
+	cy.fixture('fenix-dev.json').then(({ products }) => {
+		cy.ProductsDetailPage(products.noStockVariationProduct);
+		cy.get('@ProductDetail').its('body').then((res) => {
+			const { stockVirtual, typeInfo: { code } } = res;
+			expect(code).to.be.eq('variantes');
+			expect(stockVirtual).to.be.eq(0);
 		});
 		cy.get('[data-cy="add-to-cart"]')
 			.should('exist')
@@ -144,6 +178,23 @@ Cypress.Commands.add('AddProductVariation', () => {
 			const { type, typeInfo } = res;
 			expect(type).to.equal(5);
 			expect(typeInfo.code).to.equal('variantes');
+			cy.get('[data-cy="add-to-cart"]')
+				.should('exist')
+				.click({ force: true });
+			cy.get('[data-cy="go-to-cart"]')
+				.should('exist')
+				.click();
+		});
+	})
+})
+
+Cypress.Commands.add('AddProductCompuesto', () => {
+	cy.fixture('fenix-dev.json').then(({ products }) => {
+		cy.ProductsDetailPage(products.compuesto);
+		cy.get('@ProductDetail').its('body').then((res) => {
+			const { type, typeInfo } = res;
+			expect(type).to.equal(6);
+			expect(typeInfo.code).to.equal('composed');
 			cy.get('[data-cy="add-to-cart"]')
 				.should('exist')
 				.click({ force: true });
@@ -216,7 +267,7 @@ Cypress.Commands.add('CheckIfThereIsProductServices', () => {
 		cy.visit('http://localhost:9010');
 		cy.request({
 			method: 'get',
-			url: 'https://products2.perudatos.com/products-public?flagGrouper=2',
+			url: 'https://products2.perudatos.com/products-public?flagGrouper=1&limit=20&page=1',
 			headers: {
 				Authorization: token,
 			},
