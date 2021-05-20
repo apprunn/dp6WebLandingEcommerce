@@ -106,7 +106,6 @@ img {
 }
 
 .opacity::before {
-	background-image: linear-gradient(to bottom, rgba(0, 78, 156, 0.61), rgba(0, 78, 156, 0.61));
 	content: '';
 	position: absolute;
 	top: 0;
