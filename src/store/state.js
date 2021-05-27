@@ -89,6 +89,7 @@ export default {
 			limit: 20,
 			page: 1,
 			search: null,
+			flagCommerce: true,
 		},
 		relateds: [],
 	},
