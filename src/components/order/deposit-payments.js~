@@ -9,17 +9,11 @@ function yapeData() {
 	return getDeeper('settings.billeters.yape')(this.getCommerceData);
 }
 
-/*
- * Descripcion: Funcion que construye las propiedades para yape
- * @param {string} name - Nombre de la billetera
- * @param {string} code - Codigo de la billetera
- * @return {object}
- */
 function buildProps(name, code) {
 	const propsOptions = {
 		[Yape.name]: this.yapeProps.bind(this, code),
 	};
-	return typeof propsOptions[name] === 'function' ? propsOptions[name].call() : {};
+	return propsOptions[name].call();
 }
 
 function yapeProps(code) {

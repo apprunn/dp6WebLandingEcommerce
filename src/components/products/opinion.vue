@@ -2,7 +2,7 @@
 	<div class="opinion">
 		<div class="container-avatar" :style="`border-color: ${globalColors.primary}`">
 			<img 
-				:src="opinion.additionalInformation.customerImage ||
+				:src="opinion.additionalInformation.customer.customerImage ||
 					'https://quipu-admin.s3.amazonaws.com/user-min.svg'" 
 				:alt="opinion.additionalInformation.name"
 				class="opinion-avatar">
