@@ -36,7 +36,6 @@ module.exports = {
     // allow debugger during development
 		'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
 		'no-tabs': 0,
-		'indent': ['error', 'tab'],
-    "linebreak-style": 0
+		'indent': ['error', 'tab']
   }
 }
