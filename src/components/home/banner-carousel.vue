@@ -94,22 +94,14 @@ export default {
 	.img-carousel {
 		height: 62vh;
     	width: 100%;
+		max-height: 615px;
+		max-width: 1280px;
+		margin: 0 auto;
 		
 		@media (min-width: 700px) {
-			height: 50vh;
+			height: auto;
 		}
 
-		@media (min-width: 768px) {
-			height: 54vh;
-		}
-
-		@media (min-width: 900px) {
-			height: 64vh;
-		}
-
-		@media (min-width: 1280px) {
-			height: 68vh;
-		}
 
 		picture {
 			height: 100%;
@@ -172,5 +164,6 @@ export default {
 		height: 100%;
 		// object-fit: cover;
 		width: 100%;
+		max-height: 615px;
 	}
 </style>
