@@ -13,6 +13,16 @@
 				Agotado
 			</div>
 			<div class="position-relative">
+				<div class="product-favorite-mobile">
+					<div class="heart-content"
+						:style="`background-color:${product.flagFavorite ?  globalColors.primary : '#fff'}`"
+						:class="[
+							{ 'favorite': product.flagFavorite },
+						]"
+					>
+						<heart-component @click="productFavo" :value="product.flagFavorite"/>
+					</div>
+				</div>
 				<section
 					:class="[
 						'product-header',
@@ -22,7 +32,7 @@
 				>
 					<div
 						v-if="!!discountPercentage"
-						:style="`background-color:${indeterminate ? 'transparent' : globalColors.primary}`"
+						:style="`background-color:${indeterminate ? 'transparent' : '#f42b17'}`"
 						:class="[
 							'product-discount',
 							{ 'loading loading-dark': indeterminate },
@@ -32,7 +42,7 @@
 					</div>
 					<div class="product-favorite">
 						<div class="heart-content"
-							:style="`background-color:${product.flagFavorite ? '#fff' : globalColors.primary}`"
+							:style="`background-color:${product.flagFavorite ?  globalColors.primary : '#fff'}`"
 							:class="[
 								{ 'favorite': product.flagFavorite },
 							]"
@@ -221,11 +231,10 @@ export default {
 		transform: perspective(0px) rotateY(deg) rotateX(0deg) scale3d(0, 0, 0);
   		transition: all 120ms ease;
 		&:hover {
-			border: 3px solid color(base);
+			border: 3px solid color(blueLight);
 		}
 
-		@media (min-width: 600px) {
-			
+		@media (min-width: 600px) {			
 			box-shadow: 0 2px 2px 0 rgba(31, 26, 26, 0.07);
 			border: 1px solid color(border);
 			border-radius: 5px;
@@ -248,17 +257,20 @@ export default {
 		justify-content: space-between;
 		position: absolute;
 		left: 0;
-		top: 156px;
+		bottom: 10px;
 		width: 100%;
 		padding: 0 6px;
 		&.noDiscount {
 			justify-content: flex-end;
 		}
 
-		
+		@media (min-width: 600px) {
+			bottom: auto;
+			top: 156px;
+		}
 	}
 
-	.product-favorite {
+	.product-favorite, .product-favorite-mobile {
 		.heart-content{
 			padding: 5px;
 			border-radius: 100%;
@@ -268,7 +280,7 @@ export default {
 				 	svg {
 						g {
 							stroke: #fff;
-    						stroke-width: 2px;
+    						stroke-width: 3px;
 						}
 				 	}
 				}
@@ -278,7 +290,7 @@ export default {
 					height: 15px;
 					width: 15px;
 					g {
-						stroke: #fff;
+						stroke: color(blueLight);
 						stroke-width: 3px;
 					}
 				}
@@ -286,6 +298,22 @@ export default {
 			
 		}
 	}
+	.product-favorite {
+		display: none;
+		@media (min-width: 600px) {
+			display: block;
+		}
+	}
+
+	.product-favorite-mobile {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		@media (min-width: 600px) {
+			display: none;
+		}
+	}
+
 
 	.product-discount {
 		border-radius: 5px;
@@ -303,7 +331,7 @@ export default {
 		display: flex;
 		justify-content: center;
 		margin: 0 0;
-		padding: 0 0;
+		padding: 1em 0;
 		text-align: center;
 
 		.product-content-img {
@@ -325,6 +353,7 @@ export default {
 
 		@media (min-width: 600px) {
 			flex-direction: column;
+			padding:  0;
 		}
 
 		@media (max-width: 975px) {
@@ -343,7 +372,8 @@ export default {
 
 	.product-img {
 		width: auto;
-    	height: 100%;
+    	height: auto;
+		max-height: 190px;
 		max-width: 100%;
 	}
 
@@ -368,7 +398,7 @@ export default {
 		color: color(base);
 		font-size: size(xsmall);
 		letter-spacing: 2px;
-		margin: 0 auto 8px;
+		margin: 0 auto 4px;
 	}
 
 	.product-price-discount {
