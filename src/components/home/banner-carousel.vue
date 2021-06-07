@@ -92,14 +92,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 	.img-carousel {
-		height: 62vh;
+		height: 472px;
     	width: 100%;
-		max-height: 615px;
+		max-height: 472px;
 		max-width: 1280px;
 		margin: 0 auto;
 		
-		@media (min-width: 700px) {
+		@media (min-width: 600px) {
 			height: auto;
+			max-height: 615px;
 		}
 
 
@@ -161,9 +162,13 @@ export default {
 		height: 616px;
 	}
 	.cover-all-container {
-		height: 100%;
-		// object-fit: cover;
+		height: 100%;		
 		width: 100%;
-		max-height: 615px;
+    	object-fit: cover;
+		max-height: 472px;
+		@media (min-width: 600px) {
+			max-height: 615px;
+		}
+
 	}
 </style>
