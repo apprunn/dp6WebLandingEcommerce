@@ -68,6 +68,10 @@ function SET_WAREHOUSES(state, warehouses) {
 	Vue.set(state, 'warehouses', state.warehouses.concat(warehouses));
 }
 
+function SET_WAREHOUSES_FILTER(state, warehousesFilter) {
+	Vue.set(state, 'warehousesFilter', state.warehousesFilter.concat(warehousesFilter));
+}
+
 function SET_DIRECTIONS(state, directions) {
 	const addressDefault = { id: 0, addressLine1: 'Nueva dirección', name: 'Nueva dirección' };
 	Vue.set(state, 'directions', [].concat(addressDefault, directions));
@@ -188,6 +192,7 @@ const methods = {
 	SET_PRODUCT_FILTER,
 	SET_PRODUCT_TO_BUY,
 	SET_WAREHOUSES,
+	SET_WAREHOUSES_FILTER,
 	UPDATE_FLAG_ADD_VOUCHER,
 	UPDATE_POLL_PROGRESS,
 	SET_CATEGORIES,

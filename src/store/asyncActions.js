@@ -119,6 +119,11 @@ const asyncActions = {
 		const { data: warehouses } = await context.$httpProductsPublic.get(url);
 		commit('SET_WAREHOUSES', warehouses);
 	},
+	LOAD_WAREHOUSES_FILTER: async ({ commit }, context) => {
+		const url = 'warehouse-public?flagWarehouse=true';
+		const { data: warehousesFilter } = await context.$httpProductsPublic.get(url);
+		commit('SET_WAREHOUSES_FILTER', warehousesFilter);
+	},
 	NEW_ADDRESS: async ({ commit }, { context, newAddress }) => {
 		await context.$httpSales.post('customers-address', newAddress);
 		asyncActions.LOAD_USER_ADDRESS(
