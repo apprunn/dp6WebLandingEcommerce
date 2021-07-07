@@ -22,6 +22,7 @@
     "vue-authenticate": "1.4.1",
     "vue-awesome-swiper": "3.1.3",
     "vue-axios": "2.1.4",
+    "vue-head": "^2.2.0",
     "vue-router": "3.0.1",
     "vue-simple-svg": "1.3.2",
     "vue-six-four": "1.1.1",

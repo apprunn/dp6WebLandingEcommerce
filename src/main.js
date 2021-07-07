@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuelidate from 'vuelidate';
 import VueAnalytics from 'vue-analytics';
+import VueHead from 'vue-head';
 import VueSimpleSVG from 'vue-simple-svg';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
@@ -36,6 +37,7 @@ Vue.use(VueAxios, axios);
 Vue.use(VueTheMask);
 Vue.use(Vuelidate);
 Vue.use(VueSimpleSVG);
+Vue.use(VueHead);
 Vue.use(VueAuthenticate, {
 	baseUrl: process.env.ACL_URL,
 	providers: {

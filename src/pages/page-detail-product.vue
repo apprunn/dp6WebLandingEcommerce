@@ -407,6 +407,18 @@ export default {
 	watch: {
 		$route: newRoute,
 	},
+	head: {
+		meta: [
+			{ name: 'application-name', content: 'Name of my application' },
+			{ name: 'description', content: 'A description of the page', id: 'myDescription' },
+			{ itemprop: 'name', content: 'Content Title pruebaaa' },
+			{ itemprop: 'description', content: 'Content Title pruebaaa' },
+			{ property: 'og:image', content: 'https://casamarket-landing.netlify.app/static/images-new/logos/casa-market.jpg' },
+			{ property: 'og:title', content: 'Nombre del producto' },
+			{ property: 'og:description', content: 'Descripcion nombre del producto' },
+			{ itemprop: 'image', content: 'https://casamarket-landing.netlify.app/static/images-new/logos/casa-market.jpg' },
+		],
+	},
 };
 </script>
 <style lang="scss" scoped>
