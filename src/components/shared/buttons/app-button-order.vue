@@ -1,5 +1,6 @@
 <template>
 	<button
+		:disabled="disabledOrder"
 		data-cy="add-to-cart"
 		type="button"
 		v-on="$listeners"
@@ -36,6 +37,10 @@ export default {
 		buttonTitle: {
 			default: '',
 			type: String,
+		},
+		disabledOrder: {
+			default: false,
+			type: Boolean,
 		},
 	},
 };

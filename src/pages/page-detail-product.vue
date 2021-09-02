@@ -17,7 +17,7 @@
 			>Lo sentimos, este producto está desactivado  :(</h1>
 		</div>
 		<div v-else class="detail-product-top">
-			<product-view 
+			<product-view
 				:data="productDetails"
 				:images="productImages"
 				class="container-product-view"
@@ -26,6 +26,8 @@
 				:open-warehouse="stockWarehouse"
 				:data="productDetails"
 				:features="globalFeatures"
+				:show-unity="showUnity"
+				:stock-avaible="stockAvaible"
 				class="container-product-detail"
 				@update="loadData"
 				@selected="selectFeature"
@@ -50,7 +52,7 @@
 				@update-opinion="loadOpinions"/>
 		</div>
 		<div>
-			<product-related 
+			<product-related
 				:relateds="relateds"
 				v-if="relateds.length"
 			/>
@@ -61,7 +63,7 @@
 			:color="globalColors.secondary"
 			big
 		/>
-		<warehouses-modal 
+		<warehouses-modal
 			:dialog="dialogWarehouses"
 			:rows="warehouses"
 			@change-modal="closeModal"
@@ -81,6 +83,7 @@ import productPublicity from '@/components/products/product-publicity';
 import appModal from '@/components/shared/modal/app-modal';
 
 async function created() {
+	this.showUnity = this.getCommerceData.settings.flagShowBaseUnit || false;
 	this.$loading(true);
 	await this.loadProduct();
 }
@@ -303,6 +306,7 @@ function closeModal(value) {
 }
 
 function selectedUnit(unit) {
+	this.stockAvaible = parseInt(this.product.stock / unit.quantity, 10);
 	this.productInstance.updateUnit(unit);
 	this.productImages = [...this.productInstance.getImages()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
@@ -343,8 +347,10 @@ function data() {
 		productsFilter: [],
 		productImages: [],
 		productFather: {},
+		showUnity: false,
 		showConfirmModal: false,
 		stockWarehouse: false,
+		stockAvaible: 0,
 		tabs: [],
 		warehouses: [],
 	};
