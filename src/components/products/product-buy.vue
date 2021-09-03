@@ -23,6 +23,7 @@
 			<app-button-order
 				active
 				button-title="¡LO QUIERO!"
+				:disabled-order="disabledOrder"
 				:class="[
 					isLoading ? 'loading' : 'btn',
 				]"
@@ -78,6 +79,10 @@ export default {
 			required: true,
 			type: Object,
 		},
+		disabledOrder: {
+			type: Boolean,
+			default: false,
+		},
 	},
 };
 </script>
@@ -131,6 +136,6 @@ export default {
 	.warehouse-null {
 		color: #acaaaa;
 		font-family: font(regular);
-		font-size: 12px;	
+		font-size: 12px;
 	}
 </style>

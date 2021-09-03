@@ -21,6 +21,10 @@ function setToken(context, token) {
 	context.commit('setToken', token);
 }
 
+function setStock(context, stock) {
+	context.commit('setStock', stock);
+}
+
 function setUser(context, user) {
 	const newUser = user;
 	newUser.dni = Number(user.dni) ? user.dni : null;
@@ -251,6 +255,7 @@ const methods = {
 	MORE_PRODUCTS,
 	setUser,
 	setToken,
+	setStock,
 	showSnackBar,
 	toggleLoading,
 	updateFilters,

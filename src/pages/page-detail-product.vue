@@ -17,7 +17,7 @@
 			>Lo sentimos, este producto está desactivado  :(</h1>
 		</div>
 		<div v-else class="detail-product-top">
-			<product-view 
+			<product-view
 				:data="productDetails"
 				:images="productImages"
 				class="container-product-view"
@@ -26,6 +26,8 @@
 				:open-warehouse="stockWarehouse"
 				:data="productDetails"
 				:features="globalFeatures"
+				:show-unity="showUnity"
+				:stock-avaible="stockAvaible"
 				class="container-product-detail"
 				@update="loadData"
 				@selected="selectFeature"
@@ -50,7 +52,7 @@
 				@update-opinion="loadOpinions"/>
 		</div>
 		<div>
-			<product-related 
+			<product-related
 				:relateds="relateds"
 				v-if="relateds.length"
 			/>
@@ -61,7 +63,7 @@
 			:color="globalColors.secondary"
 			big
 		/>
-		<warehouses-modal 
+		<warehouses-modal
 			:dialog="dialogWarehouses"
 			:rows="warehouses"
 			@change-modal="closeModal"
@@ -79,8 +81,11 @@ import productRelated from '@/components/products/product-related';
 import warehousesModal from '@/components/products/warehouses-modal';
 import productPublicity from '@/components/products/product-publicity';
 import appModal from '@/components/shared/modal/app-modal';
+import { setNewProperty, map } from '@/shared/lib';
 
 async function created() {
+	this.showUnity = this.getCommerceData.company.settings ?
+		this.getCommerceData.company.settings.flagShowBaseUnit : false;
 	this.$loading(true);
 	await this.loadProduct();
 }
@@ -96,6 +101,18 @@ async function loadProduct() {
 	try {
 		const { data: response } = await this.isLoggedUser();
 		this.product = response;
+		let conversionsFormatted = [];
+		const { conversions } = this.product;
+		if (this.showUnity) {
+			if (conversions) {
+				conversionsFormatted = map(
+					k => setNewProperty('id', Number(k))(conversions[k]),
+					Object.keys(conversions),
+				);
+			}
+			this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0].quantity, 10);
+			this.$store.dispatch('setStock', this.stockAvaible);
+		}
 		this.updatePageTitle(this.product.name.toUpperCase());
 		this.updateDescriptionTag(this.product.description);
 		this.$store.dispatch('setRatingProductId', this.product.id);
@@ -303,6 +320,8 @@ function closeModal(value) {
 }
 
 function selectedUnit(unit) {
+	this.stockAvaible = parseInt(this.product.stock / unit.quantity, 10);
+	this.$store.dispatch('setStock', this.stockAvaible);
 	this.productInstance.updateUnit(unit);
 	this.productImages = [...this.productInstance.getImages()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
@@ -343,8 +362,10 @@ function data() {
 		productsFilter: [],
 		productImages: [],
 		productFather: {},
+		showUnity: false,
 		showConfirmModal: false,
 		stockWarehouse: false,
+		stockAvaible: 0,
 		tabs: [],
 		warehouses: [],
 	};
