@@ -242,7 +242,7 @@ export default {
 			flex: 1 1 100%;
 		}
 	}
-	
+
 	.district-field,
 	.province-field {
 		flex: 1 1 40%;

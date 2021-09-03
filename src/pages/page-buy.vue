@@ -23,6 +23,7 @@
 						<h2 class="payment-section-title">PRODUCTOS </h2>
 					</div>
 					<product-in-car
+						:show-unity="showUnity"
 						data-cy="product-in-car"
 						v-for="(product, indexProduct) in getProductToBuy"
 						:key="indexProduct"
@@ -62,6 +63,8 @@ import summaryOrder from '@/components/order/summary-order';
 import summaryInPayment from '@/components/order/summary-in-payment';
 
 function created() {
+	this.showUnity = this.getCommerceData.company.settings ?
+		this.getCommerceData.company.settings.flagShowBaseUnit : false;
 	const localOrder = this.getLocalStorage('ecommerce-order');
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
 }
@@ -104,6 +107,7 @@ function isNiubiz() {
 
 function data() {
 	return {
+		showUnity: false,
 		logo: {
 			section: '/static/icons/shopping-basket.svg',
 		},
@@ -120,6 +124,7 @@ export default {
 	},
 	computed: {
 		...mapGetters([
+			'getCommerceData',
 			'getProductToBuy',
 			'getTotalQuantityProducts',
 			'getOrderInfo',
