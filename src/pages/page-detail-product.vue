@@ -81,9 +81,11 @@ import productRelated from '@/components/products/product-related';
 import warehousesModal from '@/components/products/warehouses-modal';
 import productPublicity from '@/components/products/product-publicity';
 import appModal from '@/components/shared/modal/app-modal';
+import { setNewProperty, map } from '@/shared/lib';
 
 async function created() {
-	this.showUnity = this.getCommerceData.settings.flagShowBaseUnit || false;
+	this.showUnity = this.getCommerceData.company.settings ?
+		this.getCommerceData.company.settings.flagShowBaseUnit : false;
 	this.$loading(true);
 	await this.loadProduct();
 }
@@ -99,6 +101,18 @@ async function loadProduct() {
 	try {
 		const { data: response } = await this.isLoggedUser();
 		this.product = response;
+		let conversionsFormatted = [];
+		const { conversions } = this.product;
+		if (this.showUnity) {
+			if (conversions) {
+				conversionsFormatted = map(
+					k => setNewProperty('id', Number(k))(conversions[k]),
+					Object.keys(conversions),
+				);
+			}
+			this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0].quantity, 10);
+			this.$store.dispatch('setStock', this.stockAvaible);
+		}
 		this.updatePageTitle(this.product.name.toUpperCase());
 		this.updateDescriptionTag(this.product.description);
 		this.$store.dispatch('setRatingProductId', this.product.id);
@@ -307,6 +321,7 @@ function closeModal(value) {
 
 function selectedUnit(unit) {
 	this.stockAvaible = parseInt(this.product.stock / unit.quantity, 10);
+	this.$store.dispatch('setStock', this.stockAvaible);
 	this.productInstance.updateUnit(unit);
 	this.productImages = [...this.productInstance.getImages()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };

@@ -84,7 +84,7 @@
 			@selected="selecFeature"
 			@clear="$emit('clear')"/>
 		<product-buy
-			:disabled-order="!stockAvaible > 0"
+			:disabled-order="disabledOrder"
 			:open-warehouse="openWarehouse"
 			:number="data.quantity"
 			:product="data"
@@ -153,6 +153,13 @@ function getBrandName(data) {
 	return getDeeper('warehouseProduct.brand.name')(data);
 }
 
+function disabledOrder() {
+	if (this.showUnity) {
+		return !this.stockAvaible > 0;
+	}
+	return false;
+}
+
 function unitSelection(item) {
 	this.$emit('unit-selection', item);
 }
@@ -172,6 +179,7 @@ export default {
 		...mapGetters('loading', [
 			'isLoading',
 		]),
+		disabledOrder,
 		isComposed,
 		isService,
 		isVariation,

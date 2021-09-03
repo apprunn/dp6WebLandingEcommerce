@@ -19,6 +19,13 @@
 					:style="`color: ${globalColors.subtitle};`"
 					class="product-content">{{product.description}}</p>
 				<p class="product-brand">{{product.brand}}</p>
+				<p
+					v-if="showUnity"
+					:style="`color: ${globalColors.primary};`"
+					class="product-title"> Disponibilidad: <span class="product-price">
+						{{ stockAvaible }}
+					</span>
+				</p>
 			</div>
 			<div class="price">
 				<p
@@ -35,6 +42,7 @@
 						class="continer-quantity-button"
 						:number="product.quantity"
 						@click="clickQuantity"
+						:max-quantity="maxQuantity"
 					/>
 				</div>
 				<p class="product-quantity" v-else>{{product.quantity}}</p>
@@ -78,6 +86,14 @@ function clickQuantity(val) {
 	};
 	quantity += opt[val];
 	quantity = quantity < 1 ? 1 : quantity;
+	if (this.showUnity) {
+		if (quantity >= this.stockAvaible) {
+			this.maxQuantity = true;
+			this.showNotification('No cuenta con la disponibilidad de stock del producto', 'warning');
+		} else {
+			this.maxQuantity = false;
+		}
+	}
 	this.$set(this.product, 'quantity', quantity);
 	this.$forceUpdate();
 	this.$store.commit('UPDATE_PRODUCTS_TO_BUY', { product: this.product, context: this });
@@ -96,6 +112,7 @@ function data() {
 	return {
 		comments: '',
 		show: false,
+		maxQuantity: false,
 	};
 }
 
@@ -110,6 +127,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'getCurrencySymbol',
+			'stockAvaible',
 		]),
 		stepOne,
 	},
@@ -123,6 +141,10 @@ export default {
 		product: {
 			default: () => {},
 			type: Object,
+		},
+		showUnity: {
+			type: Boolean,
+			default: false,
 		},
 	},
 };
