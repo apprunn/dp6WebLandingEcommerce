@@ -86,6 +86,7 @@ import { setNewProperty, map } from '@/shared/lib';
 async function created() {
 	this.showUnity = this.getCommerceData.company.settings ?
 		this.getCommerceData.company.settings.flagShowBaseUnit : false;
+	debugger;
 	this.$loading(true);
 	await this.loadProduct();
 }
@@ -110,7 +111,9 @@ async function loadProduct() {
 					Object.keys(conversions),
 				);
 			}
-			this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0].quantity, 10);
+			debugger;
+			this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0]
+				? conversionsFormatted[0].quantity : 0, 10);
 			this.$store.dispatch('setStock', this.stockAvaible);
 		}
 		this.updatePageTitle(this.product.name.toUpperCase());
@@ -119,6 +122,7 @@ async function loadProduct() {
 		this.loadData(this.product.id);
 		this.loadOpinions();
 	} catch (error) {
+		console.log(error);
 		if (error.data.message === 'PRODUCT_NOT_FOUND') {
 			this.disabled = true;
 			this.showNotification('Este producto ya no está disponible', 'warning');
