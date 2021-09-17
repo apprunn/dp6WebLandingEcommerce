@@ -86,7 +86,6 @@ import { setNewProperty, map } from '@/shared/lib';
 async function created() {
 	this.showUnity = this.getCommerceData.company.settings ?
 		this.getCommerceData.company.settings.flagShowBaseUnit : false;
-	debugger;
 	this.$loading(true);
 	await this.loadProduct();
 }
@@ -111,7 +110,6 @@ async function loadProduct() {
 					Object.keys(conversions),
 				);
 			}
-			debugger;
 			this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0]
 				? conversionsFormatted[0].quantity : 0, 10);
 			this.$store.dispatch('setStock', this.stockAvaible);
