@@ -84,10 +84,15 @@ import appModal from '@/components/shared/modal/app-modal';
 import { setNewProperty, map } from '@/shared/lib';
 
 async function created() {
-	this.showUnity = this.getCommerceData.company.settings ?
-		this.getCommerceData.company.settings.flagShowBaseUnit : false;
 	this.$loading(true);
 	await this.loadProduct();
+}
+
+function mounted() {
+	debugger;
+	this.showUnity = this.getCommerceData.company.settings ?
+		this.getCommerceData.company.settings.flagShowBaseUnit : false;
+	debugger;
 }
 
 function isLoggedUser() {
@@ -120,7 +125,6 @@ async function loadProduct() {
 		this.loadData(this.product.id);
 		this.loadOpinions();
 	} catch (error) {
-		console.log(error);
 		if (error.data.message === 'PRODUCT_NOT_FOUND') {
 			this.disabled = true;
 			this.showNotification('Este producto ya no está disponible', 'warning');
@@ -156,6 +160,9 @@ async function loadData(id) {
 	this.productInstance.firstProductSelected(this.product);
 	this.globalFeatures = [...this.productInstance.getFeatures()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
+	if (!Array.isArray(this.productDetails.sections)) {
+		this.showNotification('Se esta cargando mal la información del producto', 'warning');
+	}
 	this.productImages = [...this.productInstance.getImages()];
 	this.allFeatures = this.childrens.reduce((acum, children) => acum.concat(children.features), []);
 	this.features = this.allFeatures.reduce((acum, feature) => {
@@ -402,6 +409,7 @@ export default {
 		topLocation,
 	},
 	data,
+	mounted,
 	methods: {
 		...mapActions('loading', {
 			$loading: 'SET_LOADING_FLAG',
