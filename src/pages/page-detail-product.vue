@@ -89,10 +89,8 @@ async function created() {
 }
 
 function mounted() {
-	debugger;
 	this.showUnity = this.getCommerceData.company.settings ?
 		this.getCommerceData.company.settings.flagShowBaseUnit : false;
-	debugger;
 }
 
 function isLoggedUser() {
