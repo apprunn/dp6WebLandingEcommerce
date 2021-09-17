@@ -215,7 +215,6 @@ async function reclamationAction() {
 			'success',
 		);
 	} catch (err) {
-		console.log(err);
 		this.showGenericError();
 	}
 }

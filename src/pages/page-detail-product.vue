@@ -84,10 +84,13 @@ import appModal from '@/components/shared/modal/app-modal';
 import { setNewProperty, map } from '@/shared/lib';
 
 async function created() {
-	this.showUnity = this.getCommerceData.company.settings ?
-		this.getCommerceData.company.settings.flagShowBaseUnit : false;
 	this.$loading(true);
 	await this.loadProduct();
+}
+
+function mounted() {
+	this.showUnity = this.getCommerceData.company.settings ?
+		this.getCommerceData.company.settings.flagShowBaseUnit : false;
 }
 
 function isLoggedUser() {
@@ -110,7 +113,8 @@ async function loadProduct() {
 					Object.keys(conversions),
 				);
 			}
-			this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0].quantity, 10);
+			this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0]
+				? conversionsFormatted[0].quantity : 0, 10);
 			this.$store.dispatch('setStock', this.stockAvaible);
 		}
 		this.updatePageTitle(this.product.name.toUpperCase());
@@ -154,6 +158,9 @@ async function loadData(id) {
 	this.productInstance.firstProductSelected(this.product);
 	this.globalFeatures = [...this.productInstance.getFeatures()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
+	if (!Array.isArray(this.productDetails.sections)) {
+		this.showNotification('Se esta cargando mal la información del producto', 'warning');
+	}
 	this.productImages = [...this.productInstance.getImages()];
 	this.allFeatures = this.childrens.reduce((acum, children) => acum.concat(children.features), []);
 	this.features = this.allFeatures.reduce((acum, feature) => {
@@ -400,6 +407,7 @@ export default {
 		topLocation,
 	},
 	data,
+	mounted,
 	methods: {
 		...mapActions('loading', {
 			$loading: 'SET_LOADING_FLAG',
