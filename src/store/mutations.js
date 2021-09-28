@@ -12,6 +12,10 @@ function setToken(state, token) {
 	Vue.set(state, 'token', token);
 }
 
+function setStock(state, stock) {
+	Vue.set(state, 'stockAvaible', stock);
+}
+
 function setUser(state, user) {
 	Vue.set(state, 'user', user);
 }
@@ -171,6 +175,7 @@ const methods = {
 	...profileMutations,
 	PAGE_ONE,
 	setToken,
+	setStock,
 	setUser,
 	showSnackBar,
 	toggleLoading,

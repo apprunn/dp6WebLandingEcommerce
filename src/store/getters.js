@@ -24,6 +24,10 @@ function token(state) {
 	return state.token;
 }
 
+function stockAvaible(state) {
+	return state.stockAvaible;
+}
+
 function snackbar(state) {
 	return state.appConfig.snackbar;
 }
@@ -187,6 +191,7 @@ const methods = {
 	templateColors,
 	themeColors,
 	token,
+	stockAvaible,
 	user,
 	userName,
 	getCategories,

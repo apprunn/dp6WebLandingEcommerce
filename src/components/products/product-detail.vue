@@ -1,7 +1,7 @@
 <template>
 	<div class="product-detail">
 		<div>
-			<heart-component 
+			<heart-component
 				v-model="data.flagFavorite"
 				class="container-like"
 				@click="addToFavorites"
@@ -70,15 +70,21 @@
 			</span>
 		</div>
 		<ProductConversions
+			:show-unit="showUnity"
 			:default-unit="data.unit"
 			:conversions="data.conversions"
+			:stock-product="data.stock"
 			@unit-selection="unitSelection"
 		/>
+		<v-flex mt-3 text-xs-center class="content-dis" v-if="showUnity">
+			<h4 :style="`color:${globalColors.title}`">Disponibilidad: <span class="number-dispon">{{ stockAvaible }}</span></h4>
+		</v-flex>
 		<product-childrens
 			:features="features"
 			@selected="selecFeature"
 			@clear="$emit('clear')"/>
 		<product-buy
+			:disabled-order="disabledOrder"
 			:open-warehouse="openWarehouse"
 			:number="data.quantity"
 			:product="data"
@@ -147,6 +153,13 @@ function getBrandName(data) {
 	return getDeeper('warehouseProduct.brand.name')(data);
 }
 
+function disabledOrder() {
+	if (this.showUnity) {
+		return !this.stockAvaible > 0;
+	}
+	return false;
+}
+
 function unitSelection(item) {
 	this.$emit('unit-selection', item);
 }
@@ -166,6 +179,7 @@ export default {
 		...mapGetters('loading', [
 			'isLoading',
 		]),
+		disabledOrder,
 		isComposed,
 		isService,
 		isVariation,
@@ -188,6 +202,14 @@ export default {
 		features: {
 			default: () => [],
 			type: Array,
+		},
+		stockAvaible: {
+			type: Number,
+			default: 0,
+		},
+		showUnity: {
+			type: Boolean,
+			default: false,
 		},
 		openWarehouse: false,
 	},
@@ -334,5 +356,16 @@ export default {
 		height: 21px;
 		margin-left: 10px;
 		width: 100%;
+	}
+
+	.number-dispon {
+		color: #acaaaa;
+	}
+
+	.content-dis {
+		background-color: #ebebeb;
+		border-radius: 15.5px;
+		max-width: 178px;
+		padding: 5px 8px;
 	}
 </style>

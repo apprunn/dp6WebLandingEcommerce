@@ -43,7 +43,11 @@ function conversionsChanges(conversions) {
 			Object.keys(conversions),
 		);
 	}
-	this.conversionsComputed = [].concat(this.defaultUnit, conversionsFormatted);
+	if (this.showUnit) {
+		this.conversionsComputed = conversionsFormatted;
+	} else {
+		this.conversionsComputed = [].concat(this.defaultUnit, conversionsFormatted);
+	}
 	this.conversionsComputed = this.conversionsComputed.map((p, index) => {
 		const newP = { ...p };
 		newP.isSelected = index === 0;
@@ -90,6 +94,11 @@ export default {
 		defaultUnit: {
 			default: () => {},
 			type: Object,
+		},
+		stockProduct: [Number],
+		showUnit: {
+			type: Boolean,
+			default: true,
 		},
 	},
 	watch: {
