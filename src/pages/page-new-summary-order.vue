@@ -207,7 +207,6 @@ function wayPayment() {
  * Cuando el pago es online wayPayment es null
  */
 function isOnlinePayment() {
-	debugger;
 	const online = isEmpty(this.wayPayment);
 	if (online) {
 		return online;
@@ -250,7 +249,6 @@ function copyLink() {
 }
 
 function isNiubiz() {
-	debugger;
 	const codeNiubiz = getDeeper('additionalInformation.gatewayCode')(this.order);
 	return codeNiubiz === niubiz;
 }
