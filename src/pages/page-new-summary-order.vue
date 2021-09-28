@@ -89,8 +89,8 @@
 								<h4 class="payment-link">{{isDeposit.description}}</h4>
 								<div v-if="true">
 									<swiper :options="swiperOption" ref="swp">
-										<swiper-slide 
-											v-for="bankAccount in isDeposit.bankAccounts" 
+										<swiper-slide
+											v-for="bankAccount in isDeposit.bankAccounts"
 											:key="bankAccount.id"
 										>
 											<div class="bankAccount-container">
@@ -131,7 +131,6 @@
 				:url-image="isYape.urlImage"
 			/>
 		</section>
-
 		<section
 			v-if="isNiubiz && isOnlinePayment"
 			class="card-data-niubiz"
@@ -208,6 +207,7 @@ function wayPayment() {
  * Cuando el pago es online wayPayment es null
  */
 function isOnlinePayment() {
+	debugger;
 	const online = isEmpty(this.wayPayment);
 	if (online) {
 		return online;
@@ -250,6 +250,7 @@ function copyLink() {
 }
 
 function isNiubiz() {
+	debugger;
 	const codeNiubiz = getDeeper('additionalInformation.gatewayCode')(this.order);
 	return codeNiubiz === niubiz;
 }
@@ -386,11 +387,11 @@ export default {
 		font-size: size(medium);
 		margin: 0 auto;
 		max-width: 900px;
-		
+
 		@media (min-width: 600px) {
 			grid-template-columns: 1fr 1fr;
 		}
-	
+
 		.title {
 			font-family: font(bold) !important;
 			font-size: size(medium) !important;
@@ -400,7 +401,7 @@ export default {
 			display: grid;
 			grid-auto-flow: row;
 			margin-bottom: 0;
-	
+
 			@media (min-width: 900px) {
 				grid-auto-flow: column;
 			}
@@ -436,10 +437,10 @@ export default {
 		@media (min-width: 768px) {
 			grid-template-columns: 1fr 1fr;
 		}
-	
+
 		.products-in-order {
 			border-bottom: 2px solid color(border);
-			
+
 			@media (min-width: 768px) {
 				border-bottom: none;
 				border-right: 2px solid color(border);
