@@ -36,15 +36,15 @@
 						:key="indexTran"
 					>
 						<h4>
-							Número de órden: 
-							<span :style="`color:${globalColors.primary}`">{{transaction.number}}</span>	
+							Número de órden:
+							<span :style="`color:${globalColors.primary}`">{{transaction.number}}</span>
 						</h4>
 						<h4>
-							Referencia de la transacción: 
+							Referencia de la transacción:
 							<span :style="`color:${globalColors.primary}`">{{getValue('additionalInformation.paymentGateway.referenceId', transaction)}}</span>
 						</h4>
 						<h4>
-							Estado de la transacción: 
+							Estado de la transacción:
 							<span :style="`color:${globalColors.primary}`">{{getValue('additionalInformation.paymentGateway.status', transaction)}}</span>
 						</h4>
 					</li>
@@ -113,7 +113,6 @@ async function linkGenerator() {
 			'Ocurrió un error al generar el enlace de pago. Recargue y vuelva a intentarlo por favor',
 			'error',
 		);
-		console.log(error);
 	}
 }
 
