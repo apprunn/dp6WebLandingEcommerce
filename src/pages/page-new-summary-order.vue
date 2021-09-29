@@ -139,7 +139,7 @@
 			<h4>Pago realizado con tarjeta: <span>{{niubizGateway.cardBrand}}</span>, nro: <span>{{niubizGateway.cardNumber}}</span></h4>
 			<h5>el día <span>{{niubizGateway.createdAt | formatDate}}</span></h5>
 		</section>
-
+		<v-flex pl-5>* Recuerde que debe imprimir o tomar captura a su pedido</v-flex>
 		<section class="summary-btns">
 			<button :style="`background-color:${globalColors.primary}`" type="button" @click="seeOrder">Ver pedido</button>
 			<button
@@ -148,6 +148,11 @@
 				type="button"
 				@click="cancelOrder"
 			>Cancelar pedido</button>
+			<button
+				:style="`background-color:${globalColors.primary}`"
+				type="button"
+				@click="printOrder"
+			>Imprimir pedido</button>
 		</section>
 
 	</div>
@@ -308,6 +313,10 @@ function isYape() {
 	};
 }
 
+function printOrder() {
+	window.print();
+}
+
 function data() {
 	return {
 		swiperOption: {
@@ -367,6 +376,7 @@ export default {
 		]),
 		cancelOrder,
 		copyLink,
+		printOrder,
 		seeOrder,
 	},
 };
