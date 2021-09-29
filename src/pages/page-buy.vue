@@ -4,6 +4,7 @@
 			<h4>La transacción <span>{{transactionId}}</span> fue rechazada</h4>
 			<h5>Nro pedido: <span>{{getOrderInfo.id}}</span></h5>
 			<h5>fecha: <span>{{getOrderInfo.createdAt | formatDate}}</span></h5>
+			<h4>Razón: <span>{{ getOrderInfo.additionalInformation.paymentGateway.status }}</span> </h4>
 		</section>
 		<div
 			v-if="stepThree"

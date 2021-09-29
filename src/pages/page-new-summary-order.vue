@@ -138,8 +138,9 @@
 		>
 			<h4>Pago realizado con tarjeta: <span>{{niubizGateway.cardBrand}}</span>, nro: <span>{{niubizGateway.cardNumber}}</span></h4>
 			<h5>el día <span>{{niubizGateway.createdAt | formatDate}}</span></h5>
+			<h4>Código de Referencia: {{ order.id }}</h4>
 		</section>
-		<v-flex pl-5>* Recuerde que debe imprimir o tomar captura a su pedido</v-flex>
+		<v-flex pl-5 text-xs-center mt-2 mb-2 :style="`color:${globalColors.secondary}`">* Recuerde que debe imprimir o tomar captura a su pedido</v-flex>
 		<section class="summary-btns">
 			<button :style="`background-color:${globalColors.primary}`" type="button" @click="seeOrder">Ver pedido</button>
 			<button
