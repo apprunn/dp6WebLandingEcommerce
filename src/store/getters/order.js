@@ -163,6 +163,9 @@ const getters = {
 		const { order: { wayPaymentDetailCode } } = state;
 		return wayPaymentDetailCode || '';
 	},
+	getLocationAddress(state) {
+		return state.order.locationAddress;
+	},
 };
 
 export default getters;
