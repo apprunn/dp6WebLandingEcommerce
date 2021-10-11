@@ -67,20 +67,60 @@
 			placeholder="Referencia"
 			type="email"
 			class="mx-2 my-1 reference-field field"
-			v-model="newAddress.reference"
+			v-model="newAddress.addressLine2"
 		>
-			<span v-if="$v.newAddress.reference.$invalid">La referencia es requerida</span>
+			<span v-if="$v.newAddress.addressLine2.$invalid">La referencia es requerida</span>
 		</app-input>
+		<div class="mx-2 my-1 button-field field" v-if="flagMap">
+			<a href="#" class="btn" @click.prevent="getMap()">Ubicar en el Mapa</a>
+		</div>
+		<div class="map mx-2 my-1 map-field" v-if="showMap">
+			<map-component :zoom="16" :markers="[{location: {lat: newAddress.latitude, lng: newAddress.longitude},}]" :location="{lat: newAddress.latitude, lng: newAddress.longitude}" :center="{lat: newAddress.latitude, lng: newAddress.longitude}"/>
+		</div>		
 	</form>
 </template>
 <script>
+/* global google */
 import { required } from 'vuelidate/lib/validators';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import appInput from '@/components/shared/inputs/app-input';
 import appSelect from '@/components/shared/inputs/app-select';
+import appButton from '@/components/shared/buttons/app-button';
+import mapComponent from '@/components/shared/map/map-component';
 
 function created() {
 	this.$store.dispatch('LOAD_DEPARTMENTS', this);
+}
+
+function flagMap() {
+	return this.getCommerceData.settings.flagShowMap;
+}
+
+function getMap() {
+	if (this.newAddress.department !== null &&
+		this.newAddress.province !== null &&
+		this.newAddress.district) {
+		this.googleSearch();
+	}
+}
+
+function googleSearch() {
+	const geocoder = new google.maps.Geocoder();
+	const departmentName = this.departments.filter(d => d.id === this.newAddress.department);
+	const provinceName = this.provinces.filter(p => p.id === this.newAddress.province);
+	const disctrictName = this.districts.filter(d => d.id === this.newAddress.district);
+	geocoder.geocode({ address: `${departmentName[0].name} ${provinceName[0].name} ${disctrictName[0].name} ${this.newAddress.addressLine1}` }, (results, status) => {
+		if (status === google.maps.GeocoderStatus.OK) {
+			const lat = results[0].geometry.location.lat();
+			const lng = results[0].geometry.location.lng();
+			this.newAddress.latitude = lat;
+			this.newAddress.longitude = lng;
+			this.showMap = true;
+			this.setCustomerAddress();
+		} else {
+			console.error('Request failed.');
+		}
+	});
 }
 
 function selectDepartment(provinceId) {
@@ -154,12 +194,15 @@ function setCustomerAddress() {
 	} else {
 		const newAddress = {
 			addressLine1: this.newAddress.addressLine1,
+			addressLine2: this.newAddress.addressLine2,
 			cityId: this.newAddress.province,
 			name: this.newAddress.name,
 			number: this.newAddress.number,
 			parishId: this.newAddress.district,
 			provinceId: this.newAddress.department,
-			reference: this.newAddress.reference,
+			latitude: this.newAddress.latitude,
+			longitude: this.newAddress.longitude,
+			type: 1,
 		};
 		this.$store.commit('SET_CUSTOMER_ADDRESS', newAddress);
 	}
@@ -169,28 +212,32 @@ function validations() {
 	return {
 		newAddress: {
 			addressLine1: { required },
+			addressLine2: { required },
 			department: { required },
 			district: { required },
 			name: { required },
 			number: { required },
 			province: { required },
-			reference: { required },
 		},
 	};
 }
-
 
 function data() {
 	return {
 		newAddress: {
 			addressLine1: '',
+			addressLine2: '',
 			department: null,
 			district: null,
 			name: '',
 			number: '',
 			province: null,
-			reference: '',
+			latitude: null,
+			longitude: null,
+			type: 1,
 		},
+		address: '',
+		showMap: false,
 	};
 }
 
@@ -199,14 +246,22 @@ export default {
 	components: {
 		appInput,
 		appSelect,
+		appButton,
+		mapComponent,
 	},
 	computed: {
+		...mapState({
+			locationAddress: state => state.order.locationAddress,
+		}),
 		...mapGetters([
 			'departments',
 			'districts',
 			'getProductToBuy',
 			'provinces',
+			'getCommerceData',
+			'getLocationAddress',
 		]),
+		flagMap,
 	},
 	created,
 	data,
@@ -217,8 +272,17 @@ export default {
 		selectDistrict,
 		selectProvince,
 		setCustomerAddress,
+		googleSearch,
+		getMap,
 	},
 	validations,
+	watch: {
+		locationAddress(location) {
+			this.newAddress.latitude = location.lat;
+			this.newAddress.longitude = location.lng;
+			this.setCustomerAddress();
+		},
+	},
 };
 </script>
 <style lang="scss" scoped>
@@ -261,6 +325,36 @@ export default {
 	}
 
 	.reference-field {
-		flex: 60%;
+		flex: 1 1 60%;
+		@media (max-width: 925px) {
+			flex: 1 1 100%;
+		}
+	}
+
+
+	.button-field{
+		flex: 1 1 20%;
+
+		@media (max-width: 925px) {
+			flex: 1 1 100%;
+		}
+	}
+
+	.map-field{
+		flex: 1 1 100%;
+	}
+
+	.btn{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-family: "Avenir Next Medium";
+		font-size: 12px;
+		height: 46.8px;
+		outline: none;
+		border: 1px solid rgb(227, 5, 23);
+		border-radius: 7px;
+		color: rgb(227, 5, 23);
+		text-decoration: none;
 	}
 </style>

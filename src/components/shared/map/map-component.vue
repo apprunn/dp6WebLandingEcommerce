@@ -11,6 +11,7 @@
 		:position="m.location"
 		:clickable="true"
 		:draggable="true"
+		@dragend="updateCoordinates($event.latLng)"
 		@click="selectedMarker(m)"
 	/>
 	</GmapMap>	
@@ -21,6 +22,14 @@ function selectedMarker(args) {
 	this.$store.commit('SET_DELIVERY_PLACE', args);
 }
 
+function updateCoordinates(location) {
+	const coordinates = {
+		lat: location.lat(),
+		lng: location.lng(),
+	};
+	this.$store.commit('UPDATE_LOCATION', coordinates);
+}
+
 function setCoords() {}
 
 export default {
@@ -28,6 +37,7 @@ export default {
 	methods: {
 		setCoords,
 		selectedMarker,
+		updateCoordinates,
 	},
 	props: {
 		center: {
