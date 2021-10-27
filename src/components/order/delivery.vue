@@ -110,7 +110,6 @@ function noOrder() {
 }
 
 function setOrderInfoByDefault() {
-	console.log('setOrderInfoByDefault', this.getFlagPickUp);
 	this.$store.commit('SET_DELIVERY_PLACE', this.getDeliveryAddress);
 	if (this.getFlagPickUp === waysDeliveries.house.value) {
 		this.selectedDirection = this.getDeliveryAddress || this.selectedDirection;
