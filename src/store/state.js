@@ -49,6 +49,7 @@ export default {
 		gatewayAuthorizationResponse: null,
 		id: null,
 		list: [],
+		locationAddress: null,
 		order: null,
 		orderStates: null,
 		orderStatus: null,

@@ -112,5 +112,8 @@ const orderMutation = {
 	SET_WAYPAYMENT_DETAIL_CODE(state, wayPaymentDetailCode) {
 		Vue.set(state.order, 'wayPaymentDetailCode', wayPaymentDetailCode);
 	},
+	UPDATE_LOCATION(state, locationAddress) {
+		Vue.set(state.order, 'locationAddress', locationAddress);
+	},
 };
 export default orderMutation;
