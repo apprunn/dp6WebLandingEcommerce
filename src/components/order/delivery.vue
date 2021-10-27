@@ -139,11 +139,11 @@ function warehousesMarkers() {
 	const warehousesLocation = this.getWarehouses.reduce((list, w) => {
 		const { name, id, location } = w;
 		if (location) {
-			const { x, y } = location;
+			const { lat, lng, x, y } = location;
 			const marker = {};
 			marker.id = id;
 			marker.name = name;
-			marker.location = location ? { lat: x, lng: y } : {};
+			marker.location = location ? { lat: (lat || x), lng: (lng || y) } : {};
 			return list.concat(marker);
 		}
 		return list;
@@ -188,10 +188,13 @@ function warehouseSelected(id) {
 	const index = this.getWarehouses.findIndex(war => war.id === id);
 	const w = this.getWarehouses[index];
 	if (w.location) {
-		const { x, y } = w.location;
-		w.location = { lat: x, lng: y };
+		const { lat, lng, x, y } = w.location;
+		w.location = { lat: (lat || x), lng: (lng || y) };
 	}
 	this.$store.commit('SET_DELIVERY_PLACE', w);
+	this.selectedWarehouse.id = w.id;
+	this.selectedWarehouse.name = w.name;
+	this.selectedWarehouse.location = w.location;
 }
 
 function directionSelected(id) {
