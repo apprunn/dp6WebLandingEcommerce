@@ -69,7 +69,8 @@ function UPDATE_PRODUCTS_SELECTED(state, products) {
 }
 
 function SET_WAREHOUSES(state, warehouses) {
-	Vue.set(state, 'warehouses', state.warehouses.concat(warehouses));
+	const newWarehouse = [state.warehouses[0]].concat(warehouses);
+	Vue.set(state, 'warehouses', newWarehouse);
 }
 
 function SET_DIRECTIONS(state, directions) {
