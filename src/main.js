@@ -91,6 +91,11 @@ async function created() {
 		this.httpResponseSuccessInterceptor,
 		this.httpResponseInterceptor,
 	);
+	this.$httpXimena.interceptors.request.use(this.httpRequestInterceptor);
+	this.$httpXimena.interceptors.response.use(
+		this.httpResponseSuccessInterceptor,
+		this.httpResponseInterceptor,
+	);
 }
 
 /* eslint-disable no-new */

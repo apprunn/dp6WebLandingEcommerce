@@ -178,6 +178,17 @@ function created() {
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
+	if (this.order.codeExternalId) {
+		this.notifyPayment();
+	}
+}
+
+async function notifyPayment() {
+	try {
+		await this.$httpXimena.patch(`order/${this.order.codeExternalId}/notify-payment`);
+	} catch (error) {
+		this.showGenericError();
+	}
 }
 
 function addressPickUp() {
@@ -375,6 +386,7 @@ export default {
 			'CANCEL_ORDER',
 			'removeProductFromLS',
 		]),
+		notifyPayment,
 		cancelOrder,
 		copyLink,
 		printOrder,

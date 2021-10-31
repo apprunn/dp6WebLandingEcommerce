@@ -92,7 +92,7 @@ async function created() {
 		// localStorage.setItem(`${process.env.STORAGE_USER_KEY}::token`, tokenStringify);
 		// this.$store.dispatch('setToken', tokenStringify);
 		// const orderId = JSON.stringify(this.$route.query.orderExternalId);
-		// localStorage.setItem(`${process.env.STORAGE_USER_KEY}::orderExternal`, orderId);
+		// localStorage.setItem(`${process.env.STORAGE_USER_KEY}::orderExternalId`, orderId);
 		this.addToCar();
 	}
 }

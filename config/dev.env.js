@@ -33,6 +33,7 @@ module.exports = merge(prodEnv, {
 	WAREHOUSE_NAME: `'${process.env.WAREHOUSE_NAME}'`,
 	BANNER_SEARCHER_SHOW: `'${process.env.BANNER_SEARCHER_SHOW}'`,
 	WAYS_DELIVERIES: `'${process.env.WAYS_DELIVERIES}'`,
+	URL_XIMENA: `'${process.env.URL_XIMENA}'`,
 	GOOGLE_MAP_API_KEY: `'${process.env.GOOGLE_MAP_API_KEY}'`,
 	URL_VALID_DOCUMENT_NUMBER: `'${process.env.URL_VALID_DOCUMENT_NUMBER}'`,
 	PAYMENTEZ_CLIENT: `'${process.env.PAYMENTEZ_CLIENT}'`,

@@ -40,4 +40,5 @@ module.exports = {
 	PAGE_DESCRIPTION: `'${process.env.PAGE_DESCRIPTION}'`,
 	PAGE_KEYWORD: `'${process.env.PAGE_KEYWORD}'`,
 	PAGE_TITLE: `'${process.env.PAGE_TITLE}'`,
+	URL_XIMENA: `'${process.env.URL_XIMENA}'`,
 };

@@ -134,6 +134,7 @@ function updateOrderDetailsInLocalStorage(products) {
 	}
 }
 
+
 function buildOrderBody(flagFinish, getters) {
 	const { id, name, address } = getters.getCommerceData.settings.defaultWarehouse;
 	const { getDeliveryAddress, getCustomerAddress, getCustomerAddressId } = getters;
@@ -141,7 +142,9 @@ function buildOrderBody(flagFinish, getters) {
 	const storeAddress = isStore ? getDeliveryAddress : null;
 	const placeAddress = getCustomerAddressId ? getDeliveryAddress : getCustomerAddress;
 	const deliveryAddress = isStore ? storeAddress : placeAddress;
+	const codeExternal = JSON.parse(localStorage.getItem('ecommerce::orderExternalId'));
 	const body = {
+		codeExternalId: codeExternal,
 		additionalInfo: getters.getAdditionalInformation,
 		costShipping: getters.getShippingCost,
 		costShippingFlagTax: getters.getShippingFlagTax,

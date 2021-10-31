@@ -19,6 +19,10 @@ const salesInstance = axios.create({
 	baseURL: process.env.SALES_URL,
 });
 
+const ximena = axios.create({
+	baseURL: process.env.URL_XIMENA,
+});
+
 const updateTransactionIntance = axios.create({
 	baseURL: process.env.SALES_URL,
 });
@@ -53,4 +57,5 @@ export default function (Vue) {
 	Vue.prototype.$httpDocumentNumberValidating = documentNumberValidating;
 	Vue.prototype.$http2 = http2Instance;
 	Vue.prototype.$httpUpdateTransaction = updateTransactionIntance;
+	Vue.prototype.$httpXimena = ximena;
 }
