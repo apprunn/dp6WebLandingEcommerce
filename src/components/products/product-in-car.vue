@@ -3,7 +3,7 @@
 		<trash-component class="action" @click="deleteProduct"/>
 		<section class="grid-areas">
 			<img
-				:src="product.imagePresentation"
+				:src="product.imagePresentation || product.images[0].urlImage"
 				alt="imagen del producto"
 				class="product-img image"
 			>
