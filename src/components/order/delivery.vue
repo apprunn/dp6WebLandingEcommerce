@@ -36,7 +36,7 @@
 			:center="warehouesesCenter"
 			:disable-map="disableMapButtonByWarehouse"
 			:markers="singleOrMultiMarkersOnWarehouses"
-			:options="getWarehouses"
+			:options="getWarehousesFilter"
 			:zoom="warehousesZoom"
 			:value="selectedWarehouse.id"
 			@input="warehouseSelected"
@@ -80,6 +80,7 @@ function created() {
 	Promise.all([
 		this.$store.dispatch('LOAD_DIRECTIONS', this),
 		this.$store.dispatch('LOAD_WAREHOUSES', this),
+		this.$store.dispatch('LOAD_WAREHOUSES_FILTER', this),
 	]).then(() => {
 		if (that.noOrder) {
 			that.setDefaultDelivery();
@@ -93,8 +94,8 @@ function created() {
 }
 
 function lonleyWarehouse() {
-	if (this.getWarehouses.length === 2) {
-		const warehouse = this.getWarehouses[1];
+	if (this.getWarehousesFilter.length === 2) {
+		const warehouse = this.getWarehousesFilter[1];
 		this.selectedWarehouse = warehouse;
 		this.warehouseSelected(warehouse.id);
 	}
@@ -136,7 +137,7 @@ function selected(val) {
 }
 
 function warehousesMarkers() {
-	const warehousesLocation = this.getWarehouses.reduce((list, w) => {
+	const warehousesLocation = this.getWarehousesFilter.reduce((list, w) => {
 		const { name, id, location } = w;
 		if (location) {
 			const { lat, lng, x, y } = location;
@@ -185,8 +186,8 @@ function disableMapButtonByWarehouse() {
 }
 
 function warehouseSelected(id) {
-	const index = this.getWarehouses.findIndex(war => war.id === id);
-	const w = this.getWarehouses[index];
+	const index = this.getWarehousesFilter.findIndex(war => war.id === id);
+	const w = this.getWarehousesFilter[index];
 	if (w.location) {
 		const { lat, lng, x, y } = w.location;
 		w.location = { lat: (lat || x), lng: (lng || y) };
@@ -338,7 +339,7 @@ export default {
 			'getFlagPickUp',
 			'getOrderInfo',
 			'getProductToBuy',
-			'getWarehouses',
+			'getWarehousesFilter',
 		]),
 		atHouse,
 		atStore,

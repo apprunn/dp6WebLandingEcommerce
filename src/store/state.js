@@ -108,6 +108,9 @@ export default {
 	warehouses: [
 		{ id: 0, name: 'Seleccione una tienda' },
 	],
+	warehousesFilter: [
+		{ id: 0, name: 'Seleccione una tienda' },
+	],
 	filters: null,
 	windowLoaded: false,
 };
