@@ -63,7 +63,16 @@ const asyncActions = {
 	},
 	UPDATE_ORDER: async (store, { context, id, body }) => {
 		const url = `orders/${id}`;
-		const { data: order } = await context.$httpSales.patch(url, body);
+		const { data: order } = await context.$httpSales.patch(url, body)
+			.catch((error) => {
+				if (error.status === 400) {
+					if (error.data.message === 'NO_UPDATE_BECAUSE_ORDER_FINALIZED') {
+						store.commit('EMPTY_CAR');
+						store.dispatch('SET_DEFAULT_VALUES');
+						context.goTo('page-home');
+					}
+				}
+			});
 		await asyncActions.GET_ORDER_INFO(store, { context, id: order.id });
 	},
 	CANCEL_ORDER: async (store, { context, id }) => {
