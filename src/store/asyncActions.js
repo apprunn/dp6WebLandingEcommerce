@@ -16,6 +16,7 @@ function updateProducts(products, priceListId) {
 const asyncActions = {
 	LOAD_PRODUCTS: async ({ commit, state, getters }, { context, params = {} }) => {
 		const request = [];
+		commit('LOADING_PRODUCTS', true);
 		const completeParams = Object.assign({}, getters.productParams, params);
 		if (state.token) {
 			request.push(
@@ -30,6 +31,7 @@ const asyncActions = {
 		const commercePriceListId = getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
 		const newProducts = [].concat(state.products.list, setUpDateInProducts);
+		commit('LOADING_PRODUCTS', false);
 		commit('SET_PRODUCTS', newProducts);
 		commit('LAST_PAGE', headers);
 	},

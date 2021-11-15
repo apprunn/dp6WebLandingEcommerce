@@ -10,9 +10,19 @@
 	>
 		<div :class="{ opacity: noStock}">
 			<div v-if="noStock" class="without-stock-tag">
-				Agotado
+				<span class="without-stock-text">Agotado</span>
 			</div>
-			<div class="pd-10">
+			<div class="position-relative">
+				<div class="product-favorite-mobile">
+					<div class="heart-content"
+						:style="`background-color:${product.flagFavorite ?  globalColors.primary : '#fff'}`"
+						:class="[
+							{ 'favorite': product.flagFavorite },
+						]"
+					>
+						<heart-component @click="productFavo" :value="product.flagFavorite"/>
+					</div>
+				</div>
 				<section
 					:class="[
 						'product-header',
@@ -22,7 +32,7 @@
 				>
 					<div
 						v-if="!!discountPercentage"
-						:style="`background-color:${indeterminate ? 'transparent' : globalColors.primary}`"
+						:style="`background-color:${indeterminate ? 'transparent' : '#f42b17'}`"
 						:class="[
 							'product-discount',
 							{ 'loading loading-dark': indeterminate },
@@ -31,11 +41,18 @@
 						<span v-if="!indeterminate">- {{discountPercentage}}%</span>
 					</div>
 					<div class="product-favorite">
-						<heart-component @click="productFavo" :value="product.flagFavorite"/>
+						<div class="heart-content"
+							:style="`background-color:${product.flagFavorite ?  globalColors.primary : '#fff'}`"
+							:class="[
+								{ 'favorite': product.flagFavorite },
+							]"
+						>
+							<heart-component @click="productFavo" :value="product.flagFavorite"/>
+						</div>
 					</div>
 				</section>
 				<section class="product-content" :class="small ? 'small' : null">
-					<div
+					<div class="product-content-img"
 						:class="[
 							{ 'loading img-space': indeterminate },
 						]"
@@ -55,12 +72,12 @@
 								indeterminate ? 'loading text-field' : 'product-name'
 							]"
 						>{{product.name}}</p>
-						<span
+						<!--span
 							v-if="product.description"
 							:class="[
 								indeterminate ? 'loading text-field' : 'product-description'
 							]"
-						>{{product.description | cuttingWord(53)}}</span>
+						>{{product.description | cuttingWord(53)}}</!--span-->
 						<small
 							v-if="product.warehouseProduct && product.warehouseProduct.brand"
 							class="product-brand">{{product.warehouseProduct.brand.name}}</small>
@@ -86,14 +103,27 @@
 				</section>
 			</div>
 		</div>
+		<div class="btn-add-cart">
+			<addcar-component :class="{ outstock: noStock}" @click="addToCar()" />
+		</div>
 	</div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
 import heartComponent from '@/components/shared/icons/heart-component';
+import addcarComponent from '@/components/shared/icons/addcar-component';
 import { getDeeper } from '@/shared/lib';
 import TypeProduct from '@/shared/enums/typeProduct';
 import helper from '@/shared/helper';
+
+function addToCar() {
+	if (!this.noStock) {
+		this.$store.dispatch('addProductToBuyCar', this.product);
+		this.showNotification('Producto agregado al carrito', 'success', null, false, 3000);
+	} else {
+		this.showGenericError('Producto sin stock', 80000);
+	}
+}
 
 function productFavo() {
 	if (this.token) {
@@ -171,6 +201,7 @@ export default {
 	name: 'product-card',
 	components: {
 		heartComponent,
+		addcarComponent,
 	},
 	computed: {
 		...mapGetters([
@@ -191,6 +222,7 @@ export default {
 		goToProduct,
 		onCard,
 		productFavo,
+		addToCar,
 	},
 	props: {
 		small: {
@@ -206,67 +238,160 @@ export default {
 </script>
 <style lang="scss" scoped>
 	.product-container {
-		background-color: color(white);
-		border: 1px solid color(border);
-		box-shadow: 0 2px 2px 0 rgba(31, 26, 26, 0.07);
+		background-color: color(white);	
+		border-bottom: 1px solid color(border);	
 		cursor: pointer;
 		font-family: font(medium);
 		height: auto;
 		transform: perspective(0px) rotateY(deg) rotateX(0deg) scale3d(0, 0, 0);
   		transition: all 120ms ease;
-	
-		@media (min-width: 500px) {
-			border: 3px solid color(border);
+		&:hover {
+			border: 3px solid color(blueLight);
+		}
+
+		@media (min-width: 600px) {			
+			box-shadow: 0 2px 2px 0 rgba(31, 26, 26, 0.07);
+			border: 1px solid color(border);
 			border-radius: 5px;
 			height: 328px;
 			margin: 3px auto;
-			max-width: 202px;
+			max-width: 250px;
+			width: 100%;
 		}
 
 		&.small {
 			min-height: 319px;
 			max-width: 179px;
 		}
+		.btn-add-cart {
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			bottom: 4%;
+			right: 2%;
+			background-color: color(white);
+			border-radius: 100%;
+			color: color(white);
+			height: 30px;
+			margin: 0 auto;
+			width: 30px;
+			padding: 6px;
+			box-shadow: 0 2px 2px 0 rgba(12, 12, 12, 0.151);
+		}
+
+		.btn-add-cart:hover {
+			height: 33px;
+			width: 33px;
+			padding: 7px;
+			background-color: rgb(248, 248, 248);
+		}
 	}
 
 	.product-header {
 		align-items: center;
 		display: flex;
-		height: 3rem;
+		height: 2rem;
 		justify-content: space-between;
+		position: absolute;
+		left: 0;
+		bottom: 10px;
+		width: 100%;
+		padding: 0 6px;
 		&.noDiscount {
 			justify-content: flex-end;
 		}
+
+		@media (min-width: 600px) {
+			bottom: auto;
+			top: 156px;
+		}
 	}
+
+	.product-favorite, .product-favorite-mobile {
+		.heart-content{
+			padding: 5px;
+			border-radius: 100%;
+			box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.16);
+			&.favorite{
+				/deep/ .heart-btn{
+				 	svg {
+						g {
+							stroke: #fff;
+    						stroke-width: 3px;
+						}
+				 	}
+				}
+			}
+			/deep/ .heart-btn{
+				 svg{
+					height: 15px;
+					width: 15px;
+					g {
+						stroke: color(blueLight);
+						stroke-width: 3px;
+					}
+				}
+			}
+			
+		}
+	}
+	.product-favorite {
+		display: none;
+		@media (min-width: 600px) {
+			display: block;
+		}
+	}
+
+	.product-favorite-mobile {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		@media (min-width: 600px) {
+			display: none;
+		}
+	}
+
 
 	.product-discount {
 		border-radius: 5px;
 		color: color(white);
 		font-family: font(medium);
-		font-size: size(large);
-		padding: 8px 15px;
+		font-size: size(small);
+		padding: 2px 8px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.product-content {
 		align-items: center;
 		display: flex;
 		justify-content: center;
-		margin: 0 5px;
-		padding: 0 15px;
+		margin: 0 0;
+		padding: 1em 0;
 		text-align: center;
 
+		.product-content-img {
+			height: 190px;
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 		div {
 			margin: 0 10px;
 		}
 
 		@media (max-width: 500px) {
 			&.small {
-				flex-direction: column;
+				//flex-direction: column;
 			}
 		}
 
-		@media (min-width: 426px) {
+		@media (min-width: 600px) {
 			flex-direction: column;
+			padding:  0;
 		}
 
 		@media (max-width: 975px) {
@@ -280,21 +405,23 @@ export default {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
+		padding: 1em 0 0;
 	}
 
 	.product-img {
-		height: 130px;
-		object-fit: contain;
-		width: 125px;
+		width: auto;
+    	height: auto;
+		max-height: 190px;
+		max-width: 100%;
 	}
 
 	.product-name,
 	.product-description {
 		color: color(dark);
 		font-size: size(small);
-		font-family: font(bold);
+		font-family: font(regular);
 		max-height: 35px;
-		margin: 0 auto;
+		margin: 0 auto 8px;
 		max-width: 150px;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -308,6 +435,8 @@ export default {
 	.product-brand {
 		color: color(base);
 		font-size: size(xsmall);
+		letter-spacing: 2px;
+		margin: 0 auto 4px;
 	}
 
 	.product-price-discount {
@@ -338,23 +467,51 @@ export default {
 		position: relative;
 
 		.without-stock-tag {
-			background-color: color(dark);
-			bottom: 0;
-			color: color(white);
+			background-color: hsla(0, 0%, 0%, 0);
+			color: white;
+			display: flex;
+			font-size: 18px;
 			font-family: font(bold);
-			font-size: size(xlarge);
-			height: 48px;
-			left: 0;
-			line-height: 48px;
-			margin: auto;
+			align-items: center;
+			justify-content: center;
 			position: absolute;
-			right: 0;
-			text-align: center;
-			text-transform: uppercase;
+			left: 0;
 			top: 0;
-			width: 100%;
+			width: 0;
+			height: 0;
+			border-right: 60px solid transparent;
+			border-bottom: 60px solid transparent;
+			border-left: 60px solid #e41a13;
+			border-top: 60px solid #e41a13;
 			z-index: 2;
+			text-transform: uppercase;
+			@media screen and (min-width: 996px) {
+				font-size: 19px;
+			}
 		}
+	}
+	.without-stock-text {
+		position: absolute;
+		margin-top: 15px;
+		margin-right: 120px;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		color: white;
+		content: 'Agotado';
+		font-size: 18px;
+		font-family: font(bold);
+		text-transform: uppercase;
+		transform: rotate(-45deg);
+		@media screen and (min-width: 996px) {
+			font-size: 19px;
+			margin-top: 25px;
+			margin-right: 120px;
+		}
+	}
+
+	.position-relative {
+		position: relative;
 	}
 
 	.pd-10 {
@@ -376,5 +533,10 @@ export default {
 		height: 12px;
 		margin: 13px 0 0 !important;
 	}
+
+	.outstock {
+		opacity: 0.43;
+	}
+
 </style>
 

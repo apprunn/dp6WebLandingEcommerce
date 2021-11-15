@@ -243,6 +243,10 @@ function setWayPaymentDetailCode({ commit }, wayPaymentDetailCode) {
 	commit('SET_WAYPAYMENT_DETAIL_CODE', wayPaymentDetailCode);
 }
 
+function UPDATE_LOADING_PRODUCT({ commit }, loading) {
+	commit('LOADING_PRODUCTS', loading);
+}
+
 const methods = {
 	addProductToBuyCar,
 	addService,
@@ -280,6 +284,7 @@ const methods = {
 	topLocationOfModal,
 	setAdditionalInformation,
 	setWayPaymentDetailCode,
+	UPDATE_LOADING_PRODUCT,
 };
 
 export default methods;

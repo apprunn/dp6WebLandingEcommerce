@@ -157,7 +157,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .xchange-btn {
-	
+
 	button {
 		width: 210px !important;
 	}

@@ -90,6 +90,7 @@ export default {
 			limit: 20,
 			page: 1,
 			search: null,
+			flagCommerce: true,
 		},
 		relateds: [],
 	},
@@ -110,4 +111,5 @@ export default {
 	],
 	filters: null,
 	windowLoaded: false,
+	loadingProducts: false,
 };

@@ -13,7 +13,10 @@
 			/>
 		</section>
 		<section v-else>
-			<h2 class="no-results" :style="`color: ${globalColors.primary}`">No se encontraron productos para su búsqueda</h2>
+			<div class = "loading-products">
+				<spinner-loading  :loading="loadingProducts" ></spinner-loading>
+			</div>
+			<h2 v-if="!loadingProducts" class="no-results" :style="`color: ${globalColors.primary}`">No se encontraron productos para su búsqueda</h2>
 		</section>
 		<div class="see-more-btn" v-if="products.length > 0">
 			<button
@@ -31,6 +34,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import productCard from '@/components/products/product-card';
+import SpinnerLoading from '@/components/shared/spinner/spinner-loading';
 
 function addMoreProduct() {
 	this.$store.dispatch('MORE_PRODUCTS');
@@ -52,6 +56,7 @@ export default {
 	name: 'page-products',
 	components: {
 		productCard,
+		SpinnerLoading,
 	},
 	computed: {
 		...mapGetters([
@@ -60,6 +65,7 @@ export default {
 			'getLastPage',
 			'getProducts',
 			'indeterminate',
+			'loadingProducts',
 		]),
 		products,
 	},
@@ -70,14 +76,30 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+	.loading-products {
+		margin-top: 7%;
+		margin-bottom: 7%;
+		text-align: center;
+		width: 100%;
+	}
+
 	.product-section {
 		align-items: center;
 		display: grid;
 		flex-wrap: wrap;
-		grid-gap: 2rem;
-		grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
-		margin: 42px auto;
+		grid-gap: 0;
+		
+		margin: 20px 1em;
 		max-width: 1280px;
+
+		@media (min-width: 600px) { 
+			margin: 42px 1em;
+			grid-gap: 1rem;
+			grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
+		}
+		@media (min-width: 1280px) { 			
+			margin: 42px auto;
+		}
 	}
 
 	.see-more-btn {

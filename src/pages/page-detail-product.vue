@@ -81,16 +81,40 @@ import productRelated from '@/components/products/product-related';
 import warehousesModal from '@/components/products/warehouses-modal';
 import productPublicity from '@/components/products/product-publicity';
 import appModal from '@/components/shared/modal/app-modal';
+import helper from '@/shared/helper';
 import { setNewProperty, map } from '@/shared/lib';
 
 async function created() {
 	this.$loading(true);
 	await this.loadProduct();
+	if (this.$route.query.shoper) {
+		// const tokenStringify = JSON.stringify(this.$route.query.token);
+		// localStorage.setItem(`${process.env.STORAGE_USER_KEY}::token`, tokenStringify);
+		// this.$store.dispatch('setToken', tokenStringify);
+		// const orderId = JSON.stringify(this.$route.query.orderExternalId);
+		// localStorage.setItem(`${process.env.STORAGE_USER_KEY}::orderExternal`, orderId);
+		this.addToCar();
+	}
+}
+
+function addToCar() {
+	if (!this.noStock) {
+		this.$store.dispatch('addProductToBuyCar', this.product);
+		this.showConfirmModal = true;
+		this.goTo('buy');
+	} else {
+		this.showGenericError('Producto sin stock', 80000);
+	}
+}
+
+function noStock() {
+	return helper.stockGreaterThanCero(this.product);
 }
 
 function mounted() {
-	this.showUnity = this.getCommerceData.company.settings ?
-		this.getCommerceData.company.settings.flagShowBaseUnit : false;
+	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
+	const company = this.getCommerceData.company ? ecommerceLocal.company : ecommerceLocal.company;
+	this.showUnity = company.settings ? company.settings.flagShowBaseUnit : false;
 }
 
 function isLoggedUser() {
@@ -405,6 +429,7 @@ export default {
 			topModal: state => state.topLocationModal,
 		}),
 		topLocation,
+		noStock,
 	},
 	data,
 	mounted,
@@ -413,6 +438,7 @@ export default {
 			$loading: 'SET_LOADING_FLAG',
 		}),
 		assignProduct,
+		addToCar,
 		checkValidQuantity,
 		clearFeatures,
 		clickQuantity,

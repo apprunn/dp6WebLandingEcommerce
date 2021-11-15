@@ -4,6 +4,7 @@
 			<h4>La transacción <span>{{transactionId}}</span> fue rechazada</h4>
 			<h5>Nro pedido: <span>{{getOrderInfo.id}}</span></h5>
 			<h5>fecha: <span>{{getOrderInfo.createdAt | formatDate}}</span></h5>
+			<h4>Razón: <span>{{ getOrderInfo.additionalInformation.paymentGateway.status }}</span> </h4>
 		</section>
 		<div
 			v-if="stepThree"
@@ -54,8 +55,8 @@
 	</div>
 </template>
 <script>
-import { getDeeper } from '@/shared/lib';
 import { mapGetters } from 'vuex';
+import { getDeeper } from '@/shared/lib';
 import { niubiz } from '@/shared/enums/gatewayCodes';
 import appButton from '@/components/shared/buttons/app-button';
 import productInCar from '@/components/products/product-in-car';
@@ -63,9 +64,10 @@ import summaryOrder from '@/components/order/summary-order';
 import summaryInPayment from '@/components/order/summary-in-payment';
 
 function created() {
-	this.showUnity = this.getCommerceData.company.settings ?
-		this.getCommerceData.company.settings.flagShowBaseUnit : false;
+	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
 	const localOrder = this.getLocalStorage('ecommerce-order');
+	const company = this.getCommerceData.company ? ecommerceLocal.company : ecommerceLocal.company;
+	this.showUnity = company.settings ? company.settings.flagShowBaseUnit : false;
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
 }
 

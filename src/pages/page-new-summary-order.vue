@@ -89,8 +89,8 @@
 								<h4 class="payment-link">{{isDeposit.description}}</h4>
 								<div v-if="true">
 									<swiper :options="swiperOption" ref="swp">
-										<swiper-slide 
-											v-for="bankAccount in isDeposit.bankAccounts" 
+										<swiper-slide
+											v-for="bankAccount in isDeposit.bankAccounts"
 											:key="bankAccount.id"
 										>
 											<div class="bankAccount-container">
@@ -131,7 +131,6 @@
 				:url-image="isYape.urlImage"
 			/>
 		</section>
-
 		<section
 			v-if="isNiubiz && isOnlinePayment"
 			class="card-data-niubiz"
@@ -139,8 +138,9 @@
 		>
 			<h4>Pago realizado con tarjeta: <span>{{niubizGateway.cardBrand}}</span>, nro: <span>{{niubizGateway.cardNumber}}</span></h4>
 			<h5>el día <span>{{niubizGateway.createdAt | formatDate}}</span></h5>
+			<h4>Código de Referencia: {{ order.id }}</h4>
 		</section>
-
+		<v-flex pl-5 text-xs-center mt-2 mb-2 :style="`color:${globalColors.secondary}`">* Recuerde que debe imprimir o tomar captura a su pedido</v-flex>
 		<section class="summary-btns">
 			<button :style="`background-color:${globalColors.primary}`" type="button" @click="seeOrder">Ver pedido</button>
 			<button
@@ -149,6 +149,11 @@
 				type="button"
 				@click="cancelOrder"
 			>Cancelar pedido</button>
+			<button
+				:style="`background-color:${globalColors.primary}`"
+				type="button"
+				@click="printOrder"
+			>Imprimir pedido</button>
 		</section>
 
 	</div>
@@ -309,6 +314,10 @@ function isYape() {
 	};
 }
 
+function printOrder() {
+	window.print();
+}
+
 function data() {
 	return {
 		swiperOption: {
@@ -368,6 +377,7 @@ export default {
 		]),
 		cancelOrder,
 		copyLink,
+		printOrder,
 		seeOrder,
 	},
 };
@@ -386,11 +396,11 @@ export default {
 		font-size: size(medium);
 		margin: 0 auto;
 		max-width: 900px;
-		
+
 		@media (min-width: 600px) {
 			grid-template-columns: 1fr 1fr;
 		}
-	
+
 		.title {
 			font-family: font(bold) !important;
 			font-size: size(medium) !important;
@@ -400,7 +410,7 @@ export default {
 			display: grid;
 			grid-auto-flow: row;
 			margin-bottom: 0;
-	
+
 			@media (min-width: 900px) {
 				grid-auto-flow: column;
 			}
@@ -436,10 +446,10 @@ export default {
 		@media (min-width: 768px) {
 			grid-template-columns: 1fr 1fr;
 		}
-	
+
 		.products-in-order {
 			border-bottom: 2px solid color(border);
-			
+
 			@media (min-width: 768px) {
 				border-bottom: none;
 				border-right: 2px solid color(border);
