@@ -115,5 +115,8 @@ const orderMutation = {
 	UPDATE_LOCATION(state, locationAddress) {
 		Vue.set(state.order, 'locationAddress', locationAddress);
 	},
+	UPDATE_COMENTS(state, comment) {
+		Vue.set(state.order, 'comments', comment);
+	},
 };
 export default orderMutation;

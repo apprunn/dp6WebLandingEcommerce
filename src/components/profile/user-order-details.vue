@@ -71,6 +71,14 @@
 								<h4 v-if="getCommerceData.phone">Teléfono: {{getCommerceData.phone}}</h4>
 							</div>
 						</div>
+						<section>
+							<span v-if="getValue('comments', getOrderInfo)" class="label">
+								Comentario: 
+								<span class="order-info-data">{{getValue('comments', getOrderInfo)}}
+							</span>
+							</span>
+							
+						</section>
 					</div>
 					<app-button
 						v-if="!flagAddVoucher && isDeposit"
