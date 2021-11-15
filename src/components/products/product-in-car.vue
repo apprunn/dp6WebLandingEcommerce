@@ -3,7 +3,7 @@
 		<trash-component class="action" @click="deleteProduct"/>
 		<section class="grid-areas">
 			<img
-				:src="product.imagePresentation || product.images[0].urlImage"
+				:src="urlImage"
 				alt="imagen del producto"
 				class="product-img image"
 			>
@@ -74,6 +74,19 @@ import trashComponent from '@/components/shared/icons/trash-component';
 import quantityButton from '@/components/shared/buttons/quantity-button';
 import { mapGetters } from 'vuex';
 
+function mounted() {
+	this.getUrlImage();
+}
+
+function getUrlImage() {
+	this.urlImage = '';
+	if (this.product.imagePresentation) {
+		this.urlImage = this.product.imagePresentation;
+	} else if (this.product.images.length > 0) {
+		this.urlImage = this.product.images[0].urlImage;
+	}
+}
+
 function showComments() {
 	this.show = !this.show;
 }
@@ -113,11 +126,13 @@ function data() {
 		comments: '',
 		show: false,
 		maxQuantity: false,
+		urlImage: '',
 	};
 }
 
 export default {
 	name: 'product-in-car',
+	mounted,
 	components: {
 		commentsComponent,
 		textArea,
@@ -136,6 +151,7 @@ export default {
 		clickQuantity,
 		deleteProduct,
 		showComments,
+		getUrlImage,
 	},
 	props: {
 		product: {

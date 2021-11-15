@@ -10,7 +10,7 @@
 	>
 		<div :class="{ opacity: noStock}">
 			<div v-if="noStock" class="without-stock-tag">
-				Agotado
+				<span class="without-stock-text">Agotado</span>
 			</div>
 			<div class="position-relative">
 				<div class="product-favorite-mobile">
@@ -103,14 +103,27 @@
 				</section>
 			</div>
 		</div>
+		<div class="btn-add-cart">
+			<addcar-component :class="{ outstock: noStock}" @click="addToCar()" />
+		</div>
 	</div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
 import heartComponent from '@/components/shared/icons/heart-component';
+import addcarComponent from '@/components/shared/icons/addcar-component';
 import { getDeeper } from '@/shared/lib';
 import TypeProduct from '@/shared/enums/typeProduct';
 import helper from '@/shared/helper';
+
+function addToCar() {
+	if (!this.noStock) {
+		this.$store.dispatch('addProductToBuyCar', this.product);
+		this.showNotification('Producto agregado al carrito', 'success', null, false, 3000);
+	} else {
+		this.showGenericError('Producto sin stock', 80000);
+	}
+}
 
 function productFavo() {
 	if (this.token) {
@@ -188,6 +201,7 @@ export default {
 	name: 'product-card',
 	components: {
 		heartComponent,
+		addcarComponent,
 	},
 	computed: {
 		...mapGetters([
@@ -208,6 +222,7 @@ export default {
 		goToProduct,
 		onCard,
 		productFavo,
+		addToCar,
 	},
 	props: {
 		small: {
@@ -247,6 +262,29 @@ export default {
 		&.small {
 			min-height: 319px;
 			max-width: 179px;
+		}
+		.btn-add-cart {
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			bottom: 4%;
+			right: 2%;
+			background-color: color(white);
+			border-radius: 100%;
+			color: color(white);
+			height: 30px;
+			margin: 0 auto;
+			width: 30px;
+			padding: 6px;
+			box-shadow: 0 2px 2px 0 rgba(12, 12, 12, 0.151);
+		}
+
+		.btn-add-cart:hover {
+			height: 33px;
+			width: 33px;
+			padding: 7px;
+			background-color: rgb(248, 248, 248);
 		}
 	}
 
@@ -429,22 +467,46 @@ export default {
 		position: relative;
 
 		.without-stock-tag {
-			background-color: color(dark);
-			bottom: 0;
-			color: color(white);
+			background-color: hsla(0, 0%, 0%, 0);
+			color: white;
+			display: flex;
+			font-size: 18px;
 			font-family: font(bold);
-			font-size: size(xlarge);
-			height: 48px;
-			left: 0;
-			line-height: 48px;
-			margin: auto;
+			align-items: center;
+			justify-content: center;
 			position: absolute;
-			right: 0;
-			text-align: center;
-			text-transform: uppercase;
+			left: 0;
 			top: 0;
-			width: 100%;
+			width: 0;
+			height: 0;
+			border-right: 60px solid transparent;
+			border-bottom: 60px solid transparent;
+			border-left: 60px solid #e41a13;
+			border-top: 60px solid #e41a13;
 			z-index: 2;
+			text-transform: uppercase;
+			@media screen and (min-width: 996px) {
+				font-size: 19px;
+			}
+		}
+	}
+	.without-stock-text {
+		position: absolute;
+		margin-top: 15px;
+		margin-right: 120px;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		color: white;
+		content: 'Agotado';
+		font-size: 18px;
+		font-family: font(bold);
+		text-transform: uppercase;
+		transform: rotate(-45deg);
+		@media screen and (min-width: 996px) {
+			font-size: 19px;
+			margin-top: 25px;
+			margin-right: 120px;
 		}
 	}
 
@@ -471,5 +533,10 @@ export default {
 		height: 12px;
 		margin: 13px 0 0 !important;
 	}
+
+	.outstock {
+		opacity: 0.43;
+	}
+
 </style>
 
