@@ -158,6 +158,7 @@ function buildOrderBody(flagFinish, getters) {
 		warehouseName: name,
 		warehouseAddress: address,
 		wayPaymentDetailCode: getters.getWayPaymentDetailCode,
+		comments: getters.getComments,
 	};
 	if (getters.getOrderId && getters.getOrderStatus) {
 		body.orderStateId = getters.getOrderStatus;

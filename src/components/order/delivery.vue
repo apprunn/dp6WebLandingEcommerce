@@ -57,6 +57,15 @@
 			/>
 			<new-address v-if="selectedDirection.id === 0"/>
 		</div>
+		<app-input
+			data-cy="ref"
+			placeholder="Escribe un comentario"
+			type="text"
+			:class="[selectedDirection.id === 0 ? 'mx-2 my-1 responsible-field' : 'mx-2 my-4 responsible-field']"
+			v-model="comments"
+			@input="setComments"
+		>
+		</app-input>
 
 		<section class="billing-section">
 			<billing/>
@@ -66,6 +75,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getDeeper, isEmpty } from '@/shared/lib';
+import appInput from '@/components/shared/inputs/app-input';
 import addressComponent from '@/components/order/address-component';
 import appButtonOrder from '@/components/shared/buttons/app-button-order';
 import billing from '@/components/order/billing';
@@ -90,6 +100,10 @@ function created() {
 			that.setOrderInfoByDefault();
 		}
 	});
+}
+
+function mounted() {
+	this.comments = this.getComments;
 }
 
 function lonleyWarehouse() {
@@ -299,6 +313,10 @@ function handlerOrderInfo() {
 	this.setOrderInfoByDefault();
 }
 
+function setComments() {
+	this.$store.commit('UPDATE_COMENTS', this.comments);
+}
+
 function data() {
 	return {
 		logo: {
@@ -315,6 +333,7 @@ function data() {
 			name: '',
 			location: {},
 		},
+		comments: '',
 	};
 }
 
@@ -328,6 +347,7 @@ export default {
 		locationSvg,
 		newAddress,
 		responsibleForm,
+		appInput,
 	},
 	computed: {
 		...mapGetters([
@@ -339,6 +359,7 @@ export default {
 			'getOrderInfo',
 			'getProductToBuy',
 			'getWarehouses',
+			'getComments',
 		]),
 		atHouse,
 		atStore,
@@ -353,6 +374,7 @@ export default {
 		warehousesZoom,
 	},
 	created,
+	mounted,
 	data,
 	methods: {
 		buildBody,
@@ -367,6 +389,7 @@ export default {
 		setDeliveryPlaceByDefault,
 		setOrderInfoByDefault,
 		warehouseSelected,
+		setComments,
 	},
 	watch: {
 		getOrderInfo: handlerOrderInfo,
@@ -404,7 +427,7 @@ export default {
 
 	.responsible-field {
 		flex: 1 1 47%;
-		height: 68px;
+		margin-top: 7px;
 	}
 
 	.billing-section {

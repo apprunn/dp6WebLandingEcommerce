@@ -82,8 +82,8 @@ function getUrlImage() {
 	this.urlImage = '';
 	if (this.product.imagePresentation) {
 		this.urlImage = this.product.imagePresentation;
-	} else if (this.product.images.length > 0) {
-		this.urlImage = this.product.images[0].urlImage;
+	} else if (this.product.images) {
+		this.urlImage = this.product.images.length > 0 ? this.product.images[0].urlImage : '';
 	}
 }
 

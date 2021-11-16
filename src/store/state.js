@@ -40,6 +40,7 @@ export default {
 		bill: null,
 		customerAddressId: 0,
 		customerAddress: null,
+		comments: null,
 		delivery: null,
 		details: null,
 		flagBill: false,
