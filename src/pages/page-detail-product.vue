@@ -112,8 +112,9 @@ function noStock() {
 }
 
 function mounted() {
-	this.showUnity = this.getCommerceData.company.settings ?
-		this.getCommerceData.company.settings.flagShowBaseUnit : false;
+	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
+	const company = this.getCommerceData.company ? ecommerceLocal.company : ecommerceLocal.company;
+	this.showUnity = company.settings ? company.settings.flagShowBaseUnit : false;
 }
 
 function isLoggedUser() {

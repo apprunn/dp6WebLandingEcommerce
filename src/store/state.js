@@ -111,4 +111,5 @@ export default {
 	],
 	filters: null,
 	windowLoaded: false,
+	loadingProducts: false,
 };

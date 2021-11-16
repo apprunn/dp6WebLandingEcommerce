@@ -51,7 +51,8 @@ function UPDATE_FLAG_ADD_VOUCHER(state, flag) {
 }
 
 function SET_CATEGORIES(state, categories) {
-	Vue.set(state, 'categories', categories);
+	localStorage.setItem('ecommerce::categories', JSON.stringify(categories));
+	Vue.set(state, 'categories', [...categories]);
 }
 
 function SET_ORDER_TOTAL(state, total) {
@@ -168,6 +169,10 @@ function SET_TOP_LOCATION_OF_MODAL(state, h) {
 	Vue.set(state, 'topLocationModal', h);
 }
 
+function LOADING_PRODUCTS(state, isLoading) {
+	Vue.set(state, 'loadingProducts', isLoading);
+}
+
 const methods = {
 	ADD_ONE_IN_SERVICE_COUNTER,
 	clearUser,
@@ -209,6 +214,7 @@ const methods = {
 	UPDATE_PRODUCT_PAGE,
 	UPDATE_PRODUCTS_SELECTED,
 	UPDATE_WINDOW_LOADED,
+	LOADING_PRODUCTS,
 };
 
 export default methods;
