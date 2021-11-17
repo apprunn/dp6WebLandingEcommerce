@@ -85,6 +85,7 @@ function getOrderData({ commit, dispatch }, order) {
 	commit('SET_CUSTOMER_ADDRESS', null);
 	commit('SET_ORDER_STATUS', order.orderStateId);
 	commit('SET_FLAG_STATUS_ORDER', order.flagStatusOrder);
+	commit('UPDATE_COMENTS', order.comments);
 }
 
 function setShippingCostFromOrder({ commit }, order) {
@@ -144,6 +145,7 @@ function SET_DEFAULT_VALUES({ commit, dispatch }) {
 	commit('SET_FLAG_STATUS_ORDER', null);
 	dispatch('setAdditionalInformation', null);
 	dispatch('setWayPaymentDetailCode', null);
+	commit('UPDATE_COMENTS', null);
 }
 
 function UPDATE_ORDER_FROM_LOCAL_STORAGE({ commit }, orderInfo) {
@@ -243,6 +245,10 @@ function setWayPaymentDetailCode({ commit }, wayPaymentDetailCode) {
 	commit('SET_WAYPAYMENT_DETAIL_CODE', wayPaymentDetailCode);
 }
 
+function UPDATE_LOADING_PRODUCT({ commit }, loading) {
+	commit('LOADING_PRODUCTS', loading);
+}
+
 const methods = {
 	addProductToBuyCar,
 	addService,
@@ -280,6 +286,7 @@ const methods = {
 	topLocationOfModal,
 	setAdditionalInformation,
 	setWayPaymentDetailCode,
+	UPDATE_LOADING_PRODUCT,
 };
 
 export default methods;

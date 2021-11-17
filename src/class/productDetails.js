@@ -84,7 +84,9 @@ class ProductDetails {
 		const imgsBySelectedUnitId = allProductsImages.filter(img => img.unitId === this.unitId);
 		if (isEmpty(imgsBySelectedUnitId)) {
 			const imgs = this.getImgsWithoutUnitId.call(this, allProductsImages);
-			this.setImagePresentation.call(this, imgs[0].urlImage);
+			if (imgs.length > 0) {
+				this.setImagePresentation.call(this, imgs[0].urlImage);
+			}
 			return imgs;
 		}
 		this.setImagePresentation.call(this, imgsBySelectedUnitId[0].urlImage);

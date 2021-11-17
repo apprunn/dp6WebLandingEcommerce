@@ -158,6 +158,10 @@ function isCreditCard(state) {
 	return !!state.commerce.wayPayment.find(w => w.code === creditCard.code);
 }
 
+function loadingProducts(state) {
+	return state.loadingProducts;
+}
+
 const methods = {
 	bannersCoupons,
 	bannersTypes,
@@ -200,6 +204,7 @@ const methods = {
 	valoratingProductId,
 	windowLoaded,
 	getCurrencyISO,
+	loadingProducts,
 };
 
 export default methods;

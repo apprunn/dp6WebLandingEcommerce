@@ -52,7 +52,7 @@
 							>{{ props.item.title }}</button>
 					</template>
 				</v-breadcrumbs>
-				 <section class="section-pagination-category">
+				<section class="section-pagination-category">
 						<p class="total-products" v-if="listProducts.length">{{listProducts.length}} productos</p>
 						<v-layout class="text-xs-center" v-show="totalPages" v-if="lastPage > 1">
 							<v-pagination
@@ -65,7 +65,9 @@
 						</v-layout>
 				</section>
 			</div>
-			<p v-if="loadingProducts" class="not-products">Cargando productos...</p>
+			<div class = "loading-products">
+				<spinner-loading  :loading="loadingProducts" ></spinner-loading>
+			</div>
 			<section 
 				class="section-product-card"
 				v-if="listProducts.length"
@@ -105,10 +107,16 @@ import { mapGetters, mapState } from 'vuex';
 import appBannerTop from '@/components/header/app-banner-top';
 import buttonImage from '@/components/shared/buttons/app-button-image';
 import menuCategory from '@/components/shared/category/menu-category';
+import SpinnerLoading from '@/components/shared/spinner/spinner-loading';
 import productCard from '@/components/products/product-card';
 import productsSection from '@/components/products/products-section';
 import { compose, setNewProperty } from '@/shared/lib';
 import helper from '@/shared/helper';
+
+async function created() {
+	const categoriesEcommerceLocal = this.getLocalStorage('ecommerce::categories');
+	this.categories = this.getCategories.length === 0 ? categoriesEcommerceLocal : this.getCategories;
+}
 
 function mounted() {
 	this.loadingProducts = true;
@@ -149,10 +157,11 @@ function updateProductCard(value) {
 }
 
 function selectCategory() {
+	const categoriesEcommerceLocal = this.getLocalStorage('ecommerce::categories');
 	this.breadcrumbs = [];
 	this.setAttribute();
 	this.loadProduct();
-	this.categories = this.getCategories;
+	this.categories = this.getCategories.length === 0 ? categoriesEcommerceLocal : this.getCategories;
 	this.currentSelect = this.getCurrentcategory(this.categories, this.id);
 	this.updateMetaTag(this.currentSelect);
 	if (this.breadcrumbs.length) {
@@ -269,6 +278,7 @@ export default {
 		menuCategory,
 		productCard,
 		productsSection,
+		SpinnerLoading,
 	},
 	computed: {
 		...mapGetters([
@@ -298,6 +308,7 @@ export default {
 		updateMetaTag,
 		updateProductCard,
 	},
+	created,
 	mounted,
 	data,
 	props: {
@@ -469,5 +480,11 @@ export default {
 
 .container-end {
 	justify-content: flex-end;
+}
+
+.loading-products {
+	margin: 50px;
+	text-align: center;
+	width: 70%;
 }
 </style>

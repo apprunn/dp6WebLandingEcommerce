@@ -16,6 +16,7 @@ function updateProducts(products, priceListId) {
 const asyncActions = {
 	LOAD_PRODUCTS: async ({ commit, state, getters }, { context, params = {} }) => {
 		const request = [];
+		commit('LOADING_PRODUCTS', true);
 		const completeParams = Object.assign({}, getters.productParams, params);
 		if (state.token) {
 			request.push(
@@ -30,6 +31,7 @@ const asyncActions = {
 		const commercePriceListId = getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
 		const newProducts = [].concat(state.products.list, setUpDateInProducts);
+		commit('LOADING_PRODUCTS', false);
 		commit('SET_PRODUCTS', newProducts);
 		commit('LAST_PAGE', headers);
 	},
@@ -63,7 +65,16 @@ const asyncActions = {
 	},
 	UPDATE_ORDER: async (store, { context, id, body }) => {
 		const url = `orders/${id}`;
-		const { data: order } = await context.$httpSales.patch(url, body);
+		const { data: order } = await context.$httpSales.patch(url, body)
+			.catch((error) => {
+				if (error.status === 400) {
+					if (error.data.message === 'NO_UPDATE_BECAUSE_ORDER_FINALIZED') {
+						store.commit('EMPTY_CAR');
+						store.dispatch('SET_DEFAULT_VALUES');
+						context.goTo('page-home');
+					}
+				}
+			});
 		await asyncActions.GET_ORDER_INFO(store, { context, id: order.id });
 	},
 	CANCEL_ORDER: async (store, { context, id }) => {

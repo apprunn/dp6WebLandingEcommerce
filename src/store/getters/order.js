@@ -166,6 +166,9 @@ const getters = {
 	getLocationAddress(state) {
 		return state.order.locationAddress;
 	},
+	getComments(state) {
+		return state.order.comments;
+	},
 };
 
 export default getters;
