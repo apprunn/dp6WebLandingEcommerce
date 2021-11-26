@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<nav v-if="getTotalItems > 0" :style="activeStyle" class="nav">
+		<nav v-if="getTotalItems > 0 && !indeterminate" :style="activeStyle"  class="nav">
 			<div :style="activeStyle" class="nav-content-cart">
-				<div class="info-card">
+				<div @click="goShopping" class="info-card">
 					<button type="button">
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="32" viewBox="0 0 122.9 107.5" style="enable-background:new 0 0 122.9 107.5" xml:space="preserve">
 							<g fill="#ffffff" fill-rule="nonzero">
@@ -31,6 +31,10 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getDeeper } from '@/shared/lib';
+
+function goShopping() {
+	this.goTo('buy');
+}
 
 function addCarEvent($event) {
 	$event.stopPropagation();
@@ -78,6 +82,7 @@ export default {
 	methods: {
 		addCarEvent,
 		removeCarEvent,
+		goShopping,
 	},
 	props: {
 		iscar: {

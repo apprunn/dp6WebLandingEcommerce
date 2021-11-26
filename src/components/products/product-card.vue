@@ -104,7 +104,7 @@
 				</section>
 			</div>
 		</div>
-		<div class="bottom-position">
+		<div v-if="!indeterminate" class="bottom-position">
 			<addcar-component active @add-car="addToCar" @remove-car="removeProductFromCar" :class="{ outstock: noStock}" />
 		</div>
 	</div>
