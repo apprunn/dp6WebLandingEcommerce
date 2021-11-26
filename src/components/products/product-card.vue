@@ -90,7 +90,8 @@
 						>
 							{{getCurrencySymbol}} {{ product.priceDiscount | currencyFormat }}
 						</h3>
-						<small
+						<!-- 
+							<small
 							v-if="product.price"
 							:class="[
 								indeterminate ? 'loading text-field' : product.priceDiscount ? 'product-price' : 'product-price-discount',
@@ -99,7 +100,16 @@
 						>
 							{{getCurrencySymbol}} {{ product.price | currencyFormat }}
 						</small>
-						
+						-->
+						<small
+							v-if="WholeSalePrice.price"
+							:class="[
+								indeterminate ? 'loading text-field' : product.priceDiscount ? 'product-price-whole' : 'product-price-whole',
+							]"
+							:style="`color: ${indeterminate ? 'transparent' : globalColors.primary};`"
+						>
+						x{{WholeSalePrice.from}} {{getCurrencySymbol}} {{WholeSalePrice.price | currencyFormat }}
+						</small>
 					</div>
 				</section>
 			</div>
@@ -117,10 +127,15 @@ import { getDeeper } from '@/shared/lib';
 import TypeProduct from '@/shared/enums/typeProduct';
 import helper from '@/shared/helper';
 
+function created() {
+	this.WholeSalePrice = this.getWholeSalePrice();
+}
 
 function addToCar() {
 	if (!this.noStock) {
-		this.$store.dispatch('addProductToBuyCar', this.product);
+		const productSelected = this.product;
+		productSelected.unitSelected = this.product.unitId;
+		this.$store.dispatch('addProductToBuyCar', productSelected);
 	}
 }
 
@@ -190,6 +205,19 @@ function isService() {
 	return serviceCode === TypeProduct.service;
 }
 
+function getWholeSalePrice() {
+	const priceId = this.getCommerceData.settings.salPriceListId;
+	const priceList = this.product.priceList || {};
+	const { ranges } = priceList[priceId] || {};
+	const prices = ranges.reduce((acc, range) => {
+		if (range.from > 0 && range.to > 0 && range.price > 0) {
+			acc.push(range);
+		}
+		return acc;
+	}, []);
+	return prices.length > 0 ? prices[0] : {};
+}
+
 function data() {
 	return {
 		x: 0,
@@ -197,8 +225,7 @@ function data() {
 		elWidth: 0,
 		elHeight: 0,
 		mouseOnCard: false,
-		modeflex: true,
-		modeflexButtons: false,
+		WholeSalePrice: null,
 	};
 }
 
@@ -210,6 +237,7 @@ export default {
 	},
 	computed: {
 		...mapGetters([
+			'getCommerceData',
 			'getCurrencySymbol',
 			'getProductsParams',
 			'indeterminate',
@@ -229,7 +257,9 @@ export default {
 		productFavo,
 		addToCar,
 		removeProductFromCar,
+		getWholeSalePrice,
 	},
+	created,
 	props: {
 		small: {
 			type: Boolean,
@@ -445,11 +475,6 @@ export default {
 		margin: 0 auto 4px;
 	}
 
-	.product-price-discount {
-		font-family: font(bold);
-		font-size: size(xlarge);
-	}
-
 	.product-price {
 		font-size: size(medium);
 		color: color(base) !important;
@@ -457,6 +482,10 @@ export default {
 
 	.product-price {
 		text-decoration: line-through;
+	}
+
+	.product-price-whole {
+		font-size: size(small);
 	}
 
 	.product-rating {
@@ -473,7 +502,7 @@ export default {
 		position: relative;
 
 		.without-stock-tag {
-			background-color: hsla(0, 0%, 0%, 0);
+			background-color: #acacac;
 			color: white;
 			display: flex;
 			font-size: 18px;
@@ -482,24 +511,27 @@ export default {
 			justify-content: center;
 			position: absolute;
 			left: 0;
-			top: 0;
-			width: 0;
-			height: 0;
-			border-right: 60px solid transparent;
-			border-bottom: 60px solid transparent;
-			border-left: 60px solid #e41a13;
-			border-top: 60px solid #e41a13;
+			top: 45%;
+			width: 50%;
+			height: 35px;
 			z-index: 2;
 			text-transform: uppercase;
-			@media screen and (min-width: 996px) {
+			@media screen and (min-width: 600px) {
 				font-size: 19px;
+				background-color: #acacac;
+				left: 10%;
+				top: 20%;
+				width: 80%;
+				height: 35px;
+				z-index: 2;
 			}
 		}
 	}
 	.without-stock-text {
 		position: absolute;
-		margin-top: 15px;
-		margin-right: 120px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 100%;
 		height: 100%;
 		z-index: 1;
@@ -508,11 +540,9 @@ export default {
 		font-size: 18px;
 		font-family: font(bold);
 		text-transform: uppercase;
-		transform: rotate(-45deg);
-		@media screen and (min-width: 996px) {
-			font-size: 19px;
-			margin-top: 25px;
-			margin-right: 120px;
+		@media screen and (min-width: 600px) {
+			font-size: 20px;
+			margin-top: 10px;
 		}
 	}
 

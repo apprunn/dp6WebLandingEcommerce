@@ -103,6 +103,7 @@ class ProductDetails {
 		}
 		return defaultImage;
 	}
+
 	getProductDetails() {
 		return { ...this.selectedProduct };
 	}
@@ -221,6 +222,19 @@ class ProductDetails {
 			this.selectedProduct.price = null;
 		}
 	}
+
+	getWholeSalePrice() {
+		const priceList = this.selectedProduct.priceList || {};
+		const { ranges } = priceList[this.priceListId] || {};
+		const prices = ranges.reduce((acc, range) => {
+			if (range.from > 0 && range.to > 0 && range.price > 0) {
+				acc.push(range);
+			}
+			return acc;
+		}, []);
+		return prices;
+	}
+
 	updateProductSelected(prop, val) {
 		this.selectedProduct[prop] = val;
 		this.updateProductPrices.call(this);

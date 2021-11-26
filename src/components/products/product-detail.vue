@@ -10,6 +10,9 @@
 		</div>
 		<div class="container-detail-information">
 			<div class="container-detail-name">
+				<div v-if="data.category" class="product-category">{{data.category.name}} 
+					<span> . </span>
+					{{data.code}}</div>
 				<p
 					data-cy="product-name"
 					:class="[isLoading ? 'loading' : 'product-detail-name']"
@@ -28,7 +31,7 @@
 				<span
 					:class="[isLoading ? 'loading' : 'product-detail-code']"
 				>#{{ data.code }}</span>
-				<div
+				<div 
 					:class="[
 						isLoading ? 'loading rating-loading' : 'container-rating d-center',
 					]"
@@ -59,10 +62,21 @@
 					{{ getCurrencySymbol }} {{ data.priceDiscount | currencyFormat }}
 				</span>
 			</div>
+			<div class="d-center">
+				<small v-if="wholeSalePrice.length > 0"
+				:style="`color: ${isLoading ? 'transparent' : globalColors.primary};`"
+				:class="[
+					isLoading ? 'loading' : 'text-price-whole',
+				]"
+			>
+				x {{wholeSalePrice[0].price}}  {{ getCurrencySymbol }} {{ wholeSalePrice[0].price | currencyFormat }}
+				</small>
+			</div>
+			
 			<span
 				v-if="data.price"
 				:class="[
-					isLoading ? 'loading' : data.priceDiscount >= 0 ? 'text-price' : 'text-price-dis',
+					isLoading ? 'loading' : data.priceDiscount >= 0 ? 'text-price text-price-dis-mobile' : 'text-price-dis',
 				]"
 				:style="`color: ${globalColors.primary}`"
 			>
@@ -83,7 +97,8 @@
 			:features="features"
 			@selected="selecFeature"
 			@clear="$emit('clear')"/>
-		<product-buy
+		<!---- -->
+		<product-buy class="mobile"
 			:disabled-order="disabledOrder"
 			:open-warehouse="openWarehouse"
 			:number="data.quantity"
@@ -92,6 +107,15 @@
 			@add-to-car="addToCar"
 			@open-dialog="$emit('open-dialog')"
 		/>
+		<cart-bottom 
+			:disabled-order="disabledOrder"
+			:open-warehouse="openWarehouse"
+			:number="data.quantity"
+			:product="data"
+			@click="clickQuantity"
+			@add-to-car="addToCar"
+			@open-dialog="$emit('open-dialog')"
+			:iscar="true" />
 	</div>
 </template>
 <script>
@@ -102,6 +126,7 @@ import productChildrens from '@/components/products/product-childrens';
 import productBuy from '@/components/products/product-buy';
 import ProductConversions from '@/components/products/product-conversions';
 import TypeProduct from '@/shared/enums/typeProduct';
+import cartBottom from '@/components/footer/cart-bottom';
 import helper from '@/shared/helper';
 
 function stopClick() {
@@ -149,6 +174,7 @@ function addToCar() {
 	}
 }
 
+
 function getBrandName(data) {
 	return getDeeper('warehouseProduct.brand.name')(data);
 }
@@ -171,6 +197,7 @@ export default {
 		productChildrens,
 		ProductConversions,
 		productBuy,
+		cartBottom,
 	},
 	computed: {
 		...mapGetters([
@@ -212,16 +239,76 @@ export default {
 			default: false,
 		},
 		openWarehouse: false,
+		wholeSalePrice: {
+			default: () => [],
+			type: Array,
+		},
 	},
 };
 </script>
 <style lang="scss" scoped>
+
+	.mobile {
+		@media (max-width: 600px) {
+			display: none;
+		}
+		
+	}
 	.product-detail-name {
 		color: color(black);
 		font-family: font(demi);
 		font-size: size(xlarge);
-		margin: 20px 0 5px 0;
+		margin: 10px 0 5px 0;
 		text-transform: uppercase;
+		@media (max-width: 600px) {
+			width:537px;
+		}
+		@media (max-width: 550px) {
+			width:417px;
+		}
+		@media  (max-width: 490px) {
+			width:437px;
+		}
+		@media  (max-width: 450px) {
+			width:422px;
+		}
+		@media  (max-width: 425px) {
+			width:390px;
+		}
+		@media  (max-width: 410px) {
+			width:370px;
+		}
+		@media  (max-width: 380px) {
+			width:320px;
+		}
+		@media  (max-width: 310px) {
+			width:270px;
+		}
+		@media  (max-width: 270px) {
+			width:250px;
+		}
+		@media  (max-width: 250px) {
+			width:auto;
+		}
+		
+		
+	}
+	.product-category {
+		text-transform: uppercase;
+		display: flex;
+		align-items: center;
+		color: #acaaaa;
+		font-family: font(demi);
+		font-size: 12px;
+		margin-top: 10px;
+		span { 
+			width: 12px;
+			height: 12px;
+			margin-bottom: 6px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 	}
 
 	.product-detail-description {
@@ -250,6 +337,9 @@ export default {
 			align-items: flex-end;
 			flex-direction: column;
 		}
+		@media (max-width: 600px) {
+			display: none;
+		}
 	}
 
 	.text-rating {
@@ -261,6 +351,17 @@ export default {
 	.text-price-dis {
 		font-family: font(bold);
 		font-size: 26px;
+	}
+
+	.text-price-dis-mobile {
+		@media (max-width: 600px) {
+			display: none;
+		}
+	}
+
+	.text-price-whole{
+		margin-top: -8px;
+		font-size: size(small);
 	}
 
 	.content-discount {
@@ -305,12 +406,19 @@ export default {
 		@media screen and (max-width: 996px) {
 			margin-top: 39px;
 		}
+		@media (max-width: 600px) {
+			margin-top: 0px;
+		}
 	}
 
 	.container-like {
 		margin-bottom: 5px;
 		@media screen and (max-width: 996px) {
 			margin: auto;
+		}
+		
+		@media (max-width: 600px) {
+			display: none;
 		}
 	}
 
@@ -322,8 +430,12 @@ export default {
 	}
 
 	.container-detail-name {
+		width: 100%;
 		@media screen and (max-width: 996px) {
 			flex: 1 1 60%;
+		}
+		@media (max-width: 600px) {
+			flex: auto;
 		}
 	}
 

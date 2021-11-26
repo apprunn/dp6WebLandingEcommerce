@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<nav v-if="getTotalItems > 0 && !indeterminate" :style="activeStyle"  class="nav">
+		<nav v-if="(getTotalItems > 0 && !indeterminate) || iscar" :style="activeStyle"  class="nav">
 			<div :style="activeStyle" class="nav-content-cart">
 				<div @click="goShopping" class="info-card">
 					<button type="button">
@@ -26,6 +26,16 @@
 				</div>
 			</div>
 		</nav>
+		<button v-if="iscar" @click="$emit('add-to-car')" :style="colorBackGroundStyle" class="acction">
+			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 256 256" xml:space="preserve">
+				<g transform="translate(128 128) scale(0.72 0.72)" fill="#ffffff" style="">
+					<g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: ffffff; fill-rule: nonzero; opacity: 1;" transform="translate(-175.05 -175.05000000000004) scale(3.89 3.89)" >
+						<path d="M 45 90 c -3.866 0 -7 -3.134 -7 -7 V 7 c 0 -3.866 3.134 -7 7 -7 s 7 3.134 7 7 v 76 C 52 86.866 48.866 90 45 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: #ffffff; fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+						<path d="M 83 52 H 7 c -3.866 0 -7 -3.134 -7 -7 s 3.134 -7 7 -7 h 76 c 3.866 0 7 3.134 7 7 S 86.866 52 83 52 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: #ffffff; fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round" />
+					</g>
+				</g>
+			</svg>
+		</button>
 	</div>
 </template>
 <script>
@@ -108,9 +118,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	.acction{
+		display:none;
+		@media (max-width: 600px) {	
+			position: fixed;
+			bottom: 80px;
+			right: 10px;
+			width: 40px;
+			height: 40px;
+			color: color(white) ;
+			box-shadow: rgba(0, 0, 0, 0.35) 1px 3px 8px;
+			border-radius: 100%;
+			background-color: color(white);
+			display: flex;
+			overflow-x: auto;
+			z-index: 10000;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			
+
+		}
+	}
     .nav {
         display:none;
-		@media (max-width: 600px) {		
+		@media (max-width: 600px) {	
 			position: fixed;
 			bottom: 0;
 			width: 100%;
@@ -118,13 +150,14 @@ export default {
 			background: color(primary) 0% 0% no-repeat padding-box;
 			box-shadow: 0px -1px 6px #00000033;
 			border-radius: 40px 40px 0px 0px;
-			background-color: color(primary);
+			background-color: color(white);
 			display: flex;
 			overflow-x: auto;
 			z-index: 9999;
 		}
     }
 	.nav-content-cart {
+		display:none;	
 		background-color: color(primary);
 		display: flex;
 		flex-direction: row;
@@ -168,8 +201,8 @@ export default {
 		align-items: center;
 		padding:10px;
 		background-color: #ffffff;
-		width: 50px;
-		height: 35px;
+		width: 45px;
+		height: 32px;
 		margin-left: 10px;
 		margin-right: 10px;
 	}
@@ -180,7 +213,7 @@ export default {
 		
 	}
 	.total-items {
-		font-size: 14px;
+		font-size: 10px;
 		font-weight: normal;
 		color: color(black);
 	}
@@ -196,8 +229,8 @@ export default {
 		font-size: 14px;
 		font-weight: normal;
 		margin-left: 10px;
-		width: 25px;
-		height: 25px;
+		width: 21px;
+		height: 21px;
 		background-color: #ffffff;
 		color: color(black);
 		justify-content: center;
