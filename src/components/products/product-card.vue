@@ -51,7 +51,7 @@
 						</div>
 					</div>
 				</section>
-				<section class="product-content" :class="small ? 'small' : null">
+				<section class="product-content" :class="[small ? 'small' : null]" >
 					<div class="product-content-img"
 						:class="[
 							{ 'loading img-space': indeterminate },
@@ -99,12 +99,13 @@
 						>
 							{{getCurrencySymbol}} {{ product.price | currencyFormat }}
 						</small>
+						
 					</div>
 				</section>
 			</div>
 		</div>
-		<div class="btn-add-cart">
-			<addcar-component :class="{ outstock: noStock}" @click="addToCar()" />
+		<div class="bottom-position">
+			<addcar-component active @add-car="addToCar" @remove-car="removeProductFromCar" :class="{ outstock: noStock}" />
 		</div>
 	</div>
 </template>
@@ -116,13 +117,15 @@ import { getDeeper } from '@/shared/lib';
 import TypeProduct from '@/shared/enums/typeProduct';
 import helper from '@/shared/helper';
 
+
 function addToCar() {
 	if (!this.noStock) {
 		this.$store.dispatch('addProductToBuyCar', this.product);
-		this.showNotification('Producto agregado al carrito', 'success', null, false, 3000);
-	} else {
-		this.showGenericError('Producto sin stock', 80000);
 	}
+}
+
+function removeProductFromCar() {
+	this.$store.dispatch('removeProductToBuyCar', this.product);
 }
 
 function productFavo() {
@@ -194,6 +197,8 @@ function data() {
 		elWidth: 0,
 		elHeight: 0,
 		mouseOnCard: false,
+		modeflex: true,
+		modeflexButtons: false,
 	};
 }
 
@@ -223,6 +228,7 @@ export default {
 		onCard,
 		productFavo,
 		addToCar,
+		removeProductFromCar,
 	},
 	props: {
 		small: {
@@ -253,41 +259,39 @@ export default {
 			box-shadow: 0 2px 2px 0 rgba(31, 26, 26, 0.07);
 			border: 1px solid color(border);
 			border-radius: 5px;
-			height: 328px;
+			height: 360px;
 			margin: 3px auto;
 			max-width: 250px;
 			width: 100%;
+			
 		}
 
 		&.small {
 			min-height: 319px;
 			max-width: 179px;
 		}
-		.btn-add-cart {
+		
+		
+	}
+	.bottom-position {
+		width: 50%;
+		position: absolute;
+		bottom: 3px;
+		right: 0;
+		@media (min-width: 600px) {
+			width: 100%;
 			position: absolute;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			bottom: 4%;
-			right: 2%;
-			background-color: color(white);
-			border-radius: 100%;
-			color: color(white);
-			height: 30px;
-			margin: 0 auto;
-			width: 30px;
-			padding: 6px;
-			box-shadow: 0 2px 2px 0 rgba(12, 12, 12, 0.151);
-		}
-
-		.btn-add-cart:hover {
-			height: 33px;
-			width: 33px;
-			padding: 7px;
-			background-color: rgb(248, 248, 248);
+			bottom: 3px;
+			right: 0;
 		}
 	}
 
+	.column-custom {
+		background-color:red;
+		display: flex !important;
+		flex-direction: column !important;
+		padding:  0 !important;
+	}
 	.product-header {
 		align-items: center;
 		display: flex;
@@ -390,9 +394,11 @@ export default {
 		}
 
 		@media (min-width: 600px) {
+			display: flex;
 			flex-direction: column;
 			padding:  0;
 		}
+
 
 		@media (max-width: 975px) {
 			&.small {

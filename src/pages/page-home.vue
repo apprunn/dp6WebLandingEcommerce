@@ -38,6 +38,7 @@
 			v-if="getCouponsBanner"
 			:data="getCouponsBanner"
 		/>
+		<cart-bottom></cart-bottom>
 	</layout-admin>
 </template>
 
@@ -52,6 +53,7 @@ import categoriesCarousel from '@/components/home/categories-carousel';
 import componentFilterProduct from '@/components/shared/products/component-filter-product';
 import productsSection from '@/components/products/products-section';
 import sectionSettlement from '@/components/home/section-settlement';
+import cartBottom from '@/components/footer/cart-bottom';
 
 function created() {
 	this.updatePageTitle(this.getCommerceData.name);
@@ -149,6 +151,7 @@ export default {
 		componentFilterProduct,
 		productsSection,
 		sectionSettlement,
+		cartBottom,
 	},
 	computed: {
 		...mapGetters([

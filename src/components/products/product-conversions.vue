@@ -1,5 +1,5 @@
 <template>
-	<div
+	<div v-if="conversionsComputed.length > 0"
 		class="conversions-container"
 	>
 		<h3

@@ -34,6 +34,11 @@ const getters = {
 		const { products } = state.order;
 		return products ? products.length : 0;
 	},
+	getTotalItems(state) {
+		const { products } = state.order;
+		const totalItems = products.reduce((acc, { quantity }) => acc + quantity, 0);
+		return totalItems;
+	},
 	getFlagPickUp(state) {
 		return state.order.flagPickUp;
 	},

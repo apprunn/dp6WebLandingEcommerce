@@ -56,6 +56,31 @@ function addProductToBuyCar(context, product) {
 	}
 }
 
+function removeProductToBuyCar(context, product) {
+	const newProduct = product.quantity ? product : setNewProperty('quantity', 1)(product);
+	const productsSelected = JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
+	const index = productsSelected.findIndex(
+		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
+	);
+	if (index > -1) {
+		const currentProduct = productsSelected[index];
+		const { stock, stockWarehouse, stockComposite } = currentProduct;
+		const finalStock = helper.isComposed(currentProduct) ?
+			stockComposite : (stockWarehouse || stock);
+		let quantity = currentProduct.quantity - newProduct.quantity;
+		if (quantity > 0) {
+			quantity = finalStock > quantity ? quantity : finalStock;
+			productsSelected[index].quantity = quantity;
+			context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);
+			context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected);
+		}
+		if (quantity === 0) {
+			const { id, unitSelected } = currentProduct;
+			context.commit('DELETE_PRODUCT_BUY_CAR', { id, unitSelected });
+		}
+	}
+}
+
 function updateProductSelect(context, product) {
 	context.commit('UPDATE_PRODUCTS_SELECTED', product);
 }
@@ -251,6 +276,7 @@ function UPDATE_LOADING_PRODUCT({ commit }, loading) {
 
 const methods = {
 	addProductToBuyCar,
+	removeProductToBuyCar,
 	addService,
 	CLEAN_PRODUCTS_ARRAY,
 	clearUser,
