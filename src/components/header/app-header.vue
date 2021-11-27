@@ -65,7 +65,7 @@
 					@click="goToFavorites">
 					<HeartComponent @click="goToFavorites"/>
 				</button>
-				<CarComponent @click="goShopping" :count="totalProducts"/>
+				<CarComponent @click="goShopping" :count="getTotalItems"/>
 			</div>
 		</div>
 		<modal-login 
@@ -214,10 +214,12 @@ export default {
 		...mapGetters([
 			'token',
 			'totalProducts',
+			'getTotalItems',
 			'getFilters',
 			'getTotalQuantityProducts',
 			'indeterminate',
 			'productParams',
+
 		]),
 		...mapState({
 			showLoginModal: state => state.openSignInModal,

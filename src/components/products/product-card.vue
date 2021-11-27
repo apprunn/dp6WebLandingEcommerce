@@ -51,7 +51,7 @@
 						</div>
 					</div>
 				</section>
-				<section class="product-content" :class="small ? 'small' : null">
+				<section class="product-content" :class="[small ? 'small' : null]" >
 					<div class="product-content-img"
 						:class="[
 							{ 'loading img-space': indeterminate },
@@ -90,7 +90,8 @@
 						>
 							{{getCurrencySymbol}} {{ product.priceDiscount | currencyFormat }}
 						</h3>
-						<small
+						<!-- 
+							<small
 							v-if="product.price"
 							:class="[
 								indeterminate ? 'loading text-field' : product.priceDiscount ? 'product-price' : 'product-price-discount',
@@ -99,12 +100,22 @@
 						>
 							{{getCurrencySymbol}} {{ product.price | currencyFormat }}
 						</small>
+						-->
+						<small
+							v-if="WholeSalePrice.price"
+							:class="[
+								indeterminate ? 'loading text-field' : product.priceDiscount ? 'product-price-whole' : 'product-price-whole',
+							]"
+							:style="`color: ${indeterminate ? 'transparent' : globalColors.primary};`"
+						>
+						x{{WholeSalePrice.from}} {{getCurrencySymbol}} {{WholeSalePrice.price | currencyFormat }}
+						</small>
 					</div>
 				</section>
 			</div>
 		</div>
-		<div class="btn-add-cart">
-			<addcar-component :class="{ outstock: noStock}" @click="addToCar()" />
+		<div v-if="!indeterminate" class="bottom-position">
+			<addcar-component active @add-car="addToCar" @remove-car="removeProductFromCar" :class="{ outstock: noStock}" />
 		</div>
 	</div>
 </template>
@@ -116,13 +127,20 @@ import { getDeeper } from '@/shared/lib';
 import TypeProduct from '@/shared/enums/typeProduct';
 import helper from '@/shared/helper';
 
+function created() {
+	this.WholeSalePrice = this.getWholeSalePrice();
+}
+
 function addToCar() {
 	if (!this.noStock) {
-		this.$store.dispatch('addProductToBuyCar', this.product);
-		this.showNotification('Producto agregado al carrito', 'success', null, false, 3000);
-	} else {
-		this.showGenericError('Producto sin stock', 80000);
+		const productSelected = this.product;
+		productSelected.unitSelected = this.product.unitId;
+		this.$store.dispatch('addProductToBuyCar', productSelected);
 	}
+}
+
+function removeProductFromCar() {
+	this.$store.dispatch('removeProductToBuyCar', this.product);
 }
 
 function productFavo() {
@@ -187,6 +205,19 @@ function isService() {
 	return serviceCode === TypeProduct.service;
 }
 
+function getWholeSalePrice() {
+	const priceId = this.getCommerceData.settings.salPriceListId;
+	const priceList = this.product.priceList || {};
+	const { ranges } = priceList[priceId] || {};
+	const prices = ranges.reduce((acc, range) => {
+		if (range.from > 0 && range.to > 0 && range.price > 0) {
+			acc.push(range);
+		}
+		return acc;
+	}, []);
+	return prices.length > 0 ? prices[0] : {};
+}
+
 function data() {
 	return {
 		x: 0,
@@ -194,6 +225,7 @@ function data() {
 		elWidth: 0,
 		elHeight: 0,
 		mouseOnCard: false,
+		WholeSalePrice: null,
 	};
 }
 
@@ -205,6 +237,7 @@ export default {
 	},
 	computed: {
 		...mapGetters([
+			'getCommerceData',
 			'getCurrencySymbol',
 			'getProductsParams',
 			'indeterminate',
@@ -223,7 +256,10 @@ export default {
 		onCard,
 		productFavo,
 		addToCar,
+		removeProductFromCar,
+		getWholeSalePrice,
 	},
+	created,
 	props: {
 		small: {
 			type: Boolean,
@@ -253,41 +289,39 @@ export default {
 			box-shadow: 0 2px 2px 0 rgba(31, 26, 26, 0.07);
 			border: 1px solid color(border);
 			border-radius: 5px;
-			height: 328px;
+			height: 360px;
 			margin: 3px auto;
 			max-width: 250px;
 			width: 100%;
+			
 		}
 
 		&.small {
 			min-height: 319px;
 			max-width: 179px;
 		}
-		.btn-add-cart {
+		
+		
+	}
+	.bottom-position {
+		width: 50%;
+		position: absolute;
+		bottom: 3px;
+		right: 0;
+		@media (min-width: 600px) {
+			width: 100%;
 			position: absolute;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			bottom: 4%;
-			right: 2%;
-			background-color: color(white);
-			border-radius: 100%;
-			color: color(white);
-			height: 30px;
-			margin: 0 auto;
-			width: 30px;
-			padding: 6px;
-			box-shadow: 0 2px 2px 0 rgba(12, 12, 12, 0.151);
-		}
-
-		.btn-add-cart:hover {
-			height: 33px;
-			width: 33px;
-			padding: 7px;
-			background-color: rgb(248, 248, 248);
+			bottom: 3px;
+			right: 0;
 		}
 	}
 
+	.column-custom {
+		background-color:red;
+		display: flex !important;
+		flex-direction: column !important;
+		padding:  0 !important;
+	}
 	.product-header {
 		align-items: center;
 		display: flex;
@@ -390,9 +424,11 @@ export default {
 		}
 
 		@media (min-width: 600px) {
+			display: flex;
 			flex-direction: column;
 			padding:  0;
 		}
+
 
 		@media (max-width: 975px) {
 			&.small {
@@ -439,11 +475,6 @@ export default {
 		margin: 0 auto 4px;
 	}
 
-	.product-price-discount {
-		font-family: font(bold);
-		font-size: size(xlarge);
-	}
-
 	.product-price {
 		font-size: size(medium);
 		color: color(base) !important;
@@ -451,6 +482,10 @@ export default {
 
 	.product-price {
 		text-decoration: line-through;
+	}
+
+	.product-price-whole {
+		font-size: size(small);
 	}
 
 	.product-rating {
@@ -467,7 +502,7 @@ export default {
 		position: relative;
 
 		.without-stock-tag {
-			background-color: hsla(0, 0%, 0%, 0);
+			background-color: #acacac;
 			color: white;
 			display: flex;
 			font-size: 18px;
@@ -476,24 +511,27 @@ export default {
 			justify-content: center;
 			position: absolute;
 			left: 0;
-			top: 0;
-			width: 0;
-			height: 0;
-			border-right: 60px solid transparent;
-			border-bottom: 60px solid transparent;
-			border-left: 60px solid #e41a13;
-			border-top: 60px solid #e41a13;
+			top: 45%;
+			width: 50%;
+			height: 35px;
 			z-index: 2;
 			text-transform: uppercase;
-			@media screen and (min-width: 996px) {
+			@media screen and (min-width: 600px) {
 				font-size: 19px;
+				background-color: #acacac;
+				left: 10%;
+				top: 20%;
+				width: 80%;
+				height: 35px;
+				z-index: 2;
 			}
 		}
 	}
 	.without-stock-text {
 		position: absolute;
-		margin-top: 15px;
-		margin-right: 120px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: 100%;
 		height: 100%;
 		z-index: 1;
@@ -502,11 +540,9 @@ export default {
 		font-size: 18px;
 		font-family: font(bold);
 		text-transform: uppercase;
-		transform: rotate(-45deg);
-		@media screen and (min-width: 996px) {
-			font-size: 19px;
-			margin-top: 25px;
-			margin-right: 120px;
+		@media screen and (min-width: 600px) {
+			font-size: 20px;
+			margin-top: 10px;
 		}
 	}
 
