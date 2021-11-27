@@ -28,6 +28,7 @@
 				:features="globalFeatures"
 				:show-unity="showUnity"
 				:stock-avaible="stockAvaible"
+				:wholeSalePrice="wholeSalePrice"
 				class="container-product-detail"
 				@update="loadData"
 				@selected="selectFeature"
@@ -227,6 +228,7 @@ async function loadData(id) {
 	if (this.childrens.length) {
 		this.disabledBtn = true;
 	}
+	this.wholeSalePrice = this.productInstance.getWholeSalePrice();
 }
 
 function selectFeature(value) {
@@ -366,6 +368,7 @@ function topLocation() {
 	return `top:${this.topModal}px`;
 }
 
+
 function data() {
 	return {
 		allFeatures: [],
@@ -399,6 +402,7 @@ function data() {
 		stockAvaible: 0,
 		tabs: [],
 		warehouses: [],
+		wholeSalePrice: [],
 	};
 }
 

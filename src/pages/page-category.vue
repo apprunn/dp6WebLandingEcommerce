@@ -1,6 +1,7 @@
 <template>
 <div>
 	<div class="page-category">
+		<cart-bottom></cart-bottom>
 		<div class="name-select-mobile" v-if="!open">
 			<div class="flex-center flex-60">
 				<img 
@@ -99,6 +100,7 @@
 		:data="getPromotionalBanner"
 		:color="globalColors.secondary"
 		big/>
+	
 	</div>
 </template>
 
@@ -110,6 +112,7 @@ import menuCategory from '@/components/shared/category/menu-category';
 import SpinnerLoading from '@/components/shared/spinner/spinner-loading';
 import productCard from '@/components/products/product-card';
 import productsSection from '@/components/products/products-section';
+import cartBottom from '@/components/footer/cart-bottom';
 import { compose, setNewProperty } from '@/shared/lib';
 import helper from '@/shared/helper';
 
@@ -279,6 +282,7 @@ export default {
 		productCard,
 		productsSection,
 		SpinnerLoading,
+		cartBottom,
 	},
 	computed: {
 		...mapGetters([
