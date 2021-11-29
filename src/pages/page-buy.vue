@@ -185,7 +185,7 @@ export default {
 
 	.small {
 		flex: 0 0 20%;
-		height: 100%;
+		height: auto;
 		margin: 0 auto;
 		position: sticky;
 		top: 8rem;
