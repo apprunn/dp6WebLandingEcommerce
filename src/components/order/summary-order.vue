@@ -151,8 +151,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 	.summary-container {
-		position: sticky;
-		top: 115px;
+		position: relative;
+		top: 0;
 		margin: 0 auto;
 		max-width: 400px;
 	}
