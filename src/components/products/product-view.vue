@@ -74,19 +74,11 @@
 				:alt="data.name"
 				class="image-product-slider">
 		</div>
-		<ProductConversions
+		<!-- <ProductConversions
 			:default-unit="data.unit"
 			:conversions="data.conversions"
 			:stock-product="data.stock"
-		/>
-		<!-- <button class="btn-unit"
-		v-for="(item, index) in conversionsComputed"
-		:key="index"
-		type="button"
-		:style="`border:1px solid ${globalColors.primary};color: ${item.isSelected ? 'white' : globalColors.primary};background-color: ${item.isSelected ? globalColors.primary : 'white'}`"
-		>
-			{{ item.name }}
-		</button> -->
+		/> -->
 	</div>
 </template>
 <script>
