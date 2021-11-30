@@ -54,6 +54,7 @@
 				class="mx-2 my-1 responsible-field"
 				v-model="responsible.phone"
 				@input="validateForm"
+				v-on:blur="getResponsiblePhones"
 			>
 				<span v-if="!$v.responsible.phone.required">El teléfono es requerido</span>
 				<span v-if="!$v.responsible.phone.onlyNumbers">Solo se permiten números</span>
@@ -112,6 +113,7 @@ import { getDeeper, compose, setNewProperty } from '@/shared/lib';
 import appInput from '@/components/shared/inputs/app-input';
 import userDataValidation from '@/mixins/userDataValidation';
 import modalComponent from '@/components/shared/modal/modal-component';
+import helper from '@/shared/helper';
 
 function mounted() {
 	this.setResponsibleData();
@@ -232,6 +234,22 @@ function buildBody() {
 	)({});
 }
 
+function getResponsiblePhones() {
+	if (this.responsible.phone.length < 6) {
+		return;
+	}
+	const { phoneNumbers } = this.user ? this.user : [];
+	const currentPhone = phoneNumbers.find(p => p === this.responsible.phone);
+	if (!currentPhone) {
+		phoneNumbers.push(this.responsible.phone);
+		const newPhones = {
+			phone: this.responsible.phone,
+			phoneNumbers,
+		};
+		helper.setLocalData('phonesList::user', newPhones);
+	}
+}
+
 function validations() {
 	const validating = {
 		responsible: {
@@ -302,6 +320,7 @@ export default {
 		setUserData,
 		updateCustomerDni,
 		validateForm,
+		getResponsiblePhones,
 	},
 	mixins: [userDataValidation],
 	mounted,
