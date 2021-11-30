@@ -134,7 +134,7 @@ export default {
 		margin-left: 8px;
 		font-weight: bold;
 		@media (max-width: 500px){
-			margin-right: -18px;
+			margin-right: -10px;
 			margin-left: 5px;
 		}
 		@media (max-width: 435px){
