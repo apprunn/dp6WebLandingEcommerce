@@ -56,7 +56,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import appButton from '@/components/shared/buttons/app-button';
-import { getDeeper } from '@/shared/lib';
+import { getDeeper, compose, setNewProperty } from '@/shared/lib';
 import { creditCard } from '@/shared/enums/wayPayment';
 
 function total() {
@@ -65,6 +65,22 @@ function total() {
 
 function makeOrder(flagFinish) {
 	this.$store.dispatch('MAKE_ORDER', { flagFinish, context: this });
+	const body = this.buildPayloadPhones();
+	if (body) {
+		this.$store.dispatch('UPDATE_USER_DATA', { context: this, body });
+		localStorage.removeItem('ecommerce::phonesList::user');
+	}
+}
+
+function buildPayloadPhones() {
+	const phoneList = this.getLocalStorage('ecommerce::phonesList::user');
+	if (phoneList) {
+		return compose(
+			setNewProperty('phone', phoneList.phone),
+			setNewProperty('phoneNumbers', phoneList.phoneNumbers),
+		)({});
+	}
+	return null;
 }
 
 function stepThree() {
@@ -146,6 +162,7 @@ export default {
 	methods: {
 		goToMakeOrder,
 		makeOrder,
+		buildPayloadPhones,
 	},
 };
 </script>

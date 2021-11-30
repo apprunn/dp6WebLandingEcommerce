@@ -354,7 +354,6 @@ function closeModal(value) {
 }
 
 function selectedUnit(unit) {
-	debugger;
 	this.stockAvaible = parseInt(this.product.stock / unit.quantity, 10);
 	this.$store.dispatch('setStock', this.stockAvaible);
 	this.productInstance.updateUnit(unit);
