@@ -1,5 +1,12 @@
 <template>
   <div class="product-view">
+	  	<ProductConversionsHeader
+			:show-unit="showUnity"
+			:default-unit="data.unit"
+			:conversions="data.conversions"
+			:stock-product="data.stock"
+			@unit-selection="unitSelection"
+		/>
 		<div class="btns-product-view" v-if="webLocalImages.length > 0">
 			<button 
 				v-for="(image, index) in webLocalImages" 
@@ -74,25 +81,12 @@
 				:alt="data.name"
 				class="image-product-slider">
 		</div>
-		<ProductConversions
-			:default-unit="data.unit"
-			:conversions="data.conversions"
-			:stock-product="data.stock"
-		/>
-		<!-- <button class="btn-unit"
-		v-for="(item, index) in conversionsComputed"
-		:key="index"
-		type="button"
-		:style="`border:1px solid ${globalColors.primary};color: ${item.isSelected ? 'white' : globalColors.primary};background-color: ${item.isSelected ? globalColors.primary : 'white'}`"
-		>
-			{{ item.name }}
-		</button> -->
 	</div>
 </template>
 <script>
 import { getDeeper, isEmpty, map, setNewProperty } from '@/shared/lib';
 import TypeProduct from '@/shared/enums/typeProduct';
-import ProductConversions from '@/components/products/product-conversions';
+import ProductConversionsHeader from '@/components/products/product-conversion-header';
 import helper from '@/shared/helper';
 
 function swiper() {
@@ -113,14 +107,8 @@ function imagesHandler(newImages) {
 		this.webLocalImages = [];
 
 		newImages.forEach((img) => {
-			if (img.fromApp === 0) {
-				this.webLocalImages.push(img);
-			} else if (img.fromApp === 1) {
-				this.movilLocalImages.push(img);
-			} else {
-				this.webLocalImages.push(img);
-				this.movilLocalImages.push(img);
-			}
+			this.webLocalImages.push(img);
+			this.movilLocalImages.push(img);
 		});
 		this.$set(this.webLocalImages[0], 'select', true);
 	}
@@ -143,6 +131,10 @@ function isComposed() {
 function isService() {
 	const serviceCode = getDeeper('typeInfo.code')(this.data);
 	return serviceCode === TypeProduct.service;
+}
+
+function unitSelection(item) {
+	this.$emit('unit-selection', item);
 }
 
 function data() {
@@ -172,7 +164,7 @@ function data() {
 export default {
 	name: 'product-view',
 	components: {
-		ProductConversions,
+		ProductConversionsHeader,
 	},
 	computed: {
 		isComposed,
@@ -183,6 +175,7 @@ export default {
 	},
 	data,
 	methods: {
+		unitSelection,
 		goToSlider,
 		imagesHandler,
 	},
@@ -194,6 +187,10 @@ export default {
 		images: {
 			default: () => [],
 			type: Array,
+		},
+		showUnity: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	watch: {
@@ -236,6 +233,12 @@ export default {
 	.product-view {
 		display: flex;
 		justify-content: center;
+
+		@media screen and (max-width: 996px) {
+			border: 1px solid #f1eaea;
+			border-radius: 9px;
+			padding: 9px;
+		}
 	}
 
 	.slider-product-view-web {
