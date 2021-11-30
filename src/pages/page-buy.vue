@@ -64,7 +64,6 @@ import summaryOrder from '@/components/order/summary-order';
 import summaryInPayment from '@/components/order/summary-in-payment';
 
 function created() {
-	debugger;
 	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
 	const localOrder = this.getLocalStorage('ecommerce-order');
 	if (ecommerceLocal || this.getCommerceData.company) {
