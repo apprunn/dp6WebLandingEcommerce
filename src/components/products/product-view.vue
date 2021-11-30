@@ -74,11 +74,25 @@
 				:alt="data.name"
 				class="image-product-slider">
 		</div>
+		<ProductConversions
+			:default-unit="data.unit"
+			:conversions="data.conversions"
+			:stock-product="data.stock"
+		/>
+		<!-- <button class="btn-unit"
+		v-for="(item, index) in conversionsComputed"
+		:key="index"
+		type="button"
+		:style="`border:1px solid ${globalColors.primary};color: ${item.isSelected ? 'white' : globalColors.primary};background-color: ${item.isSelected ? globalColors.primary : 'white'}`"
+		>
+			{{ item.name }}
+		</button> -->
 	</div>
 </template>
 <script>
 import { getDeeper, isEmpty, map, setNewProperty } from '@/shared/lib';
 import TypeProduct from '@/shared/enums/typeProduct';
+import ProductConversions from '@/components/products/product-conversions';
 import helper from '@/shared/helper';
 
 function swiper() {
@@ -157,6 +171,9 @@ function data() {
 }
 export default {
 	name: 'product-view',
+	components: {
+		ProductConversions,
+	},
 	computed: {
 		isComposed,
 		isService,
@@ -332,5 +349,14 @@ export default {
 				font-size: 30px;
 			}
 		}
+	}
+
+	.btn-unit {
+		border: 1px solid #dedede;
+		border-radius: 16px;
+		color: #dedede;
+		font-size: 10px;
+		height: 25px;
+		width: 53px;
 	}
 </style>
