@@ -119,6 +119,10 @@ export default {
 		justify-content: flex-start;
 		margin-top: 10px;
 		padding: 20px 0;
+
+		@media (max-width: 960px) {
+			display: none;
+		}
 	}
 
 	.conversions-title {

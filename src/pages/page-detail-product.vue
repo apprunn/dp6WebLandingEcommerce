@@ -123,7 +123,7 @@ function isLoggedUser() {
 	if (this.token) {
 		return this.$httpProducts.get(`products/favorites/${this.id}`);
 	}
-	return this.$httpProductsPublic.get(`products-public/${this.id}`);
+	return this.$httpProductsPublic.get(`products-public/${this.id}?fromApp=2`);
 }
 
 async function loadProduct() {

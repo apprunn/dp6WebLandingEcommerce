@@ -996,4 +996,12 @@ input.app-input::-webkit-input-placeholder {
 .v-snack__content {
 	height: auto !important;
 }
+
+.product-view {
+	.swiper-pagination {
+		background-color: white !important;
+		padding: 8px 0;
+		bottom: 0px;
+	}
+}
 </style>
