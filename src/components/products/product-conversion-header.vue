@@ -110,7 +110,7 @@ export default {
 		display: flex;
 		padding: 20px 0;
         position: absolute;
-        right: 20px;
+        right: 18px;
         top: 20px;
 
         @media (min-width: 950px) {
@@ -141,6 +141,7 @@ export default {
         font-size: 10px;
         height: 25px;
         margin: 3px 0px;
+		min-width: 60px !important;
 
 		&.active {
 			background-color: red;
