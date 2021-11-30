@@ -102,7 +102,7 @@
 						</small>
 						-->
 						<small
-							v-if="WholeSalePrice.price"
+							v-if="WholeSalePrice && WholeSalePrice.price > 0"
 							:class="[
 								indeterminate ? 'loading text-field' : product.priceDiscount ? 'product-price-whole' : 'product-price-whole',
 							]"
@@ -127,7 +127,7 @@ import { getDeeper } from '@/shared/lib';
 import TypeProduct from '@/shared/enums/typeProduct';
 import helper from '@/shared/helper';
 
-function created() {
+function mounted() {
 	this.WholeSalePrice = this.getWholeSalePrice();
 }
 
@@ -206,15 +206,19 @@ function isService() {
 }
 
 function getWholeSalePrice() {
-	const priceId = this.getCommerceData.settings.salPriceListId;
+	const commerceData = this.getCommerceData.settings ? this.getCommerceData : this.getLocalStorage('ecommerce::ecommerce-data');
+	const priceId = commerceData.settings.salPriceListId;
 	const priceList = this.product.priceList || {};
 	const { ranges } = priceList[priceId] || {};
-	const prices = ranges.reduce((acc, range) => {
-		if (range.from > 0 && range.to > 0 && range.price > 0) {
-			acc.push(range);
-		}
-		return acc;
-	}, []);
+	let prices = {};
+	if (ranges) {
+		prices = ranges.reduce((acc, range) => {
+			if (range.from > 0 && range.to > 0 && range.price > 0) {
+				acc.push(range);
+			}
+			return acc;
+		}, []);
+	}
 	return prices.length > 0 ? prices[0] : {};
 }
 
@@ -259,7 +263,7 @@ export default {
 		removeProductFromCar,
 		getWholeSalePrice,
 	},
-	created,
+	mounted,
 	props: {
 		small: {
 			type: Boolean,

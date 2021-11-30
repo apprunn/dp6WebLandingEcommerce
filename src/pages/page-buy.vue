@@ -66,8 +66,13 @@ import summaryInPayment from '@/components/order/summary-in-payment';
 function created() {
 	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
 	const localOrder = this.getLocalStorage('ecommerce-order');
-	const company = this.getCommerceData.company ? ecommerceLocal.company : ecommerceLocal.company;
-	this.showUnity = company.settings ? company.settings.flagShowBaseUnit : false;
+	if (ecommerceLocal || this.getCommerceData.company) {
+		const company = this.getCommerceData.company ?
+			this.getCommerceData.company : ecommerceLocal.company;
+		this.showUnity = company.settings ? company.settings.flagShowBaseUnit : false;
+	} else {
+		this.showUnity = false;
+	}
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
 }
 
