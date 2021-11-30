@@ -108,9 +108,9 @@ export default {
 	.conversions-container {
 		align-items: center;
 		display: flex;
-		padding: 20px 0;
+		padding: 15px 0;
         position: absolute;
-        right: 18px;
+        right: 15px;
         top: 20px;
 
         @media (min-width: 950px) {

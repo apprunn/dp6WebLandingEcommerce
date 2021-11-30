@@ -107,14 +107,8 @@ function imagesHandler(newImages) {
 		this.webLocalImages = [];
 
 		newImages.forEach((img) => {
-			if (img.fromApp === 0) {
-				this.webLocalImages.push(img);
-			} else if (img.fromApp === 1) {
-				this.movilLocalImages.push(img);
-			} else {
-				this.webLocalImages.push(img);
-				this.movilLocalImages.push(img);
-			}
+			this.webLocalImages.push(img);
+			this.movilLocalImages.push(img);
 		});
 		this.$set(this.webLocalImages[0], 'select', true);
 	}
