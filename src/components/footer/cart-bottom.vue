@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<nav v-if="(getTotalItems > 0 && !indeterminate) || iscar" :style="activeStyle"  class="nav">
+		<nav @click="goShopping" v-if="(getTotalItems > 0 && !indeterminate) || iscar" :style="activeStyle"  class="nav">
 			<div :style="activeStyle" class="nav-content-cart">
-				<div @click="goShopping" class="info-card">
+				<div  class="info-card">
 					<button type="button">
 						<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="32" viewBox="0 0 122.9 107.5" style="enable-background:new 0 0 122.9 107.5" xml:space="preserve">
 							<g fill="#ffffff" fill-rule="nonzero">
@@ -20,9 +20,9 @@
 					<h2 class="total-sumary">{{getCurrencySymbol}} {{getTotalToBuy | currencyFormat}}</h2>
 				</div>
 				<div v-if="iscar" class="car-action">
-					<button @click="$emit('click', 'less')" class="btn-add-cart"> <span :style="colorBackGroundStyle" class="txt-icon-min"></span></button>
+					<button @click="onClickEvent($event,'less')" class="btn-add-cart"> <span :style="colorBackGroundStyle" class="txt-icon-min"></span></button>
 					<div class="cube"><span class="txt-quantity"> {{number}} </span></div> 
-					<button @click="$emit('click', 'more')" class="btn-add-cart" > <span :style="colorTextStyle" class="txt-icon-plus"> + </span></button>
+					<button @click="onClickEvent($event,'more')" class="btn-add-cart" > <span :style="colorTextStyle" class="txt-icon-plus"> + </span></button>
 				</div>
 			</div>
 		</nav>
@@ -41,6 +41,11 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getDeeper } from '@/shared/lib';
+
+function onClickEvent($event, action = 'more') {
+	$event.stopPropagation();
+	this.$emit('click', action);
+}
 
 function goShopping() {
 	this.goTo('buy');
@@ -93,6 +98,7 @@ export default {
 		addCarEvent,
 		removeCarEvent,
 		goShopping,
+		onClickEvent,
 	},
 	props: {
 		iscar: {
@@ -146,7 +152,7 @@ export default {
 			position: fixed;
 			bottom: 0;
 			width: 100%;
-			height: 70px;
+			height: 60px;
 			background: color(primary) 0% 0% no-repeat padding-box;
 			box-shadow: 0px -1px 6px #00000033;
 			border-radius: 40px 40px 0px 0px;
@@ -244,7 +250,7 @@ export default {
 		padding-left: 20px;
 		width: auto;
 		span {
-			font-size: 14px;
+			font-size: 13px;
 			position: absolute;
 			bottom: 30px;
 			@media screen and (max-width: 600px) {
@@ -260,7 +266,7 @@ export default {
 	}
 	.total-sumary {
 		width: 100%;
-		font-size: 22px;
+		font-size: 21px;
 		font-weight: bold;
 		color: color(white);
 		@media screen and (max-width: 400px) {
