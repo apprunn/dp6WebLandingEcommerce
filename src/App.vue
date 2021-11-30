@@ -999,9 +999,10 @@ input.app-input::-webkit-input-placeholder {
 
 .product-view {
 	.swiper-pagination {
+		box-shadow: 0 -3px 4px 0 rgba(0, 0, 0, 0.03);
 		background-color: white !important;
 		padding: 8px 0;
-		bottom: 0px;
+		bottom: -10px;
 	}
 }
 </style>

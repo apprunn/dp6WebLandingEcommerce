@@ -243,7 +243,7 @@ export default {
 		@media screen and (max-width: 996px) {
 			border: 1px solid #f1eaea;
 			border-radius: 9px;
-			padding: 9px 9px 0 9px;
+			padding: 9px 9px 10px 9px;
 		}
 	}
 
