@@ -107,8 +107,14 @@ function imagesHandler(newImages) {
 		this.webLocalImages = [];
 
 		newImages.forEach((img) => {
-			this.webLocalImages.push(img);
-			this.movilLocalImages.push(img);
+			if (img.fromApp === 0) {
+				this.webLocalImages.push(img);
+			} else if (img.fromApp === 1) {
+				this.movilLocalImages.push(img);
+			} else {
+				this.webLocalImages.push(img);
+				this.movilLocalImages.push(img);
+			}
 		});
 		this.$set(this.webLocalImages[0], 'select', true);
 	}
@@ -237,7 +243,7 @@ export default {
 		@media screen and (max-width: 996px) {
 			border: 1px solid #f1eaea;
 			border-radius: 9px;
-			padding: 9px;
+			padding: 35px 9px 9px 9px;
 		}
 	}
 
@@ -261,7 +267,7 @@ export default {
 		background: transparent;
 		box-shadow: none;
 		display: flex;
-		height: 217px;
+		height: 270px;
 		padding: 0;
 		width: 298px;
 
