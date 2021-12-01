@@ -47,7 +47,7 @@ function stockGreaterThanCero(product) {
 		return stockVirtual === 0;
 	}
 	const { stock } = product;
-	return stock === 0;
+	return stock <= 0;
 }
 
 function exactDate(date, formatter = 'DD-MM-YYYY', splitBy = 'T') {
