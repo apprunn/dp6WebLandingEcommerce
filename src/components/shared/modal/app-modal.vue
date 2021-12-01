@@ -18,7 +18,7 @@
 				<span
 					class="product-price"
 					:style="`color:${globalColors.secondary}`"
-				>{{getCurrencySymbol}}{{ product.priceDiscount }}</span>
+				>{{getCurrencySymbol}}{{getTotalToBuy | currencyFormat}}</span>
 			</p>
 			<trash-component class="action" @click="deleteProduct"/>
 		</section>
@@ -59,6 +59,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'getCurrencySymbol',
+			'getTotalToBuy',
 		]),
 	},
 	methods: {

@@ -21,6 +21,7 @@
 				:data="productDetails"
 				:images="productImages"
 				class="container-product-view"
+				@unit-selection="selectedUnit"
 			/>
 			<product-detail
 				:open-warehouse="stockWarehouse"
@@ -122,7 +123,7 @@ function isLoggedUser() {
 	if (this.token) {
 		return this.$httpProducts.get(`products/favorites/${this.id}`);
 	}
-	return this.$httpProductsPublic.get(`products-public/${this.id}`);
+	return this.$httpProductsPublic.get(`products-public/${this.id}?fromApp=2`);
 }
 
 async function loadProduct() {
@@ -484,7 +485,7 @@ export default {
 		position: relative;
 
 		@media screen and (max-width: 996px) {
-			padding-top: 20px;
+			padding-top: 29px;
 		}
 	}
 
@@ -497,7 +498,7 @@ export default {
 		@media screen and (max-width: 996px) {
 			flex-direction: column;
 			margin-bottom: 35px;
-			padding: 0;
+			padding: 0 5px;
 		}
 	}
 

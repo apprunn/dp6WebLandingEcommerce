@@ -1,22 +1,17 @@
 <template>
-	<div v-if="conversionsComputed.length > 0"
+	<!-- v-if="conversionsComputed.length > 0" -->
+	<div
 		class="conversions-container"
 	>
-		<h3
-			:class="[
-				indeterminate ? 'loading' : 'conversions-title',
-			]"
-			:style="`color:${globalColors.title}`"
-		>Presentaciones:</h3>
 		<v-flex xs12>
 			<div
 				:class="{ 'loading conversions-select-container': indeterminate }"
 			>
-				<div v-if="!indeterminate">
+				<div v-if="!indeterminate" class="column">
 					<v-btn
 						v-for="(item, index) in conversionsComputed"
-						class="btn-conversions pa-2"
-						:style="`border:1px solid ${globalColors.primary};color: ${item.isSelected ? 'white' : globalColors.primary};background-color: ${item.isSelected ? globalColors.primary : 'white'}`"
+						class="btn-conversions pa-1"
+						:style="`border:1px solid ${item.isSelected ? globalColors.primary : '#bbbbbb'};color: ${item.isSelected ? globalColors.primary : '#bbbbbb'}`"
 						:key="index"
 						type="button"
 						v-model="conversionSelected"
@@ -112,18 +107,21 @@ export default {
 <style lang="scss" scoped>
 	.conversions-container {
 		align-items: center;
-		border-bottom: 1px solid color(border);
-		border-top: 1px solid color(border);
 		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-		margin-top: 10px;
-		padding: 20px 0;
+		padding: 15px 0;
+        position: absolute;
+        right: 15px;
+        top: 20px;
 
-		@media (max-width: 960px) {
-			display: none;
-		}
+        @media (min-width: 950px) {
+            display: none !important;
+        }
 	}
+
+    .column {
+        display: flex;
+        flex-direction: column;
+    }
 
 	.conversions-title {
 		margin: 0 10px;
@@ -136,8 +134,14 @@ export default {
 	}
 
 	.btn-conversions {
-		border-radius: 7px;
+        background-color: white !important;
+		box-shadow: none !important;
+		border-radius: 16px;
 		font-family: font(bold);
+        font-size: 10px;
+        height: 25px;
+        margin: 3px 0px;
+		min-width: 60px !important;
 
 		&.active {
 			background-color: red;

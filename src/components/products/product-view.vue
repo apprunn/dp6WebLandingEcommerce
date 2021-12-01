@@ -1,5 +1,12 @@
 <template>
   <div class="product-view">
+	  	<ProductConversionsHeader
+			:show-unit="showUnity"
+			:default-unit="data.unit"
+			:conversions="data.conversions"
+			:stock-product="data.stock"
+			@unit-selection="unitSelection"
+		/>
 		<div class="btns-product-view" v-if="webLocalImages.length > 0">
 			<button 
 				v-for="(image, index) in webLocalImages" 
@@ -79,6 +86,7 @@
 <script>
 import { getDeeper, isEmpty, map, setNewProperty } from '@/shared/lib';
 import TypeProduct from '@/shared/enums/typeProduct';
+import ProductConversionsHeader from '@/components/products/product-conversion-header';
 import helper from '@/shared/helper';
 
 function swiper() {
@@ -131,6 +139,10 @@ function isService() {
 	return serviceCode === TypeProduct.service;
 }
 
+function unitSelection(item) {
+	this.$emit('unit-selection', item);
+}
+
 function data() {
 	return {
 		localImages: [],
@@ -157,6 +169,9 @@ function data() {
 }
 export default {
 	name: 'product-view',
+	components: {
+		ProductConversionsHeader,
+	},
 	computed: {
 		isComposed,
 		isService,
@@ -166,6 +181,7 @@ export default {
 	},
 	data,
 	methods: {
+		unitSelection,
 		goToSlider,
 		imagesHandler,
 	},
@@ -177,6 +193,10 @@ export default {
 		images: {
 			default: () => [],
 			type: Array,
+		},
+		showUnity: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	watch: {
@@ -219,6 +239,12 @@ export default {
 	.product-view {
 		display: flex;
 		justify-content: center;
+
+		@media screen and (max-width: 996px) {
+			border: 1px solid #f1eaea;
+			border-radius: 9px;
+			padding: 35px 9px 9px 9px;
+		}
 	}
 
 	.slider-product-view-web {
@@ -241,7 +267,7 @@ export default {
 		background: transparent;
 		box-shadow: none;
 		display: flex;
-		height: 217px;
+		height: 270px;
 		padding: 0;
 		width: 298px;
 
@@ -332,5 +358,14 @@ export default {
 				font-size: 30px;
 			}
 		}
+	}
+
+	.btn-unit {
+		border: 1px solid #dedede;
+		border-radius: 16px;
+		color: #dedede;
+		font-size: 10px;
+		height: 25px;
+		width: 53px;
 	}
 </style>
