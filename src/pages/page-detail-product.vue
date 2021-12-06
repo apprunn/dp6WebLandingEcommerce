@@ -35,6 +35,7 @@
 				@selected="selectFeature"
 				@clear="clearFeatures"
 				@click-quantity="clickQuantity"
+				@input-quantity="inputQuantity"
 				@open-dialog="openDialog"
 				@open-confirm-modal="showConfirmModal = true"
 				@unit-selection="selectedUnit"
@@ -330,6 +331,19 @@ function clickQuantity(value) {
 	}
 }
 
+function inputQuantity(num) {
+	const newProductdetail = { ...this.product };
+	const validQuantity = this.checkValidQuantity(num);
+	if (validQuantity) {
+		this.$set(newProductdetail, 'quantity', num);
+		this.product = { ...newProductdetail };
+		this.productInstance.updateQuantity(num);
+		this.productDetails = { ...this.productInstance.getProductDetails() };
+	} else {
+		this.showNotification(`Cantidad: ${num} no disponible`, 'primary');
+	}
+}
+
 function checkValidQuantity(quantity) {
 	if (this.productInstance.isService) {
 		return true;
@@ -359,6 +373,7 @@ function selectedUnit(unit) {
 	this.productInstance.updateUnit(unit);
 	this.productImages = [...this.productInstance.getImages()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
+	this.wholeSalePrice = this.productInstance.getWholeSalePrice();
 }
 
 function closeConfirmModal() {
@@ -404,6 +419,7 @@ function data() {
 		tabs: [],
 		warehouses: [],
 		wholeSalePrice: [],
+		totalPriceProduct: 0,
 	};
 }
 
@@ -458,6 +474,7 @@ export default {
 		possibleFeature,
 		selectFeature,
 		selectedUnit,
+		inputQuantity,
 	},
 	props: {
 		id: {

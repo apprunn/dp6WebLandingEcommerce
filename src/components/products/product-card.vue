@@ -161,6 +161,13 @@ function goToProduct({ slug, id }) {
 	this.goTo('detail-product', { params });
 }
 
+function goToCategories(item) {
+	if (item.length) {
+		const { slug, id } = item[0];
+		this.goTo('category', { params: { slug: slug || id, id } });
+	}
+}
+
 function discountPercentage() {
 	const { price, priceDiscount } = this.product;
 	const percentage = Number((((price - priceDiscount) / price) * 100).toFixed(2));
@@ -262,6 +269,7 @@ export default {
 		addToCar,
 		removeProductFromCar,
 		getWholeSalePrice,
+		goToCategories,
 	},
 	mounted,
 	props: {

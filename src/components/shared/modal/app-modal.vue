@@ -18,7 +18,7 @@
 				<span
 					class="product-price"
 					:style="`color:${globalColors.secondary}`"
-				>{{getCurrencySymbol}}{{getTotalToBuy | currencyFormat}}</span>
+				>{{getCurrencySymbol}}{{Number(product.quantity) * Number(product.priceDiscount) | currencyFormat}}</span>
 			</p>
 			<trash-component class="action" @click="deleteProduct"/>
 		</section>
