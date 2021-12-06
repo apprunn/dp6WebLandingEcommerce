@@ -201,7 +201,6 @@ function unitSelection(item) {
 }
 
 function goToCategory() {
-	debugger;
 	const categories = [];
 	this.getCategories.forEach((c1) => {
 		if (c1.detail.length > 0) {
