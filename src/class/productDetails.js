@@ -224,15 +224,12 @@ class ProductDetails {
 	}
 
 	getWholeSalePrice() {
-		const priceList = this.selectedProduct.priceList || {};
-		const { ranges } = priceList[this.priceListId] || {};
-		const prices = ranges.reduce((acc, range) => {
-			if (range.from > 0 && range.to > 0 && range.price > 0) {
-				acc.push(range);
-			}
-			return acc;
-		}, []);
-		return prices;
+		const priceList = this.selectedProduct.priceList[this.priceListId];
+		const { units } = priceList;
+		const rightRanges = units[this.selectedProduct.unitSelected];
+		const { ranges } = rightRanges || priceList;
+		const resultRanges = ranges || [];
+		return resultRanges;
 	}
 
 	updateProductSelected(prop, val) {

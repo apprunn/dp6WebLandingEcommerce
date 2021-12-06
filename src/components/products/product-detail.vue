@@ -10,9 +10,13 @@
 		</div>
 		<div class="container-detail-information">
 			<div class="container-detail-name">
-				<div v-if="data.category" class="product-category">{{data.category.name}} 
-					<span> . </span>
-					{{data.code}}</div>
+				<div @click="goToCategory" v-if="data.category" class="product-category">
+					<div class="container-category">
+						{{data.category.name}} 
+						<span> . </span>
+						{{data.code}}
+					</div>
+				</div>
 				<p
 					data-cy="product-name"
 					:class="[isLoading ? 'loading' : 'product-detail-name']"
@@ -62,14 +66,14 @@
 					{{ getCurrencySymbol }} {{ data.priceDiscount | currencyFormat }}
 				</span>
 			</div>
-			<div class="d-center">
-				<small v-if="wholeSalePrice.length > 0"
+			<div class="d-center" v-if="wholeSalePrice.length > 0" >
+				<small v-if="wholeSalePrice[0].price > 0 && wholeSalePrice[0].from > 0"
 				:style="`color: ${isLoading ? 'transparent' : globalColors.primary};`"
 				:class="[
 					isLoading ? 'loading' : 'text-price-whole',
 				]"
 			>
-				x {{wholeSalePrice[0].price}}  {{ getCurrencySymbol }} {{ wholeSalePrice[0].price | currencyFormat }}
+				x {{wholeSalePrice[0].from}}  {{ getCurrencySymbol }} {{ wholeSalePrice[0].price | currencyFormat }}
 				</small>
 			</div>
 			
@@ -111,8 +115,10 @@
 			:disabled-order="disabledOrder"
 			:open-warehouse="openWarehouse"
 			:number="data.quantity"
+			:priceDiscount="data.priceDiscount"
 			:product="data"
 			@click="clickQuantity"
+			@input-quantity="inputQuantity"
 			@add-to-car="addToCar"
 			@open-dialog="$emit('open-dialog')"
 			:iscar="true" />
@@ -144,6 +150,10 @@ function selecFeature(value) {
 
 function clickQuantity(value) {
 	this.$emit('click-quantity', value);
+}
+
+function inputQuantity(value) {
+	this.$emit('input-quantity', value);
 }
 
 function noStock() {
@@ -190,6 +200,35 @@ function unitSelection(item) {
 	this.$emit('unit-selection', item);
 }
 
+function goToCategory() {
+	debugger;
+	const categories = [];
+	this.getCategories.forEach((c1) => {
+		if (c1.detail.length > 0) {
+			c1.detail.forEach((c2) => {
+				if (c2.detail.length > 0) {
+					c2.detail.forEach((c3) => {
+						categories.push(c3);
+					});
+				}
+				categories.push(c2);
+			});
+			categories.push(c1);
+		}
+		categories.push(c1);
+	});
+	const category = categories.find((item) => {
+		if (this.data.category.name.includes(item.title)) {
+			return true;
+		}
+		return false;
+	});
+	const listIds = this.data.eCategories ? this.data.eCategories : [];
+	const currentCat = category ? category.id : this.data.category.id;
+	const categoryId = listIds.length > 0 ? listIds[0] : currentCat;
+	this.goTo('category', { params: { slug: categoryId, id: categoryId } });
+}
+
 export default {
 	name: 'product-detail',
 	components: {
@@ -202,6 +241,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'getCurrencySymbol',
+			'getCategories',
 		]),
 		...mapGetters('loading', [
 			'isLoading',
@@ -220,6 +260,8 @@ export default {
 		stopClick,
 		selecFeature,
 		unitSelection,
+		goToCategory,
+		inputQuantity,
 	},
 	props: {
 		data: {
@@ -262,48 +304,63 @@ export default {
 		text-transform: uppercase;
 		@media (max-width: 600px) {
 			width:537px;
+			font-size: 14px;
 		}
 		@media (max-width: 550px) {
 			width:417px;
+			font-size: 14px;
 		}
 		@media  (max-width: 490px) {
 			width:437px;
+			font-size: 14px;
 		}
 		@media  (max-width: 450px) {
 			width:422px;
+			font-size: 14px;
 		}
 		@media  (max-width: 425px) {
 			width:390px;
+			font-size: 14px;
 		}
 		@media  (max-width: 410px) {
 			width:370px;
+			font-size: 14px;
 		}
 		@media  (max-width: 380px) {
 			width:320px;
+			font-size: 14px;
 		}
 		@media  (max-width: 310px) {
 			width:270px;
+			font-size: 14px;
 		}
 		@media  (max-width: 270px) {
 			width:250px;
+			font-size: 14px;
 		}
 		@media  (max-width: 250px) {
 			width:auto;
+			font-size: 14px;
 		}
 		
 		
 	}
-	.product-category {
-		text-transform: uppercase;
+	.container-category{
 		display: flex;
+	}
+	.product-category {
+		cursor: pointer;
+		text-transform: uppercase;
+		display: inline-block;
 		align-items: center;
 		color: #acaaaa;
 		font-family: font(demi);
-		font-size: 12px;
+		font-size: size(small);
 		margin-top: 10px;
+		border-bottom: 1px solid #cfcbcb;
 		span { 
-			width: 12px;
-			height: 12px;
+			width: 10px;
+			height: 10px;
 			margin-bottom: 6px;
 			display: flex;
 			justify-content: center;
@@ -313,6 +370,9 @@ export default {
 
 	.product-detail-description {
 		text-transform: lowercase;
+		@media (max-width: 800px) {
+			display: none;
+		}
 	}
 	.product-detail-code {
 		color: color(base);
@@ -351,6 +411,9 @@ export default {
 	.text-price-dis {
 		font-family: font(bold);
 		font-size: 26px;
+		@media (max-width: 600px) {
+			font-size: 22px;
+		}
 	}
 
 	.text-price-dis-mobile {
