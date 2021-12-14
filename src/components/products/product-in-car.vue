@@ -3,6 +3,7 @@
 		<trash-component class="action" @click="deleteProduct"/>
 		<section class="grid-areas">
 			<img
+				@click="goToProduct(product)"
 				:src="urlImage"
 				alt="imagen del producto"
 				class="product-img image"
@@ -10,15 +11,11 @@
 			<div class="description">
 				<p
 					:style="`color: ${globalColors.primary};`"
-					class="product-title"
-				>Producto</p>
-				<p
-					:style="`color: ${globalColors.title};`"
 					class="product-name">{{product.name}}</p>
 				<p
 					:style="`color: ${globalColors.subtitle};`"
 					class="product-content">{{product.description}}</p>
-				<p class="product-brand">{{product.brand}}</p>
+				<p class="product-brand">{{product.unit.name}}</p>
 				<p
 					v-if="showUnity"
 					:style="`color: ${globalColors.primary};`"
@@ -76,6 +73,11 @@ import { mapGetters } from 'vuex';
 
 function mounted() {
 	this.getUrlImage();
+}
+
+function goToProduct({ slug, id }) {
+	const params = { id: slug || id };
+	this.goTo('detail-product', { params });
 }
 
 function getUrlImage() {
@@ -152,6 +154,7 @@ export default {
 		deleteProduct,
 		showComments,
 		getUrlImage,
+		goToProduct,
 	},
 	props: {
 		product: {
@@ -187,6 +190,7 @@ export default {
 		@media (min-width: 800px) {
 			grid-gap: 10px;
 			grid-template-columns: 0.5fr 0.5fr 1fr 0.5fr;
+			grid-template-rows: 0fr 0fr;
 			grid-template-areas:
 				"image description description description "
 				"image price quantity total";
@@ -268,8 +272,8 @@ export default {
 		width: 6rem;
 
 		@media (min-width: 800px) {
-			height: 10rem;
-			width: 10rem;
+			height: 9rem;
+			width: 9rem;
 		}
 	}
 
@@ -280,13 +284,15 @@ export default {
 
 	.product-name {
 		color: color(dark);
-		font-family: font(bold );
-		font-size: size(large);
-		font-weight: bold;
+		font-size: size(medium);
 		margin-bottom: 0px;
 		padding-right: 2rem;
 		text-align: left;
 		width: inherit;
+		text-transform: lowercase;
+	}
+	.product-name:first-letter {
+		text-transform: uppercase
 	}
 	.product-content {
 		color: color(dark);
@@ -298,6 +304,9 @@ export default {
 		text-align: left;
 		text-transform: lowercase;
 		width: inherit;
+		@media screen and (max-width: 800px) {
+			display: none;
+		}
 	}
 
 	.product-brand {

@@ -17,11 +17,11 @@
 				</div>
 				<div class="summary-info">
 					<span>Total</span>
-					<h2 class="total-sumary">{{getCurrencySymbol}} {{getTotalToBuy | currencyFormat}}</h2>
+					<h2 class="total-sumary">{{getCurrencySymbol}} {{iscar ? getTotalPrice : getTotalToBuy | currencyFormat}}</h2>
 				</div>
 				<div v-if="iscar" class="car-action">
 					<button @click="onClickEvent($event,'less')" class="btn-add-cart"> <span :style="colorBackGroundStyle" class="txt-icon-min"></span></button>
-					<div class="cube"><span class="txt-quantity"> {{number}} </span></div> 
+					<input @keypress="isNumber($event)" @click="$event.stopPropagation()" class="cube txt-quantity" v-model="quantityInput">
 					<button @click="onClickEvent($event,'more')" class="btn-add-cart" > <span :style="colorTextStyle" class="txt-icon-plus"> + </span></button>
 					<button @click="onClickEvent($event,'add')" class="btn-confirm">
 						Agregar
@@ -37,11 +37,17 @@ import { getDeeper } from '@/shared/lib';
 
 function onClickEvent($event, action = 'more') {
 	$event.stopPropagation();
-	if (action === 'add') {
+	let currentQuntity = Number(this.quantityInput);
+	if (action === 'add' && currentQuntity > 0) {
 		this.$emit('add-to-car');
-	} else {
-		this.$emit('click', action);
 	}
+	if (action === 'more') {
+		currentQuntity += 1;
+	}
+	if (action === 'less') {
+		currentQuntity = currentQuntity > 1 ? currentQuntity - 1 : 1;
+	}
+	this.quantityInput = currentQuntity;
 }
 
 function goShopping() {
@@ -77,6 +83,32 @@ function colorBackGroundStyle() {
 	return `${bgColor}`;
 }
 
+function watchQuantity() {
+	const num = Number(this.quantityInput);
+	if (num > 0) {
+		this.$emit('input-quantity', num);
+	}
+}
+
+function isNumber($event) {
+	const charCode = ($event.which) ? $event.which : $event.keyCode;
+	if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+		$event.preventDefault();
+		return false;
+	}
+	return true;
+}
+
+function getTotalPrice() {
+	return Number(this.quantityInput) * this.priceDiscount;
+}
+
+function data() {
+	return {
+		quantityInput: 1,
+	};
+}
+
 export default {
 	name: 'cart-bottom',
 	computed: {
@@ -90,12 +122,15 @@ export default {
 		activeStyle,
 		colorTextStyle,
 		colorBackGroundStyle,
+		getTotalPrice,
 	},
+	data,
 	methods: {
 		addCarEvent,
 		removeCarEvent,
 		goShopping,
 		onClickEvent,
+		isNumber,
 	},
 	props: {
 		iscar: {
@@ -103,6 +138,7 @@ export default {
 			default: false,
 		},
 		number: Number,
+		priceDiscount: Number,
 		openWarehouse: false,
 		product: {
 			default: null,
@@ -116,6 +152,9 @@ export default {
 			default: true,
 			type: Boolean,
 		},
+	},
+	watch: {
+		quantityInput: watchQuantity,
 	},
 };
 </script>
@@ -199,13 +238,7 @@ export default {
 		height: 100%;
 		justify-content: right;
 	}
-	
-	.txt-quantity{
-		font-size: 18px;
-		font-weight: bold;
-		color: color(black);
-		
-	}
+
 	.total-items {
 		font-size: 10px;
 		font-weight: normal;
@@ -304,11 +337,21 @@ export default {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		padding:10px;
+		padding:5px;
 		background-color: #ffffff;
 		width: 40px;
 		height: 30px;
 		margin-left: 5px;
 		margin-right: 5px;
+	}
+	.txt-quantity{
+		width: 40px;
+		font-size: 16px;
+		font-weight: bold;
+		color: color(black);
+		
+	}
+	input {
+		text-align: center;
 	}
 </style>
