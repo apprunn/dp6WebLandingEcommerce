@@ -24,7 +24,8 @@ const asyncActions = {
 			);
 		} else {
 			request.push(
-				context.$httpProducts.get('products-public', { params: completeParams }),
+				process.env.PRODUCTS_READ_REPORT ? context.$httpProductsRead.get('products-public', { params: completeParams }) :
+					context.$httpProducts.get('products-public', { params: completeParams }),
 			);
 		}
 		const [{ data: products, headers }] = await Promise.all(request);
@@ -37,7 +38,8 @@ const asyncActions = {
 	},
 	LOAD_RELATED_PRODUCTS: async ({ commit, getters }, { context, id }) => {
 		const url = `products-public/${id}/related`;
-		const { data: products } = await context.$httpProductsPublic.get(url);
+		const { data: products } = process.env.PRODUCTS_READ_REPORT ?
+			await context.$httpProductsReadPublic.get(url) : await context.$httpProductsPublic.get(url);
 		const commercePriceListId = getters.getCommerceData.settings.salPriceListId;
 		const updatedProducts = updateProducts(products, commercePriceListId);
 		commit('SET_RELATED_PRODUCTS', updatedProducts);
@@ -181,7 +183,8 @@ const asyncActions = {
 		commit('SET_CURRENCY_DEFAULT', res.currencyDefault);
 	},
 	LOAD_FILTERS: async ({ commit }, context) => {
-		const { data: filters } = await context.$httpProductsPublic.get('filters-public');
+		const { data: filters } = process.env.SALES_READ_REPORT ?
+			await context.$httpProductsReadPublic.get('filters-public') : await context.$httpProductsPublic.get('filters-public');
 		if (filters.length > 0) {
 			const allFilter = { id: null, title: 'Todos', urlImage: filters[0].urlImage };
 			const newFilters = [].concat(allFilter, filters);
@@ -207,7 +210,8 @@ const asyncActions = {
 	},
 	LOAD_COMMERCE_INFO: async ({ commit, dispatch }, context) => {
 		const url = `com-ecommerce-companies/${process.env.COMMERCE_CODE}/public`;
-		const { data: commerceData } = await context.$httpSalesPublic.get(url);
+		const { data: commerceData } = process.env.SALES_READ_REPORT ?
+			await context.$httpSalesReadPublic.get(url) : await context.$httpSalesPublic.get(url);
 		context.setLocalData(`${process.env.STORAGE_USER_KEY}::ecommerce-data`, commerceData);
 		commit('SET_COMMERCE_DATA', commerceData);
 		dispatch('SET_ECOMMERCE_THEME', commerceData.settings.theme);
