@@ -138,7 +138,9 @@ async function loadProduct() {
 			codeAttribute: this.attributeCodes,
 		};
 		const url = 'products-public';
-		const { data: products, headers } = await this.$httpProductsPublic.get(url, { params });
+		const { data: products, headers } = process.env.PRODUCTS_READ_REPORT
+			? await this.$httpProductsReadPublic.get(url, { params }) :
+			await this.$httpProductsPublic.get(url, { params });
 		const commercePriceListId = this.getCommerceData.settings.salPriceListId;
 		this.listProducts = products.map(
 			compose(

@@ -284,7 +284,8 @@ async function loadOpinions() {
 		typeQuestionAnswer: 3,
 		productId: this.product.id,
 	};
-	const { data: response } = await this.$httpProductsPublic.get('question-answer/public', { params });
+	const { data: response } = process.env.PRODUCTS_READ_REPORT ?
+		await this.$httpProductsReadPublic.get('question-answer/public', { params }) : await this.$httpProductsPublic.get('question-answer/public', { params });
 	this.opinions = response;
 	this.$loading(false);
 }
