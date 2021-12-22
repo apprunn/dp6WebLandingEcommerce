@@ -20,7 +20,8 @@ const asyncActions = {
 		const completeParams = Object.assign({}, getters.productParams, params);
 		if (state.token) {
 			request.push(
-				context.$httpProducts.get('products/favorites', { params: completeParams }),
+				process.env.PRODUCTS_READ_REPORT ?
+					context.$httpProductsRead.get('products/favorites', { params: completeParams }) : context.$httpProducts.get('products/favorites', { params: completeParams }),
 			);
 		} else {
 			request.push(
