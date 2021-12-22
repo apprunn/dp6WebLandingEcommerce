@@ -42,6 +42,28 @@ const http2Instance = axios.create({
 	baseURL: process.env.SALES_URL_HTTP2,
 });
 
+const productsReadReportPublic = axios.create({
+	baseURL: process.env.PRODUCTS_READ_REPORT,
+	headers: {
+		Authorization: `Bearer ${process.env.TOKEN}`,
+	},
+});
+
+const saleReadReportPublic = axios.create({
+	baseURL: process.env.SALES_READ_REPORT,
+	headers: {
+		Authorization: `Bearer ${process.env.TOKEN}`,
+	},
+});
+
+const productsReadReport = axios.create({
+	baseURL: process.env.PRODUCTS_READ_REPORT,
+});
+
+const saleReadReport = axios.create({
+	baseURL: process.env.SALES_READ_REPORT,
+});
+
 export default function (Vue) {
 	/* eslint-disable no-param-reassign */
 	Vue.prototype.$httpProducts = productsInstance;
@@ -53,4 +75,8 @@ export default function (Vue) {
 	Vue.prototype.$httpDocumentNumberValidating = documentNumberValidating;
 	Vue.prototype.$http2 = http2Instance;
 	Vue.prototype.$httpUpdateTransaction = updateTransactionIntance;
+	Vue.prototype.$httpProductsReadPublic = productsReadReportPublic;
+	Vue.prototype.$httpSalesReadPublic = saleReadReportPublic;
+	Vue.prototype.$httpProductsRead = productsReadReport;
+	Vue.prototype.$httpSalesRead = saleReadReport;
 }

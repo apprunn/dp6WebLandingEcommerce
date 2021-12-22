@@ -91,6 +91,26 @@ async function created() {
 		this.httpResponseSuccessInterceptor,
 		this.httpResponseInterceptor,
 	);
+	this.$httpProductsRead.interceptors.request.use(this.httpRequestInterceptor);
+	this.$httpProductsRead.interceptors.response.use(
+		this.httpResponseSuccessInterceptor,
+		this.httpResponseInterceptor,
+	);
+	this.$httpSalesRead.interceptors.request.use(this.httpRequestInterceptor);
+	this.$httpSalesRead.interceptors.response.use(
+		this.httpResponseSuccessInterceptor,
+		this.httpResponseInterceptor,
+	);
+	this.$httpProductsReadPublic.interceptors.request.use(this.httpRequestInterceptor);
+	this.$httpProductsReadPublic.interceptors.response.use(
+		this.httpResponseSuccessInterceptor,
+		this.httpResponseInterceptor,
+	);
+	this.$httpSalesReadPublic.interceptors.request.use(this.httpRequestInterceptor);
+	this.$httpSalesReadPublic.interceptors.response.use(
+		this.httpResponseSuccessInterceptor,
+		this.httpResponseInterceptor,
+	);
 }
 
 /* eslint-disable no-new */

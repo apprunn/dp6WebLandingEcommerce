@@ -360,11 +360,12 @@ export default {
 		z-index: 1;
 
 		@media (max-width: 764px) {
-			left: 107%;
+			left: 110%;
 			position: absolute;
-
+			display: none;
 			&.open {
 				left: 0;
+				display: flex;
 			}
 		}
 	}
