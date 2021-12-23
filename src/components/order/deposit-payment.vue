@@ -208,12 +208,13 @@ export default {
 	}
 
 	.bank-account-number {
-		display: flex;
+		display: block;
 		flex-direction: column;
 		font-size: size(large);
 		margin-bottom: 10px;
 
 		@media (min-width: 599px){
+			display: flex;
 			align-items: center;
 			flex-direction: row;
 		}
