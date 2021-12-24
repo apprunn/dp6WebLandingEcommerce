@@ -34,8 +34,8 @@ import { mapGetters } from 'vuex';
 import { isEmpty, curry, equality, find } from '@/shared/lib';
 import { creditCard, transfer } from '@/shared/enums/wayPayment';
 import appButton from '@/components/shared/buttons/app-button';
-import depositPayment from '@/components/order/deposit-payment';
 import productsBuyed from '@/components/order/products-buyed';
+import depositPayment from '@/components/order/deposit-payment';
 import recievedPayment from '@/components/order/recieved-payment';
 import VisaByCountry from '@/components/order/credit-card-payment';
 

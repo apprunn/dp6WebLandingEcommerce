@@ -115,19 +115,18 @@ export default {
 
 .form-bulletin {
 	align-items: center;
-	background-color: color(background);
 	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.08);
 	display: flex;
 	justify-content: space-around;
 	height: 209px;
 	padding: 40px 0;
 	width: 100%;
+	z-index: 10;
 
 	@media (max-width: 768px) {
 		flex-direction: column;
 		height: 411px;
 		padding: 15px 0;
-		position: relative;
 	}
 }
 

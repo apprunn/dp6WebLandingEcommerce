@@ -1,6 +1,6 @@
 <template>
 	<div class="summary-container">
-		<section class="summary-order">
+		<section ref="sect-sum" class="summary-order summary-section">
 			<div class="summary-header text-xs-center">
 				<p class="summary-title">Resumen de Compra</p>
 			</div>
@@ -27,7 +27,7 @@
 			<app-button
 				data-cy="make-order"
 				v-if="stepOne"
-				action='Hacer pedido'
+				:action="`Hacer pedido ${getCurrencySymbol}. ${listenerPriceOrder}`"
 				class="btn-order"
 				:background="globalColors.primary"
 				@click="goToMakeOrder"
@@ -44,7 +44,7 @@
 			<app-button
 				data-cy="pay"
 				v-else-if="stepThree"
-				action="Pagar"
+				action="Finalizar compra"
 				class="btn-order"
 				:disabled="isOnlinePayment"
 				:background="globalColors.primary"
@@ -122,11 +122,30 @@ function isOnlinePayment() {
 	return false;
 }
 
+function listenerPriceOrder() {
+	const newVal = this.total ? Number(this.total.toFixed(2)) : 0;
+	if (!newVal) {
+		return '0.00';
+	}
+	const [integer, decimals] = String(newVal).split('.');
+	if (!decimals) {
+		return `${integer}.00`;
+	}
+	const newDecimals = decimals.length === 1 && decimals < 10 ? `${decimals}0` : decimals;
+	return `${integer}.${newDecimals}`;
+}
+function mounted() {
+	setTimeout(() => {
+		this.scrollTo('summary-section', 800, true);
+	}, 1000);
+}
+
 export default {
 	name: 'summary-order',
 	components: {
 		appButton,
 	},
+	mounted,
 	computed: {
 		...mapGetters([
 			'getBillingData',
@@ -158,6 +177,7 @@ export default {
 		stepThree,
 		stepTwo,
 		total,
+		listenerPriceOrder,
 	},
 	methods: {
 		goToMakeOrder,
@@ -167,6 +187,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+	.btns-summary-order {
+		@media (max-width:669px){
+			position:fixed;
+			bottom: 0;
+			left: 0;
+			z-index: 9999;
+			width:100%;
+			padding-left: 1em;
+			padding-right: 1em;
+			padding-bottom: 0.5em;
+		}
+	}
 	.summary-container {
 		position: relative;
 		top: 0;
