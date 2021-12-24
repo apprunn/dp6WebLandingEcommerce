@@ -585,7 +585,7 @@ export default {
 		text-transform: uppercase;
 		@media screen and (min-width: 600px) {
 			font-size: 20px;
-			margin-top: 10px;
+			// margin-top: 10px;
 		}
 	}
 
@@ -626,6 +626,10 @@ export default {
 		font-size: 11px;
 		padding: 2px 8px 2px 1px;
 		position: absolute;
+
+		@media (min-width: 1024px) {
+			bottom: 95px;
+		}
 	}
 	.show-agot {
 		background-color: #002074;
@@ -636,6 +640,10 @@ export default {
 		font-size: 10px;
 		padding: 2px 8px;
 		position: absolute;
+
+		@media (min-width: 1024px) {
+			bottom: 125px;
+		}
 	}
 
 </style>
