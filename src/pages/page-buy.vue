@@ -31,6 +31,12 @@
 						:product="product"
 					/>
 					<div class="footter-products-buy">
+						<div class="total-product" :style="`color: #acaaaa`">
+							<span>Total de productos: </span>
+							<div class="amount-total-products" :style="`background-color: ${globalColors.title}`">
+								<output>{{getTotalQuantityProducts}}</output>
+							</div>
+						</div>
 						<app-button
 							max-width="225px"
 							action="Continuar comprando"
@@ -38,12 +44,7 @@
 							:background="globalColors.secondary"
 							@click="goTo('page-home')"
 						/>
-						<div class="total-product" :style="`color: ${globalColors.subtitle}`">
-							<span>Total de productos: </span>
-							<div class="amount-total-products" :style="`background-color: ${globalColors.title}`">
-								<output>{{getTotalQuantityProducts}}</output>
-							</div>
-						</div>
+						
 					</div>
 				</div>
 				<router-view></router-view>
@@ -81,6 +82,8 @@ async function mounted() {
 	if (id) {
 		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
+	const el = this.$el.getElementsByClassName('summary-section')[0];
+	el.scrollIntoView();
 }
 
 function stepOneAndTwo() {
@@ -207,9 +210,9 @@ export default {
 		display: flex;
 		flex-wrap: wrap;
 		font-family: font(demi);
-
-		@media (max-width: 600px) {
-			justify-content: flex-end;
+		@media (max-width: 669px) {
+			display: block;
+			font-size: size(small);
 		}
 	}
 
