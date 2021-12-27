@@ -246,7 +246,7 @@ export default {
 	}
 
 	.payment-section-title {
-		font-size: size(large);
+		font-size: size(medium);
 		font-family: font(bold);
 		margin-left: 12px;
 		text-transform: uppercase;

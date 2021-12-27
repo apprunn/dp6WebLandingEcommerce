@@ -63,6 +63,7 @@
 					placeholder="Seleccione una dirección"
 					item-text="name"
 					item-value="id"
+					:disabled="visibleNewAddress"
 					:options="getDirections"
 					:value="selectedDirection.id"
 					@input="directionSelected"
@@ -74,6 +75,7 @@
 					</button>
 				</div>
 			</div>
+			<h5 class="mt-2 mx-2 txt-new-address" v-show="visibleNewAddress">Nueva Dirección</h5>
 			<new-address v-show="visibleNewAddress"/>
 		</div>
 		<section class="billing-section">
@@ -340,7 +342,7 @@ function visibleFormAddress() {
 }
 
 function floatBtn() {
-	return `justify-content: ${this.getDirections.length > 1 ? 'start' : 'end'}`;
+	return `justify-content: ${this.getDirections.length <= 1 ? 'start' : 'end'}`;
 }
 
 function data() {
@@ -467,7 +469,7 @@ export default {
 	}
 
 	.payment-section-title {
-		font-size: size(large);
+		font-size: size(medium);
 		font-family: font(bold);
 		margin-left: 12px;
 		text-transform: uppercase;
@@ -504,6 +506,10 @@ export default {
 		color: white;
 		font-size: 13px;
 		margin-bottom: 10px;
+	}
+
+	.txt-new-address {
+		color: #002074;
 	}
 
 </style>
