@@ -67,10 +67,12 @@
 					:value="selectedDirection.id"
 					@input="directionSelected"
 				/>
-				<button :style="floatBtn"  @click="visibleFormAddress()" 
-					class="btn-new-address mt-2 mx-2">
-					+ Agregar Nueva Dirección
-				</button>
+				<div :style="floatBtn" class="box-btn-address">
+					<button @click="visibleFormAddress()" 
+						class="btn-new-address mt-2 mx-2">
+						+ Agregar Nueva Dirección
+					</button>
+				</div>
 			</div>
 			<new-address v-show="visibleNewAddress"/>
 		</div>
@@ -338,7 +340,7 @@ function visibleFormAddress() {
 }
 
 function floatBtn() {
-	return `float: ${this.getDirections.length <= 1 ? 'left' : 'right'}`;
+	return `justify-content: ${this.getDirections.length > 1 ? 'start' : 'end'}`;
 }
 
 function data() {
@@ -484,6 +486,13 @@ export default {
 
 	.container-btn-new-address {
 		color: #002074;
+		
+	}
+	.box-btn-address{
+		display: flex;
+		align-items: center;
+		justify-content: end;
+		width: 100%;
 	}
 
 	.btn-new-address {
@@ -495,7 +504,6 @@ export default {
 		color: white;
 		font-size: 13px;
 		margin-bottom: 10px;
-		float: right;
 	}
 
 </style>
