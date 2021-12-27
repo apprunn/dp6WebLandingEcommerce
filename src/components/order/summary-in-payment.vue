@@ -12,7 +12,7 @@
 				<span>Dirección: {{getDirection}}</span>
 			</div>
 		</div>
-		<div class="summary-grid" name="billing" v-if="isNotEmptyBilling">
+		<div class="summary-grid summary-grid-method" name="billing" v-if="isNotEmptyBilling">
 			<img :src="iconSvg.bill" alt="ícono de factura">
 			<div class="summary-content">
 				<h4 class="summary-title">Solicitud de Factura</h4>
@@ -23,7 +23,7 @@
 				<span>Domicilio fiscal: {{getAddress}}</span>
 			</div>
 		</div>
-		<div class="summary-grid" name="billing" v-if="stepFour">
+		<div class="summary-grid summary-grid-method" name="billing" v-if="stepFour">
 			<img :src="iconSvg.pay" alt="ícono de factura">
 			<div class="summary-content">
 				<h4 class="summary-title">Método de pago</h4>

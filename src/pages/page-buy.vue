@@ -82,8 +82,6 @@ async function mounted() {
 	if (id) {
 		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
-	const el = this.$el.getElementsByClassName('summary-section')[0];
-	el.scrollIntoView();
 }
 
 function stepOneAndTwo() {

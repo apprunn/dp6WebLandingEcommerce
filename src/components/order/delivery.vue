@@ -1,5 +1,5 @@
 <template>
-	<div class="main-container-delivery">
+	<div class="main-container-delivery" :style="styleBtnMobile">
 		<div class="section-title">
 			<img :src="logo.section" alt="logo del método de pago">
 			<h2 class="payment-section-title">¿COMÓ QUIERES RECIBIR TU PRODUCTO?</h2>
@@ -43,30 +43,37 @@
 		/>
 
 		<responsible-form/>
-
-		<div v-if="getFlagPickUp === house.value && atHouse">
-			<address-component
-				data-cy="select-address-saved"
-				hide-map-button
-				placeholder="Seleccione una dirección"
-				item-text="name"
-				item-value="id"
-				:options="getDirections"
-				:value="selectedDirection.id"
-				@input="directionSelected"
-			/>
-			<new-address v-if="selectedDirection.id === 0"/>
-		</div>
 		<app-input
 			data-cy="ref"
 			placeholder="Escribe un comentario"
 			type="text"
-			:class="[selectedDirection.id === 0 ? 'mx-2 my-1 responsible-field' : 'mx-2 my-4 responsible-field']"
+			class="mx-2 my-1 responsible-field"
 			v-model="comments"
 			@input="setComments"
 		>
 		</app-input>
-
+		<div v-if="getFlagPickUp === house.value && atHouse">
+			<div class="container-btn-new-address">
+				<h5 class="mt-2 mx-2">Seleccionar dirección de envío</h5>
+				<address-component
+					class="select-address"
+					v-if="getDirections.length > 1"
+					data-cy="select-address-saved"
+					hide-map-button
+					placeholder="Seleccione una dirección"
+					item-text="name"
+					item-value="id"
+					:options="getDirections"
+					:value="selectedDirection.id"
+					@input="directionSelected"
+				/>
+				<button :style="floatBtn"  @click="visibleFormAddress()" 
+					class="btn-new-address mt-2 mx-2">
+					+ Agregar Nueva Dirección
+				</button>
+			</div>
+			<new-address v-show="visibleNewAddress"/>
+		</div>
 		<section class="billing-section">
 			<billing/>
 		</section>
@@ -104,6 +111,7 @@ function created() {
 
 function mounted() {
 	this.comments = this.getComments;
+	this.visibleNewAddress = false;
 }
 
 function lonleyWarehouse() {
@@ -220,6 +228,7 @@ function directionSelected(id) {
 	} else {
 		this.calculateShippingCost(w);
 		this.$store.commit('SET_CUSTOMER_ADDRESS', null);
+		this.visibleNewAddress = false;
 	}
 }
 
@@ -317,6 +326,21 @@ function setComments() {
 	this.$store.commit('UPDATE_COMENTS', this.comments);
 }
 
+function styleBtnMobile() {
+	return {
+		'--bg-mobile-color': this.globalColors.primary,
+	};
+}
+
+function visibleFormAddress() {
+	this.directionSelected(0);
+	this.visibleNewAddress = !this.visibleNewAddress;
+}
+
+function floatBtn() {
+	return `float: ${this.getDirections.length <= 1 ? 'left' : 'right'}`;
+}
+
 function data() {
 	return {
 		logo: {
@@ -334,6 +358,7 @@ function data() {
 			location: {},
 		},
 		comments: '',
+		visibleNewAddress: false,
 	};
 }
 
@@ -372,6 +397,8 @@ export default {
 		warehouesesCenter,
 		warehousesMarkers,
 		warehousesZoom,
+		styleBtnMobile,
+		floatBtn,
 	},
 	created,
 	mounted,
@@ -390,6 +417,7 @@ export default {
 		setOrderInfoByDefault,
 		warehouseSelected,
 		setComments,
+		visibleFormAddress,
 	},
 	watch: {
 		getOrderInfo: handlerOrderInfo,
@@ -400,11 +428,10 @@ export default {
 	.delivery {
 		align-items: center;
 		display: grid;
-		grid-auto-flow: row;
 		grid-gap: 10px;
-
-		@media (min-width: 768px) {
-			grid-auto-flow: column;
+		grid-auto-flow: column;
+		@media (max-width: 325px) {
+			grid-auto-flow: row;
 		}
 	}
 
@@ -427,7 +454,10 @@ export default {
 
 	.responsible-field {
 		flex: 1 1 47%;
-		margin-top: 7px;
+	}
+
+	.select-address{
+		margin-top: 10px;
 	}
 
 	.billing-section {
@@ -450,6 +480,22 @@ export default {
 
 	.main-container-delivery {
 		margin-top: 60px;
+	}
+
+	.container-btn-new-address {
+		color: #002074;
+	}
+
+	.btn-new-address {
+		background-color: var(--bg-mobile-color);
+		border-radius: 10px;
+		width: auto;
+		height: 31px;
+		padding: 6px 19px 7px;
+		color: white;
+		font-size: 13px;
+		margin-bottom: 10px;
+		float: right;
 	}
 
 </style>
