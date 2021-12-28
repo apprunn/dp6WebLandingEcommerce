@@ -243,7 +243,7 @@ export default {
 
 	.billing-section-title {
 		font-family: font(bold);
-		font-size: size(large);
+		font-size: size(medium);
 		margin-left: 20px;
 		text-transform: uppercase;
 	}

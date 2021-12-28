@@ -82,8 +82,6 @@ async function mounted() {
 	if (id) {
 		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
-	const el = this.$el.getElementsByClassName('summary-section')[0];
-	el.scrollIntoView();
 }
 
 function stepOneAndTwo() {
@@ -248,7 +246,7 @@ export default {
 	}
 
 	.payment-section-title {
-		font-size: size(large);
+		font-size: size(medium);
 		font-family: font(bold);
 		margin-left: 12px;
 		text-transform: uppercase;

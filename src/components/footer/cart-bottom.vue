@@ -52,6 +52,9 @@ function onClickEvent($event, action = 'more') {
 
 function goShopping() {
 	this.goTo('buy');
+	setTimeout(() => {
+		this.scrollTo('small', 800, false);
+	}, 900);
 }
 
 function addCarEvent($event) {
