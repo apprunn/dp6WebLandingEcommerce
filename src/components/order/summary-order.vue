@@ -97,6 +97,7 @@ function stepTwo() {
 
 function goToMakeOrder() {
 	if (this.token) {
+		this.$emit('close-collapse');
 		this.goTo('buy-delivery');
 		setTimeout(() => {
 			this.scrollTo('main-container-delivery', 800, false);
