@@ -1,83 +1,88 @@
 <template>
 	<div class="main-container-delivery" :style="styleBtnMobile">
-		<div class="section-title">
-			<img :src="logo.section" alt="logo del método de pago">
-			<h2 class="payment-section-title">¿COMÓ QUIERES RECIBIR TU PRODUCTO?</h2>
-		</div>
-
-		<section class="delivery" data-cy="delivery-buttons">
-			<app-button-order
-				v-if="atHouse"
-				button-title="Envío a Domicilio"
-				class="btn"
-				:active="getFlagPickUp === house.value"
-				@click="selected(house)"
-			>
-				<location-svg :active="getFlagPickUp === house.value"/>
-			</app-button-order>
-			<app-button-order
-				v-if="atStore"
-				button-title="Recoger en Tienda"
-				class="btn"
-				:active="getFlagPickUp === store.value"
-				@click="selected(store)"
-			>
-				<coffee-svg :active="getFlagPickUp === store.value"/>
-			</app-button-order>
-		</section>
-
-		<address-component
-			v-if="getFlagPickUp === store.value && atStore"
-			class="mt-4"
-			placeholder="Seleccione una tienda"
-			item-text="name"
-			item-value="id"
-			:address="selectedWarehouse.name"
-			:center="warehouesesCenter"
-			:disable-map="disableMapButtonByWarehouse"
-			:markers="singleOrMultiMarkersOnWarehouses"
-			:options="getWarehouses"
-			:zoom="warehousesZoom"
-			:value="selectedWarehouse.id"
-			@input="warehouseSelected"
-		/>
-
-		<responsible-form/>
-		<app-input
-			data-cy="ref"
-			placeholder="Escribe un comentario"
-			type="text"
-			class="mx-2 my-1 responsible-field"
-			v-model="comments"
-			@input="setComments"
-		>
-		</app-input>
-		<div v-if="getFlagPickUp === house.value && atHouse">
-			<div class="container-btn-new-address">
-				<h5 class="mt-2 mx-2">Seleccionar dirección de envío</h5>
-				<address-component
-					class="select-address"
-					v-if="getDirections.length > 1"
-					data-cy="select-address-saved"
-					hide-map-button
-					placeholder="Seleccione una dirección"
-					item-text="name"
-					item-value="id"
-					:disabled="visibleNewAddress"
-					:options="getDirections"
-					:value="selectedDirection.id"
-					@input="directionSelected"
-				/>
-				<div :style="floatBtn" class="box-btn-address">
-					<button @click="visibleFormAddress()" 
-						class="btn-new-address mt-2 mx-2">
-						+ Agregar Nueva Dirección
-					</button>
-				</div>
+		<div @click="toogleCollapse" class="contend-title">
+			<div class="section-title">
+				<img :src="logo.section" alt="logo del método de pago">
+				<h2 class="payment-section-title">¿COMÓ QUIERES RECIBIR TU PRODUCTO? </h2>
 			</div>
-			<h5 class="mt-2 mx-2 txt-new-address" v-show="visibleNewAddress">Nueva Dirección</h5>
-			<new-address v-show="visibleNewAddress"/>
+			<img height="16" width="18" :style="collapseStep" :src="arrow.section" alt="arrow" class="arrow"/>
 		</div>
+		<div v-show="collapseSection" class="section-forms">
+			<section class="delivery" data-cy="delivery-buttons">
+				<app-button-order
+					v-if="atHouse"
+					button-title="Envío a Domicilio"
+					class="btn"
+					:active="getFlagPickUp === house.value"
+					@click="selected(house)"
+				>
+					<location-svg :active="getFlagPickUp === house.value"/>
+				</app-button-order>
+				<app-button-order
+					v-if="atStore"
+					button-title="Recoger en Tienda"
+					class="btn"
+					:active="getFlagPickUp === store.value"
+					@click="selected(store)"
+				>
+					<coffee-svg :active="getFlagPickUp === store.value"/>
+				</app-button-order>
+			</section>
+
+			<address-component
+				v-if="getFlagPickUp === store.value && atStore"
+				class="mt-4"
+				placeholder="Seleccione una tienda"
+				item-text="name"
+				item-value="id"
+				:address="selectedWarehouse.name"
+				:center="warehouesesCenter"
+				:disable-map="disableMapButtonByWarehouse"
+				:markers="singleOrMultiMarkersOnWarehouses"
+				:options="getWarehouses"
+				:zoom="warehousesZoom"
+				:value="selectedWarehouse.id"
+				@input="warehouseSelected"
+			/>
+
+			<responsible-form/>
+			<app-input
+				data-cy="ref"
+				placeholder="Escribe un comentario"
+				type="text"
+				class="mx-2 my-1 responsible-field"
+				v-model="comments"
+				@input="setComments"
+			>
+			</app-input>
+			<div v-if="getFlagPickUp === house.value && atHouse">
+				<div class="container-btn-new-address">
+					<h5 class="mt-2 mx-2">Seleccionar dirección de envío</h5>
+					<address-component
+						class="select-address"
+						v-if="getDirections.length > 1"
+						data-cy="select-address-saved"
+						hide-map-button
+						placeholder="Seleccione una dirección"
+						item-text="name"
+						item-value="id"
+						:disabled="visibleNewAddress"
+						:options="getDirections"
+						:value="selectedDirection.id"
+						@input="directionSelected"
+					/>
+					<div :style="floatBtn" class="box-btn-address">
+						<button @click="visibleFormAddress()" 
+							class="btn-new-address mt-2 mx-2">
+							+ Agregar Nueva Dirección
+						</button>
+					</div>
+				</div>
+				<h5 class="mt-2 mx-2 txt-new-address" v-show="visibleNewAddress">Nueva Dirección</h5>
+				<new-address v-show="visibleNewAddress"/>
+			</div>
+		</div>
+		
 		<section class="billing-section">
 			<billing/>
 		</section>
@@ -98,6 +103,7 @@ import waysDeliveries from '@/shared/enums/waysDeliveries';
 
 function created() {
 	const that = this;
+	this.collapseSection = true;
 	Promise.all([
 		this.$store.dispatch('LOAD_DIRECTIONS', this),
 		this.$store.dispatch('LOAD_WAREHOUSES', this),
@@ -345,10 +351,21 @@ function floatBtn() {
 	return `justify-content: ${this.getDirections.length <= 1 ? 'start' : 'end'}`;
 }
 
+function toogleCollapse() {
+	this.collapseSection = !this.collapseSection;
+}
+
+function collapseStep() {
+	return `transform: ${this.collapseSection ? 'rotate(0deg)' : 'rotate(180deg)'};`;
+}
+
 function data() {
 	return {
 		logo: {
 			section: '/static/icons/delivery-truck.svg',
+		},
+		arrow: {
+			section: '/static/icons/arrow.svg',
 		},
 		flagWatchOrderInfo: false,
 		selectedDirection: {
@@ -363,6 +380,7 @@ function data() {
 		},
 		comments: '',
 		visibleNewAddress: false,
+		collapseSection: false,
 	};
 }
 
@@ -403,6 +421,7 @@ export default {
 		warehousesZoom,
 		styleBtnMobile,
 		floatBtn,
+		collapseStep,
 	},
 	created,
 	mounted,
@@ -422,6 +441,7 @@ export default {
 		warehouseSelected,
 		setComments,
 		visibleFormAddress,
+		toogleCollapse,
 	},
 	watch: {
 		getOrderInfo: handlerOrderInfo,
@@ -465,7 +485,7 @@ export default {
 	}
 
 	.billing-section {
-		margin-top: 50px;
+		margin-top: 40px;
 	}
 
 	.payment-section-title {
@@ -479,7 +499,6 @@ export default {
 		align-items: baseline;
 		display: flex;
 		justify-content: flex-start;
-		margin-bottom: 40px;
 	}
 
 	.main-container-delivery {
@@ -510,6 +529,19 @@ export default {
 
 	.txt-new-address {
 		color: #002074;
+	}
+
+	.contend-title{
+		display: flex;
+		justify-content:space-between;
+		align-items: center;
+	}
+	.arrow{
+		transform: rotate(180deg);
+	}
+
+	.section-forms{
+		margin-top: 20px;
 	}
 
 </style>
