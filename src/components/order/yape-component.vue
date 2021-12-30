@@ -51,7 +51,6 @@
 		</div>
 		
 	</div>
-</div>
 </template>
 <script>
 import appInput from '@/components/shared/inputs/app-input';
@@ -164,7 +163,6 @@ export default {
 
 .yape-modal-container {
 	align-items: center;
-	background-color: white;
 	border-radius: 10px;
 	display: flex;
 	padding: 30px;
@@ -173,7 +171,11 @@ export default {
 	transition-duration: 300ms;
 	transition-property: opacity;
 	transition-delay: 300ms;
-
+	@media (max-width: 600px) {
+		padding: 0;
+		padding-top: 2px;
+		padding-bottom: 2px;
+	}
 	&.active {
 		opacity: 1;
 	}
@@ -187,7 +189,11 @@ export default {
 		justify-content: center;
 		margin: 25px auto;
 		width: 220px;
-
+		@media (max-width: 600px) {
+			height: 190px;
+			margin-top: 10px;
+			width: 190px;
+		}
 		img {
 			height: 100%;
 			width: 100%;
@@ -204,7 +210,9 @@ export default {
 	overflow: hidden;
 	transition-duration: 500ms;
 	transition-property: max-height;
-
+	@media (max-width: 600px) {
+		display: block;
+	}
 	&.active {
 		max-height: 22rem;
 	}
@@ -219,7 +227,9 @@ export default {
 	padding-left: 1rem;
 	padding-right: 1rem;
 	padding-top: 2rem;
-
+	@media (max-width: 600px) {
+		margin-left: 1rem;
+	}
 	h3 {
 		margin-bottom: 1rem;
 		text-align: center;

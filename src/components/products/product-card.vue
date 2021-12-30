@@ -10,7 +10,9 @@
 	>
 		<div :class="{ opacity: noStock}">
 			<div v-if="noStock" class="without-stock-tag">
-				<span class="without-stock-text">Agotado</span>
+				<span
+				:style="`background-color: ${globalColors.primary};`"
+				class="without-stock-text">Agotado</span>
 			</div>
 			<div class="position-relative">
 				<div class="product-favorite-mobile">
@@ -57,6 +59,19 @@
 							{ 'loading img-space': indeterminate },
 						]"
 					>
+						<div>
+							<span class="show-add" v-if="showAdd">
+								<v-icon color="#03ba00" size="15">check_circle</v-icon>
+								<span class="pl-1">
+									Agregado
+								</span>
+							</span>
+							<span class="show-agot" v-if="showNotStock">
+								<span class="pl-1">
+									SIN STOCK
+								</span>
+							</span>
+						</div>
 						<img
 							v-if="!indeterminate"
 							:class="[
@@ -115,7 +130,7 @@
 			</div>
 		</div>
 		<div v-if="!indeterminate" class="bottom-position">
-			<addcar-component active @add-car="addToCar" @remove-car="removeProductFromCar" :class="{ outstock: noStock}" />
+			<addcar-component :disabled-add="disabledAdd" active @add-car="addToCar" @remove-car="removeProductFromCar" :class="{ outstock: noStock}" />
 		</div>
 	</div>
 </template>
@@ -133,13 +148,24 @@ function mounted() {
 
 function addToCar() {
 	if (!this.noStock) {
+		this.showAdd = true;
+		this.quantityAddProduct += 1;
 		const productSelected = this.product;
+		this.disabledAdd = this.quantityAddProduct >= productSelected.stock;
+		if (this.quantityAddProduct >= productSelected.stock) {
+			this.showNotStock = true;
+		}
 		productSelected.unitSelected = this.product.unitId;
 		this.$store.dispatch('addProductToBuyCar', productSelected);
 	}
 }
 
 function removeProductFromCar() {
+	this.quantityAddProduct -= 1;
+	this.disabledAdd = !(this.quantityAddProduct < this.product.stock);
+	if (this.quantityAddProduct < this.product.stock) {
+		this.showNotStock = false;
+	}
 	this.$store.dispatch('removeProductToBuyCar', this.product);
 }
 
@@ -213,7 +239,11 @@ function isService() {
 }
 
 function getWholeSalePrice() {
-	const commerceData = this.getCommerceData.settings ? this.getCommerceData : this.getLocalStorage('ecommerce::ecommerce-data');
+	if (Object.keys(this.getCommerceData).length === 0 || this.getCommerceData === null) {
+		return {};
+	}
+	const commerceData = this.getCommerceData.settings ?
+		this.getCommerceData : this.getLocalStorage('ecommerce::ecommerce-data');
 	const priceId = commerceData.settings.salPriceListId;
 	const priceList = this.product.priceList || {};
 	const { ranges } = priceList[priceId] || {};
@@ -231,12 +261,16 @@ function getWholeSalePrice() {
 
 function data() {
 	return {
+		disabledAdd: false,
 		x: 0,
 		y: 0,
 		elWidth: 0,
 		elHeight: 0,
 		mouseOnCard: false,
 		WholeSalePrice: null,
+		quantityAddProduct: 0,
+		showAdd: false,
+		showNotStock: false,
 	};
 }
 
@@ -344,6 +378,7 @@ export default {
 		bottom: 10px;
 		width: 100%;
 		padding: 0 6px;
+
 		&.noDiscount {
 			justify-content: flex-end;
 		}
@@ -514,7 +549,7 @@ export default {
 		position: relative;
 
 		.without-stock-tag {
-			background-color: #acacac;
+			// background-color: #acacac;
 			color: white;
 			display: flex;
 			font-size: 18px;
@@ -554,7 +589,7 @@ export default {
 		text-transform: uppercase;
 		@media screen and (min-width: 600px) {
 			font-size: 20px;
-			margin-top: 10px;
+			// margin-top: 10px;
 		}
 	}
 
@@ -584,6 +619,35 @@ export default {
 
 	.outstock {
 		opacity: 0.43;
+	}
+
+	.show-add {
+		background-color: white;
+		border-radius: 9px;
+		bottom: 20px;
+		box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+		color: #03ba00;
+		font-size: 11px;
+		padding: 2px 8px 2px 1px;
+		position: absolute;
+
+		@media (min-width: 1024px) {
+			bottom: 95px;
+		}
+	}
+	.show-agot {
+		background-color: #002074;
+		border-radius: 14.5px;
+		bottom: 49px;
+		color: white;
+		font-family: font(bold);
+		font-size: 10px;
+		padding: 2px 8px;
+		position: absolute;
+
+		@media (min-width: 1024px) {
+			bottom: 125px;
+		}
 	}
 
 </style>
