@@ -2,7 +2,6 @@
 	<div
 		class="product-container"
 		:class="{ 'small': small }"
-		@click="goToProduct(product)"
 		@mousemove="onCard"
 		@mouseenter="mouseOnCard = true"
 		@mouseleave="mouseOnCard = false"
@@ -73,6 +72,7 @@
 							</span>
 						</div>
 						<img
+							@click="goToProduct(product)"
 							v-if="!indeterminate"
 							:class="[
 							'product-img',
@@ -83,6 +83,7 @@
 					</div>
 					<div class="product-description-wrapper">
 						<p
+							@click="goToProduct(product)"
 							:class="[
 								indeterminate ? 'loading text-field' : 'product-name'
 							]"
