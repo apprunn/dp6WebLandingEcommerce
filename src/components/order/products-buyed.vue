@@ -79,7 +79,7 @@ export default {
 		margin-bottom: 40px;
 		padding: 10px 20px 10px 20px;
 		@media (min-width: 768px) {
-			padding: 20px 32px 27px 20px;
+			padding: 0;
 		}
 	}
 

@@ -1,31 +1,43 @@
 <template>
 	<div>
-		<products-buyed/>
 		<section class="section-container">
-			<div class="section-title">
-				<img :src="logo.section" alt="logo del método de pago">
-				<h2 class="payment-section-title">método de pago</h2>
+			<div @click="toogleCollapse('products')" class="contend-title">
+				<div class="section-title">
+					<img :src="iconProduct.section" alt="logo productos">
+					<h2 class="payment-section-title">Productos</h2>
+				</div>
+				<img height="16" width="18" :style="collapseStepProducts" :src="arrow.section" alt="arrow" class="arrow"/>
 			</div>
-			<div class="methods-container">
-				<app-button
-					class="method-item"
-					v-for="method in getWaysPayments"
-					:key="method.id"
-					:max-width="'100%'"
-					:data-cy="method.name"
-					:action="method.name"
-					:active="paymentMethodSelected === method.code"
-					:background="globalColors.secondary"
-					:border="globalColors.secondary"
-					@click="onSelect(method)"
-				/>
+			<products-buyed v-show="collapseSectionProducts"/>
+			<div @click="toogleCollapse('methods')" class="contend-title">
+				<div class="section-title">
+					<img :src="logo.section" alt="logo del método de pago">
+					<h2 class="payment-section-title">método de pago</h2>
+				</div>
+				<img height="16" width="18" :style="collapseStepMethods" :src="arrow.section" alt="arrow" class="arrow"/>
 			</div>
-			<component
-				class="component-container component-container-ios"
-				:ip="ip"
-				:is="paymentMethodSelectedComponent"
-				:paymentsTypes="gatewayConfiguration"
-			></component>
+			<div v-show="collapseSectionMethods" class="section-methods">
+				<div class="methods-container">
+					<app-button
+						class="method-item"
+						v-for="method in getWaysPayments"
+						:key="method.id"
+						:max-width="'100%'"
+						:data-cy="method.name"
+						:action="method.name"
+						:active="paymentMethodSelected === method.code"
+						:background="globalColors.secondary"
+						:border="globalColors.secondary"
+						@click="onSelect(method)"
+					/>
+				</div>
+				<component
+					class="component-container component-container-ios"
+					:ip="ip"
+					:is="paymentMethodSelectedComponent"
+					:paymentsTypes="gatewayConfiguration"
+				></component>
+			</div>
 		</section>
 	</div>
 </template>
@@ -48,6 +60,8 @@ function created() {
 		const selectThisWayPayment = this.getCreditCard || this.getWaysPayments[0];
 		this.onSelect(selectThisWayPayment);
 	}
+	this.collapseSectionMethods = true;
+	this.collapseSectionProducts = false;
 }
 
 /**
@@ -97,6 +111,22 @@ function getCreditCard() {
 	return findCreditCard;
 }
 
+function toogleCollapse(section) {
+	if (section === 'products') {
+		this.collapseSectionProducts = !this.collapseSectionProducts;
+	} else if (section === 'methods') {
+		this.collapseSectionMethods = !this.collapseSectionMethods;
+	}
+}
+
+function collapseStepProducts() {
+	return `transform: ${this.collapseSectionProducts ? 'rotate(0deg)' : 'rotate(180deg)'};`;
+}
+
+function collapseStepMethods() {
+	return `transform: ${this.collapseSectionMethods ? 'rotate(0deg)' : 'rotate(180deg)'};`;
+}
+
 function data() {
 	return {
 		flagDataFast: null,
@@ -105,9 +135,17 @@ function data() {
 		logo: {
 			section: '/static/icons/payment.svg',
 		},
+		arrow: {
+			section: '/static/icons/arrow.svg',
+		},
+		iconProduct: {
+			section: '/static/icons/shopping-basket.svg',
+		},
 		ip: '',
 		open: false,
 		paymentMethodSelected: '',
+		collapseSectionProducts: false,
+		collapseSectionMethods: false,
 	};
 }
 
@@ -129,12 +167,15 @@ export default {
 		]),
 		getCreditCard,
 		paymentMethodSelectedComponent,
+		collapseStepProducts,
+		collapseStepMethods,
 	},
 	created,
 	data,
 	methods: {
 		getClientIp,
 		onSelect,
+		toogleCollapse,
 	},
 	watch: {
 		getWaysPayments,
@@ -164,7 +205,8 @@ export default {
 	}
 
 	.payment-section-title {
-		font-size: size(large);
+		color: color(dark);
+		font-size: size(medium);
 		font-family: font(bold);
 		margin-left: 12px;
 		text-transform: uppercase;
@@ -174,14 +216,24 @@ export default {
 		align-items: baseline;
 		display: flex;
 		justify-content: flex-start;
-		margin-bottom: 40px;
 	}
 
 	.section-container {
 		margin-bottom: 30px;
-
 		@media (min-width: 768px) {
-			width: 650px;
+			width: 700px;
+			margin-left:-50px;
 		}
+	}
+
+	.contend-title{
+		display: flex;
+		justify-content:space-between;
+		align-items: center;
+		cursor: pointer;
+		margin-bottom: 30px;
+	}
+	.arrow{
+		transform: rotate(180deg);
 	}
 </style>
