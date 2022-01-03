@@ -272,6 +272,7 @@ export default {
 	}
 
 	.payment-section-title {
+		color: color(dark);
 		font-size: size(medium);
 		font-family: font(bold);
 		margin-left: 12px;
