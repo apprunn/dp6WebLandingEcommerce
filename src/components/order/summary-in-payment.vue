@@ -240,6 +240,7 @@ export default {
 		padding: 0 1rem;
 		@media (min-width: 768px) {
 			margin-left:-40px;
+			padding: 0;
 		}
 	}
 
