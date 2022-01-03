@@ -1,7 +1,9 @@
 <template>
 <div class="cart-continer">
-	<button :style="activeStyle" class="btn-add-cart" @click="removeCarEvent"> <span class="txt-icon-min"></span></button>
-	<button :style="activeStyle" class="btn-add-cart" @click="addCarEvent"> <span class="txt-icon-plus"> + </span></button>
+	<v-btn :style="activeStyle" class="btn-add-cart" depressed small type="button" @click="removeCarEvent"><span class="txt-icon-min"></span></v-btn>
+	<!-- <button :style="activeStyle" class="btn-add-cart" @click="removeCarEvent"> <span class="txt-icon-min"></span></button> -->
+	<v-btn :style="activeStyle" :disabled="disabledAdd" depressed small type="button" class="btn-add-cart" @click="addCarEvent"><span class="txt-icon-plus"> + </span></v-btn>
+	<!-- <button :style="activeStyle" class="btn-add-cart" @click="addCarEvent"> <span class="txt-icon-plus"> + </span></button> -->
 </div>
 	
 </template>
@@ -20,9 +22,9 @@ function removeCarEvent($event) {
 
 function activeStyle() {
 	const bgColor = `background-color:${this.active ? this.globalColors.primary : 'white'};`;
-	const borderColor = `border:1px solid ${this.globalColors.primary};`;
+	// const borderColor = `border:1px solid ${this.globalColors.primary};`;
 	const color = `color:${this.active ? 'white' : this.globalColors.primary};`;
-	return `${bgColor}${borderColor}${color}`;
+	return `${bgColor}${color}`;
 }
 
 export default {
@@ -43,6 +45,10 @@ export default {
 			default: false,
 			type: Boolean,
 		},
+		disabledAdd: {
+			default: false,
+			type: Boolean,
+		},
 	},
 };
 </script>
@@ -52,17 +58,18 @@ export default {
 		justify-content: center;
 		align-items: center;
 		background-color: color(primary);
-		border-radius: 100%;
-		height: 32px;
+		border-radius: 100% !important;
+		height: 32px !important;
 		margin: 8px;
-		width: 32px;
+		min-width: 32px !important;
+
 		@media screen and (max-width: 600px) {
-			height: 31px;
-			width: 31px;
+			height: 32px !important;
+			min-width: 32px !important;
 		}
 		@media screen and (max-width: 400px) {
-			height: 27px;
-			width: 27px;
+			height: 28px !important;
+			min-width: 28px !important;
 		}
 	}
 	.txt-icon-plus{
