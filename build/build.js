@@ -3,7 +3,7 @@
 require('./check-versions')()
 require('dotenv').config()
 
-process.env.NODE_ENV = 'production'
+process.env.NODE_ENV = 'bodega-bonita'
 
 const ora = require('ora')
 const rm = require('rimraf')
