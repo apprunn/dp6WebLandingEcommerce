@@ -1,10 +1,10 @@
 <template>
 	<div class="product-container">
-		<trash-component class="action" @click="deleteProduct"/>
-		<section class="grid-areas">
+		<trash-component v-if="stepOne" class="action" @click="deleteProduct"/>
+		<section v-if="stepOne" class="grid-areas">
 			<img
 				@click="goToProduct(product)"
-				:src="urlImage"
+				:src="product.imagePresentation || (product.images ? (product.images.length > 0 ? product.images[0].urlImage : ''):'')"
 				alt="imagen del producto"
 				class="product-img image"
 			>
@@ -58,6 +58,29 @@
 				/>
 			</div> -->
 		</section>
+		
+		<div v-else class="grid-product">
+			<img class="img-pro" height="75" width="80" 
+			:src="product.imagePresentation || (product.images ? (product.images.length > 0 ? product.images[0].urlImage : ''):'')"
+			alt="Imagen">
+			<div
+				:class="[
+					'product-info'
+				]"
+			>
+				<h3 class="product-name">
+					{{product.name ? product.name.toLowerCase(): product.name}}
+				</h3>
+				<span class="product-description">{{product.unit ? product.unit.name.toLowerCase() : product.unit.name}}</span>
+			</div>
+			<h3 class="product-quantity">Cantidad: {{product.quantity}} 
+				<span class="product-unity">/ {{product.unit ? product.unit.name.toLowerCase(): product.unit}}</span>
+			</h3>
+			<h3
+				class="product-total"
+			>Total: {{getCurrencySymbol}}. {{product.total | currencyFormat}}</h3>
+		</div>
+				
 		<!-- <section class="actions">
 			<comments-component class="action" @click="showComments"/>
 			<trash-component class="action" @click="deleteProduct"/>
@@ -71,23 +94,12 @@ import trashComponent from '@/components/shared/icons/trash-component';
 import quantityButton from '@/components/shared/buttons/quantity-button';
 import { mapGetters } from 'vuex';
 
-function mounted() {
-	this.getUrlImage();
-}
 
 function goToProduct({ slug, id }) {
 	const params = { id: slug || id };
 	this.goTo('detail-product', { params });
 }
 
-function getUrlImage() {
-	this.urlImage = '';
-	if (this.product.imagePresentation) {
-		this.urlImage = this.product.imagePresentation;
-	} else if (this.product.images) {
-		this.urlImage = this.product.images.length > 0 ? this.product.images[0].urlImage : '';
-	}
-}
 
 function showComments() {
 	this.show = !this.show;
@@ -128,13 +140,11 @@ function data() {
 		comments: '',
 		show: false,
 		maxQuantity: false,
-		urlImage: '',
 	};
 }
 
 export default {
 	name: 'product-in-car',
-	mounted,
 	components: {
 		commentsComponent,
 		textArea,
@@ -153,7 +163,6 @@ export default {
 		clickQuantity,
 		deleteProduct,
 		showComments,
-		getUrlImage,
 		goToProduct,
 	},
 	props: {
@@ -347,9 +356,8 @@ export default {
 		margin: 5px 15px;
 		position: absolute;
 		right: 10px;
-		top: 10;
+		top: 10px;
 	}
-
 	.continer-quantity-button {
 		margin-top: -12px;
 	}
@@ -358,5 +366,90 @@ export default {
 		display: flex;
 		justify-content: center;
 		margin-top: 16px;
+	}
+
+
+	.grid-product {
+		align-items: center;
+		display: grid;
+		grid-column-gap: 14px;
+		grid-template-columns: 0.5fr 1.1fr 0.3fr 0.4fr;
+		transform: translateX(15px);
+		padding: 10px;
+
+		@media (max-width: 600px) {
+			grid-column-gap: 0px;
+			grid-row-gap: 10px;
+			transform: translateX(0px);
+		}
+	}
+
+	.product-total {
+		color: color(dark);
+		font-size: 12px;
+		font-family: font(regular);
+		text-align: center;
+
+		@media (max-width: 600px) {
+			grid-column: 2/5;
+			grid-row: 2;
+			text-align: right;
+		}
+	}
+
+	.img-pro {
+		@media (max-width: 600px) {
+			grid-column: 1/2;
+			grid-row: span 2;
+		}
+	}
+
+	.product-info {
+		max-height: 2rem;
+		transition-duration: 200ms;
+		text-transform:capitalize;
+		@media (max-width: 600px) {
+			grid-column: 2/5;
+			grid-row: 1;
+		}
+		
+		.product-name {
+			color: color(dark);
+			text-transform:capitalize;
+			font-size: 13px;
+		}
+		.product-description {
+			color: color(dark);
+			font-family: font(regular);
+			font-size: size(small);
+			@media (max-width: 550px) {
+				display: none;
+			}
+		}
+	}
+
+	.product-quantity {
+		color: color(dark);
+		font-size: 12px;
+		font-family: font(regular);
+		@media (max-width: 600px) {
+			grid-column: 2/2;
+			grid-row: 2;
+		}
+	}
+	.product-unity{
+		text-transform: capitalize;
+		@media (min-width: 550px) {
+			display: none;
+		}
+	}
+
+	.show-description {
+		max-height: 9rem;
+	}
+
+	.more-info-btn {
+		font-family: font(regular);
+		font-size: size(xsmall);
 	}
 </style>

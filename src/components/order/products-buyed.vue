@@ -8,6 +8,7 @@
 				:key="product.id"
 			>
 				<div class="grid-product">
+					<img class="img-pro" height="75" width="80" :src="product.productImage" alt="Imagen">
 					<div
 						:class="[
 							'product-info',
@@ -15,12 +16,12 @@
 						]"
 					>
 						<h3 class="product-name">
-							{{product.productName.toLowerCase()}}
+							{{product.productName ? product.productName.toLowerCase() : product.productName}}
 						</h3>
-						<span class="product-description">{{product.unitName.toLowerCase()}}</span>
+						<span class="product-description">{{product.unitName ? product.unitName.toLowerCase(): product.unitName}}</span>
 					</div>
 					<h3 class="product-quantity">Cantidad: {{product.quantity}} 
-						<span class="product-unity">/ {{product.unitName.toLowerCase()}}</span>
+						<span class="product-unity">/ {{product.unitName ? product.unitName.toLowerCase(): product.unitName}}</span>
 					</h3>
 					<h3
 						class="product-total"
@@ -86,9 +87,10 @@ export default {
 	.grid-product {
 		align-items: center;
 		display: grid;
-    	grid-column-gap: 14px;
-		grid-template-columns: 1.2fr 0.3fr 0.4fr;
+		grid-column-gap: 14px;
+		grid-template-columns: 0.6fr 1.1fr 0.3fr 0.4fr;
 		transform: translateX(15px);
+		padding: 2px;
 
 		@media (max-width: 600px) {
 			grid-column-gap: 0px;
@@ -104,9 +106,16 @@ export default {
 		text-align: center;
 
 		@media (max-width: 600px) {
-			grid-column: 2/4;
+			grid-column: 2/5;
 			grid-row: 2;
 			text-align: right;
+		}
+	}
+
+	.img-pro {
+		@media (max-width: 600px) {
+			grid-column: 1/2;
+			grid-row: span 2;
 		}
 	}
 
@@ -115,9 +124,10 @@ export default {
 		transition-duration: 200ms;
 		text-transform:capitalize;
 		@media (max-width: 600px) {
-			grid-column: 1/4;
+			grid-column: 2/5;
 			grid-row: 1;
 		}
+		
 		.product-name {
 			color: color(dark);
 			text-transform:capitalize;
@@ -127,7 +137,7 @@ export default {
 			color: color(dark);
 			font-family: font(regular);
 			font-size: size(small);
-			@media (max-width: 385px) {
+			@media (max-width: 448px) {
 				display: none;
 			}
 		}
@@ -138,12 +148,13 @@ export default {
 		font-size: 12px;
 		font-family: font(regular);
 		@media (max-width: 600px) {
-			grid-column: 1/2;
+			grid-column: 2/2;
 			grid-row: 2;
 		}
 	}
 	.product-unity{
-		@media (min-width: 385px) {
+		text-transform: capitalize;
+		@media (min-width: 449px) {
 			display: none;
 		}
 	}

@@ -12,7 +12,7 @@
 			<div @click="toogleCollapse('methods')" class="contend-title">
 				<div class="section-title">
 					<img :src="logo.section" alt="logo del método de pago">
-					<h2 class="payment-section-title">método de pago</h2>
+					<h2 class="payment-section-title">métodos de pago</h2>
 				</div>
 				<img height="16" width="18" :style="collapseStepMethods" :src="arrow.section" alt="arrow" class="arrow"/>
 			</div>
@@ -222,7 +222,6 @@ export default {
 		margin-bottom: 30px;
 		@media (min-width: 768px) {
 			width: 700px;
-			margin-left:-50px;
 		}
 	}
 

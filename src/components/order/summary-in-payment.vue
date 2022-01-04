@@ -237,11 +237,7 @@ export default {
 	}
 
 	.container-info {
-		padding: 0 1rem;
-		@media (min-width: 768px) {
-			margin-left:-40px;
-			padding: 0;
-		}
+		padding: 0 0.7rem;
 	}
 
 	.contend-title{
@@ -249,7 +245,7 @@ export default {
 		justify-content:space-between;
 		align-items: center;
 		cursor: pointer;
-		margin-bottom: 30px;
+		margin-bottom: 10px;
 		@media (min-width: 768px) {
 			width: 700px;
 		}
