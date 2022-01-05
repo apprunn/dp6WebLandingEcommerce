@@ -200,7 +200,7 @@ export default {
 			position:fixed;
 			bottom: 0;
 			left: 0;
-			z-index: 9999;
+			z-index: 11;
 			width:94%;
 			margin-left: 3%;
 			margin-right: 3%;

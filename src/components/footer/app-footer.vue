@@ -89,6 +89,9 @@ export default {
 
 .app-footer {
 	width: 100%;
+	@media (max-width:669px){
+		margin-bottom: 50px;
+	}
 }
 
 .social-logo {
