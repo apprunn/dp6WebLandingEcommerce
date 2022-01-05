@@ -240,7 +240,11 @@ function isService() {
 }
 
 function getWholeSalePrice() {
-	const commerceData = this.getCommerceData.settings ? this.getCommerceData : this.getLocalStorage('ecommerce::ecommerce-data');
+	if (Object.keys(this.getCommerceData).length === 0 || this.getCommerceData === null) {
+		return {};
+	}
+	const commerceData = this.getCommerceData.settings ?
+		this.getCommerceData : this.getLocalStorage('ecommerce::ecommerce-data');
 	const priceId = commerceData.settings.salPriceListId;
 	const priceList = this.product.priceList || {};
 	const { ranges } = priceList[priceId] || {};

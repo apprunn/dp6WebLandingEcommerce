@@ -1,81 +1,108 @@
 <template>
-	<div class="main-container-delivery">
-		<div class="section-title">
-			<img :src="logo.section" alt="logo del método de pago">
-			<h2 class="payment-section-title">¿COMÓ QUIERES RECIBIR TU PRODUCTO?</h2>
+	<div class="main-container-delivery" :style="styleBtnMobile">
+		<div @click="toogleCollapse('address')" class="contend-title">
+			<div class="section-title">
+				<img :src="logo.section" alt="logo del método de pago">
+				<h2 class="payment-section-title">¿COMÓ QUIERES RECIBIR TU PRODUCTO? </h2>
+			</div>
+			<img height="16" width="18" :style="collapseStep" :src="arrow.section" alt="arrow" class="arrow"/>
 		</div>
+		<div v-show="collapseSection" class="section-forms">
+			<section class="delivery" data-cy="delivery-buttons">
+				<app-button-order
+					v-if="atHouse"
+					button-title="Envío a Domicilio"
+					class="btn"
+					:active="getFlagPickUp === house.value"
+					@click="selected(house)"
+				>
+					<location-svg :active="getFlagPickUp === house.value"/>
+				</app-button-order>
+				<app-button-order
+					v-if="atStore"
+					button-title="Recoger en Tienda"
+					class="btn"
+					:active="getFlagPickUp === store.value"
+					@click="selected(store)"
+				>
+					<coffee-svg :active="getFlagPickUp === store.value"/>
+				</app-button-order>
+			</section>
 
-		<section class="delivery" data-cy="delivery-buttons">
-			<app-button-order
-				v-if="atHouse"
-				button-title="Envío a Domicilio"
-				class="btn"
-				:active="getFlagPickUp === house.value"
-				@click="selected(house)"
-			>
-				<location-svg :active="getFlagPickUp === house.value"/>
-			</app-button-order>
-			<app-button-order
-				v-if="atStore"
-				button-title="Recoger en Tienda"
-				class="btn"
-				:active="getFlagPickUp === store.value"
-				@click="selected(store)"
-			>
-				<coffee-svg :active="getFlagPickUp === store.value"/>
-			</app-button-order>
-		</section>
-
-		<address-component
-			v-if="getFlagPickUp === store.value && atStore"
-			class="mt-4"
-			placeholder="Seleccione una tienda"
-			item-text="name"
-			item-value="id"
-			:address="selectedWarehouse.name"
-			:center="warehouesesCenter"
-			:disable-map="disableMapButtonByWarehouse"
-			:markers="singleOrMultiMarkersOnWarehouses"
-			:options="getWarehouses"
-			:zoom="warehousesZoom"
-			:value="selectedWarehouse.id"
-			@input="warehouseSelected"
-		/>
-
-		<responsible-form/>
-
-		<div v-if="getFlagPickUp === house.value && atHouse">
 			<address-component
-				data-cy="select-address-saved"
-				hide-map-button
-				placeholder="Seleccione una dirección"
+				v-if="getFlagPickUp === store.value && atStore"
+				class="mt-4"
+				placeholder="Seleccione una tienda"
 				item-text="name"
 				item-value="id"
-				:options="getDirections"
-				:value="selectedDirection.id"
-				@input="directionSelected"
+				:address="selectedWarehouse.name"
+				:center="warehouesesCenter"
+				:disable-map="disableMapButtonByWarehouse"
+				:markers="singleOrMultiMarkersOnWarehouses"
+				:options="getWarehouses"
+				:zoom="warehousesZoom"
+				:value="selectedWarehouse.id"
+				@input="warehouseSelected"
 			/>
-			<new-address v-if="selectedDirection.id === 0"/>
-		</div>
-		<app-input
-			data-cy="ref"
-			placeholder="Escribe un comentario"
-			type="text"
-			:class="[selectedDirection.id === 0 ? 'mx-2 my-1 responsible-field' : 'mx-2 my-4 responsible-field']"
-			v-model="comments"
-			@input="setComments"
-		>
-		</app-input>
 
+			<responsible-form/>
+			
+			<div v-if="getFlagPickUp === house.value && atHouse">
+				<div class="container-btn-new-address">
+					<h5 class="mt-2 mx-2">Seleccionar dirección de envío</h5>
+					<address-component
+						class="select-address"
+						v-if="getDirections.length > 1"
+						data-cy="select-address-saved"
+						hide-map-button
+						placeholder="Seleccione una dirección"
+						item-text="name"
+						item-value="id"
+						:disabled="visibleNewAddress"
+						:options="getDirections"
+						:value="selectedDirection.id"
+						@input="directionSelected"
+					/>
+					<div :style="floatBtn" class="box-btn-address">
+						<button @click="visibleFormAddress()" 
+							class="btn-new-address mt-2 mx-2">
+							+ Agregar Nueva Dirección
+						</button>
+					</div>
+				</div>
+				<h5 class="mt-2 mx-2 txt-new-address" v-show="visibleNewAddress">Nueva Dirección</h5>
+				<new-address v-show="visibleNewAddress"/>
+			</div>
+		</div>
+		
 		<section class="billing-section">
 			<billing/>
 		</section>
+		<div @click="toogleCollapse('comment')" class="contend-title">
+			<div class="section-title">
+				<img height="26" width="28" :src="comment.section" alt="comentario icono">
+				<h2 class="comment-section-title">COMENTARIO</h2>
+			</div>
+			<img height="16" width="18" :style="collapseStepComment" :src="arrow.section" alt="arrow" class="arrow"/>
+		</div>
+		<div v-show="collapseSectionComment" class="section-comments">
+			<text-area
+				data-cy="ref"
+				placeholder="Escribe un comentario"
+				type="text"
+				class="mx-2 my-1 responsible-field"
+				v-model="comments"
+				@input="setComments"
+			>
+			</text-area>
+		</div>
+		
 	</div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
 import { getDeeper, isEmpty } from '@/shared/lib';
-import appInput from '@/components/shared/inputs/app-input';
+import textArea from '@/components/shared/inputs/text-area';
 import addressComponent from '@/components/order/address-component';
 import appButtonOrder from '@/components/shared/buttons/app-button-order';
 import billing from '@/components/order/billing';
@@ -87,6 +114,7 @@ import waysDeliveries from '@/shared/enums/waysDeliveries';
 
 function created() {
 	const that = this;
+	this.collapseSection = true;
 	Promise.all([
 		this.$store.dispatch('LOAD_DIRECTIONS', this),
 		this.$store.dispatch('LOAD_WAREHOUSES', this),
@@ -104,6 +132,7 @@ function created() {
 
 function mounted() {
 	this.comments = this.getComments;
+	this.visibleNewAddress = false;
 }
 
 function lonleyWarehouse() {
@@ -220,6 +249,7 @@ function directionSelected(id) {
 	} else {
 		this.calculateShippingCost(w);
 		this.$store.commit('SET_CUSTOMER_ADDRESS', null);
+		this.visibleNewAddress = false;
 	}
 }
 
@@ -317,10 +347,47 @@ function setComments() {
 	this.$store.commit('UPDATE_COMENTS', this.comments);
 }
 
+function styleBtnMobile() {
+	return {
+		'--bg-mobile-color': this.globalColors.primary,
+	};
+}
+
+function visibleFormAddress() {
+	this.directionSelected(0);
+	this.visibleNewAddress = !this.visibleNewAddress;
+}
+
+function floatBtn() {
+	return `justify-content: ${this.getDirections.length <= 1 ? 'start' : 'end'}`;
+}
+
+function toogleCollapse(section) {
+	if (section === 'address') {
+		this.collapseSection = !this.collapseSection;
+	} else if (section === 'comment') {
+		this.collapseSectionComment = !this.collapseSectionComment;
+	}
+}
+
+function collapseStep() {
+	return `transform: ${this.collapseSection ? 'rotate(0deg)' : 'rotate(180deg)'};`;
+}
+
+function collapseStepComment() {
+	return `transform: ${this.collapseSectionComment ? 'rotate(0deg)' : 'rotate(180deg)'};`;
+}
+
 function data() {
 	return {
 		logo: {
 			section: '/static/icons/delivery-truck.svg',
+		},
+		arrow: {
+			section: '/static/icons/arrow.svg',
+		},
+		comment: {
+			section: '/static/icons/comment.svg',
 		},
 		flagWatchOrderInfo: false,
 		selectedDirection: {
@@ -334,6 +401,9 @@ function data() {
 			location: {},
 		},
 		comments: '',
+		visibleNewAddress: false,
+		collapseSection: false,
+		collapseSectionComment: false,
 	};
 }
 
@@ -347,7 +417,7 @@ export default {
 		locationSvg,
 		newAddress,
 		responsibleForm,
-		appInput,
+		textArea,
 	},
 	computed: {
 		...mapGetters([
@@ -372,6 +442,10 @@ export default {
 		warehouesesCenter,
 		warehousesMarkers,
 		warehousesZoom,
+		styleBtnMobile,
+		floatBtn,
+		collapseStep,
+		collapseStepComment,
 	},
 	created,
 	mounted,
@@ -390,6 +464,8 @@ export default {
 		setOrderInfoByDefault,
 		warehouseSelected,
 		setComments,
+		visibleFormAddress,
+		toogleCollapse,
 	},
 	watch: {
 		getOrderInfo: handlerOrderInfo,
@@ -400,11 +476,10 @@ export default {
 	.delivery {
 		align-items: center;
 		display: grid;
-		grid-auto-flow: row;
 		grid-gap: 10px;
-
-		@media (min-width: 768px) {
-			grid-auto-flow: column;
+		grid-auto-flow: column;
+		@media (max-width: 325px) {
+			grid-auto-flow: row;
 		}
 	}
 
@@ -427,17 +502,28 @@ export default {
 
 	.responsible-field {
 		flex: 1 1 47%;
-		margin-top: 7px;
+	}
+
+	.select-address{
+		margin-top: 10px;
 	}
 
 	.billing-section {
-		margin-top: 50px;
+		margin-top: 40px;
 	}
 
 	.payment-section-title {
-		font-size: size(large);
+		color: color(dark);
+		font-size: size(medium);
 		font-family: font(bold);
 		margin-left: 12px;
+		text-transform: uppercase;
+	}
+	.comment-section-title{
+		color: color(dark);
+		font-size: size(medium);
+		font-family: font(bold);
+		margin-left: 19px;
 		text-transform: uppercase;
 	}
 
@@ -445,11 +531,53 @@ export default {
 		align-items: baseline;
 		display: flex;
 		justify-content: flex-start;
-		margin-bottom: 40px;
 	}
 
 	.main-container-delivery {
 		margin-top: 60px;
+	}
+
+	.container-btn-new-address {
+		color: #002074;
+		
+	}
+	.box-btn-address{
+		display: flex;
+		align-items: center;
+		justify-content: end;
+		width: 100%;
+	}
+
+	.btn-new-address {
+		background-color: var(--bg-mobile-color);
+		border-radius: 10px;
+		width: auto;
+		height: 31px;
+		padding: 6px 19px 7px;
+		color: white;
+		font-size: 13px;
+		margin-bottom: 10px;
+	}
+
+	.txt-new-address {
+		color: #002074;
+	}
+
+	.contend-title{
+		display: flex;
+		justify-content:space-between;
+		align-items: center;
+	}
+	.arrow{
+		transform: rotate(180deg);
+	}
+
+	.section-forms{
+		margin-top: 20px;
+	}
+
+	.section-comments{
+		margin-top: 20px;
 	}
 
 </style>

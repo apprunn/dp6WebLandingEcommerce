@@ -1,6 +1,6 @@
 <template>
-	<div class="summary-container">
-		<section ref="sect-sum" class="summary-order summary-section">
+	<div class="summary-container summary-section">
+		<section class="summary-order">
 			<div class="summary-header text-xs-center">
 				<p class="summary-title">Resumen de Compra</p>
 			</div>
@@ -23,7 +23,7 @@
 				</p>
 			</div>
 		</section>
-		<section class="btns-summary-order">
+		<section class="btns-summary-order" :style="styleBtnMobile">
 			<app-button
 				data-cy="make-order"
 				v-if="stepOne"
@@ -97,7 +97,11 @@ function stepTwo() {
 
 function goToMakeOrder() {
 	if (this.token) {
+		this.$emit('close-collapse');
 		this.goTo('buy-delivery');
+		setTimeout(() => {
+			this.scrollTo('main-container-delivery', 800, false);
+		}, 900);
 	} else if (window.innerWidth < 765) {
 		this.setLocalData('route-after-login', '/carrito-de-compras');
 		this.goTo('login');
@@ -134,18 +138,19 @@ function listenerPriceOrder() {
 	const newDecimals = decimals.length === 1 && decimals < 10 ? `${decimals}0` : decimals;
 	return `${integer}.${newDecimals}`;
 }
-function mounted() {
-	setTimeout(() => {
-		this.scrollTo('summary-section', 800, true);
-	}, 1000);
+
+function styleBtnMobile() {
+	return {
+		'--bg-mobile-color': this.globalColors.primary,
+	};
 }
+
 
 export default {
 	name: 'summary-order',
 	components: {
 		appButton,
 	},
-	mounted,
 	computed: {
 		...mapGetters([
 			'getBillingData',
@@ -178,6 +183,7 @@ export default {
 		stepTwo,
 		total,
 		listenerPriceOrder,
+		styleBtnMobile,
 	},
 	methods: {
 		goToMakeOrder,
@@ -189,14 +195,16 @@ export default {
 <style lang="scss" scoped>
 	.btns-summary-order {
 		@media (max-width:669px){
+			background-color: var(--bg-mobile-color);
+			border-radius: 10px;
 			position:fixed;
 			bottom: 0;
 			left: 0;
 			z-index: 9999;
-			width:100%;
-			padding-left: 1em;
-			padding-right: 1em;
-			padding-bottom: 0.5em;
+			width:94%;
+			margin-left: 3%;
+			margin-right: 3%;
+			margin-bottom: 2px;
 		}
 	}
 	.summary-container {

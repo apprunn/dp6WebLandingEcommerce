@@ -237,7 +237,11 @@ const asyncActions = {
 			: { context, body };
 		await dispatch(dispatchName, dispatchObj);
 		const page = flagFinish ? 'buy-summary' : 'buy-payment';
+		const classPage = flagFinish ? 'summary-content-container' : 'section-container';
 		context.goTo(page);
+		setTimeout(() => {
+			context.scrollTo(classPage, 800, false);
+		}, 900);
 	},
 	LOAD_PAYMENT_TRANSACTIONS: async ({ commit }, { context, codeGateway, page }) => {
 		const url = 'payment-gateway';

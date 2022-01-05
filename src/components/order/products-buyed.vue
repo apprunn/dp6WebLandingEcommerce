@@ -1,13 +1,14 @@
 <template>
 	<div class="buyed-main-container">
-		<ol class="buyed-products-container">
+		<ul class="buyed-products-container">
 			<li
 				:style="`color: ${globalColors.secondary};`"
-				class="list"
+				class="list buyed-main-container"
 				v-for="product in getOrderDetails"
 				:key="product.id"
 			>
 				<div class="grid-product">
+					<img class="img-pro" height="75" width="80" :src="product.productImage" alt="Imagen">
 					<div
 						:class="[
 							'product-info',
@@ -15,23 +16,19 @@
 						]"
 					>
 						<h3 class="product-name">
-							{{product.productName}}
-							<button
-								type="button"
-								class="more-info-btn"
-								@click="toogleDescription(product)"
-							>{{moreInfoContent(product)}}</button>
+							{{product.productName ? product.productName.toLowerCase() : product.productName}}
 						</h3>
-						<span class="product-description">{{product.description}}</span>
+						<span class="product-description">{{product.unitName ? product.unitName.toLowerCase(): product.unitName}}</span>
 					</div>
-					<span class="product-quantity">Cantidad: {{product.quantity}} / {{product.unitName}}</span>
+					<h3 class="product-quantity">Cantidad: {{product.quantity}} 
+						<span class="product-unity">/ {{product.unitName ? product.unitName.toLowerCase(): product.unitName}}</span>
+					</h3>
 					<h3
-						:style="`color: ${globalColors.secondary};`"
 						class="product-total"
-					>{{getCurrencySymbol}}. {{product.total | currencyFormat}}</h3>
+					>Total: {{getCurrencySymbol}}. {{product.total | currencyFormat}}</h3>
 				</div>
 			</li>
-		</ol>
+		</ul>
 	</div>
 </template>
 <script>
@@ -72,25 +69,28 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+	.buyed-products-container{
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
 	.buyed-main-container {
 		background-color: white;
-		border-radius: 8px;
-		border: solid 1px color(border);
 		font-family: font(bold);
 		margin-bottom: 40px;
 		padding: 10px 20px 10px 20px;
-
 		@media (min-width: 768px) {
-			padding: 20px 32px 27px 20px;
+			padding: 0;
 		}
 	}
 
 	.grid-product {
 		align-items: center;
 		display: grid;
-    	grid-column-gap: 14px;
-		grid-template-columns: 0.8fr 0.5fr 0.5fr;
+		grid-column-gap: 14px;
+		grid-template-columns: 0.6fr 1.1fr 0.3fr 0.4fr;
 		transform: translateX(15px);
+		padding: 2px;
 
 		@media (max-width: 600px) {
 			grid-column-gap: 0px;
@@ -100,49 +100,74 @@ export default {
 	}
 
 	.product-total {
-		font-size: size(large);
+		color: color(dark);
+		font-size: 12px;
+		font-family: font(regular);
 		text-align: center;
 
 		@media (max-width: 600px) {
-			grid-column: 2/4;
+			grid-column: 2/5;
 			grid-row: 2;
 			text-align: right;
+		}
+	}
+
+	.img-pro {
+		@media (max-width: 600px) {
+			grid-column: 1/2;
+			grid-row: span 2;
 		}
 	}
 
 	.product-info {
 		max-height: 2rem;
 		transition-duration: 200ms;
-		overflow: hidden;
-
+		text-transform:capitalize;
 		@media (max-width: 600px) {
-			grid-column: 1/4;
+			grid-column: 2/5;
 			grid-row: 1;
 		}
+		
 		.product-name {
 			color: color(dark);
-	
+			text-transform:capitalize;
+			font-size: 13px;
 		}
 		.product-description {
+			color: color(dark);
 			font-family: font(regular);
 			font-size: size(small);
+			@media (max-width: 448px) {
+				display: none;
+			}
 		}
 	}
 
 	.product-quantity {
 		color: color(dark);
-		font-family: font(medium);
-		white-space: nowrap;
-
+		font-size: 12px;
+		font-family: font(regular);
 		@media (max-width: 600px) {
-			grid-column: 1/2;
+			grid-column: 2/2;
 			grid-row: 2;
+		}
+	}
+	.product-unity{
+		text-transform: capitalize;
+		@media (min-width: 449px) {
+			display: none;
 		}
 	}
 
 	.list {
 		border-top: 1px solid color(border);
-		padding: 14px 0;
+		border-radius: 8px;
+		border: solid 1px color(border);
+		margin-bottom: 5px;
+		padding: 10px 20px 10px 20px;
+		@media (min-width: 768px) {
+			padding: 20px 32px 27px 20px;
+		}
 	}
 
 	.list:first-child {
