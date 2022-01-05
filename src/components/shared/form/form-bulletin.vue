@@ -54,7 +54,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .button-form {
 	background-color: color(dark);
 	border-bottom-right-radius: 6px;
@@ -87,7 +87,7 @@ export default {
 		color: color(dark);
 		height: 3px;
 		left: 10px;
-  		position: relative;
+		position: absolute;
 		top: 9px;
 		width: 110px;
 	@media (max-width: 850px) {
@@ -102,7 +102,7 @@ export default {
 	color: color(dark);
 	content: '';
 	height: 3px;
-	position: relative;
+	position: absolute;
 	right: 8px;
 	top: 9px;
 	width: 110px;
@@ -121,8 +121,7 @@ export default {
 	height: 209px;
 	padding: 40px 0;
 	width: 100%;
-	z-index: 8;
-
+	z-index: 10px;
 	@media (max-width: 768px) {
 		flex-direction: column;
 		height: 411px;
@@ -192,7 +191,6 @@ export default {
 	height: 100%;
 	justify-content: space-around;
 	width: 100%;
-
 	@media (min-width: 768px) {
 		align-items: center;
 		flex-direction: row;

@@ -121,6 +121,10 @@ function created() {
 	]).then(() => {
 		if (that.noOrder) {
 			that.setDefaultDelivery();
+			if (this.getDirections.length > 1) {
+				const w = this.getDirections[1];
+				this.directionSelected(w.id);
+			}
 			if (that.getFlagPickUp === that.store.value) {
 				that.lonleyWarehouse();
 			}
