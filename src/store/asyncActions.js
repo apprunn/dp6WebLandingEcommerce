@@ -18,17 +18,22 @@ const asyncActions = {
 		const request = [];
 		commit('LOADING_PRODUCTS', true);
 		const completeParams = Object.assign({}, getters.productParams, params);
-		if (state.token) {
-			request.push(
-				process.env.PRODUCTS_READ_REPORT ?
-					context.$httpProductsRead.get('products/favorites', { params: completeParams }) : context.$httpProducts.get('products/favorites', { params: completeParams }),
-			);
-		} else {
-			request.push(
-				process.env.PRODUCTS_READ_REPORT ? context.$httpProductsRead.get('products-public', { params: completeParams }) :
-					context.$httpProducts.get('products-public', { params: completeParams }),
-			);
-		}
+		// if (state.token) {
+		// 	request.push(
+		// 		process.env.PRODUCTS_READ_REPORT ?
+		// 		context.$httpProductsRead.get('products-public', { params: completeParams }) :
+		// 		context.$httpProducts.get('products-public', { params: completeParams }),
+		// 	);
+		// } else {
+		// 	request.push(
+		// 		process.env.PRODUCTS_READ_REPORT ?
+		// context.$httpProductsRead.get('products-public', { params: completeParams }) :
+		// 			context.$httpProducts.get('products-public', { params: completeParams }),
+		// 	);
+		// }
+		request.push(
+			context.$httpProductsPublic.get('products-public', { params: completeParams }),
+		);
 		const [{ data: products, headers }] = await Promise.all(request);
 		const commercePriceListId = getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
