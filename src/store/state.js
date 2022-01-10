@@ -1,4 +1,3 @@
-
 export default {
 	appConfig: {
 		loadingCounter: [],
@@ -114,4 +113,6 @@ export default {
 	windowLoaded: false,
 	loadingProducts: false,
 	keySearch: '',
+	isToogleBtn: false,
+	isCollapseProduct: false,
 };

@@ -177,6 +177,14 @@ function LOADING_PRODUCTS(state, isLoading) {
 	Vue.set(state, 'loadingProducts', isLoading);
 }
 
+function SET_IS_TOOGLE_BTN(state, value) {
+	Vue.set(state, 'isToogleBtn', value);
+}
+
+function SET_IS_COLLAPSE_PRODUCT(state, value) {
+	Vue.set(state, 'isCollapseProduct', value);
+}
+
 const methods = {
 	ADD_ONE_IN_SERVICE_COUNTER,
 	clearUser,
@@ -220,6 +228,8 @@ const methods = {
 	UPDATE_WINDOW_LOADED,
 	LOADING_PRODUCTS,
 	SET_KEYSEARCH,
+	SET_IS_TOOGLE_BTN,
+	SET_IS_COLLAPSE_PRODUCT,
 };
 
 export default methods;
