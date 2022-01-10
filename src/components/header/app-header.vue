@@ -85,6 +85,7 @@ import CarComponent from '@/components/shared/icons/car-component';
 import HeartComponent from '@/components/shared/icons/heart-component';
 import UserSvg from '@/components/shared/icons/user-svg';
 import SearchIcon from '@/components/shared/icons/search-component';
+import helper from '@/shared/helper';
 
 function mounted() {
 	const ls = this.getLocalStorage(`${process.env.STORAGE_USER_KEY}::product-select`);
@@ -132,13 +133,17 @@ function searchProduct(value) {
 	this.$store.dispatch('LOAD_PRODUCTS', { context: this });
 	this.isSearchMobile = false;
 	this.updateFilter(id);
-	if (this.$route.name !== 'page-home') {
-		this.goTo('page-home');
+	helper.setLocalData('products::buscar', search);
+	this.$store.commit('SET_KEYSEARCH', search);
+	if (this.$route.name !== 'search') {
+		this.goTo('search', { query: { buscar: search } });
 		setTimeout(() => {
-			this.scrollTo('transition-product-section', 800, true);
+			this.scrollTo('section-product-card', 800, true);
 		}, 1000);
 	} else {
-		this.scrollTo('transition-product-section', 800, true);
+		const query = { ...this.$route.query, buscar: search };
+		this.$router.replace({ query });
+		this.scrollTo('section-product-card', 800, true);
 	}
 }
 
