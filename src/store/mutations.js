@@ -91,6 +91,10 @@ function SET_BANNERS(state, banners) {
 	Vue.set(state, 'banners', banners);
 }
 
+function SET_KEYSEARCH(state, key) {
+	Vue.set(state, 'keySearch', key);
+}
+
 function SET_COMMERCE_DATA(state, data) {
 	Vue.set(state, 'commerce', data);
 }
@@ -215,6 +219,7 @@ const methods = {
 	UPDATE_PRODUCTS_SELECTED,
 	UPDATE_WINDOW_LOADED,
 	LOADING_PRODUCTS,
+	SET_KEYSEARCH,
 };
 
 export default methods;
