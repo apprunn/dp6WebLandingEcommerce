@@ -6,6 +6,7 @@ import register from './register';
 import Order from './buy';
 import Help from './help';
 import Category from './category';
+import Search from './search';
 import ProductDetail from './detail-product';
 import restorePassword from './restore-password';
 import SummaryOrder from './summary-order';
@@ -25,6 +26,7 @@ export default function (Vue) {
 				},
 				component: () => import(/* webpackChunkName: "home" */ '@/pages/page-home'),
 			},
+			Search,
 			Category,
 			Components,
 			Help,
