@@ -327,11 +327,7 @@ export default {
 		font-family: font(medium);
 		height: auto;
 		transform: perspective(0px) rotateY(deg) rotateX(0deg) scale3d(0, 0, 0);
-  		transition: all 120ms ease;
-		&:hover {
-			border: 3px solid color(blueLight);
-		}
-
+		transition: all 120ms ease;
 		@media (min-width: 600px) {			
 			box-shadow: 0 2px 2px 0 rgba(31, 26, 26, 0.07);
 			border: 1px solid color(border);

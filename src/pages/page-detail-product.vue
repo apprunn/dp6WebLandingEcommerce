@@ -104,6 +104,7 @@ function addToCar() {
 	if (!this.noStock) {
 		this.$store.dispatch('addProductToBuyCar', this.product);
 		this.showConfirmModal = true;
+		this.$store.commit('SET_IS_COLLAPSE_PRODUCT', true);
 		this.goTo('buy');
 	} else {
 		this.showGenericError('Producto sin stock', 80000);

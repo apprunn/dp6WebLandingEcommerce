@@ -38,17 +38,19 @@
 				action="Pasar a caja"
 				class="btn-order"
 				:background="globalColors.primary"
-				:disabled="invalidOrder"
+				:disabled="invalidOrder || isToogleBtn ? true : false"
 				@click="makeOrder(false)"
+				:spinner="isToogleBtn"
 			/>
 			<app-button
 				data-cy="pay"
 				v-else-if="stepThree"
 				action="Finalizar compra"
 				class="btn-order"
-				:disabled="isOnlinePayment"
+				:disabled="isOnlinePayment || isToogleBtn ? true : false"
 				:background="globalColors.primary"
 				@click="makeOrder(true)"
+				:spinner="isToogleBtn"
 			/>
 		</section>
 	</div>
@@ -58,6 +60,7 @@ import { mapGetters } from 'vuex';
 import appButton from '@/components/shared/buttons/app-button';
 import { getDeeper, compose, setNewProperty } from '@/shared/lib';
 import { creditCard } from '@/shared/enums/wayPayment';
+
 
 function total() {
 	return (this.getTotalToBuy - this.discount) + this.getShippingCost;
@@ -97,6 +100,7 @@ function stepTwo() {
 
 function goToMakeOrder() {
 	if (this.token) {
+		this.$store.commit('SET_IS_COLLAPSE_PRODUCT', false);
 		this.$emit('close-collapse');
 		this.goTo('buy-delivery');
 		setTimeout(() => {
@@ -145,7 +149,6 @@ function styleBtnMobile() {
 	};
 }
 
-
 export default {
 	name: 'summary-order',
 	components: {
@@ -175,6 +178,7 @@ export default {
 			'invalidOrder',
 			'token',
 			'user',
+			'isToogleBtn',
 		]),
 		discount,
 		isOnlinePayment,

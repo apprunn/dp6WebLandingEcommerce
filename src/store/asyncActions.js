@@ -233,7 +233,8 @@ const asyncActions = {
 		const title = PAGE_TITLE === 'undefined' ? backUp : PAGE_TITLE;
 		pageTitle[0].innerHTML = title;
 	},
-	MAKE_ORDER: async ({ dispatch, getters }, { flagFinish, context }) => {
+	MAKE_ORDER: async ({ dispatch, getters, commit }, { flagFinish, context }) => {
+		commit('SET_IS_TOOGLE_BTN', true);
 		const body = helper.buildOrderBody(flagFinish, getters);
 		const orderExist = !isEmpty(getters.getOrderInfo);
 		const dispatchName = orderExist ? 'UPDATE_ORDER' : 'CREATE_ORDER';
@@ -243,6 +244,7 @@ const asyncActions = {
 		await dispatch(dispatchName, dispatchObj);
 		const page = flagFinish ? 'buy-summary' : 'buy-payment';
 		const classPage = flagFinish ? 'summary-content-container' : 'section-container';
+		commit('SET_IS_TOOGLE_BTN', false);
 		context.goTo(page);
 		setTimeout(() => {
 			context.scrollTo(classPage, 800, false);

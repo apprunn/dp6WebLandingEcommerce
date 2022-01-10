@@ -26,7 +26,7 @@
 						</div>
 						<img v-if="stepTwo" height="16" width="18" :style="collapseStep" :src="arrow.section" alt="arrow" class="arrow"/>
 					</div>
-					<div v-show="collapseCar" class="section-collapse-step1">
+					<div v-show="isCollapseProduct" class="section-collapse-step1">
 						<product-in-car
 							:show-unity="showUnity"
 							data-cy="product-in-car"
@@ -88,7 +88,6 @@ async function mounted() {
 	if (id) {
 		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
-	this.collapseCar = getDeeper('meta.step')(this.$route) !== 2;
 }
 
 function stepOneAndTwo() {
@@ -121,15 +120,15 @@ function isNiubiz() {
 }
 
 function collapseStep() {
-	return `transform: ${this.collapseCar ? 'rotate(0deg)' : 'rotate(180deg)'};`;
+	return `transform: ${this.isCollapseProduct ? 'rotate(0deg)' : 'rotate(180deg)'};`;
 }
 
 function toogleCollapse() {
-	this.collapseCar = !this.collapseCar;
+	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', !this.isCollapseProduct);
 }
 
 function closeCollapse() {
-	this.collapseCar = false;
+	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', false);
 }
 
 function data() {
@@ -141,7 +140,6 @@ function data() {
 		arrow: {
 			section: '/static/icons/arrow.svg',
 		},
-		collapseCar: false,
 	};
 }
 
@@ -159,6 +157,7 @@ export default {
 			'getProductToBuy',
 			'getTotalQuantityProducts',
 			'getOrderInfo',
+			'isCollapseProduct',
 		]),
 		isNiubiz,
 		stepOneAndTwo,
