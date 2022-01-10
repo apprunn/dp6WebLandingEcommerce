@@ -165,6 +165,13 @@ function loadingProducts(state) {
 function getkeySearch(state) {
 	return state.keySearch;
 }
+function isToogleBtn(state) {
+	return state.isToogleBtn;
+}
+
+function isCollapseProduct(state) {
+	return state.isCollapseProduct;
+}
 
 const methods = {
 	bannersCoupons,
@@ -210,6 +217,8 @@ const methods = {
 	getCurrencyISO,
 	loadingProducts,
 	getkeySearch,
+	isToogleBtn,
+	isCollapseProduct,
 };
 
 export default methods;
