@@ -14,7 +14,8 @@
 				'app-input',
 			]"
 			:style="`color: ${color}`"
-			@keydown.enter="$emit('search', searchText)"
+			@keydown.enter="sendValue"
+			@keyup.esc="sendValue"
 			v-model="searchText"
 		/>
 	</div>
@@ -25,9 +26,14 @@ import SearchIcon from '@/components/shared/icons/search-component';
 
 function data() {
 	return {
-		searchText: null,
+		searchText: '',
 	};
 }
+
+function sendValue(value) {
+	this.$emit('search', value.target.value);
+}
+
 
 export default {
 	name: 'app-input-search',
@@ -43,6 +49,9 @@ export default {
 	props: {
 		image: String,
 		color: String,
+	},
+	methods: {
+		sendValue,
 	},
 };
 </script>

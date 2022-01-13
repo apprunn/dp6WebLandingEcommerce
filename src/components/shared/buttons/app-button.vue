@@ -7,6 +7,11 @@
 			:class="{ 'thin': thin, 'active' : active}"
 			:style="`background-color: ${active ? background : 'transparent'}; text-align: ${!img ? 'center' : 'left'} ; color: ${active ? color : border}; border: ${border ? `1px solid ${border}` : null}; max-width: ${maxWidth}`"
 		>
+		<v-progress-circular
+			v-if="spinner"
+			indeterminate
+			color="white"
+			></v-progress-circular>
 			<span class="span-img" :style="`border-color: ${imgBorderColor}`" v-if="img">
 				<img
 					v-if="img"
@@ -22,35 +27,49 @@
 </template>
 
 <script>
-	export default {
-		name: 'app-button',
-		inheritAttrs: false,
-		props: {
-			action: String,
-			active: {
-				default: true,
-				type: Boolean,
-			},
-			background: String,
-			border: String,
-			color: {
-				type: String,
-				default: 'white',
-			},
-			img: String,
-			imgBorderColor: String,
-			imgHeight: [String, Number],
-			imgWidth: [String, Number],
-			maxWidth: {
-				type: String,
-				default: '182px',
-			},
-			thin: Boolean,
+import SpinnerLoading from '@/components/shared/spinner/spinner-loading';
+
+export default {
+	name: 'app-button',
+	inheritAttrs: false,
+	components: {
+		SpinnerLoading,
+	},
+	props: {
+		action: String,
+		active: {
+			default: true,
+			type: Boolean,
 		},
-	};
+		background: String,
+		border: String,
+		color: {
+			type: String,
+			default: 'white',
+		},
+		img: String,
+		imgBorderColor: String,
+		imgHeight: [String, Number],
+		imgWidth: [String, Number],
+		maxWidth: {
+			type: String,
+			default: '182px',
+		},
+		thin: Boolean,
+		spinner: {
+			type: Boolean,
+			default: false,
+		},
+	},
+};
 </script>
 
 <style lang="scss" scoped>
+	.spinner{
+		width: 20px;
+		height: 20px;
+		background-color: red;
+	}
 	.app-button {
 		border-radius: 7px;
 		font-family: font(bold);

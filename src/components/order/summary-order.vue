@@ -1,6 +1,6 @@
 <template>
-	<div class="summary-container">
-		<section ref="sect-sum" class="summary-order summary-section">
+	<div class="summary-container summary-section">
+		<section class="summary-order">
 			<div class="summary-header text-xs-center">
 				<p class="summary-title">Resumen de Compra</p>
 			</div>
@@ -23,7 +23,7 @@
 				</p>
 			</div>
 		</section>
-		<section class="btns-summary-order">
+		<section class="btns-summary-order" :style="styleBtnMobile">
 			<app-button
 				data-cy="make-order"
 				v-if="stepOne"
@@ -38,17 +38,19 @@
 				action="Pasar a caja"
 				class="btn-order"
 				:background="globalColors.primary"
-				:disabled="invalidOrder"
+				:disabled="invalidOrder || isToogleBtn ? true : false"
 				@click="makeOrder(false)"
+				:spinner="isToogleBtn"
 			/>
 			<app-button
 				data-cy="pay"
 				v-else-if="stepThree"
 				action="Finalizar compra"
 				class="btn-order"
-				:disabled="isOnlinePayment"
+				:disabled="isOnlinePayment || isToogleBtn ? true : false"
 				:background="globalColors.primary"
 				@click="makeOrder(true)"
+				:spinner="isToogleBtn"
 			/>
 		</section>
 	</div>
@@ -58,6 +60,7 @@ import { mapGetters } from 'vuex';
 import appButton from '@/components/shared/buttons/app-button';
 import { getDeeper, compose, setNewProperty } from '@/shared/lib';
 import { creditCard } from '@/shared/enums/wayPayment';
+
 
 function total() {
 	return (this.getTotalToBuy - this.discount) + this.getShippingCost;
@@ -97,7 +100,12 @@ function stepTwo() {
 
 function goToMakeOrder() {
 	if (this.token) {
+		this.$store.commit('SET_IS_COLLAPSE_PRODUCT', false);
+		this.$emit('close-collapse');
 		this.goTo('buy-delivery');
+		setTimeout(() => {
+			this.scrollTo('main-container-delivery', 800, false);
+		}, 900);
 	} else if (window.innerWidth < 765) {
 		this.setLocalData('route-after-login', '/carrito-de-compras');
 		this.goTo('login');
@@ -134,10 +142,11 @@ function listenerPriceOrder() {
 	const newDecimals = decimals.length === 1 && decimals < 10 ? `${decimals}0` : decimals;
 	return `${integer}.${newDecimals}`;
 }
-function mounted() {
-	setTimeout(() => {
-		this.scrollTo('summary-section', 800, true);
-	}, 1000);
+
+function styleBtnMobile() {
+	return {
+		'--bg-mobile-color': this.globalColors.primary,
+	};
 }
 
 export default {
@@ -145,7 +154,6 @@ export default {
 	components: {
 		appButton,
 	},
-	mounted,
 	computed: {
 		...mapGetters([
 			'getBillingData',
@@ -170,6 +178,7 @@ export default {
 			'invalidOrder',
 			'token',
 			'user',
+			'isToogleBtn',
 		]),
 		discount,
 		isOnlinePayment,
@@ -178,6 +187,7 @@ export default {
 		stepTwo,
 		total,
 		listenerPriceOrder,
+		styleBtnMobile,
 	},
 	methods: {
 		goToMakeOrder,
@@ -189,14 +199,16 @@ export default {
 <style lang="scss" scoped>
 	.btns-summary-order {
 		@media (max-width:669px){
+			background-color: var(--bg-mobile-color);
+			border-radius: 10px;
 			position:fixed;
 			bottom: 0;
 			left: 0;
-			z-index: 9999;
-			width:100%;
-			padding-left: 1em;
-			padding-right: 1em;
-			padding-bottom: 0.5em;
+			z-index: 11;
+			width:94%;
+			margin-left: 3%;
+			margin-right: 3%;
+			margin-bottom: 2px;
 		}
 	}
 	.summary-container {

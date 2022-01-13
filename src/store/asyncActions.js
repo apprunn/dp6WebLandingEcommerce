@@ -18,17 +18,22 @@ const asyncActions = {
 		const request = [];
 		commit('LOADING_PRODUCTS', true);
 		const completeParams = Object.assign({}, getters.productParams, params);
-		if (state.token) {
-			request.push(
-				process.env.PRODUCTS_READ_REPORT ?
-					context.$httpProductsRead.get('products/favorites', { params: completeParams }) : context.$httpProducts.get('products/favorites', { params: completeParams }),
-			);
-		} else {
-			request.push(
-				process.env.PRODUCTS_READ_REPORT ? context.$httpProductsRead.get('products-public', { params: completeParams }) :
-					context.$httpProducts.get('products-public', { params: completeParams }),
-			);
-		}
+		// if (state.token) {
+		// 	request.push(
+		// 		process.env.PRODUCTS_READ_REPORT ?
+		// 		context.$httpProductsRead.get('products-public', { params: completeParams }) :
+		// 		context.$httpProducts.get('products-public', { params: completeParams }),
+		// 	);
+		// } else {
+		// 	request.push(
+		// 		process.env.PRODUCTS_READ_REPORT ?
+		// context.$httpProductsRead.get('products-public', { params: completeParams }) :
+		// 			context.$httpProducts.get('products-public', { params: completeParams }),
+		// 	);
+		// }
+		request.push(
+			context.$httpProductsPublic.get('products-public', { params: completeParams }),
+		);
 		const [{ data: products, headers }] = await Promise.all(request);
 		const commercePriceListId = getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
@@ -228,7 +233,8 @@ const asyncActions = {
 		const title = PAGE_TITLE === 'undefined' ? backUp : PAGE_TITLE;
 		pageTitle[0].innerHTML = title;
 	},
-	MAKE_ORDER: async ({ dispatch, getters }, { flagFinish, context }) => {
+	MAKE_ORDER: async ({ dispatch, getters, commit }, { flagFinish, context }) => {
+		commit('SET_IS_TOOGLE_BTN', true);
 		const body = helper.buildOrderBody(flagFinish, getters);
 		const orderExist = !isEmpty(getters.getOrderInfo);
 		const dispatchName = orderExist ? 'UPDATE_ORDER' : 'CREATE_ORDER';
@@ -237,7 +243,12 @@ const asyncActions = {
 			: { context, body };
 		await dispatch(dispatchName, dispatchObj);
 		const page = flagFinish ? 'buy-summary' : 'buy-payment';
+		const classPage = flagFinish ? 'summary-content-container' : 'section-container';
+		commit('SET_IS_TOOGLE_BTN', false);
 		context.goTo(page);
+		setTimeout(() => {
+			context.scrollTo(classPage, 800, false);
+		}, 900);
 	},
 	LOAD_PAYMENT_TRANSACTIONS: async ({ commit }, { context, codeGateway, page }) => {
 		const url = 'payment-gateway';

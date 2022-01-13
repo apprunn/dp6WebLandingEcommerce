@@ -50,6 +50,7 @@ async function created() {
 
 function buyThisProduct(product) {
 	this.$store.dispatch('addProductToBuyCar', product);
+	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', true);
 	this.goTo('buy');
 }
 
