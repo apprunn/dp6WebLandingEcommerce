@@ -461,12 +461,6 @@ export default {
 			margin: 0 10px;
 		}
 
-		@media (max-width: 500px) {
-			&.small {
-				//flex-direction: column;
-			}
-		}
-
 		@media (min-width: 600px) {
 			display: flex;
 			flex-direction: column;
