@@ -116,6 +116,7 @@ async function created() {
 	const categoriesEcommerceLocal = this.getLocalStorage('ecommerce::categories');
 	this.categories = this.getCategories.length === 0 ? categoriesEcommerceLocal : this.getCategories;
 	this.keySearch = this.getLocalStorage('ecommerce::products::buscar');
+	this.$store.commit('SET_KEYSEARCH', this.keySearch);
 }
 
 function mounted() {
@@ -160,18 +161,9 @@ function updateProductCard(value) {
 }
 
 function selectCategory() {
-	const categoriesEcommerceLocal = this.getLocalStorage('ecommerce::categories');
-	this.breadcrumbs = [];
-	this.setAttribute();
+	this.keySearch = this.getLocalStorage('ecommerce::products::buscar');
+	this.$store.commit('SET_KEYSEARCH', this.keySearch);
 	this.loadProduct();
-	this.categories = this.getCategories.length === 0 ? categoriesEcommerceLocal : this.getCategories;
-	this.currentSelect = this.getCurrentcategory(this.categories, this.id);
-	this.updateMetaTag(this.currentSelect);
-	if (this.breadcrumbs.length) {
-		this.breadcrumbs[0].disabled = true;
-		this.breadcrumbs = this.breadcrumbs.reverse();
-		this.categorySelected = this.breadcrumbs[0];
-	}
 }
 
 function updateMetaTag(category) {

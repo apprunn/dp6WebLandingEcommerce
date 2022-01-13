@@ -122,7 +122,7 @@ function getData($event) {
 
 function searchProduct(value) {
 	const search = value.trim() ? value : null;
-	const filterId = this.getFilters[0] ? this.getFilters[0].id : null;
+	const filterId = this.getFilters.length > 0 ? this.getFilters[0].id : null;
 	const id = search ? null : filterId;
 	if (!search || this.productParams.search !== search) {
 		this.$store.dispatch('START_PAGINATION');
@@ -135,13 +135,14 @@ function searchProduct(value) {
 	this.updateFilter(id);
 	helper.setLocalData('products::buscar', search);
 	this.$store.commit('SET_KEYSEARCH', search);
+	const query = { query: { buscar: search } };
+	console.log('query', query);
 	if (this.$route.name !== 'search') {
-		this.goTo('search', { query: { buscar: search } });
+		this.goTo('search', query);
 		setTimeout(() => {
 			this.scrollTo('section-product-card', 800, true);
 		}, 1000);
 	} else {
-		const query = { ...this.$route.query, buscar: search };
 		this.$router.replace({ query });
 		this.scrollTo('section-product-card', 800, true);
 	}
