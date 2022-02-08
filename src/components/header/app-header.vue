@@ -136,7 +136,6 @@ function searchProduct(value) {
 	helper.setLocalData('products::buscar', search);
 	this.$store.commit('SET_KEYSEARCH', search);
 	const query = { query: { buscar: search } };
-	console.log('query', query);
 	if (this.$route.name !== 'search') {
 		this.goTo('search', query);
 		setTimeout(() => {

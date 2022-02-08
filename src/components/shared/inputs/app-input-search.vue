@@ -1,11 +1,12 @@
 <template>
-  	<div
-	  :class="[
-	  	{ 'loading': indeterminate },
-	  	'app-input-search',
+	<div
+		:class="[
+		{ 'loading': indeterminate },
+		'app-input-search',
 	]">
 		<SearchIcon v-if="!indeterminate"/>
 		<input
+			ref="search"
 			data-cy="inputSearcher"
 			v-bind="$attrs"
 			placeholder="¿Qué buscas?"
@@ -18,11 +19,13 @@
 			@keyup.esc="sendValue"
 			v-model="searchText"
 		/>
+		<trash-component class="action" @click="cleanInput" :width="16" :height="19" />
 	</div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
 import SearchIcon from '@/components/shared/icons/search-component';
+import trashComponent from '@/components/shared/icons/trash-component';
 
 function data() {
 	return {
@@ -33,12 +36,20 @@ function data() {
 function sendValue(value) {
 	this.$emit('search', value.target.value);
 }
+function cleanInput() {
+	this.searchText = '';
+	this.focusInput();
+}
 
+function focusInput() {
+	this.$refs.search.focus();
+}
 
 export default {
 	name: 'app-input-search',
 	components: {
 		SearchIcon,
+		trashComponent,
 	},
 	computed: {
 		...mapGetters([
@@ -52,6 +63,8 @@ export default {
 	},
 	methods: {
 		sendValue,
+		cleanInput,
+		focusInput,
 	},
 };
 </script>
@@ -90,6 +103,11 @@ export default {
 		@media (max-width: 764px) {
 			height: 17px;
 		}
+	}
+
+	.action {
+		width: 20px;
+		height: 20px;
 	}
 </style>
 
