@@ -31,6 +31,43 @@
 						@click="onSelect(method)"
 					/>
 				</div>
+				<div class="contanier-payments">
+					<label :style="`color:${globalColors.primary};margin-top: 20px;`" for="">Método de Pago</label>
+					<app-select
+						item-text="name"
+						item-value="code"
+						class="address-select"
+						data-cy="address-selection"
+						:items="gatewayConfiguration"
+						v-model="typePaymentSelected"
+						return-object
+						@input="sendValue"
+					/>
+					<div v-if="visibleFormPayment">
+						<label :style="`color:${globalColors.primary}`" for="">Monto con el que pagare</label>
+						<input
+							placeholder="Monto con el que pagare"
+							class="app-input my-1 address-field"
+							:style="`border-color: #e6e6e6`"
+							v-model="amountCash"
+							@keypress="isNumber($event)" 
+							@click="$event.stopPropagation()"
+						/>
+						<v-layout row wrap>
+							<v-flex xs1>
+								<v-layout>
+								<v-checkbox
+									v-model="totalAmountCash"
+									:color="globalColors.primary"
+									hide-details
+									class="amout-cash-checkbox mr-0 mt-2"
+									></v-checkbox>
+								</v-layout>
+							</v-flex>
+							<v-flex @click="checkTotal" xs6 :style="`color:${totalAmountCash ? globalColors.primary : '#333'}`" class="amout-cash-label ml-2">Tengo Monto exacto</v-flex>
+						</v-layout>
+					</div>
+				</div>
 				<component
 					class="component-container component-container-ios"
 					:ip="ip"
@@ -50,6 +87,8 @@ import productsBuyed from '@/components/order/products-buyed';
 import depositPayment from '@/components/order/deposit-payment';
 import recievedPayment from '@/components/order/recieved-payment';
 import VisaByCountry from '@/components/order/credit-card-payment';
+import appSelect from '@/components/shared/inputs/app-select';
+import appInput from '@/components/shared/inputs/app-input';
 
 function created() {
 	this.getClientIp();
@@ -80,6 +119,7 @@ async function getClientIp() {
 
 function onSelect(method) {
 	this.$store.commit('SET_WAY_PAYMENT', { wayPayment: null, bankAccountId: null });
+	this.methodSelected = method;
 	this.paymentMethodSelected = method.code;
 	this.gatewayConfiguration = method.gatewayConfiguration || [];
 	const wayPayment = method.wayPaymentId;
@@ -127,6 +167,28 @@ function collapseStepMethods() {
 	return `transform: ${this.collapseSectionMethods ? 'rotate(0deg)' : 'rotate(180deg)'};`;
 }
 
+function sendValue(typePayment) {
+	this.typePaymentSelected = typePayment;
+	this.onSelect(this.methodSelected);
+}
+
+function checkTotal() {
+	this.totalAmountCash = !this.totalAmountCash;
+}
+
+function visibleFormPayment() {
+	return this.typePaymentSelected.code !== 'POS';
+}
+
+function isNumber($event) {
+	const charCode = ($event.which) ? $event.which : $event.keyCode;
+	if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+		$event.preventDefault();
+		return false;
+	}
+	return true;
+}
+
 function data() {
 	return {
 		flagDataFast: null,
@@ -146,6 +208,14 @@ function data() {
 		paymentMethodSelected: '',
 		collapseSectionProducts: false,
 		collapseSectionMethods: false,
+		value: null,
+		methodSelected: {},
+		typePaymentSelected: {
+			name: 'Pago con POS',
+			code: 'POS',
+		},
+		amountCash: null,
+		totalAmountCash: true,
 	};
 }
 
@@ -157,6 +227,8 @@ export default {
 		productsBuyed,
 		recievedPayment,
 		VisaByCountry,
+		appSelect,
+		appInput,
 	},
 	computed: {
 		...mapGetters([
@@ -169,6 +241,7 @@ export default {
 		paymentMethodSelectedComponent,
 		collapseStepProducts,
 		collapseStepMethods,
+		visibleFormPayment,
 	},
 	created,
 	data,
@@ -176,6 +249,9 @@ export default {
 		getClientIp,
 		onSelect,
 		toogleCollapse,
+		sendValue,
+		checkTotal,
+		isNumber,
 	},
 	watch: {
 		getWaysPayments,
@@ -183,6 +259,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+	input[type=checkbox] {
+		transform: scale(2.5);
+		margin: 10px;
+	}
 	.methods-container {
 		align-items: center;
 		display: grid;
@@ -234,5 +314,34 @@ export default {
 	}
 	.arrow{
 		transform: rotate(180deg);
+	}
+
+	.contanier-payments{
+		display: grid;
+		grid-auto-flow: row;
+		align-items: center;
+		grid-gap: 10px;
+	}
+
+	.amout-cash-checkbox{
+		margin-left: 9px;
+		height: 20px;
+		transform: scale(1.5);
+	}
+	.amout-cash-label{
+		font-size: size(medium);
+		margin-top: 20px;
+	}
+	.app-input {
+		background-color: color(background);
+		border: 1px solid color(border);
+		border-radius: 7px;
+		color: color(base);
+		font-family: font(medium);
+		font-size: size(medium);
+		height: 46.8px;
+		outline: none;
+		padding: 0px 16.2px;
+		width: 100%;
 	}
 </style>
