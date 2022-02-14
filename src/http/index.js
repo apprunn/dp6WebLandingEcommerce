@@ -34,6 +34,7 @@ function pseudoLogout() {
 
 export function httpResponseInterceptor(error) {
 	store.dispatch('toggleLoading', false);
+	store.commit('SET_IS_TOOGLE_BTN', false);
 	store.dispatch('resetCounter');
 	let text = 'Su sesión expiró.';
 	const { status, statusText } = error.response;
