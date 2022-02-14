@@ -49,7 +49,7 @@
 			
 			<div v-if="getFlagPickUp === house.value && atHouse">
 				<div v-if="!isGetDirections" class="container-btn-new-address">
-					<h5 class="mt-2 mx-2">Seleccionar dirección de envío</h5>
+					<h5 class="mt-2 mx-2">Seleccionar dirección de envío </h5>
 					<address-component
 						class="select-address"
 						v-if="getDirections.length > 1"
