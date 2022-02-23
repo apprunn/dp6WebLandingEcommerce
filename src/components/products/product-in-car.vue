@@ -4,7 +4,7 @@
 		<section class="grid-areas">
 			<img
 				@click="goToProduct(product)"
-				:src="urlImage"
+				:src="product.urlImage || product.productImage || product.imagePresentation || (product.images ? (product.images.length > 0 ? product.images[0].urlImage : ''):'')"
 				alt="imagen del producto"
 				class="product-img image"
 			>
