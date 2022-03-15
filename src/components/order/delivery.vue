@@ -1,6 +1,6 @@
 <template>
 	<div class="main-container-delivery" :style="styleBtnMobile">
-		<div @click="toogleCollapse" class="contend-title">
+		<div @click="toogleCollapse('address')" class="contend-title">
 			<div class="section-title">
 				<img :src="logo.section" alt="logo del método de pago">
 				<h2 class="payment-section-title">¿COMÓ QUIERES RECIBIR TU PRODUCTO? </h2>
@@ -46,15 +46,7 @@
 			/>
 
 			<responsible-form/>
-			<app-input
-				data-cy="ref"
-				placeholder="Escribe un comentario"
-				type="text"
-				class="mx-2 my-1 responsible-field"
-				v-model="comments"
-				@input="setComments"
-			>
-			</app-input>
+			
 			<div v-if="getFlagPickUp === house.value && atHouse">
 				<div class="container-btn-new-address">
 					<h5 class="mt-2 mx-2">Seleccionar dirección de envío</h5>
@@ -86,12 +78,31 @@
 		<section class="billing-section">
 			<billing/>
 		</section>
+		<div @click="toogleCollapse('comment')" class="contend-title">
+			<div class="section-title">
+				<img height="26" width="28" :src="comment.section" alt="comentario icono">
+				<h2 class="comment-section-title">COMENTARIO</h2>
+			</div>
+			<img height="16" width="18" :style="collapseStepComment" :src="arrow.section" alt="arrow" class="arrow"/>
+		</div>
+		<div v-show="collapseSectionComment" class="section-comments">
+			<text-area
+				data-cy="ref"
+				placeholder="Escribe un comentario"
+				type="text"
+				class="mx-2 my-1 responsible-field"
+				v-model="comments"
+				@input="setComments"
+			>
+			</text-area>
+		</div>
+		
 	</div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
 import { getDeeper, isEmpty } from '@/shared/lib';
-import appInput from '@/components/shared/inputs/app-input';
+import textArea from '@/components/shared/inputs/text-area';
 import addressComponent from '@/components/order/address-component';
 import appButtonOrder from '@/components/shared/buttons/app-button-order';
 import billing from '@/components/order/billing';
@@ -110,6 +121,10 @@ function created() {
 	]).then(() => {
 		if (that.noOrder) {
 			that.setDefaultDelivery();
+			if (this.getDirections.length > 1) {
+				const w = this.getDirections[1];
+				this.directionSelected(w.id);
+			}
 			if (that.getFlagPickUp === that.store.value) {
 				that.lonleyWarehouse();
 			}
@@ -351,12 +366,20 @@ function floatBtn() {
 	return `justify-content: ${this.getDirections.length <= 1 ? 'start' : 'end'}`;
 }
 
-function toogleCollapse() {
-	this.collapseSection = !this.collapseSection;
+function toogleCollapse(section) {
+	if (section === 'address') {
+		this.collapseSection = !this.collapseSection;
+	} else if (section === 'comment') {
+		this.collapseSectionComment = !this.collapseSectionComment;
+	}
 }
 
 function collapseStep() {
 	return `transform: ${this.collapseSection ? 'rotate(0deg)' : 'rotate(180deg)'};`;
+}
+
+function collapseStepComment() {
+	return `transform: ${this.collapseSectionComment ? 'rotate(0deg)' : 'rotate(180deg)'};`;
 }
 
 function data() {
@@ -366,6 +389,9 @@ function data() {
 		},
 		arrow: {
 			section: '/static/icons/arrow.svg',
+		},
+		comment: {
+			section: '/static/icons/comment.svg',
 		},
 		flagWatchOrderInfo: false,
 		selectedDirection: {
@@ -381,6 +407,7 @@ function data() {
 		comments: '',
 		visibleNewAddress: false,
 		collapseSection: false,
+		collapseSectionComment: false,
 	};
 }
 
@@ -394,7 +421,7 @@ export default {
 		locationSvg,
 		newAddress,
 		responsibleForm,
-		appInput,
+		textArea,
 	},
 	computed: {
 		...mapGetters([
@@ -422,6 +449,7 @@ export default {
 		styleBtnMobile,
 		floatBtn,
 		collapseStep,
+		collapseStepComment,
 	},
 	created,
 	mounted,
@@ -489,9 +517,17 @@ export default {
 	}
 
 	.payment-section-title {
+		color: color(dark);
 		font-size: size(medium);
 		font-family: font(bold);
 		margin-left: 12px;
+		text-transform: uppercase;
+	}
+	.comment-section-title{
+		color: color(dark);
+		font-size: size(medium);
+		font-family: font(bold);
+		margin-left: 19px;
 		text-transform: uppercase;
 	}
 
@@ -541,6 +577,10 @@ export default {
 	}
 
 	.section-forms{
+		margin-top: 20px;
+	}
+
+	.section-comments{
 		margin-top: 20px;
 	}
 

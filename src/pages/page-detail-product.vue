@@ -104,6 +104,7 @@ function addToCar() {
 	if (!this.noStock) {
 		this.$store.dispatch('addProductToBuyCar', this.product);
 		this.showConfirmModal = true;
+		this.$store.commit('SET_IS_COLLAPSE_PRODUCT', true);
 		this.goTo('buy');
 	} else {
 		this.showGenericError('Producto sin stock', 80000);
@@ -162,12 +163,14 @@ async function loadProduct() {
 
 async function loadData(id) {
 	this.$store.dispatch('LOAD_RELATED_PRODUCTS', { context: this, id });
-	const requests = [
-		this.$httpProductsPublic.get(`products-public/${id}/children`),
-	];
-	([
-		{ data: this.childrens },
-	] = await Promise.all(requests));
+	if (this.getCommerceData.settings.flagGrouper !== 2) {
+		const requests = [
+			this.$httpProductsPublic.get(`products-public/${id}/children`),
+		];
+		([
+			{ data: this.childrens },
+		] = await Promise.all(requests));
+	}
 	this.product.images = this.product.images.map((i, index) => {
 		const newImage = { ...i };
 		newImage.select = index === 0;

@@ -113,7 +113,8 @@ function setLocalData(key, setData) {
 }
 
 function scrollTo(element, duration, fit) {
-	const to = document.getElementsByClassName(element)[0].offsetTop;
+	const elementTop = document.getElementsByClassName(element);
+	const to = elementTop.length > 0 ? elementTop[0].offsetTop : 0;
 	const start = window.scrollY;
 	const change = fit ? to - start : to - start - 100;
 	let currentTime = 0;

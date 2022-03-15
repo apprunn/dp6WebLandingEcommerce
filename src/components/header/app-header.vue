@@ -85,6 +85,7 @@ import CarComponent from '@/components/shared/icons/car-component';
 import HeartComponent from '@/components/shared/icons/heart-component';
 import UserSvg from '@/components/shared/icons/user-svg';
 import SearchIcon from '@/components/shared/icons/search-component';
+import helper from '@/shared/helper';
 
 function mounted() {
 	const ls = this.getLocalStorage(`${process.env.STORAGE_USER_KEY}::product-select`);
@@ -121,7 +122,7 @@ function getData($event) {
 
 function searchProduct(value) {
 	const search = value.trim() ? value : null;
-	const filterId = this.getFilters[0] ? this.getFilters[0].id : null;
+	const filterId = this.getFilters.length > 0 ? this.getFilters[0].id : null;
 	const id = search ? null : filterId;
 	if (!search || this.productParams.search !== search) {
 		this.$store.dispatch('START_PAGINATION');
@@ -132,13 +133,17 @@ function searchProduct(value) {
 	this.$store.dispatch('LOAD_PRODUCTS', { context: this });
 	this.isSearchMobile = false;
 	this.updateFilter(id);
-	if (this.$route.name !== 'page-home') {
-		this.goTo('page-home');
+	helper.setLocalData('products::buscar', search);
+	this.$store.commit('SET_KEYSEARCH', search);
+	const query = { query: { buscar: search } };
+	if (this.$route.name !== 'search') {
+		this.goTo('search', query);
 		setTimeout(() => {
-			this.scrollTo('transition-product-section', 800, true);
+			this.scrollTo('section-product-card', 800, true);
 		}, 1000);
 	} else {
-		this.scrollTo('transition-product-section', 800, true);
+		this.$router.replace({ query });
+		this.scrollTo('section-product-card', 800, true);
 	}
 }
 
@@ -152,10 +157,8 @@ function updateFilter(id) {
 }
 
 function goShopping() {
+	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', true);
 	this.goTo('buy');
-	setTimeout(() => {
-		this.scrollTo('small', 800, false);
-	}, 900);
 }
 
 function goToFavorites() {

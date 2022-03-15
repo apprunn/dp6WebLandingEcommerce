@@ -1,39 +1,48 @@
 <template>
-	<div class="summary-main-container">
-		<div class="summary-grid" name="delivery">
-			<img :src="iconSvg.location" alt="ícono de localización">
-			<div class="summary-content-delivery">
-				<h4 class="summary-title">{{pickUpName}}</h4>
-				<span class="">
-					<span>{{getResponsibleName}}</span>
-					<span class="mx-3">{{labelCountry}}: {{getDni}}</span>
-					<span>Teléfono: {{getPhone}}</span>
-				</span>
-				<span>Dirección: {{getDirection}}</span>
+	<div class="container-info">
+		<div @click="toogleCollapse()" class="contend-title">
+			<div class="section-title">
+				<img :src="iconAddress.section" alt="icono recibir">
+				<h2 class="payment-section-title">¿COMÓ QUIERES RECIBIR TU PRODUCTO? </h2>
 			</div>
+			<img height="16" width="18" :style="collapseStep" :src="arrow.section" alt="arrow" class="arrow"/>
 		</div>
-		<div class="summary-grid summary-grid-method" name="billing" v-if="isNotEmptyBilling">
-			<img :src="iconSvg.bill" alt="ícono de factura">
-			<div class="summary-content">
-				<h4 class="summary-title">Solicitud de Factura</h4>
-				<div>
-					<span class="mr-3">RUC: {{getRuc}}</span>
-					<span>Razón Social: {{getRzSocial}}</span>
+		<div v-show="collapseSection" class="summary-main-container">
+			<div class="summary-grid" name="delivery">
+				<img :src="iconSvg.location" alt="ícono de localización">
+				<div class="summary-content-delivery">
+					<h4 class="summary-title">{{pickUpName}}</h4>
+					<span class="">
+						<span>{{getResponsibleName}}</span>
+						<span class="mx-3">{{labelCountry}}: {{getDni}}</span>
+						<span>Teléfono: {{getPhone}}</span>
+					</span>
+					<span>Dirección: {{getDirection}}</span>
 				</div>
-				<span>Domicilio fiscal: {{getAddress}}</span>
 			</div>
-		</div>
-		<div class="summary-grid summary-grid-method" name="billing" v-if="stepFour">
-			<img :src="iconSvg.pay" alt="ícono de factura">
-			<div class="summary-content">
-				<h4 class="summary-title">Método de pago</h4>
-				<div>
-					<h5>{{getWayPayment.title}}</h5>
-					<div v-if="getWayPayment.code === 'link'" class="link-container">
-						<a :href="getWayPayment.payment"
-						>{{getWayPayment.payment}}:</a>
+			<div class="summary-grid summary-grid-method" name="billing" v-if="isNotEmptyBilling">
+				<img :src="iconSvg.bill" alt="ícono de factura">
+				<div class="summary-content">
+					<h4 class="summary-title">Solicitud de Factura</h4>
+					<div>
+						<span class="mr-3">RUC: {{getRuc}}</span>
+						<span>Razón Social: {{getRzSocial}}</span>
 					</div>
-					<span v-else>{{getWayPayment.payment}}</span>
+					<span>Domicilio fiscal: {{getAddress}}</span>
+				</div>
+			</div>
+			<div class="summary-grid summary-grid-method" name="billing" v-if="stepFour">
+				<img :src="iconSvg.pay" alt="ícono de factura">
+				<div class="summary-content">
+					<h4 class="summary-title">Método de pago</h4>
+					<div>
+						<h5>{{getWayPayment.title}}</h5>
+						<div v-if="getWayPayment.code === 'link'" class="link-container">
+							<a :href="getWayPayment.payment"
+							>{{getWayPayment.payment}}:</a>
+						</div>
+						<span v-else>{{getWayPayment.payment}}</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -111,6 +120,14 @@ function labelCountry() {
 	return getDeeper('company.country.countryCode')(this.user) === 'ECU' ? 'Número de Documento' : 'DNI';
 }
 
+function toogleCollapse() {
+	this.collapseSection = !this.collapseSection;
+}
+
+function collapseStep() {
+	return `transform: ${this.collapseSection ? 'rotate(0deg)' : 'rotate(180deg)'};`;
+}
+
 function data() {
 	return {
 		iconSvg: {
@@ -118,6 +135,13 @@ function data() {
 			bill: '/static/icons/red-bill.svg',
 			pay: '/static/icons/pay.svg',
 		},
+		iconAddress: {
+			section: '/static/icons/delivery-truck.svg',
+		},
+		arrow: {
+			section: '/static/icons/arrow.svg',
+		},
+		collapseSection: false,
 	};
 }
 
@@ -140,8 +164,12 @@ export default {
 		pickUpName,
 		stepFour,
 		labelCountry,
+		collapseStep,
 	},
 	data,
+	methods: {
+		toogleCollapse,
+	},
 };
 </script>
 <style lang="scss" scoped>
@@ -151,9 +179,8 @@ export default {
 		flex-wrap: wrap;
 		justify-content: flex-start;
 		margin: 0 30px;
-
 		@media (min-width: 750px) {
-			justify-content: space-around;
+			justify-content: space-between;
 		}
 	}
 
@@ -194,5 +221,33 @@ export default {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+
+	.section-title {
+		align-items: baseline;
+		display: flex;
+		justify-content: flex-start;
+	}
+	.payment-section-title {
+		color: color(dark);
+		font-size: size(medium);
+		font-family: font(bold);
+		margin-left: 12px;
+		text-transform: uppercase;
+	}
+
+	.container-info {
+		padding: 0 0.7rem;
+	}
+
+	.contend-title{
+		display: flex;
+		justify-content:space-between;
+		align-items: center;
+		cursor: pointer;
+		margin-bottom: 10px;
+		@media (min-width: 768px) {
+			width: 700px;
+		}
 	}
 </style>
