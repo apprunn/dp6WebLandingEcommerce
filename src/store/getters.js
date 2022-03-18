@@ -173,6 +173,10 @@ function isCollapseProduct(state) {
 	return state.isCollapseProduct;
 }
 
+function getTotalBuyWithShipp(state) {
+	return state.totalBuyWithShipp;
+}
+
 const methods = {
 	bannersCoupons,
 	bannersTypes,
@@ -219,6 +223,7 @@ const methods = {
 	getkeySearch,
 	isToogleBtn,
 	isCollapseProduct,
+	getTotalBuyWithShipp,
 };
 
 export default methods;

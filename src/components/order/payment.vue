@@ -31,7 +31,7 @@
 						@click="onSelect(method)"
 					/>
 				</div>
-				<div class="contanier-payments">
+				<div v-if="methodSelected.code === 'PPR'" class="contanier-payments">
 					<label :style="`color:${globalColors.primary};margin-top: 20px;`" for="">Método de Pago</label>
 					<app-select
 						item-text="name"
@@ -57,14 +57,15 @@
 							<v-flex xs1>
 								<v-layout>
 								<v-checkbox
-									v-model="totalAmountCash"
+									v-model="isTotalAmountCash"
 									:color="globalColors.primary"
 									hide-details
+									:disabled="false"
 									class="amout-cash-checkbox mr-0 mt-2"
 									></v-checkbox>
 								</v-layout>
 							</v-flex>
-							<v-flex @click="checkTotal" xs6 :style="`color:${totalAmountCash ? globalColors.primary : '#333'}`" class="amout-cash-label ml-2">Tengo Monto exacto</v-flex>
+							<v-flex @click="checkTotal" xs6 :style="`color:${isTotalAmountCash ? globalColors.primary : '#333'}`" class="amout-cash-label ml-2">Tengo Monto exacto</v-flex>
 						</v-layout>
 					</div>
 				</div>
@@ -173,7 +174,7 @@ function sendValue(typePayment) {
 }
 
 function checkTotal() {
-	this.totalAmountCash = !this.totalAmountCash;
+	this.isTotalAmountCash = !this.isTotalAmountCash;
 }
 
 function visibleFormPayment() {
@@ -187,6 +188,10 @@ function isNumber($event) {
 		return false;
 	}
 	return true;
+}
+
+function showAmoutCash() {
+	this.isTotalAmountCash = parseFloat(this.getTotalBuyWithShipp) === parseFloat(this.amountCash);
 }
 
 function data() {
@@ -215,7 +220,7 @@ function data() {
 			code: 'POS',
 		},
 		amountCash: null,
-		totalAmountCash: true,
+		isTotalAmountCash: false,
 	};
 }
 
@@ -236,6 +241,7 @@ export default {
 			'getWaysPayments',
 			'getBankAccounts',
 			'indeterminate',
+			'getTotalBuyWithShipp',
 		]),
 		getCreditCard,
 		paymentMethodSelectedComponent,
@@ -255,6 +261,7 @@ export default {
 	},
 	watch: {
 		getWaysPayments,
+		amountCash: showAmoutCash,
 	},
 };
 </script>
