@@ -189,6 +189,10 @@ function SET_TOTAL_BUY_SHIPP(state, value) {
 	Vue.set(state, 'totalBuyWithShipp', value);
 }
 
+function SET_TOTALAMOUNT_BUY_SHIPP(state, value) {
+	Vue.set(state, 'totalAmountBuyWithShipp', value);
+}
+
 const methods = {
 	ADD_ONE_IN_SERVICE_COUNTER,
 	clearUser,
@@ -235,6 +239,7 @@ const methods = {
 	SET_IS_TOOGLE_BTN,
 	SET_IS_COLLAPSE_PRODUCT,
 	SET_TOTAL_BUY_SHIPP,
+	SET_TOTALAMOUNT_BUY_SHIPP,
 };
 
 export default methods;

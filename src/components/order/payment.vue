@@ -192,6 +192,7 @@ function isNumber($event) {
 
 function showAmoutCash() {
 	this.isTotalAmountCash = parseFloat(this.getTotalBuyWithShipp) === parseFloat(this.amountCash);
+	this.$store.commit('SET_TOTALAMOUNT_BUY_SHIPP', parseFloat(this.amountCash));
 }
 
 function data() {

@@ -177,6 +177,10 @@ function getTotalBuyWithShipp(state) {
 	return state.totalBuyWithShipp;
 }
 
+function getAmountBuyWithShipp(state) {
+	return state.totalAmountBuyWithShipp;
+}
+
 const methods = {
 	bannersCoupons,
 	bannersTypes,
@@ -224,6 +228,7 @@ const methods = {
 	isToogleBtn,
 	isCollapseProduct,
 	getTotalBuyWithShipp,
+	getAmountBuyWithShipp,
 };
 
 export default methods;
