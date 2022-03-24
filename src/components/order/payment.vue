@@ -46,6 +46,7 @@
 					<div v-if="visibleFormPayment">
 						<label :style="`color:${globalColors.primary}`" for="">Monto con el que pagare</label>
 						<input
+							:disabled="isCheckActivate"
 							placeholder="Monto con el que pagare"
 							class="app-input my-1 address-field"
 							:style="`border-color: #e6e6e6`"
@@ -53,11 +54,11 @@
 							@keypress="isNumber($event)" 
 							@click="$event.stopPropagation()"
 						/>
-						<v-layout row wrap>
+						<v-layout row wrap >
 							<v-flex xs1>
 								<v-layout>
 								<v-checkbox
-									v-model="isTotalAmountCash"
+									v-model="isCheckActivate"
 									:color="globalColors.primary"
 									hide-details
 									:disabled="false"
@@ -192,7 +193,16 @@ function isNumber($event) {
 
 function showAmoutCash() {
 	this.isTotalAmountCash = parseFloat(this.getTotalBuyWithShipp) === parseFloat(this.amountCash);
+	this.isCheckActivate = this.isTotalAmountCash;
 	this.$store.commit('SET_TOTALAMOUNT_BUY_SHIPP', parseFloat(this.amountCash));
+}
+
+function setCheckActivate() {
+	if (this.isCheckActivate) {
+		this.amountCash = parseFloat(this.getTotalBuyWithShipp);
+		this.$store.commit('SET_TOTALAMOUNT_BUY_SHIPP', parseFloat(this.getTotalBuyWithShipp));
+	}
+	this.isTotalAmountCash = this.isCheckActivate;
 }
 
 function data() {
@@ -222,6 +232,7 @@ function data() {
 		},
 		amountCash: null,
 		isTotalAmountCash: false,
+		isCheckActivate: false,
 	};
 }
 
@@ -259,10 +270,12 @@ export default {
 		sendValue,
 		checkTotal,
 		isNumber,
+		setCheckActivate,
 	},
 	watch: {
 		getWaysPayments,
 		amountCash: showAmoutCash,
+		isCheckActivate: setCheckActivate,
 	},
 };
 </script>

@@ -258,7 +258,6 @@ const asyncActions = {
 		const classPage = flagFinish ? 'summary-content-container' : 'section-container';
 		commit('SET_IS_TOOGLE_BTN', false);
 		commit('SET_TOTALAMOUNT_BUY_SHIPP', 0);
-		commit('SET_TOTAL_BUY_SHIPP', 0);
 		context.goTo(page);
 		setTimeout(() => {
 			context.scrollTo(classPage, 800, false);
