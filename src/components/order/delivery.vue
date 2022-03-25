@@ -48,8 +48,8 @@
 			<responsible-form/>
 			
 			<div v-if="getFlagPickUp === house.value && atHouse">
-				<div class="container-btn-new-address">
-					<h5 class="mt-2 mx-2">Seleccionar dirección de envío</h5>
+				<div v-if="!isGetDirections" class="container-btn-new-address">
+					<h5 class="mt-2 mx-2">Seleccionar dirección de envío </h5>
 					<address-component
 						class="select-address"
 						v-if="getDirections.length > 1"
@@ -66,7 +66,7 @@
 					<div :style="floatBtn" class="box-btn-address">
 						<button @click="visibleFormAddress()" 
 							class="btn-new-address mt-2 mx-2">
-							+ Agregar Nueva Dirección
+							{{txtBtnNewddress}}
 						</button>
 					</div>
 				</div>
@@ -136,7 +136,7 @@ function created() {
 
 function mounted() {
 	this.comments = this.getComments;
-	this.visibleNewAddress = false;
+	this.visibleNewAddress = this.getDirections.length === 1;
 }
 
 function lonleyWarehouse() {
@@ -408,7 +408,17 @@ function data() {
 		visibleNewAddress: false,
 		collapseSection: false,
 		collapseSectionComment: false,
+		isGetDirections: false,
 	};
+}
+
+function handlerGetDirections() {
+	this.visibleNewAddress = this.getDirections.length === 1;
+	this.isGetDirections = this.getDirections.length === 1;
+}
+
+function txtBtnNewddress() {
+	return this.visibleNewAddress ? 'Elejir una Dirección' : '+ Agregar Nueva Dirección';
 }
 
 export default {
@@ -450,6 +460,7 @@ export default {
 		floatBtn,
 		collapseStep,
 		collapseStepComment,
+		txtBtnNewddress,
 	},
 	created,
 	mounted,
@@ -473,6 +484,7 @@ export default {
 	},
 	watch: {
 		getOrderInfo: handlerOrderInfo,
+		getDirections: handlerGetDirections,
 	},
 };
 </script>

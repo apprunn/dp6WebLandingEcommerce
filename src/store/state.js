@@ -115,4 +115,6 @@ export default {
 	keySearch: '',
 	isToogleBtn: false,
 	isCollapseProduct: false,
+	totalBuyWithShipp: 0,
+	totalAmountBuyWithShipp: 0,
 };
