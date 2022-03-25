@@ -102,13 +102,11 @@ function goToSlider(index, image) {
 }
 
 function imagesHandler(newImages) {
-	debugger;
 	if (!isEmpty(newImages)) {
 		this.movilLocalImages = [];
 		this.webLocalImages = [];
 
 		newImages.forEach((img) => {
-			debugger;
 			if (img.fromApp === 0) {
 				this.webLocalImages.push(img);
 			} else if (img.fromApp === 1) {
