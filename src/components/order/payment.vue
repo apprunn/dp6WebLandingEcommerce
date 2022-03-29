@@ -31,7 +31,7 @@
 						@click="onSelect(method)"
 					/>
 				</div>
-				<div class="contanier-payments">
+				<div v-if="methodSelected.code === 'PPR'" class="contanier-payments">
 					<label :style="`color:${globalColors.primary};margin-top: 20px;`" for="">Método de Pago</label>
 					<app-select
 						item-text="name"
@@ -46,6 +46,7 @@
 					<div v-if="visibleFormPayment">
 						<label :style="`color:${globalColors.primary}`" for="">Monto con el que pagare</label>
 						<input
+							:disabled="isCheckActivate"
 							placeholder="Monto con el que pagare"
 							class="app-input my-1 address-field"
 							:style="`border-color: #e6e6e6`"
@@ -53,18 +54,19 @@
 							@keypress="isNumber($event)" 
 							@click="$event.stopPropagation()"
 						/>
-						<v-layout row wrap>
+						<v-layout row wrap >
 							<v-flex xs1>
 								<v-layout>
 								<v-checkbox
-									v-model="totalAmountCash"
+									v-model="isCheckActivate"
 									:color="globalColors.primary"
 									hide-details
+									:disabled="false"
 									class="amout-cash-checkbox mr-0 mt-2"
 									></v-checkbox>
 								</v-layout>
 							</v-flex>
-							<v-flex @click="checkTotal" xs6 :style="`color:${totalAmountCash ? globalColors.primary : '#333'}`" class="amout-cash-label ml-2">Tengo Monto exacto</v-flex>
+							<v-flex @click="checkTotal" xs6 :style="`color:${isTotalAmountCash ? globalColors.primary : '#333'}`" class="amout-cash-label ml-2">Tengo Monto exacto</v-flex>
 						</v-layout>
 					</div>
 				</div>
@@ -173,7 +175,7 @@ function sendValue(typePayment) {
 }
 
 function checkTotal() {
-	this.totalAmountCash = !this.totalAmountCash;
+	this.isTotalAmountCash = !this.isTotalAmountCash;
 }
 
 function visibleFormPayment() {
@@ -187,6 +189,20 @@ function isNumber($event) {
 		return false;
 	}
 	return true;
+}
+
+function showAmoutCash() {
+	this.isTotalAmountCash = parseFloat(this.getTotalBuyWithShipp) === parseFloat(this.amountCash);
+	this.isCheckActivate = this.isTotalAmountCash;
+	this.$store.commit('SET_TOTALAMOUNT_BUY_SHIPP', parseFloat(this.amountCash));
+}
+
+function setCheckActivate() {
+	if (this.isCheckActivate) {
+		this.amountCash = parseFloat(this.getTotalBuyWithShipp);
+		this.$store.commit('SET_TOTALAMOUNT_BUY_SHIPP', parseFloat(this.getTotalBuyWithShipp));
+	}
+	this.isTotalAmountCash = this.isCheckActivate;
 }
 
 function data() {
@@ -215,7 +231,8 @@ function data() {
 			code: 'POS',
 		},
 		amountCash: null,
-		totalAmountCash: true,
+		isTotalAmountCash: false,
+		isCheckActivate: false,
 	};
 }
 
@@ -236,6 +253,7 @@ export default {
 			'getWaysPayments',
 			'getBankAccounts',
 			'indeterminate',
+			'getTotalBuyWithShipp',
 		]),
 		getCreditCard,
 		paymentMethodSelectedComponent,
@@ -252,9 +270,12 @@ export default {
 		sendValue,
 		checkTotal,
 		isNumber,
+		setCheckActivate,
 	},
 	watch: {
 		getWaysPayments,
+		amountCash: showAmoutCash,
+		isCheckActivate: setCheckActivate,
 	},
 };
 </script>

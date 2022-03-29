@@ -109,13 +109,16 @@ function imagesHandler(newImages) {
 		newImages.forEach((img) => {
 			if (img.fromApp === 0) {
 				this.webLocalImages.push(img);
-			} else if (img.fromApp === 1) {
-				this.movilLocalImages.push(img);
 			} else {
-				this.webLocalImages.push(img);
 				this.movilLocalImages.push(img);
 			}
 		});
+		if (this.movilLocalImages.length === 0) {
+			this.movilLocalImages = this.webLocalImages;
+		}
+		if (this.webLocalImages.length === 0 && this.movilLocalImages > 0) {
+			this.webLocalImages = this.movilLocalImages;
+		}
 		this.$set(this.webLocalImages[0], 'select', true);
 	}
 }

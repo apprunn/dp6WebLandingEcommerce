@@ -53,8 +53,7 @@
 				placeholder="Celular"
 				class="mx-2 my-1 responsible-field"
 				v-model="responsible.phone"
-				@input="validateForm"
-				v-on:blur="getResponsiblePhones"
+				@input="setResponsiblePhones"
 			>
 				<span v-if="!$v.responsible.phone.required">El teléfono es requerido</span>
 				<span v-if="!$v.responsible.phone.onlyNumbers">Solo se permiten números</span>
@@ -136,7 +135,21 @@ function setUserData(user) {
 		const { dni, email: mail, name, phone, lastname } = user;
 		this.responsible = { dni, name, email: mail, phone, lastname };
 		this.validateForm();
+		if (this.responsible.dni && this.responsible.phone) {
+			helper.setLocalData('responsible::user', this.responsible);
+		}
+		const responsibleLocal = this.getLocalStorage('ecommerce::responsible::user');
+		const phonesLocal = this.getLocalStorage('ecommerce::phonesList::user');
+		if (responsibleLocal) {
+			const newPhone = phonesLocal ? phonesLocal.phone : responsibleLocal.phone;
+			this.responsible.dni = !this.responsible.dni ? responsibleLocal.dni :
+				this.responsible.dni;
+			this.responsible.phone = !this.responsible.phone ? newPhone :
+				this.responsible.phone;
+		}
+		this.open = !this.responsible.dni;
 	}
+	this.validateForm();
 }
 
 function validateForm() {
@@ -211,6 +224,7 @@ function closeModal() {
 
 function updateCustomerDni() {
 	const body = this.buildBody();
+	helper.setLocalData('responsible::user', body);
 	this.$store.dispatch('UPDATE_USER_DATA', { context: this, body });
 	this.closeModal();
 }
@@ -234,20 +248,17 @@ function buildBody() {
 	)({});
 }
 
-function getResponsiblePhones() {
+function setResponsiblePhones(value) {
+	this.responsible.phone = value;
+	this.validateForm();
+	helper.setLocalData('responsible::user', this.responsible);
 	if (this.responsible.phone.length < 6) {
 		return;
 	}
-	const { phoneNumbers } = this.user ? this.user : [];
-	const currentPhone = phoneNumbers.find(p => p === this.responsible.phone);
-	if (!currentPhone) {
-		phoneNumbers.push(this.responsible.phone);
-		const newPhones = {
-			phone: this.responsible.phone,
-			phoneNumbers,
-		};
-		helper.setLocalData('phonesList::user', newPhones);
-	}
+	const newPhones = {
+		phone: this.responsible.phone,
+	};
+	helper.setLocalData('phonesList::user', newPhones);
 }
 
 function validations() {
@@ -274,6 +285,7 @@ function validations() {
 	};
 	return validating;
 }
+
 
 function data() {
 	return {
@@ -320,7 +332,7 @@ export default {
 		setUserData,
 		updateCustomerDni,
 		validateForm,
-		getResponsiblePhones,
+		setResponsiblePhones,
 	},
 	mixins: [userDataValidation],
 	mounted,

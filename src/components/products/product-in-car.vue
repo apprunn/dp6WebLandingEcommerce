@@ -4,14 +4,14 @@
 		<section v-if="stepOne" class="grid-areas">
 			<img
 				@click="goToProduct(product)"
-				:src="product.imagePresentation || (product.images ? (product.images.length > 0 ? product.images[0].urlImage : ''):'')"
+				:src="product.urlImage || product.productImage || product.imagePresentation || (product.images ? (product.images.length > 0 ? product.images[0].urlImage : ''):'')"
 				alt="imagen del producto"
 				class="product-img image"
 			>
 			<div class="description">
 				<p
 					:style="`color: ${globalColors.primary};`"
-					class="product-name">{{product.name}}</p>
+					class="product-name">{{product.name || product.productName}}</p>
 				<p
 					:style="`color: ${globalColors.subtitle};`"
 					class="product-content">{{product.description}}</p>
@@ -28,7 +28,7 @@
 				<p
 					:style="`color: ${globalColors.primary};`"
 					class="product-title">P.U.</p>
-				<p class="product-price">{{getCurrencySymbol}} {{ product.priceDiscount | currencyFormat }}</p>
+				<p class="product-price">{{getCurrencySymbol}} {{ (product.priceDiscount || product.salePrice) | currencyFormat }}</p>
 			</div>
 			<div class="quantity">
 				<p
@@ -61,7 +61,7 @@
 		
 		<div v-else class="grid-product">
 			<img class="img-pro" height="75" width="80" 
-			:src="product.imagePresentation || (product.images ? (product.images.length > 0 ? product.images[0].urlImage : ''):'')"
+			:src="product.urlImage || product.productImage || product.imagePresentation || (product.images ? (product.images.length > 0 ? product.images[0].urlImage : ''):'')"
 			alt="Imagen">
 			<div
 				:class="[
@@ -69,7 +69,7 @@
 				]"
 			>
 				<h3 class="product-name">
-					{{product.name ? product.name.toLowerCase(): product.name}}
+					{{ (product.productName ? product.productName.toLowerCase(): product.productName) || (product.name ? product.name.toLowerCase(): product.name)}}
 				</h3>
 				<span class="product-description">{{product.unit ? product.unit.name.toLowerCase() : product.unit.name}}</span>
 			</div>
