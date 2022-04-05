@@ -162,6 +162,25 @@ function loadingProducts(state) {
 	return state.loadingProducts;
 }
 
+function getkeySearch(state) {
+	return state.keySearch;
+}
+function isToogleBtn(state) {
+	return state.isToogleBtn;
+}
+
+function isCollapseProduct(state) {
+	return state.isCollapseProduct;
+}
+
+function getTotalBuyWithShipp(state) {
+	return state.totalBuyWithShipp;
+}
+
+function getAmountBuyWithShipp(state) {
+	return state.totalAmountBuyWithShipp;
+}
+
 const methods = {
 	bannersCoupons,
 	bannersTypes,
@@ -205,6 +224,11 @@ const methods = {
 	windowLoaded,
 	getCurrencyISO,
 	loadingProducts,
+	getkeySearch,
+	isToogleBtn,
+	isCollapseProduct,
+	getTotalBuyWithShipp,
+	getAmountBuyWithShipp,
 };
 
 export default methods;

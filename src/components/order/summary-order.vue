@@ -1,5 +1,5 @@
 <template>
-	<div class="summary-container">
+	<div class="summary-container summary-section">
 		<section class="summary-order">
 			<div class="summary-header text-xs-center">
 				<p class="summary-title">Resumen de Compra</p>
@@ -23,11 +23,11 @@
 				</p>
 			</div>
 		</section>
-		<section class="btns-summary-order">
+		<section class="btns-summary-order" :style="styleBtnMobile">
 			<app-button
 				data-cy="make-order"
 				v-if="stepOne"
-				action='Hacer pedido'
+				:action="`Hacer pedido ${getCurrencySymbol}. ${listenerPriceOrder}`"
 				class="btn-order"
 				:background="globalColors.primary"
 				@click="goToMakeOrder"
@@ -38,17 +38,19 @@
 				action="Pasar a caja"
 				class="btn-order"
 				:background="globalColors.primary"
-				:disabled="invalidOrder"
+				:disabled="invalidOrder || isToogleBtn ? true : false"
 				@click="makeOrder(false)"
+				:spinner="isToogleBtn"
 			/>
 			<app-button
 				data-cy="pay"
 				v-else-if="stepThree"
-				action="Pagar"
+				action="Finalizar compra"
 				class="btn-order"
-				:disabled="isOnlinePayment"
+				:disabled="isOnlinePayment || isToogleBtn ? true : false"
 				:background="globalColors.primary"
 				@click="makeOrder(true)"
+				:spinner="isToogleBtn"
 			/>
 		</section>
 	</div>
@@ -59,8 +61,11 @@ import appButton from '@/components/shared/buttons/app-button';
 import { getDeeper, compose, setNewProperty } from '@/shared/lib';
 import { creditCard } from '@/shared/enums/wayPayment';
 
+
 function total() {
-	return (this.getTotalToBuy - this.discount) + this.getShippingCost;
+	const totalBuyWithShipp = (this.getTotalToBuy - this.discount) + this.getShippingCost;
+	this.$store.commit('SET_TOTAL_BUY_SHIPP', totalBuyWithShipp);
+	return totalBuyWithShipp;
 }
 
 function makeOrder(flagFinish) {
@@ -97,7 +102,12 @@ function stepTwo() {
 
 function goToMakeOrder() {
 	if (this.token) {
+		this.$store.commit('SET_IS_COLLAPSE_PRODUCT', false);
+		this.$emit('close-collapse');
 		this.goTo('buy-delivery');
+		setTimeout(() => {
+			this.scrollTo('main-container-delivery', 800, false);
+		}, 900);
 	} else if (window.innerWidth < 765) {
 		this.setLocalData('route-after-login', '/carrito-de-compras');
 		this.goTo('login');
@@ -120,6 +130,25 @@ function isOnlinePayment() {
 		return isOnline;
 	}
 	return false;
+}
+
+function listenerPriceOrder() {
+	const newVal = this.total ? Number(this.total.toFixed(2)) : 0;
+	if (!newVal) {
+		return '0.00';
+	}
+	const [integer, decimals] = String(newVal).split('.');
+	if (!decimals) {
+		return `${integer}.00`;
+	}
+	const newDecimals = decimals.length === 1 && decimals < 10 ? `${decimals}0` : decimals;
+	return `${integer}.${newDecimals}`;
+}
+
+function styleBtnMobile() {
+	return {
+		'--bg-mobile-color': this.globalColors.primary,
+	};
 }
 
 export default {
@@ -151,6 +180,7 @@ export default {
 			'invalidOrder',
 			'token',
 			'user',
+			'isToogleBtn',
 		]),
 		discount,
 		isOnlinePayment,
@@ -158,6 +188,8 @@ export default {
 		stepThree,
 		stepTwo,
 		total,
+		listenerPriceOrder,
+		styleBtnMobile,
 	},
 	methods: {
 		goToMakeOrder,
@@ -167,6 +199,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+	.btns-summary-order {
+		@media (max-width:669px){
+			background-color: var(--bg-mobile-color);
+			border-radius: 10px;
+			position:fixed;
+			bottom: 0;
+			left: 0;
+			z-index: 11;
+			width:94%;
+			margin-left: 3%;
+			margin-right: 3%;
+			margin-bottom: 2px;
+		}
+	}
 	.summary-container {
 		position: relative;
 		top: 0;

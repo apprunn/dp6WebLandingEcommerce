@@ -19,37 +19,44 @@
 		<div class="buy-layout">
 			<section class="big">
 				<div v-if="stepOneAndTwo" class="mb-5">
-					<div class="section-title" v-if="stepTwo">
-						<img :src="logo.section" alt="logo del método de pago">
-						<h2 class="payment-section-title">PRODUCTOS </h2>
+					<div @click="toogleCollapse" class="contend-title">
+						<div class="section-title" v-if="stepTwo">
+							<img :src="logo.section" alt="logo del método de pago">
+							<h2 class="payment-section-title">PRODUCTOS </h2>
+						</div>
+						<img v-if="stepTwo" height="16" width="18" :style="collapseStep" :src="arrow.section" alt="arrow" class="arrow"/>
 					</div>
-					<product-in-car
-						:show-unity="showUnity"
-						data-cy="product-in-car"
-						v-for="(product, indexProduct) in getProductToBuy"
-						:key="indexProduct"
-						:product="product"
-					/>
-					<div class="footter-products-buy">
-						<app-button
-							max-width="225px"
-							action="Continuar comprando"
-							class="continue-buying"
-							:background="globalColors.secondary"
-							@click="goTo('page-home')"
+					<div v-show="isCollapseProduct" class="section-collapse-step1">
+						<product-in-car
+							:show-unity="showUnity"
+							data-cy="product-in-car"
+							v-for="(product, indexProduct) in getProductToBuy"
+							:key="indexProduct"
+							:product="product"
 						/>
-						<div class="total-product" :style="`color: ${globalColors.subtitle}`">
-							<span>Total de productos: </span>
-							<div class="amount-total-products" :style="`background-color: ${globalColors.title}`">
-								<output>{{getTotalQuantityProducts}}</output>
+						<div class="footter-products-buy">
+							<div class="total-product" :style="`color: #acaaaa`">
+								<span>Total de productos: </span>
+								<div class="amount-total-products" :style="`background-color: ${globalColors.title}`">
+									<output>{{getTotalQuantityProducts}}</output>
+								</div>
 							</div>
+							<app-button
+								max-width="225px"
+								action="Continuar comprando"
+								class="continue-buying"
+								:background="globalColors.secondary"
+								@click="goTo('page-home')"
+							/>
 						</div>
 					</div>
 				</div>
-				<router-view></router-view>
+				<div class="container-routes">
+					<router-view></router-view>
+				</div>
 			</section>
 			<section class="small">
-				<summary-order/>
+				<summary-order @close-collapse="closeCollapse"/>
 			</section>
 		</div>
 	</div>
@@ -81,6 +88,7 @@ async function mounted() {
 	if (id) {
 		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
+	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', getDeeper('meta.step')(this.$route) !== 2);
 }
 
 function stepOneAndTwo() {
@@ -112,11 +120,26 @@ function isNiubiz() {
 	return codeNiubiz === niubiz;
 }
 
+function collapseStep() {
+	return `transform: ${this.isCollapseProduct ? 'rotate(0deg)' : 'rotate(180deg)'};`;
+}
+
+function toogleCollapse() {
+	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', !this.isCollapseProduct);
+}
+
+function closeCollapse() {
+	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', false);
+}
+
 function data() {
 	return {
 		showUnity: false,
 		logo: {
 			section: '/static/icons/shopping-basket.svg',
+		},
+		arrow: {
+			section: '/static/icons/arrow.svg',
 		},
 	};
 }
@@ -135,17 +158,21 @@ export default {
 			'getProductToBuy',
 			'getTotalQuantityProducts',
 			'getOrderInfo',
+			'isCollapseProduct',
 		]),
 		isNiubiz,
 		stepOneAndTwo,
 		stepThree,
 		stepTwo,
 		transactionId,
+		collapseStep,
 	},
 	created,
 	data,
 	methods: {
 		getProductToBuyHandler,
+		toogleCollapse,
+		closeCollapse,
 	},
 	mounted,
 	watch: {
@@ -182,7 +209,7 @@ export default {
 		flex: 1 0 60%;
 		height: max-content;
 		margin-bottom: 20px;
-
+		
 		@media (min-width: 750px) {
 			margin-right: 10px;
 		}
@@ -207,9 +234,9 @@ export default {
 		display: flex;
 		flex-wrap: wrap;
 		font-family: font(demi);
-
-		@media (max-width: 600px) {
-			justify-content: flex-end;
+		@media (max-width: 669px) {
+			display: block;
+			font-size: size(small);
 		}
 	}
 
@@ -245,7 +272,8 @@ export default {
 	}
 
 	.payment-section-title {
-		font-size: size(large);
+		color: color(dark);
+		font-size: size(medium);
 		font-family: font(bold);
 		margin-left: 12px;
 		text-transform: uppercase;
@@ -255,7 +283,6 @@ export default {
 		align-items: baseline;
 		display: flex;
 		justify-content: flex-start;
-		margin-bottom: 40px;
 	}
 
 	.rejected-transaction {
@@ -264,5 +291,19 @@ export default {
 		color: color(error);
 		margin: 0 3rem;
 		padding: 1rem;
+	}
+
+	.contend-title{
+		display: flex;
+		justify-content:space-between;
+		align-items: center;
+		margin-bottom: 20px;
+	}
+	.arrow{
+		transform: rotate(180deg);
+	}
+
+	.container-routes {
+		margin-top: -30px;
 	}
 </style>

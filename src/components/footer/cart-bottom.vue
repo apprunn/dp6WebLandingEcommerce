@@ -51,6 +51,7 @@ function onClickEvent($event, action = 'more') {
 }
 
 function goShopping() {
+	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', true);
 	this.goTo('buy');
 }
 

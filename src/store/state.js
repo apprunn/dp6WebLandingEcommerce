@@ -1,4 +1,3 @@
-
 export default {
 	appConfig: {
 		loadingCounter: [],
@@ -113,4 +112,9 @@ export default {
 	filters: null,
 	windowLoaded: false,
 	loadingProducts: false,
+	keySearch: '',
+	isToogleBtn: false,
+	isCollapseProduct: false,
+	totalBuyWithShipp: 0,
+	totalAmountBuyWithShipp: 0,
 };
