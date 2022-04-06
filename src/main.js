@@ -3,7 +3,6 @@ import Vuelidate from 'vuelidate';
 import VueAnalytics from 'vue-analytics';
 import VueSimpleSVG from 'vue-simple-svg';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
-import 'swiper/dist/css/swiper.css';
 import VueTheMask from 'vue-the-mask';
 import VueAuthenticate from 'vue-authenticate';
 import axios from 'axios';
@@ -13,6 +12,7 @@ import updateFromLocalStorage from '@/mixins/updateFromLocalStorage';
 import loadResources from '@/mixins/loadResources';
 import App from './App';
 import registerVuetify from './vuetify';
+import './assets/css/swiper.css';
 import {
 	httpRequestInterceptor,
 	httpResponseInterceptor,
