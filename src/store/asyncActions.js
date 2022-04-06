@@ -236,18 +236,9 @@ const asyncActions = {
 	MAKE_ORDER: async ({ dispatch, getters, commit }, { flagFinish, context }) => {
 		commit('SET_IS_TOOGLE_BTN', true);
 		const body = helper.buildOrderBody(flagFinish, getters);
-		const cash = getters.getAmountBuyWithShipp - getters.getTotalBuyWithShipp;
-		if (cash) {
-			if (body.additionalInfo) {
-				body.additionalInfo.cash = cash;
-				body.additionalInfo.amountCash = getters.getAmountBuyWithShipp;
-			} else {
-				body.additionalInfo = {
-					cash,
-					amountCash: getters.getAmountBuyWithShipp,
-				};
-			}
-		}
+		body.additionalInfo = {
+			changeAmount: getters.getAmountBuyWithShipp,
+		};
 		const orderExist = !isEmpty(getters.getOrderInfo);
 		const dispatchName = orderExist ? 'UPDATE_ORDER' : 'CREATE_ORDER';
 		const dispatchObj = orderExist
