@@ -65,7 +65,7 @@ import { creditCard } from '@/shared/enums/wayPayment';
 function total() {
 	const totalBuyWithShipp = (this.getTotalToBuy - this.discount) + this.getShippingCost;
 	this.$store.commit('SET_TOTAL_BUY_SHIPP', totalBuyWithShipp);
-	return totalBuyWithShipp;
+	return Number(totalBuyWithShipp.toFixed(2));
 }
 
 function makeOrder(flagFinish) {
