@@ -50,6 +50,40 @@
 					Ingrese un email válido
 				</span>
 			</v-flex>
+			<v-flex xs12 pb-4 text-xs-left>
+				<app-input
+					placeholder="Dni"
+					:value="model.dni"
+					@input="$emit('set-model', { model: 'dni', value: $event })"
+				>
+					<span class="error-message" v-if="!validatons.model.dni.required">
+						El dni es requerido
+					</span>
+					<span
+						class="error-message"
+						v-if="!validatons.model.dni.onlyNumbers && validatons.model.dni.required"
+					>
+						Solo se permiten números
+					</span>
+				</app-input>
+			</v-flex>
+			<v-flex xs12 pb-4 text-xs-left>
+				<app-input
+					placeholder="Télefono"
+					:value="model.phone"
+					@input="$emit('set-model', { model: 'phone', value: $event })"
+				>
+					<span class="error-message" v-if="!validatons.model.phone.required">
+						El teléfono es requerido
+					</span>
+					<span
+						class="error-message"
+						v-if="!validatons.model.phone.onlyNumbers && validatons.model.phone.required"
+					>
+						Solo se permiten números
+					</span>
+				</app-input>
+			</v-flex>
 			<v-flex xs12 pb-4 text-xs-left v-if="noFacebookPass">
 				<app-input
 					type="password"
@@ -130,10 +164,12 @@ export default {
 				return {
 					flagTyc: {},
 					model: {
+						dni: {},
 						email: {},
 						lastname: {},
 						name: {},
 						password: {},
+						phone: {},
 					},
 					passwordVerified: {},
 				};
