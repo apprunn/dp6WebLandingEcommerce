@@ -112,18 +112,23 @@ async function createAccount() {
 			this.cleanForm();
 			this.showNotification('La cuenta ha sido creada exitosamente.');
 			const self = this;
-			if (response.data && response.data.token) {
-				localStorage.clear();
-				localStorage.setItem(`${process.env.STORAGE_USER_KEY}::token`, response.data.token);
-				this.$store.dispatch('setToken', response.data.token);
-				this.getCustomerData();
-				this.cleanForm();
-				this.showNotification('¡Bienvenido! Ya puedes iniciar tu primera compra.');
-				this.redirect();
+			if (this.getFlagNotValidEmailUser) {
+				if (response.data && response.data.token) {
+					localStorage.clear();
+					localStorage.setItem(`${process.env.STORAGE_USER_KEY}::token`, response.data.token);
+					this.$store.dispatch('setToken', response.data.token);
+					this.$store.dispatch('SET_CURRENCY_DEFAULT', this);
+					this.$store.dispatch('LOAD_COMMERCE_INFO', this);
+					this.getCustomerData();
+					this.cleanForm();
+					this.showNotification('¡Bienvenido! Ya puedes iniciar tu primera compra.');
+					this.redirect();
+				}
+			} else {
+				setTimeout(() => {
+					self.showNotification('Se le ha enviado un correo electrónico para validar su cuenta.');
+				}, 5050);
 			}
-			setTimeout(() => {
-				self.showNotification('Se le ha enviado un correo electrónico para validar su cuenta.');
-			}, 5050);
 		}
 	} catch (err) {
 		if (err.status === 400) {
@@ -147,9 +152,9 @@ async function getCustomerData() {
 		Authorization: `Bearer ${this.token}`,
 	};
 	const { data: userInfo } = await this.$httpSales.get('customers/current', { headers });
-	userInfo.dni = null;
 	userInfo.avatar = userInfo.urlImage || process.env.DEFAULT_AVATAR;
 	userInfo.fullName = userInfo.typePerson.fullName;
+	userInfo.showCustomerDiscountMessage = true;
 	this.$store.dispatch('setUser', userInfo);
 }
 
