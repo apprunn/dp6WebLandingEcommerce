@@ -50,6 +50,40 @@
 					Ingrese un email válido
 				</span>
 			</v-flex>
+			<v-flex xs12 pb-4 text-xs-left>
+				<app-input
+					placeholder="Número de documento"
+					:value="model.documentNumber"
+					@input="$emit('set-model', { model: 'documentNumber', value: $event })"
+				>
+					<span class="error-message" v-if="!validatons.model.documentNumber.required">
+						El número de documento es requerido
+					</span>
+					<span
+						class="error-message"
+						v-if="!validatons.model.documentNumber.onlyNumbers && validatons.model.documentNumber.required"
+					>
+						Solo se permiten números
+					</span>
+				</app-input>
+			</v-flex>
+			<v-flex xs12 pb-4 text-xs-left>
+				<app-input
+					placeholder="Télefono"
+					:value="model.phone"
+					@input="$emit('set-model', { model: 'phone', value: $event })"
+				>
+					<span class="error-message" v-if="!validatons.model.phone.required">
+						El teléfono es requerido
+					</span>
+					<span
+						class="error-message"
+						v-if="!validatons.model.phone.onlyNumbers && validatons.model.phone.required"
+					>
+						Solo se permiten números
+					</span>
+				</app-input>
+			</v-flex>
 			<v-flex xs12 pb-4 text-xs-left v-if="noFacebookPass">
 				<app-input
 					type="password"
@@ -130,10 +164,12 @@ export default {
 				return {
 					flagTyc: {},
 					model: {
+						dni: {},
 						email: {},
 						lastname: {},
 						name: {},
 						password: {},
+						phone: {},
 					},
 					passwordVerified: {},
 				};

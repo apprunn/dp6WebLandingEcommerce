@@ -69,7 +69,6 @@
 			class="mx-2 my-1 reference-field field"
 			v-model="newAddress.addressLine2"
 		>
-			<span v-if="$v.newAddress.addressLine2.$invalid">La referencia es requerida</span>
 		</app-input>
 		<div class="mx-2 my-1 button-field field" v-if="flagMap">
 			<a href="#" class="btn" @click.prevent="getMap()">Ubicar en el Mapa</a>
@@ -212,7 +211,6 @@ function validations() {
 	return {
 		newAddress: {
 			addressLine1: { required },
-			addressLine2: { required },
 			department: { required },
 			district: { required },
 			name: { required },

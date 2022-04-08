@@ -220,6 +220,7 @@ const asyncActions = {
 			await context.$httpSalesReadPublic.get(url) : await context.$httpSalesPublic.get(url);
 		context.setLocalData(`${process.env.STORAGE_USER_KEY}::ecommerce-data`, commerceData);
 		commit('SET_COMMERCE_DATA', commerceData);
+		commit('SET_FLAG_NOT_VALID_EMAIL_USER', commerceData.settings.flagNotValidEmailUser);
 		dispatch('SET_ECOMMERCE_THEME', commerceData.settings.theme);
 		dispatch('setFlagGrouper', commerceData.settings.flagGrouper);
 		const link = document.querySelector("link[rel*='icon']") || document.createElement('link');

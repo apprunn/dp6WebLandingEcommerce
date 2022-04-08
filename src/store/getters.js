@@ -181,6 +181,10 @@ function getAmountBuyWithShipp(state) {
 	return state.totalAmountBuyWithShipp;
 }
 
+function getFlagNotValidEmailUser(state) {
+	return state.flagNotValidEmailUser;
+}
+
 const methods = {
 	bannersCoupons,
 	bannersTypes,
@@ -229,6 +233,7 @@ const methods = {
 	isCollapseProduct,
 	getTotalBuyWithShipp,
 	getAmountBuyWithShipp,
+	getFlagNotValidEmailUser,
 };
 
 export default methods;

@@ -26,7 +26,7 @@
 import { email, required, sameAs } from 'vuelidate/lib/validators';
 import formContainer from '@/components/shared/account/form-container';
 import registerForm from '@/components/shared/account/register-form';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import userDataValidation from '@/mixins/userDataValidation';
 
 function created() {
@@ -40,15 +40,26 @@ function created() {
 		this.setModel({ model: 'password', value: this.facebookExternalId });
 		this.setModel({ model: 'passwordVerified', value: this.facebookExternalId });
 	}
+	this.afterLoginRoute = this.getLocalStorage('route-after-login');
+}
+
+function redirect() {
+	if (this.afterLoginRoute) {
+		this.$router.push(this.afterLoginRoute);
+	} else {
+		this.goTo('page-home');
+	}
 }
 
 function cleanForm() {
 	this.flagTyc = false;
 	this.model = {
+		documentNumber: null,
 		email: null,
 		lastname: null,
 		name: null,
 		password: null,
+		phone: null,
 	};
 	this.modelFacebook = {
 		email: null,
@@ -101,9 +112,23 @@ async function createAccount() {
 			this.cleanForm();
 			this.showNotification('La cuenta ha sido creada exitosamente.');
 			const self = this;
-			setTimeout(() => {
-				self.showNotification('Se le ha enviado un correo electrónico para validar su cuenta.');
-			}, 5050);
+			if (this.getFlagNotValidEmailUser) {
+				if (response.data && response.data.token) {
+					localStorage.clear();
+					localStorage.setItem(`${process.env.STORAGE_USER_KEY}::token`, response.data.token);
+					this.$store.dispatch('setToken', response.data.token);
+					this.$store.dispatch('SET_CURRENCY_DEFAULT', this);
+					this.$store.dispatch('LOAD_COMMERCE_INFO', this);
+					this.getCustomerData();
+					this.cleanForm();
+					this.showNotification('¡Bienvenido! Ya puedes iniciar tu primera compra.');
+					this.redirect();
+				}
+			} else {
+				setTimeout(() => {
+					self.showNotification('Se le ha enviado un correo electrónico para validar su cuenta.');
+				}, 5050);
+			}
 		}
 	} catch (err) {
 		if (err.status === 400) {
@@ -127,9 +152,9 @@ async function getCustomerData() {
 		Authorization: `Bearer ${this.token}`,
 	};
 	const { data: userInfo } = await this.$httpSales.get('customers/current', { headers });
-	userInfo.dni = null;
 	userInfo.avatar = userInfo.urlImage || process.env.DEFAULT_AVATAR;
 	userInfo.fullName = userInfo.typePerson.fullName;
+	userInfo.showCustomerDiscountMessage = true;
 	this.$store.dispatch('setUser', userInfo);
 }
 
@@ -154,8 +179,13 @@ function setWidth() {
 
 function validations() {
 	return {
+		afterLoginRoute: '',
 		flagTyc: { required },
 		model: {
+			documentNumber: {
+				required,
+				onlyNumbers: this.onlyNumbers,
+			},
 			email: {
 				required,
 				email,
@@ -170,6 +200,10 @@ function validations() {
 			},
 			password: {
 				required,
+			},
+			phone: {
+				required,
+				onlyNumbers: this.onlyNumbers,
 			},
 		},
 		passwordVerified: {
@@ -187,10 +221,12 @@ function data() {
 		headingImage: '/static/img/sign-up.svg',
 		loading: false,
 		model: {
+			documentNumber: null,
 			email: null,
 			lastname: null,
 			name: null,
 			password: null,
+			phone: null,
 		},
 		modelFacebook: {
 			email: null,
@@ -215,6 +251,9 @@ export default {
 		...mapState('login', {
 			facebookExternalId: state => state.externalId,
 		}),
+		...mapGetters([
+			'getFlagNotValidEmailUser',
+		]),
 	},
 	created,
 	data,
@@ -224,6 +263,7 @@ export default {
 		getCustomerData,
 		setModel,
 		setWidth,
+		redirect,
 	},
 	mixins: [userDataValidation],
 	mounted,
