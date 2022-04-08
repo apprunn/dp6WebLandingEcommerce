@@ -54,10 +54,12 @@ function redirect() {
 function cleanForm() {
 	this.flagTyc = false;
 	this.model = {
+		documentNumber: null,
 		email: null,
 		lastname: null,
 		name: null,
 		password: null,
+		phone: null,
 	};
 	this.modelFacebook = {
 		email: null,
@@ -175,6 +177,10 @@ function validations() {
 		afterLoginRoute: '',
 		flagTyc: { required },
 		model: {
+			documentNumber: {
+				required,
+				onlyNumbers: this.onlyNumbers,
+			},
 			email: {
 				required,
 				email,
@@ -189,6 +195,10 @@ function validations() {
 			},
 			password: {
 				required,
+			},
+			phone: {
+				required,
+				onlyNumbers: this.onlyNumbers,
 			},
 		},
 		passwordVerified: {
@@ -206,10 +216,12 @@ function data() {
 		headingImage: '/static/img/sign-up.svg',
 		loading: false,
 		model: {
+			documentNumber: null,
 			email: null,
 			lastname: null,
 			name: null,
 			password: null,
+			phone: null,
 		},
 		modelFacebook: {
 			email: null,
