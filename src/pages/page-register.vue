@@ -45,7 +45,7 @@ function created() {
 function cleanForm() {
 	this.flagTyc = false;
 	this.model = {
-		dni: null,
+		documentNumber: null,
 		email: null,
 		lastname: null,
 		name: null,
@@ -158,7 +158,7 @@ function validations() {
 	return {
 		flagTyc: { required },
 		model: {
-			dni: {
+			documentNumber: {
 				required,
 				onlyNumbers: this.onlyNumbers,
 			},
@@ -197,7 +197,7 @@ function data() {
 		headingImage: '/static/img/sign-up.svg',
 		loading: false,
 		model: {
-			dni: null,
+			documentNumber: null,
 			email: null,
 			lastname: null,
 			name: null,

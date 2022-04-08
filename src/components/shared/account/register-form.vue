@@ -52,16 +52,16 @@
 			</v-flex>
 			<v-flex xs12 pb-4 text-xs-left>
 				<app-input
-					placeholder="Dni"
-					:value="model.dni"
-					@input="$emit('set-model', { model: 'dni', value: $event })"
+					placeholder="Número de documento"
+					:value="model.documentNumber"
+					@input="$emit('set-model', { model: 'documentNumber', value: $event })"
 				>
-					<span class="error-message" v-if="!validatons.model.dni.required">
-						El dni es requerido
+					<span class="error-message" v-if="!validatons.model.documentNumber.required">
+						El número de documento es requerido
 					</span>
 					<span
 						class="error-message"
-						v-if="!validatons.model.dni.onlyNumbers && validatons.model.dni.required"
+						v-if="!validatons.model.documentNumber.onlyNumbers && validatons.model.documentNumber.required"
 					>
 						Solo se permiten números
 					</span>
