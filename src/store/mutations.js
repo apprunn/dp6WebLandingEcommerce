@@ -193,6 +193,10 @@ function SET_TOTALAMOUNT_BUY_SHIPP(state, value) {
 	Vue.set(state, 'totalAmountBuyWithShipp', value);
 }
 
+function SET_FLAG_NOT_VALID_EMAIL_USER(state, value) {
+	Vue.set(state, 'flagNotValidEmailUser', value);
+}
+
 const methods = {
 	ADD_ONE_IN_SERVICE_COUNTER,
 	clearUser,
@@ -240,6 +244,7 @@ const methods = {
 	SET_IS_COLLAPSE_PRODUCT,
 	SET_TOTAL_BUY_SHIPP,
 	SET_TOTALAMOUNT_BUY_SHIPP,
+	SET_FLAG_NOT_VALID_EMAIL_USER,
 };
 
 export default methods;
