@@ -17,7 +17,9 @@ function user(state) {
 }
 
 function userName(state) {
-	return state.user ? `${state.user.name || ''} ${state.user.lastname || ''}` : '';
+	return state.user
+		? `${state.user.name || ''} ${state.user.lastname || ''}`
+		: '';
 }
 
 function token(state) {
@@ -33,7 +35,9 @@ function snackbar(state) {
 }
 
 function themeColors() {
-	return JSON.parse(localStorage.getItem(`${process.env.STORAGE_USER_KEY}::theme`));
+	return JSON.parse(
+		localStorage.getItem(`${process.env.STORAGE_USER_KEY}::theme`),
+	);
 }
 
 function pollData(state) {
@@ -111,19 +115,27 @@ function getPromotionalBanner(state) {
 }
 
 function getPromotionalDetailsBanner(state) {
-	return state.banners.find(banner => banner.typeName === 'Promoción en detalle');
+	return state.banners.find(
+		banner => banner.typeName === 'Promoción en detalle',
+	);
 }
 
 function getPlansBanner(state) {
-	return state.banners.find(banner => banner.typeName === 'Promoción en planes');
+	return state.banners.find(
+		banner => banner.typeName === 'Promoción en planes',
+	);
 }
 
 function getCreditBanner(state) {
-	return state.banners.find(banner => banner.typeName === 'Promoción en creditos');
+	return state.banners.find(
+		banner => banner.typeName === 'Promoción en creditos',
+	);
 }
 
 function getCouponsBanner(state) {
-	return state.banners.find(banner => banner.typeName === 'Promoción en cupones');
+	return state.banners.find(
+		banner => banner.typeName === 'Promoción en cupones',
+	);
 }
 
 function productParams(state) {
@@ -167,6 +179,15 @@ function getkeySearch(state) {
 }
 function isToogleBtn(state) {
 	return state.isToogleBtn;
+}
+function isToogleDp(state) {
+	return state.isToogleDp;
+}
+function isTooglePr(state) {
+	return state.isTooglePr;
+}
+function isTooglePs(state) {
+	return state.isTooglePs;
 }
 
 function isCollapseProduct(state) {
@@ -230,6 +251,9 @@ const methods = {
 	loadingProducts,
 	getkeySearch,
 	isToogleBtn,
+	isToogleDp,
+	isTooglePr,
+	isTooglePs,
 	isCollapseProduct,
 	getTotalBuyWithShipp,
 	getAmountBuyWithShipp,

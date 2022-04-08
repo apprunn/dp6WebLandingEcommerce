@@ -18,7 +18,19 @@
 			v-model="newAddress.department"
 			@input="selectDepartment"
 		>
-			<span v-if="$v.newAddress.department.$invalid">El {{countryLabels.department}} es requerido</span>
+		<div>
+		</div>
+			<span v-if="$v.newAddress.department.$invalid">El {{countryLabels.department}} es requerido
+				<v-progress-circular
+			v-if="isToogleDp"
+      indeterminate
+      color="deep-orange"
+	  v-model="value"
+	  :active="show"
+	  :width="2"
+	  :size="15"
+			></v-progress-circular>
+			</span>
 		</app-select>
 		<app-select
 			item-text="name"
@@ -31,7 +43,16 @@
 			@input="selectProvince"
 			v-model="newAddress.province"
 		>
-			<span v-if="$v.newAddress.province.$invalid">La {{countryLabels.province}} es requerida</span>
+		<div class="divSpinner">
+			<span  v-if="$v.newAddress.province.$invalid">La {{countryLabels.province}} es requerida</span>
+			<v-progress-circular
+			v-if="isTooglePr"
+      indeterminate
+      color="deep-orange"
+	  :width="2"
+	  :size="15"
+			></v-progress-circular>
+		</div>
 		</app-select>
 		<app-select
 			item-text="name"
@@ -44,7 +65,16 @@
 			v-model="newAddress.district"
 			@input="selectDistrict"
 		>
+		<div class="divSpinner">
 			<span v-if="$v.newAddress.district.$invalid">El {{countryLabels.district}} es requerido</span>
+			<v-progress-circular
+			v-if="isTooglePs"
+      indeterminate
+      color="deep-orange"
+	  :width="2"
+	  :size="15"
+			></v-progress-circular>
+		</div>
 		</app-select>
 		<app-input
 			data-cy="direccion"
@@ -75,7 +105,7 @@
 		</div>
 		<div class="map mx-2 my-1 map-field" v-if="showMap">
 			<map-component :zoom="16" :markers="[{location: {lat: newAddress.latitude, lng: newAddress.longitude},}]" :location="{lat: newAddress.latitude, lng: newAddress.longitude}" :center="{lat: newAddress.latitude, lng: newAddress.longitude}"/>
-		</div>		
+		</div>	
 	</form>
 </template>
 <script>
@@ -258,6 +288,9 @@ export default {
 			'provinces',
 			'getCommerceData',
 			'getLocationAddress',
+			'isToogleDp',
+			'isTooglePs',
+			'isTooglePr',
 		]),
 		flagMap,
 	},
@@ -284,6 +317,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.divSpinner {
+	margin: 2px;
+justify-content: space-between;
+}
+.v-progress-circular {
+  float: right;
+}
 	.new-address-form {
 		align-items: center;
 		display: flex;

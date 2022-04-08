@@ -96,19 +96,28 @@ const asyncActions = {
 		store.dispatch('getOrderData', order);
 	},
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
+		commit('SET_IS_TOOGLE_DP', true);
 		const url = 'province';
+		await new Promise(resolve => setTimeout(resolve, 1000));
 		const { data: departments } = await context.$httpSales.get(url);
 		commit('SET_DEPARTMENTS', departments);
+		commit('SET_IS_TOOGLE_DP', false);
 	},
 	LOAD_PROVINCES: async ({ commit }, { context, provinceId }) => {
+		commit('SET_IS_TOOGLE_PR', true);
 		const url = `cities/${provinceId}`;
+		await new Promise(resolve => setTimeout(resolve, 1000));
 		const { data: cities } = await context.$httpSales.get(url);
 		commit('SET_PROVINCES', cities);
+		commit('SET_IS_TOOGLE_PR', false);
 	},
 	LOAD_DISTRICTS: async ({ commit }, { context, cityId }) => {
+		commit('SET_IS_TOOGLE_PS', true);
 		const url = `parish/${cityId}`;
+		await new Promise(resolve => setTimeout(resolve, 1000));
 		const { data: parish } = await context.$httpSales.get(url);
 		commit('SET_DISTRICTS', parish);
+		commit('SET_IS_TOOGLE_PS', false);
 	},
 	LOAD_CATEGORIES: async ({ commit, getters }, { context }) => {
 		const { id } = getters.getCommerceData;

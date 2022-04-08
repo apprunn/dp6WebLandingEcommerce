@@ -32,11 +32,11 @@
 				:background="globalColors.primary"
 				@click="goToMakeOrder"
 			/>
-			<app-button
+			<app-button 
 				data-cy="go-pay"
 				v-else-if="stepTwo"
-				action="Pasar a caja"
-				class="btn-order"
+				:action=" `Pasar a Caja`"
+				class="btn-order "
 				:background="globalColors.primary"
 				:disabled="invalidOrder || isToogleBtn ? true : false"
 				@click="makeOrder(false)"
@@ -45,7 +45,7 @@
 			<app-button
 				data-cy="pay"
 				v-else-if="stepThree"
-				action="Finalizar compra"
+				:action=" `Terminar Compra ${getCurrencySymbol}. ${listenerPriceOrder}`"
 				class="btn-order"
 				:disabled="isOnlinePayment || isToogleBtn ? true : false"
 				:background="globalColors.primary"
@@ -65,7 +65,7 @@ import { creditCard } from '@/shared/enums/wayPayment';
 function total() {
 	const totalBuyWithShipp = (this.getTotalToBuy - this.discount) + this.getShippingCost;
 	this.$store.commit('SET_TOTAL_BUY_SHIPP', totalBuyWithShipp);
-	return totalBuyWithShipp;
+	return Number(totalBuyWithShipp.toFixed(2));
 }
 
 function makeOrder(flagFinish) {

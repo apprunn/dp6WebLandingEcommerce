@@ -180,7 +180,15 @@ function LOADING_PRODUCTS(state, isLoading) {
 function SET_IS_TOOGLE_BTN(state, value) {
 	Vue.set(state, 'isToogleBtn', value);
 }
-
+function SET_IS_TOOGLE_DP(state, value) {
+	Vue.set(state, 'isToogleDp', value);
+}
+function SET_IS_TOOGLE_PR(state, value) {
+	Vue.set(state, 'isTooglePr', value);
+}
+function SET_IS_TOOGLE_PS(state, value) {
+	Vue.set(state, 'isTooglePs', value);
+}
 function SET_IS_COLLAPSE_PRODUCT(state, value) {
 	Vue.set(state, 'isCollapseProduct', value);
 }
@@ -241,6 +249,9 @@ const methods = {
 	LOADING_PRODUCTS,
 	SET_KEYSEARCH,
 	SET_IS_TOOGLE_BTN,
+	SET_IS_TOOGLE_DP,
+	SET_IS_TOOGLE_PR,
+	SET_IS_TOOGLE_PS,
 	SET_IS_COLLAPSE_PRODUCT,
 	SET_TOTAL_BUY_SHIPP,
 	SET_TOTALAMOUNT_BUY_SHIPP,
