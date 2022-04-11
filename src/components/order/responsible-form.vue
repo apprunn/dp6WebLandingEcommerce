@@ -15,9 +15,34 @@
 				:style="activeStyleOther"
 				@click="setResponsible('otherResponsible')"
 			>Otro recogera</button>
+			
+			<v-tooltip top>
+				<div slot="activator">
+					<button @click="showResponsible" class="show-data-responsible">
+						<svg width="25px" height="15px" viewBox="0 0 25 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+							<g id="PERFIL" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+								<g id="3_PERFIL_V3" transform="translate(-1089.000000, -474.000000)" :fill="showResponsibleSelected ? this.globalColors.secondary : '#4A4A4A'" fill-rule="nonzero">
+									<g id="Group-15" transform="translate(69.000000, 250.000000)">
+										<g id="Group-5">
+											<g id="Group-4" transform="translate(1020.000000, 224.000000)">
+												<g id="eye-copy-13">
+													<path d="M10.5680397,4.04413978 C10.3589494,3.79293701 10.0190437,3.79293701 9.80995338,4.04413978 C9.60032696,4.2947001 9.60032696,4.70202122 9.80995338,4.95258153 C10.0190437,5.2037843 10.3589494,5.2037843 10.5680397,4.95258153 C10.7776661,4.70202122 10.7776661,4.2947001 10.5680397,4.04413978 Z" id="Shape"></path>
+													<path d="M13.4065744,2.5704918 C12.7322103,2.5704918 12.0801078,2.73380639 11.4685468,3.05595328 C11.1635204,3.21666525 11.0249434,3.64320623 11.1589957,4.00873016 C11.2930481,4.3742541 11.6490529,4.54024361 11.9540793,4.37967623 C12.4116792,4.13864443 12.9004092,4.01639344 13.4065744,4.01639344 C15.4025184,4.01639344 17.0263495,5.96228787 17.0263495,8.35409836 C17.0263495,10.7459089 15.4025184,12.6918033 13.4065744,12.6918033 C11.4106304,12.6918033 9.78679931,10.7459089 9.78679931,8.35409836 C9.78679931,8.32937344 9.78673898,8.30522689 9.78722162,8.28050197 C9.7949438,7.88136082 9.53118286,7.55024934 9.19810322,7.54099557 C8.86448062,7.53101885 8.58871408,7.84774361 8.5809919,8.24695705 C8.58026794,8.28296 8.58020761,8.31809541 8.58020761,8.35409836 C8.58020761,11.543179 10.7453158,14.1377049 13.4065744,14.1377049 C16.067833,14.1377049 18.2329412,11.543179 18.2329412,8.35409836 C18.2329412,5.1650177 16.067833,2.5704918 13.4065744,2.5704918 Z" id="Shape"></path>
+													<path d="M26.6819679,8.46398689 C23.3551987,3.84230689 18.4155027,0 13.4065744,0 C8.39696524,0 3.45732167,3.84327082 0.131180839,8.46398689 C-0.0602818674,8.73003279 -0.0397530433,9.13610623 0.177004107,9.37104918 C0.393813628,9.60599213 0.724788547,9.58080131 0.916198885,9.31481967 C1.02779818,9.15975475 1.14212069,9.0052682 1.25790954,8.85174557 C3.84574588,13.6498256 8.53689641,16.7081967 13.4065744,16.7081967 C18.2762524,16.7081967 22.9674029,13.6498256 25.5552392,8.85174557 C25.6710281,9.00533246 25.7853506,9.15981902 25.8969499,9.31481967 C26.0877842,9.5799659 26.4187067,9.60669902 26.6361447,9.37104918 C26.8529018,9.13610623 26.8734307,8.72996852 26.6819679,8.46398689 Z M13.4065744,15.4229508 C8.80251426,15.4229508 4.3743631,12.4875134 2.00632134,7.90554754 C3.87214008,5.66208656 8.18329789,1.2852459 13.4065744,1.2852459 C18.6299033,1.2852459 22.9410087,5.66208656 24.8068274,7.90548328 C22.4387857,12.4875134 18.0106345,15.4229508 13.4065744,15.4229508 Z" id="Shape"></path>
+												</g>
+											</g>
+										</g>
+									</g>
+								</g>
+							</g>
+						</svg>
+					</button>
+				</div>
+				<span> {{!showResponsibleSelected ? 'Ver formulario' : 'Ocultar Formulario'}}</span>
+			</v-tooltip>
 		</section>
 
-		<form class="responsible">
+		<form v-show="showResponsibleSelected" class="responsible">
 			<app-input
 				data-cy="responsible-name"
 				placeholder="Persona responsable de recibir"
@@ -116,6 +141,8 @@ import helper from '@/shared/helper';
 
 function mounted() {
 	this.setResponsibleData();
+	this.showResponsibleSelected = (!this.meResponsible &&
+		this.otherResponsible) || (this.responsible.dni === '' || this.responsible.phone === '');
 }
 
 function setResponsibleData() {
@@ -174,7 +201,9 @@ function setResponsible(who) {
 
 	if (this.meResponsible) {
 		this.setResponsibleData();
+		this.showResponsibleSelected = (this.responsible.dni === '' || this.responsible.phone === '');
 	} else {
+		this.showResponsibleSelected = true;
 		this.cleanForm();
 	}
 }
@@ -286,6 +315,11 @@ function validations() {
 	return validating;
 }
 
+function showResponsible() {
+	if (!this.otherResponsible) {
+		this.showResponsibleSelected = !this.showResponsibleSelected;
+	}
+}
 
 function data() {
 	return {
@@ -301,6 +335,7 @@ function data() {
 			name: '',
 			phone: '',
 		},
+		showResponsibleSelected: false,
 	};
 }
 
@@ -333,6 +368,7 @@ export default {
 		updateCustomerDni,
 		validateForm,
 		setResponsiblePhones,
+		showResponsible,
 	},
 	mixins: [userDataValidation],
 	mounted,
@@ -400,5 +436,12 @@ export default {
 			text-align: center;
 			margin-bottom: 20px;
 		}
+	}
+	.show-data-responsible {
+		width: 25px;
+		height: 25px;
+		border-radius: 100%;
+		color: color(dark);
+		margin: 3px 10px 0 10px;
 	}
 </style>
