@@ -335,6 +335,9 @@ justify-content: space-between;
 	.field {
 		height: 68px;
 	}
+	.field ::placeholder {
+		color: black;
+	}
 
 	.name-field,
 	.department-field {
