@@ -334,9 +334,9 @@ justify-content: space-between;
 
 	.field {
 		height: 68px;
-	}
-	.field ::placeholder {
-		color: black;
+		::placeholder {
+			color: #767575 !important;
+		}
 	}
 
 	.name-field,
