@@ -143,6 +143,12 @@ import { getDeeper } from '@/shared/lib';
 import TypeProduct from '@/shared/enums/typeProduct';
 import helper from '@/shared/helper';
 
+function created() {
+	const productsSelected = JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
+	const product = productsSelected.find(p => p.id === this.product.id);
+	this.showAdd = product && product.quantity > 0;
+}
+
 function mounted() {
 	this.WholeSalePrice = this.getWholeSalePrice();
 }
@@ -166,6 +172,11 @@ function removeProductFromCar() {
 	this.disabledAdd = !(this.quantityAddProduct < this.product.stock);
 	if (this.quantityAddProduct < this.product.stock) {
 		this.showNotStock = false;
+	}
+	const productsSelected = JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
+	const product = productsSelected.find(p => p.id === this.product.id);
+	if (product && product.quantity < 2) {
+		this.showAdd = false;
 	}
 	this.$store.dispatch('removeProductToBuyCar', this.product);
 }
@@ -306,6 +317,7 @@ export default {
 		getWholeSalePrice,
 		goToCategories,
 	},
+	created,
 	mounted,
 	props: {
 		small: {
