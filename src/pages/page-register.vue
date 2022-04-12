@@ -6,7 +6,7 @@
 			:disabled="disabled"
 			:heading-image="headingImage"
 			:img-height="width > 768 ? '39.3' : '38'"
-			title="Crear Cuenta"
+			title="Ingresa tus datos"
 			@on-submit="createAccount"
 		>
 			<register-form
@@ -41,14 +41,6 @@ function created() {
 		this.setModel({ model: 'passwordVerified', value: this.facebookExternalId });
 	}
 	this.afterLoginRoute = this.getLocalStorage('route-after-login');
-}
-
-function redirect() {
-	if (this.afterLoginRoute) {
-		this.$router.push(this.afterLoginRoute);
-	} else {
-		this.goTo('page-home');
-	}
 }
 
 function cleanForm() {
@@ -114,6 +106,7 @@ async function createAccount() {
 			const self = this;
 			if (this.getFlagNotValidEmailUser) {
 				if (response.data && response.data.token) {
+					const productsCart = this.getLocalStorage('ecommerce::product-select');
 					localStorage.clear();
 					localStorage.setItem(`${process.env.STORAGE_USER_KEY}::token`, response.data.token);
 					this.$store.dispatch('setToken', response.data.token);
@@ -122,7 +115,11 @@ async function createAccount() {
 					this.getCustomerData();
 					this.cleanForm();
 					this.showNotification('¡Bienvenido! Ya puedes iniciar tu primera compra.');
-					this.redirect();
+					if (productsCart && productsCart.length) {
+						this.goToMakeOrder();
+					} else {
+						this.goTo('page-home');
+					}
 				}
 			} else {
 				setTimeout(() => {
@@ -140,6 +137,16 @@ async function createAccount() {
 		}
 	} finally {
 		this.loading = false;
+	}
+}
+
+function goToMakeOrder() {
+	if (this.token) {
+		this.$store.commit('SET_IS_COLLAPSE_PRODUCT', false);
+		this.goTo('buy-delivery');
+		setTimeout(() => {
+			this.scrollTo('main-container-delivery', 800, false);
+		}, 900);
 	}
 }
 
@@ -168,6 +175,7 @@ function setModel({ model, value }) {
 	} else {
 		if (model === 'password') {
 			this[model] = value;
+			this.passwordVerified = value;
 		}
 		this.model[model] = value;
 	}
@@ -263,7 +271,7 @@ export default {
 		getCustomerData,
 		setModel,
 		setWidth,
-		redirect,
+		goToMakeOrder,
 	},
 	mixins: [userDataValidation],
 	mounted,

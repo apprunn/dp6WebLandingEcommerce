@@ -119,6 +119,7 @@ import mapComponent from '@/components/shared/map/map-component';
 
 function created() {
 	this.$store.dispatch('LOAD_DEPARTMENTS', this);
+	this.labels = this.countryLabels;
 }
 
 function flagMap() {
@@ -266,6 +267,7 @@ function data() {
 		},
 		address: '',
 		showMap: false,
+		labels: {},
 	};
 }
 

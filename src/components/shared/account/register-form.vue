@@ -95,7 +95,7 @@
 					La contraseña es requerida
 				</span>
 			</v-flex>
-			<v-flex xs12 text-xs-left v-if="noFacebookPass">
+			<v-flex xs12 text-xs-left v-if="noFacebookPass && model.password !== passwordVerified">
 				<app-input
 					type="password"
 					placeholder="Verificar contraseña"
