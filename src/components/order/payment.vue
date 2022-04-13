@@ -199,7 +199,7 @@ function showAmoutCash() {
 
 function setCheckActivate() {
 	if (this.isCheckActivate) {
-		this.amountCash = parseFloat(this.getTotalBuyWithShipp);
+		this.amountCash = Number(parseFloat(this.getTotalBuyWithShipp).toFixed(2));
 		this.$store.commit('SET_TOTALAMOUNT_BUY_SHIPP', parseFloat(this.getTotalBuyWithShipp));
 	}
 	this.isTotalAmountCash = this.isCheckActivate;

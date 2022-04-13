@@ -64,8 +64,9 @@ import { creditCard } from '@/shared/enums/wayPayment';
 
 function total() {
 	const totalBuyWithShipp = (this.getTotalToBuy - this.discount) + this.getShippingCost;
-	this.$store.commit('SET_TOTAL_BUY_SHIPP', totalBuyWithShipp);
-	return Number(totalBuyWithShipp.toFixed(2));
+	const newTotal = Number(totalBuyWithShipp.toFixed(2));
+	this.$store.commit('SET_TOTAL_BUY_SHIPP', newTotal);
+	return newTotal;
 }
 
 function makeOrder(flagFinish) {
@@ -110,9 +111,10 @@ function goToMakeOrder() {
 		}, 900);
 	} else if (window.innerWidth < 765) {
 		this.setLocalData('route-after-login', '/carrito-de-compras');
-		this.goTo('login');
+		this.goTo('register');
 	} else {
-		this.$store.commit('toogleLoginModal');
+		// this.$store.commit('toogleLoginModal');
+		this.goTo('register');
 	}
 }
 

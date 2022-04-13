@@ -22,14 +22,12 @@
 		</div>
 			<span v-if="$v.newAddress.department.$invalid">El {{countryLabels.department}} es requerido
 				<v-progress-circular
-			v-if="isToogleDp"
-      indeterminate
-      color="deep-orange"
-	  v-model="value"
-	  :active="show"
-	  :width="2"
-	  :size="15"
-			></v-progress-circular>
+					v-if="isToogleDp"
+					indeterminate
+					color="deep-orange"
+					:width="2"
+					:size="15"
+				></v-progress-circular>
 			</span>
 		</app-select>
 		<app-select
@@ -46,11 +44,11 @@
 		<div class="divSpinner">
 			<span  v-if="$v.newAddress.province.$invalid">La {{countryLabels.province}} es requerida</span>
 			<v-progress-circular
-			v-if="isTooglePr"
-      indeterminate
-      color="deep-orange"
-	  :width="2"
-	  :size="15"
+				v-if="isTooglePr"
+				indeterminate
+				color="deep-orange"
+				:width="2"
+				:size="15"
 			></v-progress-circular>
 		</div>
 		</app-select>
@@ -68,11 +66,11 @@
 		<div class="divSpinner">
 			<span v-if="$v.newAddress.district.$invalid">El {{countryLabels.district}} es requerido</span>
 			<v-progress-circular
-			v-if="isTooglePs"
-      indeterminate
-      color="deep-orange"
-	  :width="2"
-	  :size="15"
+				v-if="isTooglePs"
+				indeterminate
+				color="deep-orange"
+				:width="2"
+				:size="15"
 			></v-progress-circular>
 		</div>
 		</app-select>
@@ -119,7 +117,6 @@ import mapComponent from '@/components/shared/map/map-component';
 
 function created() {
 	this.$store.dispatch('LOAD_DEPARTMENTS', this);
-	this.labels = this.countryLabels;
 }
 
 function flagMap() {
