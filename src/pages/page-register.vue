@@ -107,7 +107,6 @@ async function createAccount() {
 			if (this.getFlagNotValidEmailUser) {
 				if (response.data && response.data.token) {
 					const productsCart = this.getLocalStorage('ecommerce::product-select');
-					localStorage.clear();
 					localStorage.setItem(`${process.env.STORAGE_USER_KEY}::token`, response.data.token);
 					this.$store.dispatch('setToken', response.data.token);
 					this.$store.dispatch('SET_CURRENCY_DEFAULT', this);
