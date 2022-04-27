@@ -28,11 +28,11 @@
 								:style="`background-image: url(${category.urlImage})`"
 								:class="[
 									'category-image',
-									{ 'category-opacity': !applyBgOpacity },
+									{ 'category-opacity': !applyBgOpacity && !category.urlImage},
 								]"
 							>
 								<img
-									v-if="!applyBgOpacity"
+									v-if="!applyBgOpacity && !category.urlImage"
 									:src="category.webImage" 
 									:alt="category.name"
 									class="image">	
