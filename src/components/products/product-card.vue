@@ -94,9 +94,9 @@
 								indeterminate ? 'loading text-field' : 'product-description'
 							]"
 						>{{product.description | cuttingWord(53)}}</!--span-->
-						<small
+						<!-- <small
 							v-if="product.warehouseProduct && product.warehouseProduct.brand"
-							class="product-brand">{{product.warehouseProduct.brand.name}}</small>
+							class="product-brand">{{product.warehouseProduct.brand.name}}</small> -->
 						<h3
 							v-if="product.priceDiscount"
 							:style="`color: ${indeterminate ? 'transparent' : globalColors.primary};`"
