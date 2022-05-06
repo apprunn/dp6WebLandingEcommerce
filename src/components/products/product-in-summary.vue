@@ -8,7 +8,7 @@
 				<h3 class="product-name">{{product.productName}}</h3>
 				<span class="product-description">{{product.description}}</span>
 			</div>
-			<span class="product-brand">{{product.brandName}}</span>
+			<!-- <span class="product-brand">{{product.brandName}}</span> -->
 			<span class="product-price">{{currency}} {{product.salePrice | currencyFormat}}</span>
 			<span class="product-quantity">
 				Cantidad: 
