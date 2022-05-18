@@ -29,14 +29,15 @@ function setUser(context, user) {
 	const newUser = user;
 	newUser.dni = Number(user.dni) ? user.dni : null;
 	newUser.typePerson.documentNumber =
-			Number(newUser.typePerson.documentNumber) ? newUser.typePerson.documentNumber : null;
+		Number(newUser.typePerson.documentNumber) ? newUser.typePerson.documentNumber : null;
 	localStorage.setItem('ecommerce::ecommerce-user', JSON.stringify(newUser));
 	context.commit('setUser', newUser);
 }
 
 function addProductToBuyCar(context, product) {
 	const newProduct = product.quantity ? product : setNewProperty('quantity', 1)(product);
-	const productsSelected = JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
+	const localS = localStorage.getItem('ecommerce::product-select');
+	const productsSelected = localS !== null ? JSON.parse(localStorage.getItem('ecommerce::product-select')) : [];
 	const index = productsSelected.findIndex(
 		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
 	);
@@ -45,7 +46,7 @@ function addProductToBuyCar(context, product) {
 		const { stock, stockWarehouse, stockComposite } = currentProduct;
 		const finalStock = helper.isComposed(currentProduct) ?
 			stockComposite : (stockWarehouse || stock);
-		let quantity = currentProduct.quantity + newProduct.quantity;
+		let quantity = currentProduct.quantity + (newProduct.quantity - currentProduct.quantity);
 		quantity = finalStock > quantity ? quantity : finalStock;
 		productsSelected[index].quantity = quantity;
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);

@@ -103,9 +103,9 @@ function showDownloadDialog(blob, name, extension) {
 /* eslint-disable */
 function debounce(func, wait = 800, immediate) {
 	var timeout;
-	return function() {
+	return function () {
 		var context = this, args = arguments;
-		var later = function() {
+		var later = function () {
 			timeout = null;
 			if (!immediate) func.apply(context, args);
 		};

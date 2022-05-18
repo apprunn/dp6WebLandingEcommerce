@@ -7,6 +7,7 @@
 		>
 			<app-modal
 				:product="productDetails"
+				:wholeSalePrice="wholeSalePrice"
 				@close-modal="closeConfirmModal"
 			></app-modal>
 		</div>
@@ -234,6 +235,7 @@ async function loadData(id) {
 		this.disabledBtn = true;
 	}
 	this.wholeSalePrice = this.productInstance.getWholeSalePrice();
+	this.product.wholeSalePrice = this.wholeSalePrice;
 }
 
 function selectFeature(value) {
