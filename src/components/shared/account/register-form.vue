@@ -50,6 +50,31 @@
 					Ingrese un email válido
 				</span>
 			</v-flex>
+			<v-flex xs12 pb-4 text-xs-left v-if="noFacebookPass">
+				<app-input
+					type="password"
+					placeholder="Contraseña"
+					:value="model.password"
+					@input="$emit('set-model', { model: 'password', value: $event })"
+				></app-input>
+				<span class="error-message" v-if="validatons.model.password.$invalid">
+					La contraseña es requerida
+				</span>
+			</v-flex>
+			<v-flex xs12 text-xs-left v-if="noFacebookPass && model.password !== passwordVerified">
+				<app-input
+					type="password"
+					placeholder="Verificar contraseña"
+					:value="passwordVerified"
+					@input="$emit('set-model', { model: 'passwordVerified', value: $event })"
+				></app-input>
+				<span class="error-message" v-if="!validatons.passwordVerified.required">
+					Vuelva a escribir la contraseña
+				</span>
+				<span class="error-message" v-else-if="!validatons.passwordVerified.sameAsPassword">
+					Las contraseñas no coinciden
+				</span>
+			</v-flex>
 			<v-flex xs12 pb-4 text-xs-left>
 				<app-input
 					placeholder="Número de documento"
@@ -83,31 +108,6 @@
 						Solo se permiten números
 					</span>
 				</app-input>
-			</v-flex>
-			<v-flex xs12 pb-4 text-xs-left v-if="noFacebookPass">
-				<app-input
-					type="password"
-					placeholder="Contraseña"
-					:value="model.password"
-					@input="$emit('set-model', { model: 'password', value: $event })"
-				></app-input>
-				<span class="error-message" v-if="validatons.model.password.$invalid">
-					La contraseña es requerida
-				</span>
-			</v-flex>
-			<v-flex xs12 text-xs-left v-if="noFacebookPass && model.password !== passwordVerified">
-				<app-input
-					type="password"
-					placeholder="Verificar contraseña"
-					:value="passwordVerified"
-					@input="$emit('set-model', { model: 'passwordVerified', value: $event })"
-				></app-input>
-				<span class="error-message" v-if="!validatons.passwordVerified.required">
-					Vuelva a escribir la contraseña
-				</span>
-				<span class="error-message" v-else-if="!validatons.passwordVerified.sameAsPassword">
-					Las contraseñas no coinciden
-				</span>
 			</v-flex>
 			<v-flex xs12 mt-2 text-xs-left>
 				<v-checkbox
