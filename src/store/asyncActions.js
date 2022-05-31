@@ -239,12 +239,10 @@ const asyncActions = {
 		const cash = getters.getAmountBuyWithShipp - getters.getTotalBuyWithShipp;
 		if (cash) {
 			if (body.additionalInfo) {
-				body.additionalInfo.cash = cash;
-				body.additionalInfo.amountCash = getters.getAmountBuyWithShipp;
+				body.additionalInfo.changeAmount = getters.getAmountBuyWithShipp;
 			} else {
 				body.additionalInfo = {
-					cash,
-					amountCash: getters.getAmountBuyWithShipp,
+					changeAmount: getters.getAmountBuyWithShipp,
 				};
 			}
 		}
