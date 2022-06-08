@@ -103,9 +103,9 @@ function showDownloadDialog(blob, name, extension) {
 /* eslint-disable */
 function debounce(func, wait = 800, immediate) {
 	var timeout;
-	return function() {
+	return function () {
 		var context = this, args = arguments;
-		var later = function() {
+		var later = function () {
 			timeout = null;
 			if (!immediate) func.apply(context, args);
 		};
@@ -174,7 +174,9 @@ function buildOrderBody(flagFinish, getters) {
 
 function getOrderDetails(products, warehouseId, warehouseName) {
 	return products.map((p) => {
-		const { taxes } = p;
+		const { taxes, conversions } = p;
+		const extractConversions = conversions ? Object.values(conversions) : null;
+		const unitConversion = extractConversions ? extractConversions.find(conv => conv.code === p.unit.code) : { quantity: p.unitConversion };
 		const newTaxes = setTaxes(taxes);
 		const newP = {
 			alternateCode: p.alternateCode,
@@ -201,7 +203,7 @@ function getOrderDetails(products, warehouseId, warehouseName) {
 			taxes: newTaxes,
 			unit: p.unit,
 			unitCode: p.unit.code,
-			unitConversion: 1,
+			unitConversion: unitConversion ? unitConversion.quantity : 1,
 			unitId: p.unit.id,
 			unitName: p.unit.name,
 			unitQuantity: p.quantity,
