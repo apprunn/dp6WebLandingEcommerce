@@ -103,6 +103,7 @@ function created() {
 	}
 	this.collapseSectionMethods = true;
 	this.collapseSectionProducts = false;
+	this.$store.dispatch('setWayPaymentDetailCode', this.typePaymentSelected.code);
 }
 
 /**
@@ -171,6 +172,7 @@ function collapseStepMethods() {
 
 function sendValue(typePayment) {
 	this.typePaymentSelected = typePayment;
+	this.$store.dispatch('setWayPaymentDetailCode', typePayment.code);
 	this.onSelect(this.methodSelected);
 }
 
