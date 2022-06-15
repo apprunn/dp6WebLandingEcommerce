@@ -160,7 +160,11 @@ function buildOrderBody(flagFinish, getters) {
 		wayPaymentDetailCode: getters.getWayPaymentDetailCode,
 		comments: getters.getComments,
 	};
-	body.orderStateId = getters.getOrderStatus && getters.getOrderId ? getters.getOrderStatus : 8;
+	if (flagFinish) {
+		body.orderStateId = 1;
+	} else {
+		body.orderStateId = getters.getOrderStatus && getters.getOrderId ? getters.getOrderStatus : 8;
+	}
 	if (getters.getOrderId && getters.getOrderStatus) {
 		// body.orderStateId = getters.getOrderStatus;
 		// body.flagStatusOrder = flagFinish ? 3 : getters.getFlagStatusOrder;
