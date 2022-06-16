@@ -169,7 +169,6 @@ function buildOrderBody(flagFinish, getters) {
 		// body.orderStateId = getters.getOrderStatus;
 		// body.flagStatusOrder = flagFinish ? 3 : getters.getFlagStatusOrder;
 		body.bankAccountId = null;
-		body.paymentStateId = getters.getWayPaymentDetailCode === 'EFECTIVO' || getters.getWayPaymentDetailCode === 'POS' ? 1 : 3;
 		// body.bankAccountId = flagFinish ? getters.getWayPayment.bankAccountId : null;
 		body.wayPaymentId = flagFinish ? getters.getWayPayment.wayPayment : null;
 	} else {
