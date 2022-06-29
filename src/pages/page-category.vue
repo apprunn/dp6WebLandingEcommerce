@@ -137,7 +137,7 @@ async function loadProduct() {
 			page: this.page,
 			codeAttribute: this.attributeCodes,
 			flagCommerce: true,
-			showCatalog: true,
+			showCatalog: false,
 		};
 		const url = 'products-public';
 		const { data: products, headers } = process.env.PRODUCTS_READ_REPORT
