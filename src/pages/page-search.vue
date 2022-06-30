@@ -135,7 +135,7 @@ async function loadProduct() {
 			flagGrouper: this.$store.getters.productParams.flagGrouper,
 			page: this.page,
 			codeAttribute: this.attributeCodes,
-			showCatalog: true,
+			// showCatalog: true,
 		};
 		const url = 'products-public';
 		const { data: products, headers } = process.env.PRODUCTS_READ_REPORT
