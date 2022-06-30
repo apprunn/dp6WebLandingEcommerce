@@ -160,9 +160,14 @@ function buildOrderBody(flagFinish, getters) {
 		wayPaymentDetailCode: getters.getWayPaymentDetailCode,
 		comments: getters.getComments,
 	};
+	if (flagFinish) {
+		body.orderStateId = 1;
+	} else {
+		body.orderStateId = getters.getOrderStatus && getters.getOrderId ? getters.getOrderStatus : 8;
+	}
 	if (getters.getOrderId && getters.getOrderStatus) {
-		body.orderStateId = getters.getOrderStatus;
-		body.flagStatusOrder = flagFinish ? 3 : getters.getFlagStatusOrder;
+		// body.orderStateId = getters.getOrderStatus;
+		// body.flagStatusOrder = flagFinish ? 3 : getters.getFlagStatusOrder;
 		body.bankAccountId = null;
 		// body.bankAccountId = flagFinish ? getters.getWayPayment.bankAccountId : null;
 		body.wayPaymentId = flagFinish ? getters.getWayPayment.wayPayment : null;
