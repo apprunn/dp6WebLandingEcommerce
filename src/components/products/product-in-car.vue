@@ -131,6 +131,7 @@ function stepOne() {
 }
 
 function deleteProduct() {
+	debugger;
 	const { id, unitSelected } = this.product;
 	this.$store.commit('DELETE_PRODUCT_BUY_CAR', { id, unitSelected });
 }

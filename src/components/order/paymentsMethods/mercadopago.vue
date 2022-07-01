@@ -168,6 +168,7 @@ function closeModal() {
 
 function mountMercadoPagoScrip() {
 	const JQScript = document.createElement('script');
+	debugger;
 	JQScript.setAttribute('src', 'https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js');
 	const body = document.querySelector('body');
 	body.appendChild(JQScript);
@@ -188,6 +189,7 @@ async function checkout() {
 		ipAddress: this.ipAddress,
 	};
 	const url = `payment-gateway/${this.code}/checkout`;
+	debugger;
 	const { data: res } = await this.$httpSales.post(url, body);
 	this.hash = res.hash;
 	this.publicKey = res.publicKey;

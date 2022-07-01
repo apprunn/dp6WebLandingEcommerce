@@ -141,6 +141,7 @@ class MercadoPago {
 		if (status === 200 || status === 201) {
 			const form = document.getElementById('paymentForm');
 			this.doSubmit = true;
+			debugger;
 			this.pay.call(this, form, response.id);
 		} else {
 			const { cause } = response;
@@ -246,6 +247,8 @@ class MercadoPago {
 	}
 
 	async pay(form, token) {
+		const validated = this.getLocalStorage('ecommerce::ecommerce-data');
+		const { flagEditOrderVendor } = validated.company.settings;
 		const transactionAmount = Number(form.transactionAmount.value);
 		const description = form.description.value;
 		const installments = form.installments.value;
@@ -256,6 +259,7 @@ class MercadoPago {
 		const docNumber = form.docNumber.value;
 		const body = {
 			hash: this.hash,
+			orderStateId: flagEditOrderVendor ? 1 : undefined,
 			gatewayResponse: {
 				action: 'authorize',
 				transactionAmount,
