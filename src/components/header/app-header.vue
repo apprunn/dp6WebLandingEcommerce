@@ -121,7 +121,6 @@ function getData($event) {
 }
 
 function searchProduct(value) {
-	debugger;
 	const search = value.trim() ? value : null;
 	const filterId = this.getFilters.length > 0 ? this.getFilters[0].id : null;
 	const id = search ? null : filterId;

@@ -141,7 +141,6 @@ class MercadoPago {
 		if (status === 200 || status === 201) {
 			const form = document.getElementById('paymentForm');
 			this.doSubmit = true;
-			debugger;
 			this.pay.call(this, form, response.id);
 		} else {
 			const { cause } = response;
