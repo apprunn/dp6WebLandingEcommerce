@@ -142,7 +142,7 @@ function searchProduct(value) {
 			this.scrollTo('section-product-card', 800, true);
 		}, 1000);
 	} else {
-		this.$router.replace({ query });
+		this.$router.replace(query);
 		this.scrollTo('section-product-card', 800, true);
 	}
 }
