@@ -6,6 +6,8 @@ const PAGE_TITLE = process.env.PAGE_TITLE;
 function updateProducts(products, priceListId) {
 	return products.map(
 		compose(
+			setNewProperty('showAddProduct', false),
+			setNewProperty('showNotStockProduct', false),
 			setNewProperty('price', product => helper.setPrices(product, priceListId, 'price')),
 			setNewProperty('priceDiscount', product => helper.setPrices(product, priceListId, 'priceDiscount')),
 			setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),

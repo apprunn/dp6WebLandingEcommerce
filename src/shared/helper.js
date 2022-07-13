@@ -128,6 +128,7 @@ function setPrices(product, priceListId, flag) {
 
 function updateOrderDetailsInLocalStorage(products) {
 	const localOrder = JSON.parse(localStorage.getItem('ecommerce-order'));
+	debugger;
 	if (!isEmpty(localOrder)) {
 		localOrder.details = [...products];
 		localStorage.setItem('ecommerce-order', JSON.stringify(localOrder));

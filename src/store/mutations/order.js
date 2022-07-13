@@ -43,6 +43,7 @@ const orderMutation = {
 	},
 	DELETE_PRODUCT_BUY_CAR(state, { id, unitSelected }) {
 		const { products } = state.order;
+		debugger;
 		const newProducts = products.filter(p => !(p.id === id && p.unitSelected === unitSelected));
 		Vue.set(state.order, 'products', [...newProducts]);
 		localStorage.setItem('ecommerce::product-select', JSON.stringify([...newProducts]));
@@ -92,6 +93,7 @@ const orderMutation = {
 		Vue.set(state.order.paymentMethod, 'bankAccountId', id);
 	},
 	UPDATE_ORDER_DETAILS_IF_EXIST(state, products) {
+		debugger;
 		if (!isEmpty(state.order.order)) {
 			h.updateOrderDetailsInLocalStorage(products);
 			Vue.set(state.order.order, 'details', [...products]);

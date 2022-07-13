@@ -59,12 +59,18 @@
 						]"
 					>
 						<div>
-							<span class="show-add" v-if="showAdd">
+							<span class="show-add" v-if="product.showAddProduct">
 								<v-icon color="#03ba00" size="15">check_circle</v-icon>
 								<span class="pl-1">
 									Agregado
 								</span>
 							</span>
+							<!-- <span class="show-add" v-if="showAdd">
+								<v-icon color="#03ba00" size="15">check_circle</v-icon>
+								<span class="pl-1">
+									Agregado
+								</span>
+							</span> -->
 							<span class="show-agot" v-if="showNotStock">
 								<span class="pl-1">
 									SIN STOCK
@@ -154,15 +160,18 @@ function mounted() {
 }
 
 function addToCar() {
+	debugger;
 	if (!this.noStock) {
 		this.showAdd = true;
 		this.quantityAddProduct += 1;
 		const productSelected = this.product;
 		this.disabledAdd = this.quantityAddProduct >= productSelected.stock;
 		if (this.quantityAddProduct >= productSelected.stock) {
-			this.showNotStock = true;
+			productSelected.showNotStockProduct = true;
+			// this.showNotStock = true;
 		}
 		productSelected.unitSelected = this.product.unitId;
+		productSelected.showAddProduct = true;
 		this.$store.dispatch('addProductToBuyCar', productSelected);
 	}
 }
@@ -471,12 +480,6 @@ export default {
 		}
 		div {
 			margin: 0 10px;
-		}
-
-		@media (max-width: 500px) {
-			&.small {
-				//flex-direction: column;
-			}
 		}
 
 		@media (min-width: 600px) {

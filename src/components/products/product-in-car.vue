@@ -131,7 +131,11 @@ function stepOne() {
 }
 
 function deleteProduct() {
-	const { id, unitSelected } = this.product;
+	debugger;
+	const { id, unitSelected, quantity } = this.product;
+	if (quantity === 0) {
+		this.product.showAddProduct = false;
+	}
 	this.$store.commit('DELETE_PRODUCT_BUY_CAR', { id, unitSelected });
 }
 

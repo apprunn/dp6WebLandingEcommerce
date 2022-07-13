@@ -59,7 +59,7 @@ Cypress.Commands.add('ProductsDetailPage', (productId) => {
 		cy.visit(`http://localhost:9010/${productId}/detalle-producto`);
 		cy.request({
 			method: 'get',
-			url: `https://products2.perudatos.com/products-public/${productId}`,
+			url: `https://products2.perudatos.com//${productId}`,
 			headers: {
 				Authorization: token,
 			},
