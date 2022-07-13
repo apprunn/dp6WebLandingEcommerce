@@ -31,7 +31,7 @@
 					:class="[isLoading ? 'loading' : 'product-detail-brand']"
 				>{{ data.getBrandName }}</p>
 			</div>
-			<div class="d-center container-code-rating">
+			<!-- <div class="d-center container-code-rating">
 				<span
 					:class="[isLoading ? 'loading' : 'product-detail-code']"
 				>#{{ data.code }}</span>
@@ -54,7 +54,7 @@
 						class="text-rating"
 					>{{ data.rating }} / 5</span>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div class="container-detail-bottom">
 			<div class="d-center">
