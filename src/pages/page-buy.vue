@@ -69,7 +69,6 @@ import appButton from '@/components/shared/buttons/app-button';
 import productInCar from '@/components/products/product-in-car';
 import summaryOrder from '@/components/order/summary-order';
 import summaryInPayment from '@/components/order/summary-in-payment';
-// import helper from '@/shared/helper';
 
 function created() {
 	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
@@ -107,8 +106,7 @@ async function loadProductsQuery() {
 function addToCar(product) {
 	if (!this.noStock) {
 		this.$store.dispatch('addProductToBuyCar', product);
-		// this.showConfirmModal = true;
-		// this.$store.commit('SET_IS_COLLAPSE_PRODUCT', true);
+		this.$store.commit('SET_IS_COLLAPSE_PRODUCT', true);
 	} else {
 		this.showGenericError('Producto sin stock', 80000);
 	}
