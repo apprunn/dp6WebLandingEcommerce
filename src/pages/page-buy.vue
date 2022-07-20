@@ -69,6 +69,7 @@ import appButton from '@/components/shared/buttons/app-button';
 import productInCar from '@/components/products/product-in-car';
 import summaryOrder from '@/components/order/summary-order';
 import summaryInPayment from '@/components/order/summary-in-payment';
+// import helper from '@/shared/helper';
 
 function created() {
 	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
@@ -80,7 +81,37 @@ function created() {
 	} else {
 		this.showUnity = false;
 	}
+	if (this.$route.query.ids) {
+		this.loadProductsQuery();
+	}
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
+}
+
+async function loadProductsQuery() {
+	const numbersIds = this.$route.query.ids.split(',').map(Number);
+	const body = {
+		ids: numbersIds,
+	};
+	try {
+		const response = await this.$httpProducts.post('products/by-ids-public', body);
+		this.productsBuys = response.data.map((product) => {
+			const newRow = { ...product };
+			this.addToCar(newRow.product);
+			return newRow;
+		});
+	} catch (error) {
+		this.showGenericError();
+	}
+}
+
+function addToCar(product) {
+	if (!this.noStock) {
+		this.$store.dispatch('addProductToBuyCar', product);
+		// this.showConfirmModal = true;
+		// this.$store.commit('SET_IS_COLLAPSE_PRODUCT', true);
+	} else {
+		this.showGenericError('Producto sin stock', 80000);
+	}
 }
 
 async function mounted() {
@@ -141,6 +172,7 @@ function data() {
 		arrow: {
 			section: '/static/icons/arrow.svg',
 		},
+		productsBuys: [],
 	};
 }
 
@@ -170,9 +202,11 @@ export default {
 	created,
 	data,
 	methods: {
-		getProductToBuyHandler,
-		toogleCollapse,
+		addToCar,
 		closeCollapse,
+		getProductToBuyHandler,
+		loadProductsQuery,
+		toogleCollapse,
 	},
 	mounted,
 	watch: {

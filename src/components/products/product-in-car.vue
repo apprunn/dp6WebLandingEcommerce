@@ -15,7 +15,7 @@
 				<p
 					:style="`color: ${globalColors.subtitle};`"
 					class="product-content">{{product.description}}</p>
-				<p class="product-brand">{{product.unit.name}}</p>
+				<p class="product-brand">{{product.unit ? product.unit.name : null}}</p>
 				<p
 					v-if="showUnity"
 					:style="`color: ${globalColors.primary};`"
@@ -28,7 +28,7 @@
 				<p
 					:style="`color: ${globalColors.primary};`"
 					class="product-title">P.U.</p>
-				<p class="product-price">{{getCurrencySymbol}} {{ (product.priceDiscount || product.salePrice) | currencyFormat }}</p>
+				<p class="product-price">{{getCurrencySymbol}} {{ (product.priceDiscount || product.salePrice || product.price) | currencyFormat }}</p>
 			</div>
 			<div class="quantity">
 				<p
