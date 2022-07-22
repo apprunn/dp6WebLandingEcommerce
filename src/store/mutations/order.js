@@ -45,6 +45,7 @@ const orderMutation = {
 		const { products } = state.order;
 		const newProducts = products.filter(p => !(p.id === id && p.unitSelected === unitSelected));
 		Vue.set(state.order, 'products', [...newProducts]);
+		localStorage.removeItem('ids-products');
 		localStorage.setItem('ecommerce::product-select', JSON.stringify([...newProducts]));
 		orderMutation.UPDATE_ORDER_DETAILS_IF_EXIST(state, newProducts);
 	},
