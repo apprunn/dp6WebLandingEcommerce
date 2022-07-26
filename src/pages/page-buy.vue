@@ -80,7 +80,40 @@ function created() {
 	} else {
 		this.showUnity = false;
 	}
+	const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || null;
+	if (this.$route.query.ids && !validatedIds) {
+		this.loadProductsQuery();
+	}
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
+}
+
+async function loadProductsQuery() {
+	const numbersIds = this.$route.query.ids.split(',').map(Number);
+	const { settings } = this.getCommerceData;
+	const body = {
+		ids: numbersIds,
+		warehouseId: settings.defaultWarehouse ? settings.defaultWarehouse.id : undefined,
+	};
+	localStorage.setItem('ids-products', numbersIds);
+	try {
+		const response = await this.$httpProducts.post('products/by-ids-public', body);
+		this.productsBuys = response.data.map((product) => {
+			const newRow = { ...product };
+			this.addToCar(newRow.product);
+			return newRow;
+		});
+	} catch (error) {
+		this.showGenericError();
+	}
+}
+
+function addToCar(product) {
+	if (!this.noStock) {
+		this.$store.dispatch('addProductToBuyCar', product);
+		this.$store.commit('SET_IS_COLLAPSE_PRODUCT', true);
+	} else {
+		this.showGenericError('Producto sin stock', 80000);
+	}
 }
 
 async function mounted() {
@@ -141,6 +174,7 @@ function data() {
 		arrow: {
 			section: '/static/icons/arrow.svg',
 		},
+		productsBuys: [],
 	};
 }
 
@@ -170,9 +204,11 @@ export default {
 	created,
 	data,
 	methods: {
-		getProductToBuyHandler,
-		toogleCollapse,
+		addToCar,
 		closeCollapse,
+		getProductToBuyHandler,
+		loadProductsQuery,
+		toogleCollapse,
 	},
 	mounted,
 	watch: {
