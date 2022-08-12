@@ -89,7 +89,9 @@ function created() {
 
 async function loadProductsQuery() {
 	const numbersIds = this.$route.query.ids.split(',').map(Number);
-	const { settings } = this.getCommerceData;
+	const commerceData = this.getCommerceData.settings ?
+		this.getCommerceData : this.getLocalStorage('ecommerce::ecommerce-data');
+	const { settings } = commerceData;
 	const body = {
 		ids: numbersIds,
 		warehouseId: settings.defaultWarehouse && settings.defaultWarehouse.id
