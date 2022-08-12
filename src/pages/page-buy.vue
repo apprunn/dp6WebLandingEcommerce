@@ -92,7 +92,8 @@ async function loadProductsQuery() {
 	const { settings } = this.getCommerceData;
 	const body = {
 		ids: numbersIds,
-		warehouseId: settings.defaultWarehouse ? settings.defaultWarehouse.id : undefined,
+		warehouseId: settings.defaultWarehouse && settings.defaultWarehouse.id
+			? settings.defaultWarehouse.id : undefined,
 	};
 	localStorage.setItem('ids-products', numbersIds);
 	try {
