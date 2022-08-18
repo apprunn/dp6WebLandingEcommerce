@@ -156,6 +156,9 @@ const asyncActions = {
 	SET_FAVORITE_ADDRESS: async (state, { context, body, id }) => {
 		await context.$httpSales.patch(`customers-address/${id}`, body);
 	},
+	SET_STATE_ORDERS: async (state, { context, body, id }) => {
+		await context.$httpSales.patch(`orders/${id}/update-state`, body);
+	},
 	DELETE_ADDRESS: async (state, { context, id }) => {
 		await context.$httpSales.delete(`customers-address/${id}`);
 	},
