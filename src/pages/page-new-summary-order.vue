@@ -178,9 +178,8 @@ function created() {
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
-	if (this.order.orderStateId === 8 && this.order.paymentStateId === 3) {
-		this.orderStateOrder(id);
-	}
+	console.log(this.order);
+	this.orderStateOrder(id);
 }
 
 async function orderStateOrder(id) {
