@@ -178,18 +178,19 @@ function created() {
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
-	console.log(this.order);
 	this.orderStateOrder(id);
 }
 
 async function orderStateOrder(id) {
-	const body = {
-		orderStateId: this.order.orderStateId,
-		orderStateCode: this.order.orderState.code,
-	};
-	const response = await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
-	this.order.number = response.number;
-	console.log(response);
+	console.log(this.order);
+	console.log(id);
+	// const body = {
+	// 	orderStateId: this.order.orderStateId,
+	// 	orderStateCode: this.order.orderState.code,
+	// };
+	// const response = await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
+	// this.order.number = response.number;
+	// console.log(response);
 }
 
 function addressPickUp() {
