@@ -181,16 +181,16 @@ function created() {
 	this.orderStateOrder(id);
 }
 
-async function orderStateOrder(id) {
+async function orderStateOrder() {
 	console.log(this.order);
-	console.log(id);
-	// const body = {
-	// 	orderStateId: this.order.orderStateId,
-	// 	orderStateCode: this.order.orderState.code,
-	// };
-	// const response = await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
+	const { orderId: id } = this.$route.params;
+	const body = {
+		orderStateId: null,
+		orderStateCode: null,
+	};
+	const response = await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
 	// this.order.number = response.number;
-	// console.log(response);
+	console.log(response);
 }
 
 function addressPickUp() {
