@@ -178,20 +178,15 @@ function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		const response = this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
-		console.log(response, 'a');
-		this.orderStateOrder(response);
+		console.log(response);
+		this.orderStateOrder();
 	}
 }
 
-async function orderStateOrder(order) {
-	console.log(this.order, 'b');
-	console.log(order, 'c');
-	console.log(orderStatesEnum);
+async function orderStateOrder() {
 	const { orderId: id } = this.$route.params;
-	// const response2 = this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
-	// console.log(response2);
 	const body = {
-		orderStateCode: this.order.orderState ? this.order.orderState.code : null,
+		orderStateCode: orderStatesEnum.confirmed.code,
 	};
 	const response = await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
 	// this.order.number = response.number;
