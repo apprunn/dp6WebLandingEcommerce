@@ -182,7 +182,6 @@ function created() {
 		if (order.orderStateId === 8 && order.paymentStateId === 1) {
 			this.orderStateOrder();
 		}
-		console.log(order);
 	}
 }
 
