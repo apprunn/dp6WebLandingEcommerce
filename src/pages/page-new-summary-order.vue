@@ -178,15 +178,15 @@ function created() {
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
-	this.orderStateOrder(id);
+	this.orderStateOrder();
 }
 
 async function orderStateOrder() {
 	console.log(this.order);
 	const { orderId: id } = this.$route.params;
 	const body = {
-		orderStateId: null,
-		orderStateCode: null,
+		orderStateId: this.order.orderStateId,
+		orderStateCode: this.order,
 	};
 	const response = await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
 	// this.order.number = response.number;
@@ -377,7 +377,6 @@ export default {
 		isYape,
 		link,
 		niubizGateway,
-		orderStateOrder,
 		wayPayment,
 		showReference,
 	},
@@ -393,6 +392,7 @@ export default {
 		copyLink,
 		printOrder,
 		seeOrder,
+		orderStateOrder,
 	},
 };
 </script>
