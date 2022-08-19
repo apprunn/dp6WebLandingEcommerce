@@ -177,23 +177,22 @@ function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		const response = this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
-		console.log(response);
-		this.orderStateOrder();
+		console.log(response, 'espuesta 1');
+		this.orderStateOrder(response);
 	}
 }
 
-async function orderStateOrder() {
-	console.log(this.order);
+async function orderStateOrder(order) {
 	const { orderId: id } = this.$route.params;
 	// const response2 = this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	// console.log(response2);
 	const body = {
-		orderStateId: this.order.orderStateId,
-		orderStateCode: this.order,
+		orderStateId: order.orderStateId,
+		orderStateCode: order.orderState ? order.orderState.code : null,
 	};
 	const response = await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
 	// this.order.number = response.number;
-	console.log(response);
+	console.log(response, 'respuesta 2');
 }
 
 function addressPickUp() {
