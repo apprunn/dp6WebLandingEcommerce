@@ -153,7 +153,6 @@
 				this.$store.dispatch('LOAD_COMMERCE_INFO', this);
 				this.getCustomerData();
 				this.cleanForm();
-				this.$store.dispatch('LOAD_PRODUCTS', { context: this });
 				this.redirect();
 			}
 		} catch (err) {
