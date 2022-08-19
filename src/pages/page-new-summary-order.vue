@@ -177,8 +177,9 @@ const { store, house } = deliveryWays;
 function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
-		const response = this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
-		console.log(response);
+		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+		const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+		console.log(order);
 		this.orderStateOrder();
 	}
 }
