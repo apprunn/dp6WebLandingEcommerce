@@ -189,8 +189,7 @@ async function orderStateOrder() {
 		orderStateCode: orderStatesEnum.confirmed.code,
 	};
 	const response = await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
-	// this.order.number = response.number;
-	console.log(response, 'd');
+	this.order.number = response.number;
 }
 
 function addressPickUp() {
