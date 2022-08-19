@@ -35,7 +35,10 @@ const asyncActions = {
 			context.$httpProductsPublic.get('products-public', { params: completeParams }),
 		);
 		const [{ data: products, headers }] = await Promise.all(request);
-		const commercePriceListId = getters.getCommerceData.settings.salPriceListId;
+		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+		debugger;
+		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
+			getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
 		const newProducts = [].concat(state.products.list, setUpDateInProducts);
 		commit('LOADING_PRODUCTS', false);
