@@ -169,6 +169,7 @@ import helper from '@/shared/helper';
 import ArrowLeft from '@/components/svg/ArrowLeft';
 import ArrowRight from '@/components/svg/ArrowRight';
 import YapeComponent from '@/components/order/yape-component';
+import orderStatesEnum from '@/shared/enums/orderStateId';
 import { Yape } from '@/shared/enums/depositPayment';
 
 const { store, house } = deliveryWays;
@@ -185,12 +186,12 @@ function created() {
 async function orderStateOrder(order) {
 	console.log(this.order, 'b');
 	console.log(order, 'c');
+	console.log(orderStatesEnum);
 	const { orderId: id } = this.$route.params;
 	// const response2 = this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	// console.log(response2);
 	const body = {
-		orderStateId: 8,
-		orderStateCode: 'DRAFT',
+		orderStateCode: this.order.orderState ? this.order.orderState.code : null,
 	};
 	const response = await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
 	// this.order.number = response.number;
