@@ -177,13 +177,15 @@ function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+		this.orderStateOrder();
 	}
-	this.orderStateOrder();
 }
 
 async function orderStateOrder() {
 	console.log(this.order);
 	const { orderId: id } = this.$route.params;
+	const response2 = this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+	console.log(response2);
 	const body = {
 		orderStateId: this.order.orderStateId,
 		orderStateCode: this.order,
