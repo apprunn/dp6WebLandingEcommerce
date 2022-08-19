@@ -60,7 +60,6 @@ async function getCustomerData() {
 	this.$store.dispatch('setUser', userInfo);
 	this.setLocalData('ecommerce::ecommerce-user', userInfo);
 	this.setLocalData('ecommerce-user', userInfo);
-	this.$store.dispatch('LOAD_PRODUCTS', { context: this });
 	this.$userInfo = this.$store.getters.user;
 }
 
