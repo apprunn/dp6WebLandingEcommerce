@@ -158,8 +158,7 @@ const asyncActions = {
 	},
 	SET_STATE_ORDERS: async (state, { context, body, id }) => {
 		const { data: numberOrder } = await context.$httpSales.patch(`orders/${id}/update-state`, body);
-		// commit('SET_NUMBER_ORDER', numberOrder);
-		console.log(numberOrder);
+		localStorage.setItem('order-state-order', JSON.stringify(numberOrder));
 	},
 	DELETE_ADDRESS: async (state, { context, id }) => {
 		await context.$httpSales.delete(`customers-address/${id}`);

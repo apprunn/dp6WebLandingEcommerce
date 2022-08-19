@@ -179,8 +179,10 @@ function created() {
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 		const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+		if (order.orderStateId === 8 && order.paymentStateId === 1) {
+			this.orderStateOrder();
+		}
 		console.log(order);
-		this.orderStateOrder();
 	}
 }
 
@@ -189,8 +191,9 @@ async function orderStateOrder() {
 	const body = {
 		orderStateCode: orderStatesEnum.confirmed.code,
 	};
-	const response = await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
-	this.order.number = response.number;
+	await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
+	const orderNumber = JSON.parse(localStorage.getItem('order-state-order')) || [];
+	this.order.number = orderNumber.number;
 }
 
 function addressPickUp() {
