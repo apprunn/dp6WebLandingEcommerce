@@ -151,9 +151,9 @@
 				this.$store.dispatch('setToken', token);
 				this.$store.dispatch('SET_CURRENCY_DEFAULT', this);
 				this.$store.dispatch('LOAD_COMMERCE_INFO', this);
-				this.$store.dispatch('LOAD_PRODUCTS', { context: this });
 				this.getCustomerData();
 				this.cleanForm();
+				this.$store.dispatch('LOAD_PRODUCTS', { context: this });
 				this.redirect();
 			}
 		} catch (err) {
