@@ -176,7 +176,8 @@ const { store, house } = deliveryWays;
 function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
-		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+		const response = this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+		console.log(response);
 		this.orderStateOrder();
 	}
 }
@@ -184,8 +185,8 @@ function created() {
 async function orderStateOrder() {
 	console.log(this.order);
 	const { orderId: id } = this.$route.params;
-	const response2 = this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
-	console.log(response2);
+	// const response2 = this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+	// console.log(response2);
 	const body = {
 		orderStateId: this.order.orderStateId,
 		orderStateCode: this.order,
