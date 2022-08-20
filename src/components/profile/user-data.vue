@@ -61,7 +61,6 @@ async function getCustomerData() {
 	this.setLocalData('ecommerce::ecommerce-user', userInfo);
 	this.setLocalData('ecommerce-user', userInfo);
 	this.$userInfo = this.$store.getters.user;
-	console.log('a');
 }
 
 function routeHandler(newRoute) {

@@ -42,6 +42,7 @@ function addMoreProduct() {
 }
 
 function products() {
+	debugger;
 	return this.indeterminate ? this.defaultProducts : this.getProducts;
 }
 
