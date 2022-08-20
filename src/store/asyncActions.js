@@ -4,6 +4,7 @@ import helper from '@/shared/helper';
 const PAGE_TITLE = process.env.PAGE_TITLE;
 
 function updateProducts(products, priceListId) {
+	debugger;
 	return products.map(
 		compose(
 			setNewProperty('price', product => helper.setPrices(product, priceListId, 'price')),
@@ -36,12 +37,12 @@ const asyncActions = {
 		);
 		const [{ data: products, headers }] = await Promise.all(request);
 		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
-		debugger;
 		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
 			getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
 		const newProducts = [].concat(state.products.list, setUpDateInProducts);
 		commit('LOADING_PRODUCTS', false);
+		debugger;
 		commit('SET_PRODUCTS', newProducts);
 		commit('LAST_PAGE', headers);
 	},
