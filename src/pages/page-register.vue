@@ -158,6 +158,7 @@ async function getCustomerData() {
 		Authorization: `Bearer ${this.token}`,
 	};
 	const { data: userInfo } = await this.$httpSales.get('customers/current', { headers });
+	console.log('d');
 	userInfo.avatar = userInfo.urlImage || process.env.DEFAULT_AVATAR;
 	userInfo.fullName = userInfo.typePerson.fullName;
 	userInfo.showCustomerDiscountMessage = true;
