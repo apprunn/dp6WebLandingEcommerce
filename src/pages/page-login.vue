@@ -126,6 +126,7 @@
 		userInfo.avatar = userInfo.urlImage || process.env.DEFAULT_AVATAR;
 		userInfo.fullName = userInfo.typePerson.fullName;
 		userInfo.showCustomerDiscountMessage = true;
+		this.$store.dispatch('LOAD_PRODUCTS', { context: this });
 		this.$store.dispatch('setUser', userInfo);
 	}
 
