@@ -214,6 +214,7 @@ class ProductDetails {
 		const rightConversion = units[this.selectedProduct.unitSelected];
 		this.selectedProduct.price = rightConversion ? rightConversion.price : price;
 		discount = rightConversion ? rightConversion.discount : discount;
+		debugger;
 		if (discount) {
 			const priceDiscount = (1 - (discount / 100)) * this.selectedProduct.price;
 			this.selectedProduct.priceDiscount = Number(priceDiscount.toFixed(2));

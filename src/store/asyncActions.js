@@ -37,12 +37,11 @@ const asyncActions = {
 		);
 		const [{ data: products, headers }] = await Promise.all(request);
 		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
-		console.log(user, '1');
 		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
 			getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
 		console.log(setUpDateInProducts);
-		const newProducts = [].concat(state.products.list, setUpDateInProducts);
+		const newProducts = [].concat(setUpDateInProducts);
 		console.log(newProducts);
 		commit('LOADING_PRODUCTS', false);
 		commit('SET_PRODUCTS', newProducts);
