@@ -128,7 +128,7 @@
 		userInfo.fullName = userInfo.typePerson.fullName;
 		userInfo.showCustomerDiscountMessage = true;
 		this.$store.dispatch('setUser', userInfo);
-		// this.$store.dispatch('LOAD_PRODUCTS', { context: this });
+		this.$store.dispatch('LOAD_PRODUCTS', { context: this });
 	}
 
 	async function initSession() {

@@ -37,6 +37,7 @@ const asyncActions = {
 		);
 		const [{ data: products, headers }] = await Promise.all(request);
 		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+		console.log(user, '1');
 		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
 			getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);

@@ -38,7 +38,7 @@ import SpinnerLoading from '@/components/shared/spinner/spinner-loading';
 
 function created() {
 	const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
-	console.log(user);
+	console.log(user, '2');
 	if (user) {
 		this.$store.dispatch('LOAD_PRODUCTS', { context: this });
 	}
