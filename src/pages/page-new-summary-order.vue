@@ -202,6 +202,13 @@ function addressPickUp() {
 	return this.isHome ? delivery : shop;
 }
 
+function orderStateOrderValid() {
+	console.log(this.order);
+	if (this.order) {
+		console.log(this.order);
+	}
+}
+
 function isHome() {
 	return this.flagPickUp === house.value;
 }
@@ -382,6 +389,7 @@ export default {
 		niubizGateway,
 		wayPayment,
 		showReference,
+		orderStateOrderValid,
 	},
 	created,
 	data,
