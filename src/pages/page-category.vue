@@ -142,7 +142,10 @@ async function loadProduct() {
 		const { data: products, headers } = process.env.PRODUCTS_READ_REPORT
 			? await this.$httpProductsReadPublic.get(url, { params }) :
 			await this.$httpProductsPublic.get(url, { params });
-		const commercePriceListId = this.getCommerceData.settings.salPriceListId;
+		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
+			this.getCommerceData.settings.salPriceListId;
+		// const commercePriceListId = this.getCommerceData.settings.salPriceListId;
 		this.listProducts = products.map(
 			compose(
 				setNewProperty('price', product => helper.setPrices(product, commercePriceListId, 'price')),
