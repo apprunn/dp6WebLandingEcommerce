@@ -27,7 +27,6 @@ function setStock(context, stock) {
 
 function setUser(context, user) {
 	const newUser = user;
-	debugger;
 	newUser.dni = Number(user.dni) ? user.dni : null;
 	newUser.typePerson.documentNumber =
 			Number(newUser.typePerson.documentNumber) ? newUser.typePerson.documentNumber : null;

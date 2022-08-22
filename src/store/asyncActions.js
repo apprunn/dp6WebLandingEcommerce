@@ -4,7 +4,6 @@ import helper from '@/shared/helper';
 const PAGE_TITLE = process.env.PAGE_TITLE;
 
 function updateProducts(products, priceListId) {
-	debugger;
 	return products.map(
 		compose(
 			setNewProperty('price', product => helper.setPrices(product, priceListId, 'price')),

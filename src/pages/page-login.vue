@@ -122,8 +122,6 @@
 			Authorization: `Bearer ${this.token}`,
 		};
 		const { data: userInfo } = await this.$httpSales.get('customers/current', { headers });
-		console.log('c');
-		debugger;
 		userInfo.avatar = userInfo.urlImage || process.env.DEFAULT_AVATAR;
 		userInfo.fullName = userInfo.typePerson.fullName;
 		userInfo.showCustomerDiscountMessage = true;

@@ -14,7 +14,6 @@ async function loadDataFromLocalStorage() {
 	if (token) {
 		this.$store.dispatch('setToken', token);
 		const { data: response } = await this.$httpSales.get('customers/current');
-		console.log('b');
 		helper.setLocalData('ecommerce-user', response);
 		this.$store.dispatch('setUser', response);
 		this.$userInfo = this.$store.getters.user;
