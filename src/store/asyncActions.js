@@ -15,7 +15,7 @@ function updateProducts(products, priceListId) {
 }
 
 const asyncActions = {
-	LOAD_PRODUCTS: async ({ commit, state, getters }, { context, params = {} }) => {
+	LOAD_PRODUCTS: async ({ commit, getters }, { context, params = {} }) => {
 		const request = [];
 		commit('LOADING_PRODUCTS', true);
 		const completeParams = Object.assign({}, getters.productParams, params);
