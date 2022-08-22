@@ -36,14 +36,6 @@ import { mapGetters } from 'vuex';
 import productCard from '@/components/products/product-card';
 import SpinnerLoading from '@/components/shared/spinner/spinner-loading';
 
-function created() {
-	const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
-	console.log(user, '2');
-	if (user) {
-		this.$store.dispatch('LOAD_PRODUCTS', { context: this });
-	}
-}
-
 function addMoreProduct() {
 	this.$store.dispatch('MORE_PRODUCTS');
 	this.$store.dispatch('LOAD_PRODUCTS', { context: this });
@@ -63,7 +55,6 @@ function data() {
 
 export default {
 	name: 'page-products',
-	created,
 	components: {
 		productCard,
 		SpinnerLoading,
