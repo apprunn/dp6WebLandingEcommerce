@@ -14,7 +14,7 @@ function updateProducts(products, priceListId) {
 }
 
 const asyncActions = {
-	LOAD_PRODUCTS: async ({ commit, state, getters }, { context, params = {} }) => {
+	LOAD_PRODUCTS: async ({ commit, getters }, { context, params = {} }) => {
 		const request = [];
 		commit('LOADING_PRODUCTS', true);
 		const completeParams = Object.assign({}, getters.productParams, params);
@@ -35,9 +35,11 @@ const asyncActions = {
 			context.$httpProductsPublic.get('products-public', { params: completeParams }),
 		);
 		const [{ data: products, headers }] = await Promise.all(request);
-		const commercePriceListId = getters.getCommerceData.settings.salPriceListId;
+		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
+			getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
-		const newProducts = [].concat(state.products.list, setUpDateInProducts);
+		const newProducts = [].concat(setUpDateInProducts);
 		commit('LOADING_PRODUCTS', false);
 		commit('SET_PRODUCTS', newProducts);
 		commit('LAST_PAGE', headers);
@@ -155,6 +157,10 @@ const asyncActions = {
 	},
 	SET_FAVORITE_ADDRESS: async (state, { context, body, id }) => {
 		await context.$httpSales.patch(`customers-address/${id}`, body);
+	},
+	SET_STATE_ORDERS: async (state, { context, body, id }) => {
+		const { data: numberOrder } = await context.$httpSales.patch(`orders/${id}/update-state`, body);
+		localStorage.setItem('order-state-order', JSON.stringify(numberOrder));
 	},
 	DELETE_ADDRESS: async (state, { context, id }) => {
 		await context.$httpSales.delete(`customers-address/${id}`);

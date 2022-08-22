@@ -169,6 +169,7 @@ import helper from '@/shared/helper';
 import ArrowLeft from '@/components/svg/ArrowLeft';
 import ArrowRight from '@/components/svg/ArrowRight';
 import YapeComponent from '@/components/order/yape-component';
+import orderStatesEnum from '@/shared/enums/orderStateId';
 import { Yape } from '@/shared/enums/depositPayment';
 
 const { store, house } = deliveryWays;
@@ -177,7 +178,21 @@ function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+		const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+		if (order.orderStateId === 8 && order.paymentStateId === 1) {
+			this.orderStateOrder();
+		}
 	}
+}
+
+async function orderStateOrder() {
+	const { orderId: id } = this.$route.params;
+	const body = {
+		orderStateCode: orderStatesEnum.confirmed.code,
+	};
+	await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
+	const orderNumber = JSON.parse(localStorage.getItem('order-state-order')) || [];
+	this.order.number = orderNumber.number;
 }
 
 function addressPickUp() {
@@ -379,6 +394,7 @@ export default {
 		copyLink,
 		printOrder,
 		seeOrder,
+		orderStateOrder,
 	},
 };
 </script>

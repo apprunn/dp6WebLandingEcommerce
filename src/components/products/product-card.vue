@@ -6,6 +6,7 @@
 		@mouseenter="mouseOnCard = true"
 		@mouseleave="mouseOnCard = false"
 		:style="animatingCard"
+		v-if="product.priceDiscount"
 	>
 		<div :class="{ opacity: noStock}">
 			<div v-if="noStock" class="without-stock-tag">
