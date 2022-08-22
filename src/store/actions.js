@@ -90,7 +90,8 @@ function updateFilters(context, filters) {
 }
 
 function getOrderData({ commit, dispatch }, order) {
-	const { customerBill, deliveryAddress, customerAddress, flagPickUp } = order;
+	const { customerBill, deliveryAddress, customerAddress, flagPickUp,
+		orderStateId, paymentStateId } = order;
 	const isStore = flagPickUp === waysDeliveries.store.value;
 	const place = isStore ? deliveryAddress : customerAddress;
 	commit('SET_BILL_SELECTION', false);
@@ -98,6 +99,9 @@ function getOrderData({ commit, dispatch }, order) {
 		const { address, typePerson: { fullName: rzSocial, documentNumber: ruc } } = customerBill;
 		commit('SET_BILLING_DATA', { address, rzSocial, ruc });
 		commit('SET_BILL_SELECTION', true);
+	}
+	if (orderStateId === 8 && paymentStateId === 3) {
+		console.log('tes');
 	}
 	commit('SET_ORDER_INFO', { ...order });
 	commit('SET_FLAG_PICKUP', flagPickUp);
