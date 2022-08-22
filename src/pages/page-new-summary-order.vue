@@ -179,6 +179,7 @@ function created() {
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 		const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+		console.log(order);
 		if (order.orderStateId === 8 && order.paymentStateId === 3) {
 			this.orderStateOrder();
 		}
