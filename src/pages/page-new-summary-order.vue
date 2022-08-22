@@ -186,6 +186,10 @@ function created() {
 	}
 }
 
+function mounted() {
+	console.log(this.order, 'mounted');
+}
+
 async function orderStateOrder() {
 	const { orderId: id } = this.$route.params;
 	const body = {
@@ -367,6 +371,7 @@ export default {
 		productInSummary,
 		YapeComponent,
 	},
+	mounted,
 	computed: {
 		...mapGetters({
 			addressObject: 'getDeliveryAddress',
