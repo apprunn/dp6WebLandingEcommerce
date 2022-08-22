@@ -40,9 +40,9 @@ const asyncActions = {
 		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
 			getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
+		debugger;
 		const newProducts = [].concat(state.products.list, setUpDateInProducts);
 		commit('LOADING_PRODUCTS', false);
-		debugger;
 		commit('SET_PRODUCTS', newProducts);
 		commit('LAST_PAGE', headers);
 	},

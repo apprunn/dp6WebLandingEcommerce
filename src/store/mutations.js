@@ -33,7 +33,6 @@ function UPDATE_POLL_PROGRESS(state, number) {
 }
 
 function SET_PRODUCTS(state, products) {
-	debugger;
 	Vue.set(state.products, 'list', products);
 }
 
