@@ -39,7 +39,13 @@ const asyncActions = {
 		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
 			getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
-		const newProducts = [].concat(state.products.list, setUpDateInProducts);
+		let newProducts = null;
+		if (setUpDateInProducts.length > 20) {
+			newProducts = [].concat(state.products.list, setUpDateInProducts);
+		} else {
+			newProducts = [].concat(setUpDateInProducts);
+		}
+		// const newProducts = [].concat(state.products.list, setUpDateInProducts);
 		commit('LOADING_PRODUCTS', false);
 		commit('SET_PRODUCTS', newProducts);
 		commit('LAST_PAGE', headers);
