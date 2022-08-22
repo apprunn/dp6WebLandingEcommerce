@@ -178,11 +178,11 @@ function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
-		const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
-		console.log(order);
-		if (order.orderStateId === 8 && order.paymentStateId === 3) {
-			this.orderStateOrder();
-		}
+		// const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+		// console.log(order);
+		// if (order.orderStateId === 8 && order.paymentStateId === 3) {
+		// 	this.orderStateOrder();
+		// }
 	}
 }
 
@@ -203,7 +203,9 @@ function addressPickUp() {
 }
 
 function orderStateOrderValid() {
-	console.log(this.order);
+	const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+	console.log(order, '1');
+	console.log(this.order, '2');
 	if (this.order) {
 		console.log(this.order);
 	}
