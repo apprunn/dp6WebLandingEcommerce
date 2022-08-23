@@ -389,7 +389,6 @@ export default {
 		niubizGateway,
 		wayPayment,
 		showReference,
-		validOrder,
 	},
 	created,
 	data,
@@ -404,6 +403,7 @@ export default {
 		printOrder,
 		seeOrder,
 		orderStateOrder,
+		validOrder,
 	},
 };
 </script>
