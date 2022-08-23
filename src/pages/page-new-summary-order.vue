@@ -178,8 +178,8 @@ function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
-		const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
-		console.log(order, 'created');
+		// const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+		// console.log(order, 'created');
 		// if (order.orderStateId === 8 && order.paymentStateId === 3) {
 		// 	this.orderStateOrder();
 		// }
@@ -395,7 +395,6 @@ export default {
 		niubizGateway,
 		wayPayment,
 		showReference,
-		orderStateOrderValid,
 	},
 	created,
 	data,
@@ -410,6 +409,7 @@ export default {
 		printOrder,
 		seeOrder,
 		orderStateOrder,
+		orderStateOrderValid,
 	},
 };
 </script>
