@@ -100,19 +100,12 @@ const asyncActions = {
 	},
 	GET_ORDER_INFO: async (store, { context, id }) => {
 		const url = `orders/${id}?summary=true`;
+		const newId = id;
 		const { data: order } = await context.$httpSales.get(url);
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
 		localStorage.setItem('ecommerce-order-state', JSON.stringify(order));
 		console.log(id, 'asyncaction');
-		store.dispatch('getOrderData', order, id);
-	},
-	GET_ORDER_INFO_NEW: async (store, { context, id }) => {
-		const url = `orders/${id}?summary=true`;
-		const { data: order } = await context.$httpSales.get(url);
-		localStorage.setItem('ecommerce-order', JSON.stringify(order));
-		localStorage.setItem('ecommerce-order-state', JSON.stringify(order));
-		console.log(id, 'asyncaction');
-		store.dispatch('getOrderData', order, id);
+		store.dispatch('getOrderData', order, newId);
 	},
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
 		commit('SET_IS_TOOGLE_DP', true);
