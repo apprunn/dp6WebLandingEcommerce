@@ -309,6 +309,12 @@ function showReference() {
 	return getDeeper('additionalInformation.paymentGateway.referenceId')(this.order);
 }
 
+function destroyed() {
+	const yapeCode = getDeeper('orderStateId')(this.order);
+	const yapeCodes = getDeeper('paymentStateId')(this.order);
+	console.log(yapeCode, yapeCodes);
+}
+
 function isYape() {
 	const yapeCode = getDeeper('wayPaymentDetailCode')(this.order);
 	if (yapeCode === Yape.code) {
@@ -339,7 +345,6 @@ function mounted() {
 	console.log(yapeCodes);
 	const order = this.getLocalStorage('ecommerce-order-state');
 	console.log(order, 'order');
-	// console.log(this.getOrderInfo, 'comp');
 }
 
 function vlaidMetho() {
@@ -402,6 +407,7 @@ export default {
 	},
 	created,
 	data,
+	destroyed,
 	methods: {
 		...mapActions([
 			'SET_DEFAULT_VALUES',
