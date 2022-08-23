@@ -191,6 +191,11 @@ function mounted() {
 	console.log(this.orderStateId, 'mount');
 }
 
+async function orderStateOrderValid() {
+	console.log(this.paymentStateId, 'comp');
+	console.log(this.orderStateId, 'comp');
+}
+
 async function orderStateOrder() {
 	const { orderId: id } = this.$route.params;
 	const body = {
@@ -205,15 +210,6 @@ function addressPickUp() {
 	const shop = 'Recojo en tienda';
 	const delivery = 'Envío a domicilio';
 	return this.isHome ? delivery : shop;
-}
-
-function orderStateOrderValid() {
-	const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
-	console.log(order, '1');
-	console.log(this.order, '2');
-	if (this.order) {
-		console.log(this.order);
-	}
 }
 
 function isHome() {
@@ -399,6 +395,7 @@ export default {
 		niubizGateway,
 		wayPayment,
 		showReference,
+		orderStateOrderValid,
 	},
 	created,
 	data,
@@ -413,7 +410,6 @@ export default {
 		printOrder,
 		seeOrder,
 		orderStateOrder,
-		orderStateOrderValid,
 	},
 };
 </script>
