@@ -171,7 +171,7 @@ const asyncActions = {
 	SET_STATE_ORDERS: async (state, { context, body, id }) => {
 		console.log('actaulizar');
 		console.log(body, id);
-		const { data: numberOrder } = await context.$httpSales.patch(`orders/${id}/update-state`, body);
+		const { data: numberOrder } = await context.$httpSales.patch(`orders/84653/update-state`, body);
 		console.log(numberOrder);
 		localStorage.setItem('order-state-order', JSON.stringify(numberOrder));
 	},

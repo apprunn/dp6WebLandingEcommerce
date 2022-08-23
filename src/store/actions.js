@@ -91,7 +91,6 @@ function updateFilters(context, filters) {
 }
 
 function getOrderData({ commit, dispatch }, order, id) {
-	console.log(id, 'order-data');
 	const { customerBill, deliveryAddress, customerAddress, flagPickUp } = order;
 	const isStore = flagPickUp === waysDeliveries.store.value;
 	const place = isStore ? deliveryAddress : customerAddress;
@@ -105,9 +104,8 @@ function getOrderData({ commit, dispatch }, order, id) {
 		const body = {
 			orderStateCode: orderStatesEnum.confirmed.code,
 		};
-		console.log(body, id, 'actions');
-		dispatch('SET_STATE_ORDERS', { context: this, body, id });
-		console.log('entra aqui');
+		console.log(body, order.id, 'actions');
+		dispatch('SET_STATE_ORDERS', { context: this }, body, order.id);
 	}
 	console.log(order, 'action');
 	commit('SET_ORDER_INFO', { ...order });
