@@ -100,7 +100,7 @@ function getOrderData({ commit, dispatch }, order) {
 		commit('SET_BILL_SELECTION', true);
 	}
 	if (order.orderStateId === 8 && order.paymentStateId === 3) {
-		this.$store.dispatch('SET_STATE_ORDERS', { context: this });
+		dispatch('SET_STATE_ORDERS', { context: this });
 		console.log('entra aqui');
 	}
 	console.log(order, 'action');
