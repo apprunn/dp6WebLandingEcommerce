@@ -113,10 +113,11 @@ const asyncActions = {
 		}
 		store.dispatch('getOrderData', order);
 	},
-	SET_STATE_ORDERS: async ({ context, body, id }) => {
+	SET_STATE_ORDERS: async (store, { context, body, id }) => {
 		console.log(body, id);
 		const { data: updateOrder } = await context.$httpSales.patch(`orders${id}/update-state`, body);
 		console.log(updateOrder);
+		console.log(store);
 		// localStorage.setItem('order-state-order', JSON.stringify(updateOrder));
 	},
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
