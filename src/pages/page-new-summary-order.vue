@@ -337,6 +337,8 @@ function mounted() {
 	const yapeCodes = getDeeper('paymentStateId')(this.order);
 	console.log(yapeCode);
 	console.log(yapeCodes);
+	const order = this.getLocalStorage('ecommerce-order');
+	console.log(order, 'order');
 	// console.log(this.getOrderInfo, 'comp');
 }
 

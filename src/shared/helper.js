@@ -133,7 +133,7 @@ function updateOrderDetailsInLocalStorage(products) {
 	if (!isEmpty(localOrder)) {
 		localOrder.details = [...products];
 		localStorage.setItem('ecommerce-order', JSON.stringify(localOrder))
-		localStorage.setItem('ecommerce-order-state', JSON.stringify(localOrder));
+		localStorage.setItem('ecommerce-order-state', JSON.stringify(localOrderState));
 	}
 }
 
