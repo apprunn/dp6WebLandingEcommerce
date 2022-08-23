@@ -91,6 +91,7 @@ function updateFilters(context, filters) {
 }
 
 function getOrderData({ commit, dispatch }, order, id) {
+	console.log(id, 'order-data');
 	const { customerBill, deliveryAddress, customerAddress, flagPickUp } = order;
 	const isStore = flagPickUp === waysDeliveries.store.value;
 	const place = isStore ? deliveryAddress : customerAddress;
