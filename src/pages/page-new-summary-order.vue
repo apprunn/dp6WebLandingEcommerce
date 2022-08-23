@@ -285,7 +285,8 @@ async function cancelOrder() {
 }
 
 function beforeDestroy() {
-	console.log(this.order);
+	const order = this.getLocalStorage('ecommerce-order-state');
+	console.log(order, 'order before');
 	this.SET_DEFAULT_VALUES();
 	this.removeProductFromLS();
 }
@@ -314,6 +315,8 @@ function destroyed() {
 	const yapeCode = getDeeper('orderStateId')(this.order);
 	const yapeCodes = getDeeper('paymentStateId')(this.order);
 	console.log(yapeCode, yapeCodes);
+	const order = this.getLocalStorage('ecommerce-order-state');
+	console.log(order, 'destroyed');
 }
 
 function isYape() {
@@ -349,6 +352,8 @@ function mounted() {
 }
 
 function vlaidMetho() {
+	const order = this.getLocalStorage('ecommerce-order-state');
+	console.log(order, 'comp');
 	console.log(this.order);
 }
 
