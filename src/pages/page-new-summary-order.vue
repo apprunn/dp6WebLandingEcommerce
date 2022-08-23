@@ -285,6 +285,7 @@ async function cancelOrder() {
 }
 
 function beforeDestroy() {
+	console.log(this.order);
 	this.SET_DEFAULT_VALUES();
 	this.removeProductFromLS();
 }
