@@ -188,6 +188,8 @@ function created() {
 
 function mounted() {
 	console.log(this.order, 'mounted');
+	const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+	console.log(order, 'mlunted');
 }
 
 async function orderStateOrder() {
