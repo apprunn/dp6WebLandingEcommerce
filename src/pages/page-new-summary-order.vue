@@ -332,6 +332,11 @@ function printOrder() {
 	window.print();
 }
 
+function mounted() {
+	const order = JSON.parse(localStorage.getItem('ecommerce-order-state')) || [];
+	console.log(order, 'created');
+}
+
 function validOrder() {
 	const order = JSON.parse(localStorage.getItem('ecommerce-order-state')) || [];
 	console.log(order, 'created');
@@ -391,6 +396,7 @@ export default {
 		showReference,
 	},
 	created,
+	mounted,
 	data,
 	methods: {
 		...mapActions([
