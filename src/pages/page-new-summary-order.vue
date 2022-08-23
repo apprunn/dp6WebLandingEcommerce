@@ -186,16 +186,6 @@ function created() {
 	}
 }
 
-function mounted() {
-	console.log(this.paymentStateId, 'mount');
-	console.log(this.orderStateId, 'mount');
-}
-
-async function orderStateOrderValid() {
-	console.log(this.paymentStateId, 'comp');
-	console.log(this.orderStateId, 'comp');
-}
-
 async function orderStateOrder() {
 	const { orderId: id } = this.$route.params;
 	const body = {
@@ -344,6 +334,11 @@ function printOrder() {
 	window.print();
 }
 
+function validOrder() {
+	console.log(this.orderStateId);
+	console.log(this.paymentStateId);
+}
+
 function data() {
 	return {
 		swiperOption: {
@@ -368,7 +363,6 @@ export default {
 		productInSummary,
 		YapeComponent,
 	},
-	mounted,
 	computed: {
 		...mapGetters({
 			addressObject: 'getDeliveryAddress',
@@ -395,6 +389,7 @@ export default {
 		niubizGateway,
 		wayPayment,
 		showReference,
+		validOrder,
 	},
 	created,
 	data,
@@ -409,7 +404,6 @@ export default {
 		printOrder,
 		seeOrder,
 		orderStateOrder,
-		orderStateOrderValid,
 	},
 };
 </script>
