@@ -332,11 +332,6 @@ function printOrder() {
 	window.print();
 }
 
-function mounted() {
-	const order = this.getLocalStorage('ecommerce-order-state');
-	console.log(order, 'order');
-}
-
 function data() {
 	return {
 		swiperOption: {
@@ -361,7 +356,6 @@ export default {
 		productInSummary,
 		YapeComponent,
 	},
-	mounted,
 	computed: {
 		...mapGetters({
 			addressObject: 'getDeliveryAddress',

@@ -104,7 +104,6 @@ const asyncActions = {
 		const { data: order } = await context.$httpSales.get(url);
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
 		localStorage.setItem('ecommerce-order-state', JSON.stringify(order));
-		console.log(id, 'asyncaction');
 		store.dispatch('getOrderData', order, newId);
 	},
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
@@ -169,9 +168,8 @@ const asyncActions = {
 		await context.$httpSales.patch(`customers-address/${id}`, body);
 	},
 	SET_STATE_ORDERS: async (state, { context, body, id }) => {
-		console.log('actaulizar');
-		console.log(body, id);
-		const { data: numberOrder } = await context.$httpSales.patch('orders/84653/update-state', body);
+		console.log('state-orders');
+		const { data: numberOrder } = await context.$httpSales.patch(`orders${id}/update-state`, body);
 		console.log(numberOrder);
 		localStorage.setItem('order-state-order', JSON.stringify(numberOrder));
 	},
