@@ -332,8 +332,8 @@ function printOrder() {
 	window.print();
 }
 
-function pirnt() {
-	console.log(this.order, 'comp');
+function mounted() {
+	console.log(this.getOrderInfo, 'comp');
 }
 
 function data() {
@@ -360,6 +360,7 @@ export default {
 		productInSummary,
 		YapeComponent,
 	},
+	mounted,
 	computed: {
 		...mapGetters({
 			addressObject: 'getDeliveryAddress',
@@ -386,7 +387,7 @@ export default {
 		niubizGateway,
 		wayPayment,
 		showReference,
-		pirnt,
+		// pirnt,
 	},
 	created,
 	data,
