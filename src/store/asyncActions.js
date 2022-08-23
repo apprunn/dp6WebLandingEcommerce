@@ -102,6 +102,7 @@ const asyncActions = {
 		const url = `orders/${id}?summary=true`;
 		const { data: order } = await context.$httpSales.get(url);
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
+		localStorage.setItem('ecommerce-order-state', JSON.stringify(order));
 		store.dispatch('getOrderData', order);
 	},
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
