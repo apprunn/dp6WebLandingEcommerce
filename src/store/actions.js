@@ -99,7 +99,7 @@ function getOrderData({ commit, dispatch }, order) {
 		commit('SET_BILLING_DATA', { address, rzSocial, ruc });
 		commit('SET_BILL_SELECTION', true);
 	}
-	console.log(order);
+	console.log(order, 'action');
 	commit('SET_ORDER_INFO', { ...order });
 	commit('SET_FLAG_PICKUP', flagPickUp);
 	commit('SET_RESPONSIBLE', order.responsiblePickUp);
