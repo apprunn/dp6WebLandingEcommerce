@@ -1,5 +1,6 @@
 import { setNewProperty } from '@/shared/lib';
 import waysDeliveries from '@/shared/enums/waysDeliveries';
+import orderStatesEnum from '@/shared/enums/orderStateId';
 import helper from '@/shared/helper';
 
 function clearUser(context) {
@@ -100,7 +101,10 @@ function getOrderData({ commit, dispatch }, order) {
 		commit('SET_BILL_SELECTION', true);
 	}
 	if (order.orderStateId === 8 && order.paymentStateId === 3) {
-		dispatch('SET_STATE_ORDERS', { context: this });
+		const body = {
+			orderStateCode: orderStatesEnum.confirmed.code,
+		};
+		dispatch('SET_STATE_ORDERS', { context: this }, body);
 		console.log('entra aqui');
 	}
 	console.log(order, 'action');

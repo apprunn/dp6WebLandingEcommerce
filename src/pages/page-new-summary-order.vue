@@ -332,16 +332,8 @@ function printOrder() {
 	window.print();
 }
 
-function mounted() {
-	const order = JSON.parse(localStorage.getItem('ecommerce-order-state')) || [];
-	console.log(order, 'created');
-}
-
-function validOrder() {
-	const order = JSON.parse(localStorage.getItem('ecommerce-order-state')) || [];
-	console.log(order, 'created');
-	console.log(this.orderStateId);
-	console.log(this.paymentStateId);
+function pirnt() {
+	console.log(this.order, 'comp');
 }
 
 function data() {
@@ -394,9 +386,9 @@ export default {
 		niubizGateway,
 		wayPayment,
 		showReference,
+		pirnt,
 	},
 	created,
-	mounted,
 	data,
 	methods: {
 		...mapActions([
@@ -409,7 +401,6 @@ export default {
 		printOrder,
 		seeOrder,
 		orderStateOrder,
-		validOrder,
 	},
 };
 </script>
