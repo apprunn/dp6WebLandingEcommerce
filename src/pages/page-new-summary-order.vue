@@ -333,7 +333,11 @@ function printOrder() {
 }
 
 function mounted() {
-	console.log(this.getOrderInfo, 'comp');
+	const yapeCode = getDeeper('orderStateId')(this.order);
+	const yapeCodes = getDeeper('paymentStateId')(this.order);
+	console.log(yapeCode);
+	console.log(yapeCodes);
+	// console.log(this.getOrderInfo, 'comp');
 }
 
 function data() {
