@@ -285,8 +285,6 @@ async function cancelOrder() {
 }
 
 function beforeDestroy() {
-	const order = this.getLocalStorage('ecommerce-order-state');
-	console.log(order, 'order before');
 	this.SET_DEFAULT_VALUES();
 	this.removeProductFromLS();
 }
@@ -335,18 +333,8 @@ function printOrder() {
 }
 
 function mounted() {
-	const yapeCode = getDeeper('orderStateId')(this.order);
-	const yapeCodes = getDeeper('paymentStateId')(this.order);
-	console.log(yapeCode);
-	console.log(yapeCodes);
 	const order = this.getLocalStorage('ecommerce-order-state');
 	console.log(order, 'order');
-}
-
-function vlaidMetho() {
-	const order = this.getLocalStorage('ecommerce-order-state');
-	console.log(order, 'comp');
-	console.log(this.order);
 }
 
 function data() {
@@ -400,8 +388,6 @@ export default {
 		niubizGateway,
 		wayPayment,
 		showReference,
-		vlaidMetho,
-		// pirnt,
 	},
 	created,
 	data,
