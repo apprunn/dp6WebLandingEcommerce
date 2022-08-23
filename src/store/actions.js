@@ -104,8 +104,8 @@ function getOrderData({ commit, dispatch }, order, id) {
 		const body = {
 			orderStateCode: orderStatesEnum.confirmed.code,
 		};
-		dispatch('SET_STATE_ORDERS', { context: this }, body, id);
-		console.log(body, id);
+		console.log(body, id, 'actions');
+		dispatch('SET_STATE_ORDERS', { context: this, body, id });
 		console.log('entra aqui');
 	}
 	console.log(order, 'action');
