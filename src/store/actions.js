@@ -104,7 +104,7 @@ function getOrderData({ commit, dispatch }, order) {
 		const body = {
 			orderStateCode: orderStatesEnum.confirmed.code,
 		};
-		dispatch('SET_STATE_ORDERS', { context: this }, body, order.id);
+		this.$store.dispatch('SET_STATE_ORDERS', { context: this }, body, order.id);
 	}
 	console.log(order, 'action');
 	commit('SET_ORDER_INFO', { ...order });
