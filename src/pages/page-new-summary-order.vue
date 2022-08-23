@@ -177,7 +177,7 @@ const { store, house } = deliveryWays;
 function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
-		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+		this.$store.dispatch('GET_ORDER_INFO_NEW', { context: this, id });
 		// if (order.orderStateId === 8 && order.paymentStateId === 3) {
 		// 	this.orderStateOrder();
 		// }
