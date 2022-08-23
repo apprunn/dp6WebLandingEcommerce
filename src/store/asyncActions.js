@@ -1,5 +1,6 @@
 import { compose, isEmpty, setNewProperty, map } from '@/shared/lib';
 import helper from '@/shared/helper';
+import orderStatesEnum from '@/shared/enums/orderStateId';
 
 const PAGE_TITLE = process.env.PAGE_TITLE;
 
@@ -102,6 +103,14 @@ const asyncActions = {
 		const url = `orders/${id}?summary=true`;
 		const { data: order } = await context.$httpSales.get(url);
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
+		if (order.orderStateId === 8 && order.paymentStateId === 3) {
+			console.log('entro aqui');
+			const body = {
+				orderStateCode: orderStatesEnum.confirmed.code,
+			};
+			asyncActions.SET_STATE_ORDERS(
+				{ context }, body, order.id);
+		}
 		store.dispatch('getOrderData', order);
 	},
 	SET_STATE_ORDERS: async (state, { context, body, id }) => {
