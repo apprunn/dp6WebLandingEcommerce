@@ -1,6 +1,6 @@
 import { setNewProperty } from '@/shared/lib';
 import waysDeliveries from '@/shared/enums/waysDeliveries';
-// import orderStatesEnum from '@/shared/enums/orderStateId';
+import orderStatesEnum from '@/shared/enums/orderStateId';
 import helper from '@/shared/helper';
 
 function clearUser(context) {
@@ -90,7 +90,7 @@ function updateFilters(context, filters) {
 	this.commit('UPDATE_FILTERS', filters);
 }
 
-function getOrderData({ commit, dispatch }, order) {
+function getOrderData({ commit, dispatch }, order, id) {
 	const { customerBill, deliveryAddress, customerAddress, flagPickUp } = order;
 	const isStore = flagPickUp === waysDeliveries.store.value;
 	const place = isStore ? deliveryAddress : customerAddress;
@@ -100,13 +100,15 @@ function getOrderData({ commit, dispatch }, order) {
 		commit('SET_BILLING_DATA', { address, rzSocial, ruc });
 		commit('SET_BILL_SELECTION', true);
 	}
-	// if (order.orderStateId === 8 && order.paymentStateId === 3) {
-	// 	const body = {
-	// 		orderStateCode: orderStatesEnum.confirmed.code,
-	// 	};
-	// 	dispatch('SET_STATE_ORDERS', { context: this, body, id });
-	// }
-	// console.log(order, 'action');
+	if (order.orderStateId === 8 && order.paymentStateId === 3) {
+		const body = {
+			orderStateCode: orderStatesEnum.confirmed.code,
+		};
+		dispatch('SET_STATE_ORDERS', { context: this }, body, id);
+		console.log(body, id);
+		console.log('entra aqui');
+	}
+	console.log(order, 'action');
 	commit('SET_ORDER_INFO', { ...order });
 	commit('SET_FLAG_PICKUP', flagPickUp);
 	commit('SET_RESPONSIBLE', order.responsiblePickUp);

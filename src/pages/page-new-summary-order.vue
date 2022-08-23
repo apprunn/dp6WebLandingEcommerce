@@ -311,14 +311,6 @@ function showReference() {
 	return getDeeper('additionalInformation.paymentGateway.referenceId')(this.order);
 }
 
-function destroyed() {
-	const yapeCode = getDeeper('orderStateId')(this.order);
-	const yapeCodes = getDeeper('paymentStateId')(this.order);
-	console.log(yapeCode, yapeCodes);
-	const order = this.getLocalStorage('ecommerce-order-state');
-	console.log(order, 'destroyed');
-}
-
 function isYape() {
 	const yapeCode = getDeeper('wayPaymentDetailCode')(this.order);
 	if (yapeCode === Yape.code) {
@@ -413,7 +405,6 @@ export default {
 	},
 	created,
 	data,
-	destroyed,
 	methods: {
 		...mapActions([
 			'SET_DEFAULT_VALUES',
