@@ -340,6 +340,10 @@ function mounted() {
 	// console.log(this.getOrderInfo, 'comp');
 }
 
+function vlaidMetho() {
+	console.log(this.order);
+}
+
 function data() {
 	return {
 		swiperOption: {
@@ -391,6 +395,7 @@ export default {
 		niubizGateway,
 		wayPayment,
 		showReference,
+		vlaidMetho,
 		// pirnt,
 	},
 	created,
