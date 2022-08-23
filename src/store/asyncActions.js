@@ -100,11 +100,16 @@ const asyncActions = {
 	},
 	GET_ORDER_INFO: async (store, { context, id }) => {
 		const url = `orders/${id}?summary=true`;
-		const newId = id;
 		const { data: order } = await context.$httpSales.get(url);
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
-		localStorage.setItem('ecommerce-order-state', JSON.stringify(order));
-		store.dispatch('getOrderData', order, newId);
+		store.dispatch('getOrderData', order);
+	},
+	SET_STATE_ORDERS: async (state, { context, body, id }) => {
+		console.log('state-orders');
+		const { data: order } = await context.$httpSales.patch(`orders${id}/update-state`, body);
+		// const { data: numberOrder } = await context.$httpSales.patch(`orders${id}/update-state`, body);
+		console.log(order);
+		localStorage.setItem('order-state-order', JSON.stringify(order));
 	},
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
 		commit('SET_IS_TOOGLE_DP', true);
@@ -166,12 +171,6 @@ const asyncActions = {
 	},
 	SET_FAVORITE_ADDRESS: async (state, { context, body, id }) => {
 		await context.$httpSales.patch(`customers-address/${id}`, body);
-	},
-	SET_STATE_ORDERS: async (state, { context, body, id }) => {
-		console.log('state-orders');
-		const { data: numberOrder } = await context.$httpSales.patch(`orders${id}/update-state`, body);
-		console.log(numberOrder);
-		localStorage.setItem('order-state-order', JSON.stringify(numberOrder));
 	},
 	DELETE_ADDRESS: async (state, { context, id }) => {
 		await context.$httpSales.delete(`customers-address/${id}`);
