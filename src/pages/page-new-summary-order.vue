@@ -178,8 +178,6 @@ function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
-		const order = JSON.parse(localStorage.getItem('ecommerce-order-state')) || [];
-		console.log(order, 'created');
 		// if (order.orderStateId === 8 && order.paymentStateId === 3) {
 		// 	this.orderStateOrder();
 		// }
@@ -335,6 +333,8 @@ function printOrder() {
 }
 
 function validOrder() {
+	const order = JSON.parse(localStorage.getItem('ecommerce-order-state')) || [];
+	console.log(order, 'created');
 	console.log(this.orderStateId);
 	console.log(this.paymentStateId);
 }
