@@ -90,7 +90,7 @@ function updateFilters(context, filters) {
 	this.commit('UPDATE_FILTERS', filters);
 }
 
-function getOrderData({ commit, dispatch }, order, id) {
+function getOrderData({ commit, dispatch }, order) {
 	const { customerBill, deliveryAddress, customerAddress, flagPickUp } = order;
 	const isStore = flagPickUp === waysDeliveries.store.value;
 	const place = isStore ? deliveryAddress : customerAddress;
