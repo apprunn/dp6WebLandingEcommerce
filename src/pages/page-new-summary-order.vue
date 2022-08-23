@@ -187,9 +187,8 @@ function created() {
 }
 
 function mounted() {
-	console.log(this.order, 'mounted');
-	const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
-	console.log(order, 'mlunted');
+	console.log(this.paymentStateId, 'mount');
+	console.log(this.orderStateId, 'mount');
 }
 
 async function orderStateOrder() {
@@ -382,6 +381,8 @@ export default {
 			order: 'getOrderInfo',
 			responsible: 'getResponsible',
 			user: 'user',
+			paymentStateId: 'getPaymentStateId',
+			orderStateId: 'getOrderStateId',
 		}),
 		addressDel,
 		addressPickUp,

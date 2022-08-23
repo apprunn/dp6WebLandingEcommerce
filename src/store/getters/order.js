@@ -103,6 +103,12 @@ const getters = {
 		}
 		return null;
 	},
+	getOrderStateId(state) {
+		return state.order.orderStateId;
+	},
+	getPaymentStateId(state) {
+		return state.order.paymentStateId;
+	},
 	getShippingTaxAmount(state) {
 		return state.order.shippingCost.taxAmount;
 	},
