@@ -215,7 +215,7 @@ function addressDel() {
 	if (this.isStore) {
 		return `${name}, ${address}.`;
 	}
-	return `${addressLine1} - ${parish.name} - ${city.name}, ${province.name}.`;
+	return `${addressLine1} - ${parish.name || ''} - ${city.name || ''}, ${province.name || ''}.`;
 }
 
 function billing() {
