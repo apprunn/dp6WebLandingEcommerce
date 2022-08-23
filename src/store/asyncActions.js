@@ -103,7 +103,7 @@ const asyncActions = {
 		const { data: order } = await context.$httpSales.get(url);
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
 		localStorage.setItem('ecommerce-order-state', JSON.stringify(order));
-		store.dispatch('getOrderData', order);
+		store.dispatch('getOrderData', order, id);
 	},
 	GET_STATE_INFO: async (store, { context, id }) => {
 		const url = `orders/${id}?summary=true`;
@@ -176,6 +176,7 @@ const asyncActions = {
 	SET_STATE_ORDERS: async (state, { context, body, id }) => {
 		console.log('actaulizar');
 		const { data: numberOrder } = await context.$httpSales.patch(`orders/${id}/update-state`, body);
+		console.log(numberOrder);
 		localStorage.setItem('order-state-order', JSON.stringify(numberOrder));
 	},
 	DELETE_ADDRESS: async (state, { context, id }) => {

@@ -90,7 +90,7 @@ function updateFilters(context, filters) {
 	this.commit('UPDATE_FILTERS', filters);
 }
 
-function getOrderData({ commit, dispatch }, order) {
+function getOrderData({ commit, dispatch }, order, id) {
 	const { customerBill, deliveryAddress, customerAddress, flagPickUp } = order;
 	const isStore = flagPickUp === waysDeliveries.store.value;
 	const place = isStore ? deliveryAddress : customerAddress;
@@ -104,7 +104,7 @@ function getOrderData({ commit, dispatch }, order) {
 		const body = {
 			orderStateCode: orderStatesEnum.confirmed.code,
 		};
-		dispatch('SET_STATE_ORDERS', { context: this }, body);
+		dispatch('SET_STATE_ORDERS', { context: this, body, id });
 		console.log('entra aqui');
 	}
 	console.log(order, 'action');
