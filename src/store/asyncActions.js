@@ -109,15 +109,15 @@ const asyncActions = {
 				orderStateCode: orderStatesEnum.confirmed.code,
 			};
 			asyncActions.SET_STATE_ORDERS(
-				{ context }, body, order.id);
+				{ context: this, body, id });
 		}
 		store.dispatch('getOrderData', order);
 	},
-	SET_STATE_ORDERS: async (state, { context, body, id }) => {
-		console.log('state-orders');
-		const { data: order } = await context.$httpSales.patch(`orders${id}/update-state`, body);
-		console.log(order);
-		localStorage.setItem('order-state-order', JSON.stringify(order));
+	SET_STATE_ORDERS: async ({ context, body, id }) => {
+		console.log(body, id);
+		const { data: updateOrder } = await context.$httpSales.patch(`orders${id}/update-state`, body);
+		console.log(updateOrder);
+		// localStorage.setItem('order-state-order', JSON.stringify(updateOrder));
 	},
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
 		commit('SET_IS_TOOGLE_DP', true);
