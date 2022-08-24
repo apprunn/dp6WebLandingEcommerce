@@ -115,6 +115,7 @@ const asyncActions = {
 	},
 	SET_STATE_ORDERS: async (store, { context, body, id }) => {
 		console.log(body, id);
+		console.log('entro aqui');
 		const { data: updateOrder } = await context.$httpSales.patch(`orders${id}/update-state`, body);
 		console.log(updateOrder);
 		console.log(store);
