@@ -184,7 +184,7 @@ function created() {
 	}
 }
 
-function beforeCreated() {
+function beforeUpdate() {
 	const orderNumber = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
 	console.log(orderNumber, 'before');
 }
@@ -355,7 +355,7 @@ function data() {
 export default {
 	name: 'page-new-summary-order',
 	beforeDestroy,
-	beforeCreated,
+	beforeUpdate,
 	components: {
 		ArrowLeft,
 		ArrowRight,
