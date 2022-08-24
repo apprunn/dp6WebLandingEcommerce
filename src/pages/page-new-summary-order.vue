@@ -184,6 +184,11 @@ function created() {
 	}
 }
 
+function beforeCreated() {
+	const orderNumber = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+	console.log(orderNumber, 'before');
+}
+
 async function orderStateOrder() {
 	const { orderId: id } = this.$route.params;
 	const body = {
@@ -350,6 +355,7 @@ function data() {
 export default {
 	name: 'page-new-summary-order',
 	beforeDestroy,
+	beforeCreated,
 	components: {
 		ArrowLeft,
 		ArrowRight,
