@@ -175,11 +175,6 @@ import { Yape } from '@/shared/enums/depositPayment';
 const { store, house } = deliveryWays;
 
 function created() {
-	const orderNumber = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
-	console.log(orderNumber, 'before');
-}
-
-function beforeCreated() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
@@ -187,6 +182,11 @@ function beforeCreated() {
 		// 	this.orderStateOrder();
 		// }
 	}
+}
+
+function beforeCreated() {
+	const orderNumber = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+	console.log(orderNumber, 'before');
 }
 
 async function orderStateOrder() {
