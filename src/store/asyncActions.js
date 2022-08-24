@@ -108,8 +108,6 @@ const asyncActions = {
 			const body = {
 				orderStateCode: orderStatesEnum.confirmed.code,
 			};
-			console.log(body);
-			console.log(context, body, id);
 			await asyncActions.SET_STATE_ORDERS(
 				{ context, body, id });
 		}
