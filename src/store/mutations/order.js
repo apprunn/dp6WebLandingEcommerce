@@ -9,6 +9,12 @@ const orderMutation = {
 	SET_RESPONSIBLE(state, responsible) {
 		Vue.set(state.order, 'responsible', responsible);
 	},
+	SET_ORDER_STATE_ID(state, orderStateId) {
+		Vue.set(state.order, 'orderStateId', orderStateId);
+	},
+	SET_PAYMENT_STATE_ID(state, paymentStateId) {
+		Vue.set(state.order, 'paymentStateId', paymentStateId);
+	},
 	SET_DELIVERY_PLACE(state, address) {
 		Vue.set(state.order, 'delivery', address);
 		const id = address && address.addressLine1 ? address.id : null;

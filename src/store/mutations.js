@@ -205,6 +205,10 @@ function SET_FLAG_NOT_VALID_EMAIL_USER(state, value) {
 	Vue.set(state, 'flagNotValidEmailUser', value);
 }
 
+function SET_PAYMENT_STATE_NEW(state, value) {
+	Vue.set(state, 'paymentStateIdNew', value);
+}
+
 const methods = {
 	ADD_ONE_IN_SERVICE_COUNTER,
 	clearUser,
@@ -227,6 +231,7 @@ const methods = {
 	SET_DIRECTIONS,
 	SET_ECOMMERCE_COLORS,
 	SET_ORDER_ID,
+	SET_PAYMENT_STATE_NEW,
 	SET_PRODUCTS,
 	SET_PRODUCT_FILTER,
 	SET_PRODUCT_TO_BUY,

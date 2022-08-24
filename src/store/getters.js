@@ -206,6 +206,10 @@ function getFlagNotValidEmailUser(state) {
 	return state.flagNotValidEmailUser;
 }
 
+function getPaymentState(state) {
+	return state.paymentStateIdNew;
+}
+
 const methods = {
 	bannersCoupons,
 	bannersTypes,
@@ -220,6 +224,7 @@ const methods = {
 	getCurrencySymbol,
 	getDirections,
 	getLastPage,
+	getPaymentState,
 	getPlansBanner,
 	getPromotionalBanner,
 	getProducts,

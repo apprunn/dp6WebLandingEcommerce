@@ -39,7 +39,14 @@ const asyncActions = {
 		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
 			getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
-		const newProducts = [].concat(state.products.list, setUpDateInProducts);
+		let newProducts = null;
+		debugger;
+		if (setUpDateInProducts.length > 20) {
+			newProducts = [].concat(state.products.list, setUpDateInProducts);
+		} else {
+			newProducts = [].concat(setUpDateInProducts);
+		}
+		// const newProducts = [].concat(state.products.list, setUpDateInProducts);
 		commit('LOADING_PRODUCTS', false);
 		commit('SET_PRODUCTS', newProducts);
 		commit('LAST_PAGE', headers);
@@ -95,8 +102,18 @@ const asyncActions = {
 		const url = `orders/${id}?summary=true`;
 		const { data: order } = await context.$httpSales.get(url);
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
+		// if (order.orderStateId === 8 && order.paymentStateId === 3) {
+		// 	const body = {
+		// 		orderStateCode: orderStatesEnum.confirmed.code,
+		// 	};
+		// 	await asyncActions.SET_STATE_ORDERS(store,
+		// 		{ context, body, id });
+		// }
 		store.dispatch('getOrderData', order);
 	},
+	// SET_STATE_ORDERS: async ({ commit }, { context, body, id }) => {
+	// 	commit('SET_PAYMENT_STATE_NEW', updateOrder.paymentStateId);
+	// },
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
 		commit('SET_IS_TOOGLE_DP', true);
 		const url = 'province';
@@ -157,10 +174,6 @@ const asyncActions = {
 	},
 	SET_FAVORITE_ADDRESS: async (state, { context, body, id }) => {
 		await context.$httpSales.patch(`customers-address/${id}`, body);
-	},
-	SET_STATE_ORDERS: async (state, { context, body, id }) => {
-		const { data: numberOrder } = await context.$httpSales.patch(`orders/${id}/update-state`, body);
-		localStorage.setItem('order-state-order', JSON.stringify(numberOrder));
 	},
 	DELETE_ADDRESS: async (state, { context, id }) => {
 		await context.$httpSales.delete(`customers-address/${id}`);

@@ -23,7 +23,7 @@
 		</section>
 		<section class="summary-content-container">
 			<h2 class="title" :style="`color:${globalColors.primary}`">
-				Resumen de compra - Pedido: {{this.order.number}}
+				Resumen de compra - Pedido: {{ this.order.number}}
 			</h2>
 			<div class="summary-content">
 				<div class="products-in-order">
@@ -178,10 +178,16 @@ function created() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
-		const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
-		if (order.orderStateId === 8 && order.paymentStateId === 3) {
-			this.orderStateOrder();
-		}
+		// if (order.orderStateId === 8 && order.paymentStateId === 3) {
+		// 	this.orderStateOrder();
+		// }
+	}
+}
+
+function beforeUpdate() {
+	const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+	if (order.orderStateId === 8 && order.paymentStateId === 3) {
+		this.orderStateOrder();
 	}
 }
 
@@ -190,9 +196,10 @@ async function orderStateOrder() {
 	const body = {
 		orderStateCode: orderStatesEnum.confirmed.code,
 	};
-	await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
-	const orderNumber = JSON.parse(localStorage.getItem('order-state-order')) || [];
-	this.order.number = orderNumber.number;
+	const { data: updateOrder } = await this.$httpSales.patch(`orders/${id}/update-state`, body);
+	// await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
+	// const orderNumber = JSON.parse(localStorage.getItem('order-state-order')) || [];
+	this.order.number = updateOrder.number;
 }
 
 function addressPickUp() {
@@ -214,7 +221,7 @@ function addressDel() {
 	if (this.isStore) {
 		return `${name}, ${address}.`;
 	}
-	return `${addressLine1} - ${parish.name} - ${city.name}, ${province.name}.`;
+	return `${addressLine1} - ${parish.name || ''} - ${city.name || ''}, ${province.name || ''}.`;
 }
 
 function billing() {
@@ -351,6 +358,7 @@ function data() {
 export default {
 	name: 'page-new-summary-order',
 	beforeDestroy,
+	beforeUpdate,
 	components: {
 		ArrowLeft,
 		ArrowRight,
@@ -365,6 +373,8 @@ export default {
 			order: 'getOrderInfo',
 			responsible: 'getResponsible',
 			user: 'user',
+			paymentStateId: 'getPaymentStateId',
+			orderStateId: 'getOrderStateId',
 		}),
 		addressDel,
 		addressPickUp,
