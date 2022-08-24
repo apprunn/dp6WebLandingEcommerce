@@ -1,6 +1,5 @@
 import { compose, isEmpty, setNewProperty, map } from '@/shared/lib';
 import helper from '@/shared/helper';
-import orderStatesEnum from '@/shared/enums/orderStateId';
 
 const PAGE_TITLE = process.env.PAGE_TITLE;
 
@@ -103,19 +102,18 @@ const asyncActions = {
 		const url = `orders/${id}?summary=true`;
 		const { data: order } = await context.$httpSales.get(url);
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
-		if (order.orderStateId === 8 && order.paymentStateId === 3) {
-			const body = {
-				orderStateCode: orderStatesEnum.confirmed.code,
-			};
-			await asyncActions.SET_STATE_ORDERS(store,
-				{ context, body, id });
-		}
+		// if (order.orderStateId === 8 && order.paymentStateId === 3) {
+		// 	const body = {
+		// 		orderStateCode: orderStatesEnum.confirmed.code,
+		// 	};
+		// 	await asyncActions.SET_STATE_ORDERS(store,
+		// 		{ context, body, id });
+		// }
 		store.dispatch('getOrderData', order);
 	},
-	SET_STATE_ORDERS: async ({ commit }, { context, body, id }) => {
-		const { data: updateOrder } = await context.$httpSales.patch(`orders/${id}/update-state`, body);
-		commit('SET_PAYMENT_STATE_NEW', updateOrder.paymentStateId);
-	},
+	// SET_STATE_ORDERS: async ({ commit }, { context, body, id }) => {
+	// 	commit('SET_PAYMENT_STATE_NEW', updateOrder.paymentStateId);
+	// },
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
 		commit('SET_IS_TOOGLE_DP', true);
 		const url = 'province';
