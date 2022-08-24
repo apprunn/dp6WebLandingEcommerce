@@ -23,7 +23,7 @@
 		</section>
 		<section class="summary-content-container">
 			<h2 class="title" :style="`color:${globalColors.primary}`">
-				Resumen de compra - Pedido: {{this.order.number}}
+				Resumen de compra - Pedido: {{ paymentStateIdNew ? paymentStateIdNew : this.order.number}}
 			</h2>
 			<div class="summary-content">
 				<div class="products-in-order">
@@ -374,6 +374,7 @@ export default {
 			user: 'user',
 			paymentStateId: 'getPaymentStateId',
 			orderStateId: 'getOrderStateId',
+			paymentStateIdNew: 'paymentStateIdNew',
 		}),
 		addressDel,
 		addressPickUp,

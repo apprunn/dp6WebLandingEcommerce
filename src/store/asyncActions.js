@@ -107,15 +107,14 @@ const asyncActions = {
 			const body = {
 				orderStateCode: orderStatesEnum.confirmed.code,
 			};
-			await asyncActions.SET_STATE_ORDERS(
+			await asyncActions.SET_STATE_ORDERS(store,
 				{ context, body, id });
 		}
 		store.dispatch('getOrderData', order);
 	},
-	SET_STATE_ORDERS: async ({ context, body, id }) => {
-		console.log(body, id, context);
+	SET_STATE_ORDERS: async ({ commit }, { context, body, id }) => {
 		const { data: updateOrder } = await context.$httpSales.patch(`orders/${id}/update-state`, body);
-		console.log(updateOrder);
+		commit('SET_PAYMENT_STATE_NEW', updateOrder.paymentStateId);
 	},
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
 		commit('SET_IS_TOOGLE_DP', true);

@@ -121,4 +121,5 @@ export default {
 	totalBuyWithShipp: 0,
 	totalAmountBuyWithShipp: 0,
 	flagNotValidEmailUser: false,
+	paymentStateIdNew: null,
 };
