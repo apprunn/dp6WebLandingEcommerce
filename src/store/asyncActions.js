@@ -110,7 +110,7 @@ const asyncActions = {
 			};
 			console.log(body);
 			console.log(context, body, id);
-			asyncActions.SET_STATE_ORDERS(
+			await asyncActions.SET_STATE_ORDERS(
 				{ context, body, id });
 		}
 		store.dispatch('getOrderData', order);
