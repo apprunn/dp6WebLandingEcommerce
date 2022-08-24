@@ -100,13 +100,6 @@ function getOrderData({ commit, dispatch }, order) {
 		commit('SET_BILLING_DATA', { address, rzSocial, ruc });
 		commit('SET_BILL_SELECTION', true);
 	}
-	// if (order.orderStateId === 8 && order.paymentStateId === 3) {
-	// 	const body = {
-	// 		orderStateCode: orderStatesEnum.confirmed.code,
-	// 	};
-	// 	this.$store.dispatch('SET_STATE_ORDERS', { context: this }, body, order.id);
-	// }
-	// console.log(order, 'action');
 	commit('SET_ORDER_INFO', { ...order });
 	commit('SET_FLAG_PICKUP', flagPickUp);
 	commit('SET_RESPONSIBLE', order.responsiblePickUp);

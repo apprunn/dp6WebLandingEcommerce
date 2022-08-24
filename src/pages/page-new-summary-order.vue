@@ -23,7 +23,7 @@
 		</section>
 		<section class="summary-content-container">
 			<h2 class="title" :style="`color:${globalColors.primary}`">
-				Resumen de compra - Pedido: {{ paymentStateIdNew ? paymentStateIdNew : this.order.number}}
+				Resumen de compra - Pedido: {{ this.order.number}}
 			</h2>
 			<div class="summary-content">
 				<div class="products-in-order">
@@ -197,7 +197,6 @@ async function orderStateOrder() {
 		orderStateCode: orderStatesEnum.confirmed.code,
 	};
 	const { data: updateOrder } = await this.$httpSales.patch(`orders/${id}/update-state`, body);
-	console.log(updateOrder);
 	// await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
 	// const orderNumber = JSON.parse(localStorage.getItem('order-state-order')) || [];
 	this.order.number = updateOrder.number;
@@ -376,7 +375,6 @@ export default {
 			user: 'user',
 			paymentStateId: 'getPaymentStateId',
 			orderStateId: 'getOrderStateId',
-			paymentStateIdNew: 'paymentStateIdNew',
 		}),
 		addressDel,
 		addressPickUp,
