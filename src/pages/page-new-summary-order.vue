@@ -196,7 +196,7 @@ async function orderStateOrder() {
 	const body = {
 		orderStateCode: orderStatesEnum.confirmed.code,
 	};
-	const { data: updateOrder } = await context.$httpSales.patch(`orders/${id}/update-state`, body);
+	const { data: updateOrder } = await this.$httpSales.patch(`orders/${id}/update-state`, body);
 	console.log(updateOrder);
 	// await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
 	// const orderNumber = JSON.parse(localStorage.getItem('order-state-order')) || [];
