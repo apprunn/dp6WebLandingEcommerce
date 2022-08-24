@@ -186,10 +186,9 @@ function created() {
 
 function beforeUpdate() {
 	const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
-	console.log(order);
-	// if (order.orderStateId === 8 && order.paymentStateId === 3) {
-	// 	this.orderStateOrder();
-	// }
+	if (order.orderStateId === 8 && order.paymentStateId === 3) {
+		this.orderStateOrder();
+	}
 }
 
 async function orderStateOrder() {
@@ -197,9 +196,11 @@ async function orderStateOrder() {
 	const body = {
 		orderStateCode: orderStatesEnum.confirmed.code,
 	};
-	await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
-	const orderNumber = JSON.parse(localStorage.getItem('order-state-order')) || [];
-	this.order.number = orderNumber.number;
+	const { data: updateOrder } = await context.$httpSales.patch(`orders/${id}/update-state`, body);
+	console.log(updateOrder);
+	// await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
+	// const orderNumber = JSON.parse(localStorage.getItem('order-state-order')) || [];
+	this.order.number = updateOrder.number;
 }
 
 function addressPickUp() {
