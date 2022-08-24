@@ -109,7 +109,7 @@ const asyncActions = {
 				orderStateCode: orderStatesEnum.confirmed.code,
 			};
 			asyncActions.SET_STATE_ORDERS(
-				{ context: this, body, id });
+				{ context, body, id });
 		}
 		store.dispatch('getOrderData', order);
 	},
