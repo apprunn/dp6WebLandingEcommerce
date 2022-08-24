@@ -185,8 +185,10 @@ function created() {
 }
 
 function beforeUpdate() {
-	const orderNumber = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
-	console.log(orderNumber, 'before');
+	const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+	if (order.orderStateId === 8 && order.paymentStateId === 3) {
+		this.orderStateOrder();
+	}
 }
 
 async function orderStateOrder() {

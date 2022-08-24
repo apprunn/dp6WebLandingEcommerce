@@ -104,7 +104,6 @@ const asyncActions = {
 		const { data: order } = await context.$httpSales.get(url);
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
 		if (order.orderStateId === 8 && order.paymentStateId === 3) {
-			console.log('entro aqui 1');
 			const body = {
 				orderStateCode: orderStatesEnum.confirmed.code,
 			};
@@ -115,10 +114,8 @@ const asyncActions = {
 	},
 	SET_STATE_ORDERS: async ({ context, body, id }) => {
 		console.log(body, id, context);
-		console.log('entro aqui 2');
 		const { data: updateOrder } = await context.$httpSales.patch(`orders/${id}/update-state`, body);
 		console.log(updateOrder);
-		// localStorage.setItem('order-state-order', JSON.stringify(updateOrder));
 	},
 	LOAD_DEPARTMENTS: async ({ commit }, context) => {
 		commit('SET_IS_TOOGLE_DP', true);
