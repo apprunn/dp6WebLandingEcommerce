@@ -81,9 +81,9 @@ function created() {
 		this.showUnity = false;
 	}
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
-	const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || undefined;
+	// const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || undefined;
 	debugger;
-	if (this.$route.query.ids && !validatedIds) {
+	if (this.$route.query.ids) {
 		this.loadProductsQuery();
 	}
 }
@@ -102,6 +102,7 @@ async function loadProductsQuery() {
 	debugger;
 	try {
 		const response = await this.$httpProducts.post('products/by-ids-public', body);
+		console.log(response);
 		this.productsBuys = response.data.map((product) => {
 			const newRow = { ...product };
 			debugger;
