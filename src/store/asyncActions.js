@@ -40,7 +40,6 @@ const asyncActions = {
 			getters.getCommerceData.settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(products, commercePriceListId);
 		let newProducts = null;
-		debugger;
 		if (setUpDateInProducts.length > 20) {
 			newProducts = [].concat(state.products.list, setUpDateInProducts);
 		} else {

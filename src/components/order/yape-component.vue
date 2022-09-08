@@ -6,7 +6,6 @@
 			{ 'yape-in-summary': !isPaymentPage }
 		]"
 	>
-
 		<button
 			v-show="isPaymentPage"
 			data-cy="yape-button"

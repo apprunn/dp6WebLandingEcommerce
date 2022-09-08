@@ -80,11 +80,11 @@ function created() {
 	} else {
 		this.showUnity = false;
 	}
-	const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || null;
-	if (this.$route.query.ids && !validatedIds) {
+	const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || undefined;
+	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
+	if (this.$route.query.ids && validatedIds) {
 		this.loadProductsQuery();
 	}
-	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
 }
 
 async function loadProductsQuery() {
@@ -102,7 +102,8 @@ async function loadProductsQuery() {
 		const response = await this.$httpProducts.post('products/by-ids-public', body);
 		this.productsBuys = response.data.map((product) => {
 			const newRow = { ...product };
-			this.addToCar(newRow.product);
+			debugger;
+			this.addToCar(newRow);
 			return newRow;
 		});
 	} catch (error) {
