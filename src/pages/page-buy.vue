@@ -90,9 +90,12 @@ function created() {
 
 async function loadProductsQuery() {
 	const numbersIds = this.$route.query.ids.split(',').map(Number);
-	const commerceData = this.getCommerceData.settings ?
-		this.getCommerceData : this.getLocalStorage('ecommerce::ecommerce-data');
+	const validSettings = this.getCommerceData && this.getCommerceData.settings ?
+		this.getCommerceData : null;
+	const commerceData = this.getLocalStorage('ecommerce::ecommerce-data') || validSettings;
+	console.log(commerceData);
 	const { settings } = commerceData;
+	console.log(settings);
 	const body = {
 		ids: numbersIds,
 		warehouseId: settings.defaultWarehouse && settings.defaultWarehouse.id
