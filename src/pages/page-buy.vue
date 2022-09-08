@@ -88,11 +88,18 @@ function created() {
 	}
 }
 
+function mounted() {
+	if (this.$route.query.ids) {
+		this.loadProductsQuery();
+	}
+}
+
 async function loadProductsQuery() {
 	const numbersIds = this.$route.query.ids.split(',').map(Number);
 	// const validSettings = this.getCommerceData && this.getCommerceData.settings ?
 	// 	this.getCommerceData : null;
-	const commerceData = this.getLocalStorage('ecommerce::ecommerce-data');
+	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
+	const commerceData = this.getCommerceData.company ? this.getCommerceData : ecommerceLocal;
 	console.log(commerceData);
 	const { settings } = commerceData;
 	console.log(settings);
@@ -102,7 +109,6 @@ async function loadProductsQuery() {
 			? settings.defaultWarehouse.id : undefined,
 	};
 	localStorage.setItem('ids-products', numbersIds);
-	debugger;
 	try {
 		const response = await this.$httpProducts.post('products/by-ids-public', body);
 		console.log(response);
