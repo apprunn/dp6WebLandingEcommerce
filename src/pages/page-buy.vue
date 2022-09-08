@@ -72,6 +72,7 @@ import summaryInPayment from '@/components/order/summary-in-payment';
 
 function created() {
 	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
+	console.log(ecommerceLocal);
 	const localOrder = this.getLocalStorage('ecommerce-order');
 	if (ecommerceLocal || this.getCommerceData.company) {
 		const company = this.getCommerceData.company ?
@@ -82,7 +83,6 @@ function created() {
 	}
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
 	// const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || undefined;
-	debugger;
 	if (this.$route.query.ids) {
 		this.loadProductsQuery();
 	}
@@ -90,9 +90,9 @@ function created() {
 
 async function loadProductsQuery() {
 	const numbersIds = this.$route.query.ids.split(',').map(Number);
-	const validSettings = this.getCommerceData && this.getCommerceData.settings ?
-		this.getCommerceData : null;
-	const commerceData = this.getLocalStorage('ecommerce::ecommerce-data') || validSettings;
+	// const validSettings = this.getCommerceData && this.getCommerceData.settings ?
+	// 	this.getCommerceData : null;
+	const commerceData = this.getLocalStorage('ecommerce::ecommerce-data');
 	console.log(commerceData);
 	const { settings } = commerceData;
 	console.log(settings);
