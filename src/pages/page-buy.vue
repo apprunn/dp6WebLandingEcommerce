@@ -88,12 +88,6 @@ function created() {
 	}
 }
 
-function mounted() {
-	if (this.$route.query.ids) {
-		this.loadProductsQuery();
-	}
-}
-
 async function loadProductsQuery() {
 	const numbersIds = this.$route.query.ids.split(',').map(Number);
 	// const validSettings = this.getCommerceData && this.getCommerceData.settings ?
@@ -136,6 +130,9 @@ async function mounted() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+	}
+	if (this.$route.query.ids) {
+		this.loadProductsQuery();
 	}
 	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', getDeeper('meta.step')(this.$route) !== 2);
 }
