@@ -116,9 +116,9 @@ function debounce(func, wait = 800, immediate) {
 	};
 };
 
-function setPrices(product, priceListId, flag) {
+function setPrices(product, priceListId, flag, priceListDefault) {
 	const priceList = product.priceList || {};
-	const { price, discount } = priceList[priceListId] || {};
+	const { price, discount } = priceList[priceListId] || priceList[priceListDefault] || {};
 	const newPrice = price || 0;
 	const newDiscount = discount || 0;
 	const priceDiscount = Number(((1 - (newDiscount / 100)) * newPrice).toFixed(2));

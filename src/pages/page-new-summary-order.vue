@@ -123,14 +123,20 @@
 				</div>
 			</div>
 		</section>
-
-		<section v-if="isYape.exist">
+		<v-layout row>
 			<YapeComponent
+				v-if="isYape.exist"
 				:yape-name="isYape.name"
 				:yape-phone="isYape.phone"
 				:url-image="isYape.urlImage"
 			/>
-		</section>
+			<PlinComponent
+				v-if="isPlin.exist"
+				:yape-name="isPlin.name"
+				:yape-phone="isPlin.phone"
+				:url-image="isPlin.urlImage"
+			/>
+		</v-layout>
 		<section
 			v-if="isNiubiz && isOnlinePayment"
 			class="card-data-niubiz"
@@ -169,8 +175,9 @@ import helper from '@/shared/helper';
 import ArrowLeft from '@/components/svg/ArrowLeft';
 import ArrowRight from '@/components/svg/ArrowRight';
 import YapeComponent from '@/components/order/yape-component';
+import PlinComponent from '@/components/order/plin-component';
 import orderStatesEnum from '@/shared/enums/orderStateId';
-import { Yape } from '@/shared/enums/depositPayment';
+import { Yape, Plin } from '@/shared/enums/depositPayment';
 
 const { store, house } = deliveryWays;
 
@@ -325,7 +332,26 @@ function isYape() {
 			exist: true,
 			name: '',
 			phone: walletNumber,
-			urlImage: walletQR,
+			urlImage: walletQR || '',
+		};
+	}
+	return {
+		exist: false,
+		name: '',
+		phone: '',
+		urlImage: '',
+	};
+}
+
+function isPlin() {
+	const plinCode = getDeeper('wayPaymentDetailCode')(this.order);
+	if (plinCode === Plin.code) {
+		const { walletNumber, walletQR } = getDeeper('additionalInfo')(this.order) || {};
+		return {
+			exist: true,
+			name: '',
+			phone: walletNumber,
+			urlImage: walletQR || '',
 		};
 	}
 	return {
@@ -364,6 +390,7 @@ export default {
 		ArrowRight,
 		productInSummary,
 		YapeComponent,
+		PlinComponent,
 	},
 	computed: {
 		...mapGetters({
@@ -387,6 +414,7 @@ export default {
 		isReciveAndPay,
 		isStore,
 		isYape,
+		isPlin,
 		link,
 		niubizGateway,
 		wayPayment,

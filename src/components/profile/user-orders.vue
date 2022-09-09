@@ -15,6 +15,7 @@
 						<small v-if="yapeExist(row)" class="yape-icon-container">
 							<img src="https://lh3.googleusercontent.com/y5S3ZIz-ohg3FirlISnk3ca2yQ6cd825OpA0YK9qklc5W8MLSe0NEIEqoV-pZDvO0A8=s180-rw">
 						</small>
+						sadas
 					</td>
 					<td class="row-order">
 						<span class="row-order-label">Nro. Orden: </span>{{row.number}}

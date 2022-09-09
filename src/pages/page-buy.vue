@@ -80,29 +80,30 @@ function created() {
 	} else {
 		this.showUnity = false;
 	}
-	const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || null;
-	if (this.$route.query.ids && !validatedIds) {
-		this.loadProductsQuery();
-	}
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
+	// const validatedIds = this.getLocalStorage('ecommerce::products-ids') || null;
+	// if (this.$route.query.ids && !validatedIds) {
+	// 	this.loadProductsQuery();
+	// }
 }
 
 async function loadProductsQuery() {
 	const numbersIds = this.$route.query.ids.split(',').map(Number);
-	const commerceData = this.getCommerceData.settings ?
-		this.getCommerceData : this.getLocalStorage('ecommerce::ecommerce-data');
+	// const validSettings = this.getCommerceData && this.getCommerceData.settings ?
+	// 	this.getCommerceData : null;
+	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
+	const commerceData = this.getCommerceData.company ? ecommerceLocal : this.getCommerceData;
 	const { settings } = commerceData;
 	const body = {
 		ids: numbersIds,
-		warehouseId: settings.defaultWarehouse && settings.defaultWarehouse.id
-			? settings.defaultWarehouse.id : undefined,
+		warehouseId: ecommerceLocal.warehousesRelated[0] || settings.defaultWarehouse.id,
 	};
 	localStorage.setItem('ids-products', numbersIds);
 	try {
 		const response = await this.$httpProducts.post('products/by-ids-public', body);
 		this.productsBuys = response.data.map((product) => {
 			const newRow = { ...product };
-			this.addToCar(newRow.product);
+			this.addToCar(newRow.product || newRow);
 			return newRow;
 		});
 	} catch (error) {
@@ -123,6 +124,9 @@ async function mounted() {
 	const { orderId: id } = this.$route.params;
 	if (id) {
 		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+	}
+	if (this.$route.query.ids) {
+		this.loadProductsQuery();
 	}
 	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', getDeeper('meta.step')(this.$route) !== 2);
 }

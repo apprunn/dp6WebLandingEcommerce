@@ -3,12 +3,12 @@
 		:class="[
 			'yape-main-container',
 			{ active: show },
-			{ 'yape-in-summary': !isPaymentPage }
+			{ 'plin-in-summary': !isPaymentPage }
 		]"
 	>
 		<button
 			v-show="isPaymentPage"
-			data-cy="yape-button"
+			data-cy="plin-button"
 			type="button"
 			class="yape-btn"
 			:style="`border:1px solid ${globalColors.base}`"
@@ -16,11 +16,11 @@
 		>
 			<span class="yape-btn-content">Pague con: </span>
 			<img
-				src="https://lh3.googleusercontent.com/y5S3ZIz-ohg3FirlISnk3ca2yQ6cd825OpA0YK9qklc5W8MLSe0NEIEqoV-pZDvO0A8=s180-rw"
-				alt="logo_yape"
+				src="https://apprunn.s3.amazonaws.com/plin-logo.png"
+				alt="logo_plin"
 			>
 		</button>
-		<div v-show="yapeSelectedForPay" class="yape-logo-message" data-cy="yape-in-summary">
+		<div v-show="yapeSelectedForPay" class="yape-logo-message" data-cy="plin-in-summary">
 			<div class="logo-yape">
 				<img
 					src="https://lh3.googleusercontent.com/y5S3ZIz-ohg3FirlISnk3ca2yQ6cd825OpA0YK9qklc5W8MLSe0NEIEqoV-pZDvO0A8=s180-rw"
@@ -37,13 +37,13 @@
 
 		<div
 			:class="['yape-modal-container', { active: show }]"
-			data-cy="yape-qr-container"
+			data-cy="plin-qr-container"
 		>
 			<div class="modal-qr">
 				<img :src="urlImage" alt="yape_qr">
 			</div>
 			<div v-if="yapeName || yapePhone" class="yape-data">
-				<h3 :style="`color: ${globalColors.primary}`">Datos YAPE:</h3>
+				<h3 :style="`color: ${globalColors.primary}`">Datos Plin:</h3>
 				<span v-if="yapeName">Nombre: {{yapeName}}</span>
 				<span v-if="yapePhone">Telefono: {{yapePhone}}</span>
 			</div>
@@ -95,7 +95,7 @@ function data() {
 	};
 }
 export default {
-	name: 'yape-component',
+	name: 'plin-component',
 	components: {
 		appInput,
 	},
@@ -155,7 +155,7 @@ export default {
 	}
 
 	&:hover {
-		background-color: color(yape);
+		background-color: color(plin);
 		color: white;
 	}
 }
@@ -181,7 +181,7 @@ export default {
 
 	.modal-qr {
 		align-items: center;
-		border: 2px solid color(yape);
+		border: 2px solid color(plin);
 		border-radius: 28px;
 		display: flex;
 		height: 230px;
@@ -194,6 +194,7 @@ export default {
 			width: 190px;
 		}
 		img {
+            border-radius: 28px;
 			height: 100%;
 			width: 100%;
 		}
@@ -265,8 +266,8 @@ export default {
 		}
 
 		&-notification {
-			background-color: rgba($yape, 0.1);
-			border: 2px solid color(yape);
+			// background-color: rgba($yape, 0.1);
+			// border: 2px solid color(yape);
 			color: color(yape);
 		}
 		&-voucher-loading {

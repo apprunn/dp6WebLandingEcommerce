@@ -72,6 +72,8 @@ function getDeposits() {
 	const { gatewayConfiguration } = this.getWaypaymentsByCommerce.find(
 		g => g.wayPaymentId === id,
 	);
+	console.log(this.getWaypaymentsByCommerce);
+	console.log('s');
 	this.filtered = gatewayConfiguration;
 }
 
