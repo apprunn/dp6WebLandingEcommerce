@@ -98,7 +98,7 @@ async function loadProductsQuery() {
 	console.log(this.getCommerceData);
 	const body = {
 		ids: numbersIds,
-		warehouseId: commerceData.warehousesRelated[0] || settings.defaultWarehouse.id,
+		warehouseId: ecommerceLocal.warehousesRelated[0] || settings.defaultWarehouse.id,
 	};
 	localStorage.setItem('ids-products', numbersIds);
 	try {
