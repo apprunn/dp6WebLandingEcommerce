@@ -3,11 +3,14 @@ import helper from '@/shared/helper';
 
 const PAGE_TITLE = process.env.PAGE_TITLE;
 
-function updateProducts(products, priceListId) {
+function updateProducts(products, priceListId, getters) {
+	const priceListDefault = getters && getters.getCommerceData ?
+		getters.getCommerceData.settings.salPriceListId : null;
+	const newPriceList = priceListId || priceListDefault;
 	return products.map(
 		compose(
-			setNewProperty('price', product => helper.setPrices(product, priceListId, 'price')),
-			setNewProperty('priceDiscount', product => helper.setPrices(product, priceListId, 'priceDiscount')),
+			setNewProperty('price', product => helper.setPrices(product, newPriceList, 'price')),
+			setNewProperty('priceDiscount', product => helper.setPrices(product, newPriceList, 'priceDiscount', priceListDefault)),
 			setNewProperty('createdAt', ({ createdAt }) => helper.formatDate(createdAt)),
 		),
 	);
@@ -38,7 +41,7 @@ const asyncActions = {
 		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
 		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
 			getters.getCommerceData.settings.salPriceListId;
-		const setUpDateInProducts = updateProducts(products, commercePriceListId);
+		const setUpDateInProducts = updateProducts(products, commercePriceListId, getters);
 		let newProducts = null;
 		if (setUpDateInProducts.length > 20) {
 			newProducts = [].concat(state.products.list, setUpDateInProducts);

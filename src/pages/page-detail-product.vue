@@ -117,7 +117,8 @@ function noStock() {
 
 function mounted() {
 	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
-	const company = this.getCommerceData.company ? ecommerceLocal.company : ecommerceLocal.company;
+	const company = this.getCommerceData.company ?
+		this.getCommerceData.company : ecommerceLocal.company;
 	this.showUnity = company.settings ? company.settings.flagShowBaseUnit : false;
 }
 
@@ -181,9 +182,12 @@ async function loadData(id) {
 	this.tabs = this.product.sections.map(p => p.name);
 	this.tabs.push('Comentarios');
 	this.lastIndex = this.product.sections.length;
+	const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+	const commercePriceListId = user && user.salPriceListId ? user.salPriceListId : null;
 	this.productInstance = new ProductDetails(
 		this.childrens,
 		this.getCommerceData.settings.salPriceListId,
+		commercePriceListId,
 	);
 	this.productInstance.firstProductSelected(this.product);
 	this.globalFeatures = [...this.productInstance.getFeatures()];

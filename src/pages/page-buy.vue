@@ -94,8 +94,6 @@ async function loadProductsQuery() {
 	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
 	const commerceData = this.getCommerceData.company ? ecommerceLocal : this.getCommerceData;
 	const { settings } = commerceData;
-	console.log(ecommerceLocal);
-	console.log(this.getCommerceData);
 	const body = {
 		ids: numbersIds,
 		warehouseId: ecommerceLocal.warehousesRelated[0] || settings.defaultWarehouse.id,
