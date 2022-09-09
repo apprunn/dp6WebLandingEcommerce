@@ -82,10 +82,6 @@ function created() {
 		this.showUnity = false;
 	}
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
-	// const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || undefined;
-	if (this.$route.query.ids) {
-		this.loadProductsQuery();
-	}
 }
 
 async function loadProductsQuery() {
@@ -94,9 +90,9 @@ async function loadProductsQuery() {
 	// 	this.getCommerceData : null;
 	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
 	const commerceData = this.getCommerceData.company ? this.getCommerceData : ecommerceLocal;
-	console.log(commerceData);
+	console.log(this.getCommerceData);
+	console.log(ecommerceLocal);
 	const { settings } = commerceData;
-	console.log(settings);
 	const body = {
 		ids: numbersIds,
 		warehouseId: settings.defaultWarehouse && settings.defaultWarehouse.id
@@ -105,10 +101,9 @@ async function loadProductsQuery() {
 	localStorage.setItem('ids-products', numbersIds);
 	try {
 		const response = await this.$httpProducts.post('products/by-ids-public', body);
-		console.log(response);
+		console.log(response.data);
 		this.productsBuys = response.data.map((product) => {
 			const newRow = { ...product };
-			debugger;
 			this.addToCar(newRow.product || newRow);
 			return newRow;
 		});
@@ -131,7 +126,8 @@ async function mounted() {
 	if (id) {
 		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
-	if (this.$route.query.ids) {
+	const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || undefined;
+	if (this.$route.query.ids && !validatedIds) {
 		this.loadProductsQuery();
 	}
 	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', getDeeper('meta.step')(this.$route) !== 2);
