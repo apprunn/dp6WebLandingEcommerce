@@ -126,8 +126,8 @@ async function mounted() {
 	if (id) {
 		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
 	}
-	const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || undefined;
-	if (this.$route.query.ids && !validatedIds) {
+	const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || null;
+	if (this.$route.query.ids && !!validatedIds) {
 		this.loadProductsQuery();
 	}
 	this.$store.commit('SET_IS_COLLAPSE_PRODUCT', getDeeper('meta.step')(this.$route) !== 2);
