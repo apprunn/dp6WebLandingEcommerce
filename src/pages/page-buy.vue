@@ -81,8 +81,8 @@ function created() {
 		this.showUnity = false;
 	}
 	this.$store.dispatch('UPDATE_ORDER_FROM_LOCAL_STORAGE', localOrder);
-	// const validatedIds = JSON.parse(localStorage.getItem('ids-products')) || undefined;
-	// if (this.$route.query.ids) {
+	// const validatedIds = this.getLocalStorage('ecommerce::products-ids') || null;
+	// if (this.$route.query.ids && !validatedIds) {
 	// 	this.loadProductsQuery();
 	// }
 }
