@@ -99,7 +99,7 @@ async function loadProductsQuery() {
 	const body = {
 		ids: numbersIds,
 		warehouseId: settings.defaultWarehouse && settings.defaultWarehouse.id
-			? settings.defaultWarehouse.id : undefined,
+			? settings.defaultWarehouse.id : settings.warehousesRelated[0],
 	};
 	localStorage.setItem('ids-products', numbersIds);
 	try {
