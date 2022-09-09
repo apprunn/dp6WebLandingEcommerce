@@ -3,7 +3,7 @@ import GlobalFeatures from '@/class/globalFeatures';
 import TypeProduct from '@/shared/enums/typeProduct';
 
 class ProductDetails {
-	constructor(childrens, priceListSelectedId) {
+	constructor(childrens, priceListSelectedId, commercePriceListId) {
 		this.childrens = childrens;
 		this.filteredFeatures = [];
 		this.globalFeatures = new GlobalFeatures(childrens);
@@ -13,7 +13,7 @@ class ProductDetails {
 		this.unitId = 0;
 		this.parentProduct = {};
 		this.pictureNotFound = '/static/icons/no-picture-found.svg';
-		this.priceListId = priceListSelectedId;
+		this.priceListId = commercePriceListId || priceListSelectedId;
 		this.selectedUnit = {};
 	}
 	get brand() {
@@ -208,7 +208,9 @@ class ProductDetails {
 		this.filteredFeatures = [...newFeatures];
 	}
 	updateProductPrices() {
-		const priceList = this.selectedProduct.priceList[this.priceListId];
+		const priceList = this.selectedProduct.priceList[this.priceListId] || null;
+		console.log('details', this.priceListId);
+		console.log('details', this.selectedProduct);
 		let { discount } = priceList;
 		const { units, price } = priceList;
 		const rightConversion = units[this.selectedProduct.unitSelected];

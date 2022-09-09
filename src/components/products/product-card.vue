@@ -6,7 +6,6 @@
 		@mouseenter="mouseOnCard = true"
 		@mouseleave="mouseOnCard = false"
 		:style="animatingCard"
-		v-if="product.priceDiscount"
 	>
 		<div :class="{ opacity: noStock}">
 			<div v-if="noStock" class="without-stock-tag">
@@ -99,7 +98,6 @@
 							v-if="product.warehouseProduct && product.warehouseProduct.brand"
 							class="product-brand">{{product.warehouseProduct.brand.name}}</small> -->
 						<h3
-							v-if="product.priceDiscount"
 							:style="`color: ${indeterminate ? 'transparent' : globalColors.primary};`"
 							:class="[
 								indeterminate ? 'loading text-field' : 'product-price-discount'
