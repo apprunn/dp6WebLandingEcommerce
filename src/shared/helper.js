@@ -117,7 +117,6 @@ function debounce(func, wait = 800, immediate) {
 };
 
 function setPrices(product, priceListId, flag, priceListDefault) {
-	console.log('helper', priceListDefault);
 	const priceList = product.priceList || {};
 	const { price, discount } = priceList[priceListId] || priceList[priceListDefault] || {};
 	const newPrice = price || 0;
