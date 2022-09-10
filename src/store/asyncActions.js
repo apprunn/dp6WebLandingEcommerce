@@ -267,7 +267,6 @@ const asyncActions = {
 	MAKE_ORDER: async ({ dispatch, getters, commit }, { flagFinish, context }) => {
 		commit('SET_IS_TOOGLE_BTN', true);
 		const body = helper.buildOrderBody(flagFinish, getters);
-		debugger;
 		body.additionalInfo = {
 			changeAmount: getters.getAmountBuyWithShipp,
 			walletNumber: getters.getAdditionalInformation ?

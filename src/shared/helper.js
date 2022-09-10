@@ -144,7 +144,6 @@ function buildOrderBody(flagFinish, getters) {
 	const storeAddress = isStore ? getDeliveryAddress : null;
 	const placeAddress = getCustomerAddressId ? getDeliveryAddress : getCustomerAddress;
 	const deliveryAddress = isStore ? storeAddress : placeAddress;
-	debugger;
 	const body = {
 		additionalInfo: getters.getAdditionalInformation,
 		costShipping: getters.getShippingCost,

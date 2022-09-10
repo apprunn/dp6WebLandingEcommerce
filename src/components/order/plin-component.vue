@@ -80,7 +80,6 @@ function selectYape() {
 			walletNumber: this.yapePhone,
 			walletQR: this.urlImage,
 		};
-		debugger;
 		this.$store.dispatch('setAdditionalInformation', yapeData);
 		this.$store.dispatch('setWayPaymentDetailCode', this.code);
 	} else {
