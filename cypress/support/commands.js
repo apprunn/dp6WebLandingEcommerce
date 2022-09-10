@@ -382,6 +382,26 @@ Cypress.Commands.add('PressYape', (urlImage) => {
 		});
 })
 
+Cypress.Commands.add('PressPlin', (urlImage) => {
+	cy.get('[data-cy="plin-qr-container"]')
+		.should('exist')
+		.should('have.class', 'plin-modal-container')
+		.should('not.have.class', 'active');
+
+	cy.get('[data-cy="plin-button"]')
+		.should('exist')
+		.click();
+
+	cy.get('[data-cy="plin-qr-container"]')
+		.should('exist')
+		.should('have.class', 'active')
+		.children()
+		.should('have.length', 2)
+		.find('img').then(($el) => {
+			expect($el).to.have.attr('src', urlImage);
+		});
+})
+
 Cypress.Commands.add('YapeInSummary', (urlImage) => {
 	cy.wait(1000);
 	cy.get('[data-cy="yape-in-summary"]')
@@ -391,6 +411,24 @@ Cypress.Commands.add('YapeInSummary', (urlImage) => {
 		.should('have.length', 3);
 
 	cy.get('[data-cy="yape-qr-container"]')
+		.should('exist')
+		.should('have.class', 'active')
+		.children()
+		.should('have.length', 2)
+		.find('img').then(($el) => {
+			expect($el).to.have.attr('src', urlImage);
+		});
+})
+
+Cypress.Commands.add('PlinInSummary', (urlImage) => {
+	cy.wait(1000);
+	cy.get('[data-cy="plin-in-summary"]')
+		.should('exist')
+		.should('have.class', 'yape-logo-message')
+		.children()
+		.should('have.length', 3);
+
+	cy.get('[data-cy="plin-qr-container"]')
 		.should('exist')
 		.should('have.class', 'active')
 		.children()

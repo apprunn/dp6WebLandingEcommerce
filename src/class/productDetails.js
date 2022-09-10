@@ -209,8 +209,6 @@ class ProductDetails {
 	}
 	updateProductPrices() {
 		const priceList = this.selectedProduct.priceList[this.priceListId] || null;
-		console.log('details', this.priceListId);
-		console.log('details', this.selectedProduct);
 		let { discount } = priceList;
 		const { units, price } = priceList;
 		const rightConversion = units[this.selectedProduct.unitSelected];

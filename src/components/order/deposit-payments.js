@@ -1,12 +1,17 @@
 
-import { Yape } from '@/shared/enums/depositPayment';
+import { Yape, Plin } from '@/shared/enums/depositPayment';
 import { mapGetters } from 'vuex';
 import { getDeeper } from '@/shared/lib';
 
 const YapeComponent = () => import('@/components/order/yape-component');
+const PlinComponent = () => import('@/components/order/plin-component');
 
 function yapeData() {
 	return getDeeper('settings.billeters.yape')(this.getCommerceData);
+}
+
+function plinData() {
+	return getDeeper('settings.billeters.plin')(this.getCommerceData);
 }
 
 /*
@@ -18,6 +23,7 @@ function yapeData() {
 function buildProps(name, code) {
 	const propsOptions = {
 		[Yape.name]: this.yapeProps.bind(this, code),
+		[Plin.name]: this.plinProps.bind(this, code),
 	};
 	return typeof propsOptions[name] === 'function' ? propsOptions[name].call() : {};
 }
@@ -31,6 +37,15 @@ function yapeProps(code) {
 	};
 }
 
+function plinProps(code) {
+	return {
+		code,
+		urlImage: this.plinData.imageQR,
+		yapeName: this.plinData.name,
+		yapePhone: this.plinData.phone,
+	};
+}
+
 export default {
 	name: 'deposit-payments',
 	computed: {
@@ -41,9 +56,11 @@ export default {
 			'user',
 		]),
 		yapeData,
+		plinData,
 	},
 	methods: {
 		buildProps,
+		plinProps,
 		yapeProps,
 	},
 	props: {
@@ -55,6 +72,7 @@ export default {
 	render(h) {
 		const options = {
 			[Yape.name]: YapeComponent,
+			[Plin.name]: PlinComponent,
 		};
 		let selectedPaymentMethods = [];
 		const that = this;

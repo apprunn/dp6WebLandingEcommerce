@@ -3,4 +3,9 @@ export const Yape = {
 	code: 'yape',
 };
 
-export default { Yape };
+export const Plin = {
+	name: 'Plin',
+	code: 'plin',
+};
+
+export default { Yape, Plin };

@@ -269,6 +269,10 @@ const asyncActions = {
 		const body = helper.buildOrderBody(flagFinish, getters);
 		body.additionalInfo = {
 			changeAmount: getters.getAmountBuyWithShipp,
+			walletNumber: getters.getAdditionalInformation ?
+				getters.getAdditionalInformation.walletNumber : null,
+			walletQR: getters.getAdditionalInformation ?
+				getters.getAdditionalInformation.walletQR : null,
 		};
 		const orderExist = !isEmpty(getters.getOrderInfo);
 		const dispatchName = orderExist ? 'UPDATE_ORDER' : 'CREATE_ORDER';
