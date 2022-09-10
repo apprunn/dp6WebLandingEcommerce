@@ -23,8 +23,8 @@
 		<div v-show="yapeSelectedForPay" class="yape-logo-message" data-cy="plin-in-summary">
 			<div class="logo-yape">
 				<img
-					src="https://lh3.googleusercontent.com/y5S3ZIz-ohg3FirlISnk3ca2yQ6cd825OpA0YK9qklc5W8MLSe0NEIEqoV-pZDvO0A8=s180-rw"
-					alt="logo_yape"
+					src="https://apprunn.s3.amazonaws.com/plin-logo.png"
+					alt="logo_plin"
 				>
 			</div>
 			<h3
@@ -80,7 +80,7 @@ function selectYape() {
 			walletNumber: this.yapePhone,
 			walletQR: this.urlImage,
 		};
-
+		debugger;
 		this.$store.dispatch('setAdditionalInformation', yapeData);
 		this.$store.dispatch('setWayPaymentDetailCode', this.code);
 	} else {
@@ -267,7 +267,7 @@ export default {
 
 		&-notification {
 			// background-color: rgba($yape, 0.1);
-			// border: 2px solid color(yape);
+			border: 2px solid color(yape);
 			color: color(yape);
 		}
 		&-voucher-loading {
