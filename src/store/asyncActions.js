@@ -163,9 +163,9 @@ const asyncActions = {
 		const { data: directions } = await context.$httpSales.get(url);
 		commit('SET_DIRECTIONS', directions);
 	},
-	LOAD_WAREHOUSES: async ({ commit }, context) => {
+	LOAD_WAREHOUSES: async ({ commit }, { context, params }) => {
 		const url = 'warehouse-public';
-		const { data: warehouses } = await context.$httpProductsPublic.get(url);
+		const { data: warehouses } = await context.$httpProductsPublic.get(url, { params });
 		commit('SET_WAREHOUSES', warehouses);
 	},
 	NEW_ADDRESS: async ({ commit }, { context, newAddress }) => {

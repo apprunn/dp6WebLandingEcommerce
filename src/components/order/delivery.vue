@@ -117,7 +117,7 @@ function created() {
 	this.collapseSection = true;
 	Promise.all([
 		this.$store.dispatch('LOAD_DIRECTIONS', this),
-		this.$store.dispatch('LOAD_WAREHOUSES', this),
+		this.$store.dispatch('LOAD_WAREHOUSES', { context: this, params: { flagEcommerce: 1 } }),
 	]).then(() => {
 		if (that.noOrder) {
 			that.setDefaultDelivery();
