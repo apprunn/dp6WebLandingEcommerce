@@ -80,7 +80,7 @@
 			<span
 				v-if="data.price"
 				:class="[
-					isLoading ? 'loading' : data.priceDiscount >= 0 ? 'text-price text-price-dis-mobile' : 'text-price-dis',
+					isLoading ? 'loading' : data.priceDiscount >= 0 ? 'text-price' : 'text-price-dis',
 				]"
 				:style="`color: ${globalColors.primary}`"
 			>
@@ -412,12 +412,6 @@ export default {
 		font-size: 26px;
 		@media (max-width: 600px) {
 			font-size: 22px;
-		}
-	}
-
-	.text-price-dis-mobile {
-		@media (max-width: 600px) {
-			display: none;
 		}
 	}
 
