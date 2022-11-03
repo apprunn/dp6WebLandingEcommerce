@@ -6,6 +6,7 @@
 			:style="topLocation"
 		>
 			<app-modal
+				:wholeSalePrice="wholeSalePrice"
 				:product="productDetails"
 				@close-modal="closeConfirmModal"
 			></app-modal>
@@ -237,6 +238,8 @@ async function loadData(id) {
 	if (this.childrens.length) {
 		this.disabledBtn = true;
 	}
+	this.product.wholeSalePrice = this.wholeSalePrice;
+	debugger;
 	this.wholeSalePrice = this.productInstance.getWholeSalePrice();
 }
 
@@ -322,6 +325,7 @@ function newRoute() {
 
 function clickQuantity(value) {
 	let num = this.product.quantity;
+	debugger;
 	const newProductdetail = { ...this.product };
 	if (value === 'less' && num === 1) {
 		num = 1;

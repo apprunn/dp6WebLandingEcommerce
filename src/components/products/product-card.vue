@@ -260,6 +260,7 @@ function getWholeSalePrice() {
 	const { ranges } = priceList[priceId] || {};
 	let prices = {};
 	if (ranges) {
+		debugger;
 		prices = ranges.reduce((acc, range) => {
 			if (range.from > 0 && range.to > 0 && range.price > 0) {
 				acc.push(range);
