@@ -225,12 +225,9 @@ class ProductDetails {
 
 	getWholeSalePrice() {
 		const priceList = this.selectedProduct.priceList[this.priceListId];
-		console.log(this.priceListId);
-		console.log(this.selectedProduct);
 		const { units } = priceList;
 		const rightRanges = units[this.selectedProduct.unitSelected];
 		const { ranges } = rightRanges || priceList;
-		debugger;
 		const resultRanges = ranges || [];
 		return resultRanges;
 	}

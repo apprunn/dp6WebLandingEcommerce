@@ -8,9 +8,11 @@ const getters = {
 			const products = map(
 				setNewProperty(
 					'total',
+					({ price, salePrice, priceDiscount, quantity }) =>
+						twoDecimals(quantity * (salePrice || priceDiscount || price)),
 					({ priceList, salePrice, priceDiscount, quantity, wholeSalePrice }) => {
 						if (wholeSalePrice.length > 0 && wholeSalePrice[0].price !== 0
-							&& quantity >= wholeSalePrice[0].price) {
+							&& quantity >= wholeSalePrice[0].from && quantity <= wholeSalePrice[0].to) {
 							return twoDecimals(quantity * wholeSalePrice[0].price);
 						}
 						return twoDecimals(quantity * (salePrice || priceDiscount || priceList.price));
@@ -29,10 +31,13 @@ const getters = {
 		const { products, order } = state.order;
 		const newProducts = isEmpty(order) ? products : order.details;
 		if (newProducts) {
+			debugger;
 			return newProducts.reduce(
 				(acc, { priceList, priceDiscount, salePrice, quantity, wholeSalePrice }) => {
-					if (wholeSalePrice.length > 0 && wholeSalePrice[0].price !== 0
-						&& quantity >= wholeSalePrice[0].price) {
+					if (wholeSalePrice && wholeSalePrice.length > 0 &&
+						wholeSalePrice[0].price !== 0 &&
+						quantity >= wholeSalePrice[0].from &&
+						quantity <= wholeSalePrice[0].to) {
 						return twoDecimals(wholeSalePrice[0].price * quantity) + acc;
 					}
 					return twoDecimals((priceDiscount || salePrice || priceList.price) * quantity) + acc;

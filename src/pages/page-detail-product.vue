@@ -238,9 +238,8 @@ async function loadData(id) {
 	if (this.childrens.length) {
 		this.disabledBtn = true;
 	}
-	this.product.wholeSalePrice = this.wholeSalePrice;
-	debugger;
 	this.wholeSalePrice = this.productInstance.getWholeSalePrice();
+	this.product.wholeSalePrice = this.wholeSalePrice;
 }
 
 function selectFeature(value) {
@@ -325,7 +324,6 @@ function newRoute() {
 
 function clickQuantity(value) {
 	let num = this.product.quantity;
-	debugger;
 	const newProductdetail = { ...this.product };
 	if (value === 'less' && num === 1) {
 		num = 1;
@@ -337,11 +335,26 @@ function clickQuantity(value) {
 		this.$set(newProductdetail, 'quantity', num);
 		this.product = { ...newProductdetail };
 		this.productInstance.updateQuantity(num);
+		// this.getProductPrice();
 		this.productDetails = { ...this.productInstance.getProductDetails() };
 	} else {
 		this.showNotification(`Cantidad: ${num} no disponible`, 'primary');
 	}
 }
+
+// function getProductPrice() {
+// 	const { priceList, unitId, quantity } = this.product;
+// 	const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+// 	const priceListId = this.getCommerceData.settings.salPriceListId;
+// 	const commercePriceListId = user && user.salPriceListId ? user.salPriceListId : null;
+// 	this.priceListIdSelected = commercePriceListId || priceListId;
+// 	const priceListSelected = priceList[this.priceListIdSelected];
+// 	const unitSelected = priceListSelected.units ? priceList.units[unitId] : null;
+// 	const listRanges = priceListSelected.ranges || [];
+// 	const listRangeApply = listRanges.find(lr => quantity >= lr.from && quantity <= lr.to);
+// 	console.log(this.product, unitSelected, listRangeApply);
+// 	return 0;
+// }
 
 function inputQuantity(num) {
 	const newProductdetail = { ...this.product };
