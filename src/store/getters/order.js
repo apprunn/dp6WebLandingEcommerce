@@ -31,7 +31,6 @@ const getters = {
 		const { products, order } = state.order;
 		const newProducts = isEmpty(order) ? products : order.details;
 		if (newProducts) {
-			debugger;
 			return newProducts.reduce(
 				(acc, { priceList, priceDiscount, salePrice, quantity, wholeSalePrice }) => {
 					if (wholeSalePrice && wholeSalePrice.length > 0 &&

@@ -144,7 +144,6 @@ function buildOrderBody(flagFinish, getters) {
 	const storeAddress = isStore ? getDeliveryAddress : null;
 	const placeAddress = getCustomerAddressId ? getDeliveryAddress : getCustomerAddress;
 	const deliveryAddress = isStore ? storeAddress : placeAddress;
-	debugger;
 	const body = {
 		additionalInfo: getters.getAdditionalInformation,
 		costShipping: getters.getShippingCost,
@@ -187,7 +186,6 @@ function getOrderDetails(products, warehouseId, warehouseName) {
 		const extractConversions = conversions ? Object.values(conversions) : null;
 		const unitConversion = extractConversions ? extractConversions.find(conv => conv.code === p.unit.code) : { quantity: p.unitConversion };
 		const newTaxes = setTaxes(taxes);
-		debugger;
 		const newP = {
 			alternateCode: p.alternateCode,
 			brandId: getDeeper('warehouseProduct.brandId')(p) || p.brandId,
@@ -208,7 +206,7 @@ function getOrderDetails(products, warehouseId, warehouseName) {
 			productImage: p.urlImage || p.productImage,
 			productName: p.name || p.productName,
 			quantity: p.quantity,
-			salePrice:  p.wholeSalePrice.length > 0 &&
+			salePrice:  p.wholeSalePrice && p.wholeSalePrice.length > 0 &&
 			Number(p.quantity) >= p.wholeSalePrice[0].from &&
 			Number(p.quantity) <= p.wholeSalePrice[0].to &&
 			p.wholeSalePrice[0].price !== 0 ? p.wholeSalePrice[0].price : p.priceDiscount || p.salePrice || p.price,
