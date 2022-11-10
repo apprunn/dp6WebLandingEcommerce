@@ -507,7 +507,7 @@ export default {
 		font-family: font(regular);
 		max-height: 35px;
 		margin: 0 auto 8px;
-		max-width: 150px;
+		max-width: 225px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		text-transform: capitalize;
