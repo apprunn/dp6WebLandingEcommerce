@@ -32,7 +32,7 @@
 				<p class="product-price" v-if="product.wholeSalePrice.length > 0 &&
 					product.wholeSalePrice[0].price !== 0 &&
 					product.quantity >= product.wholeSalePrice[0].from &&
-					product.quantity >= product.wholeSalePrice[0].to">
+					product.quantity <= product.wholeSalePrice[0].to">
 					{{getCurrencySymbol}} {{ product.wholeSalePrice[0].price | currencyFormat }}
 				</p>
 				<p class="product-price" v-else>{{getCurrencySymbol}} {{ product.priceDiscount | currencyFormat }}</p>
