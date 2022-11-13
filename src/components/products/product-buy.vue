@@ -23,7 +23,7 @@
 			<app-button-order
 				active
 				button-title="¡LO QUIERO!"
-				:disabled-order="disabledOrder"
+				:disabled-order="disabledOrder || disabledBuy"
 				:class="[
 					isLoading ? 'loading' : 'btn',
 				]"
@@ -80,6 +80,10 @@ export default {
 			type: Object,
 		},
 		disabledOrder: {
+			type: Boolean,
+			default: false,
+		},
+		disabledBuy: {
 			type: Boolean,
 			default: false,
 		},

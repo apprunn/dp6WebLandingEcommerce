@@ -25,6 +25,8 @@
 				@unit-selection="selectedUnit"
 			/>
 			<product-detail
+				:disabled-order="disabledOrder"
+				:disabled-buy="disabledBuy"
 				:open-warehouse="stockWarehouse"
 				:data="productDetails"
 				:features="globalFeatures"
@@ -121,6 +123,7 @@ function mounted() {
 	const company = this.getCommerceData.company ?
 		this.getCommerceData.company : ecommerceLocal.company;
 	this.showUnity = company.settings ? company.settings.flagShowBaseUnit : false;
+	// this.showUnity = true;
 }
 
 function isLoggedUser() {
@@ -143,8 +146,10 @@ async function loadProduct() {
 					Object.keys(conversions),
 				);
 			}
-			this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0]
-				? conversionsFormatted[0].quantity : 0, 10);
+			this.stockAvaible = conversionsFormatted && conversionsFormatted[0] ?
+				parseInt(this.product.stock / conversionsFormatted[0].quantity, 10) : 0;
+			// this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0]
+			// 	? conversionsFormatted[0].quantity : 0, 10);
 			this.$store.dispatch('setStock', this.stockAvaible);
 		}
 		this.updatePageTitle(this.product.name.toUpperCase());
@@ -331,7 +336,10 @@ function clickQuantity(value) {
 		num = value === 'more' ? num += 1 : num -= 1;
 	}
 	const validQuantity = this.checkValidQuantity(num);
-	if (validQuantity) {
+	this.quantityStock = parseInt(this.unitProductValid.quantity * num, 10);
+	if (this.quantityStock > this.product.stock) {
+		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación ${this.unitProductValid.name}.`, 'warning');
+	} else if (validQuantity) {
 		this.$set(newProductdetail, 'quantity', num);
 		this.product = { ...newProductdetail };
 		this.productInstance.updateQuantity(num);
@@ -394,7 +402,19 @@ function closeModal(value) {
 
 function selectedUnit(unit) {
 	this.stockAvaible = parseInt(this.product.stock / unit.quantity, 10);
+	this.quantityStock = parseInt(unit.quantity * this.product.quantity, 10);
+	const unitDefault = {
+		name: 'UNIDAD',
+		quantity: 1,
+	};
+	this.unitProductValid = unit || unitDefault;
+	// if (this.quantityStock > this.product.stock) {
+	// 	this.disabledBuy = true;
+	// 	this.showNotification(`El producto ${this.product.name}
+	// no cuenta con más stock en la presentación ${unit.name}.`, 'warning');
+	// }
 	this.$store.dispatch('setStock', this.stockAvaible);
+	this.disabledBuy = false;
 	this.productInstance.updateUnit(unit);
 	this.productImages = [...this.productInstance.getImages()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
@@ -409,6 +429,13 @@ function topLocation() {
 	return `top:${this.topModal}px`;
 }
 
+function disabledOrder() {
+	if (this.showUnity) {
+		// this.showGenericError('No se encuentre el stock suficiente');
+		return !this.stockAvaible > 0;
+	}
+	return false;
+}
 
 function data() {
 	return {
@@ -423,6 +450,7 @@ function data() {
 		disabled: false,
 		disabledBtn: false,
 		dialogWarehouses: false,
+		disabledBuy: false,
 		features: [],
 		featureSelect: [],
 		featuresFather: [],
@@ -440,8 +468,10 @@ function data() {
 		showUnity: false,
 		showConfirmModal: false,
 		stockWarehouse: false,
+		quantityStock: 0,
 		stockAvaible: 0,
 		tabs: [],
+		unitProductValid: {},
 		warehouses: [],
 		wholeSalePrice: [],
 		totalPriceProduct: 0,
@@ -474,6 +504,7 @@ export default {
 			relateds: state => state.products.relateds,
 			topModal: state => state.topLocationModal,
 		}),
+		disabledOrder,
 		topLocation,
 		noStock,
 	},

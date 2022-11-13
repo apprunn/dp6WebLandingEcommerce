@@ -22,10 +22,6 @@ function setToken(context, token) {
 	context.commit('setToken', token);
 }
 
-function setStock(context, stock) {
-	context.commit('setStock', stock);
-}
-
 function setUser(context, user) {
 	const newUser = user;
 	newUser.dni = Number(user.dni) ? user.dni : null;
@@ -242,6 +238,10 @@ function SET_ECOMMERCE_THEME({ commit }, theme) {
 
 function setRatingProductId({ commit }, productId) {
 	commit('SET_PRODUCT_ID_TO_RATE', productId);
+}
+
+function setStock(context, stock) {
+	context.commit('setStock', stock);
 }
 
 function UPDATE_PRODUCT_SEARCH({ commit }, search) {
