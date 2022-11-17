@@ -408,13 +408,18 @@ function selectedUnit(unit) {
 		quantity: 1,
 	};
 	this.unitProductValid = unit || unitDefault;
-	// if (this.quantityStock > this.product.stock) {
-	// 	this.disabledBuy = true;
-	// 	this.showNotification(`El producto ${this.product.name}
-	// no cuenta con más stock en la presentación ${unit.name}.`, 'warning');
-	// }
+	if (this.quantityStock > this.product.stock) {
+		const validQuantity = parseInt(this.product.stock / unit.quantity, 10);
+		const newProductdetail = { ...this.product };
+		this.$set(newProductdetail, 'quantity', validQuantity);
+		this.product = { ...newProductdetail };
+		this.productInstance.updateQuantity(validQuantity);
+		this.showNotification(`El producto ${this.product.name}
+		no cuenta con más stock en la presentación ${unit.name}`, 'warning');
+	} else {
+		this.disabledBuy = false;
+	}
 	this.$store.dispatch('setStock', this.stockAvaible);
-	this.disabledBuy = false;
 	this.productInstance.updateUnit(unit);
 	this.productImages = [...this.productInstance.getImages()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
