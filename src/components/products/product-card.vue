@@ -98,6 +98,7 @@
 							v-if="product.warehouseProduct && product.warehouseProduct.brand"
 							class="product-brand">{{product.warehouseProduct.brand.name}}</small> -->
 						<h3
+							class="mt-2"
 							:style="`color: ${indeterminate ? 'transparent' : globalColors.primary};`"
 							:class="[
 								indeterminate ? 'loading text-field' : 'product-price-discount'
@@ -469,7 +470,7 @@ export default {
 			align-items: center;
 		}
 		div {
-			margin: 0 10px;
+			margin: 0 12px;
 		}
 
 		@media (min-width: 600px) {
@@ -500,6 +501,10 @@ export default {
 		max-width: 100%;
 	}
 
+	.product-name {
+		max-width: 195px;
+	}
+
 	.product-name,
 	.product-description {
 		color: color(dark);
@@ -507,7 +512,7 @@ export default {
 		font-family: font(regular);
 		max-height: 35px;
 		margin: 0 auto 8px;
-		max-width: 150px;
+		// max-width: 150px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		text-transform: capitalize;
