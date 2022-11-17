@@ -29,7 +29,7 @@
 					:style="`color: ${globalColors.primary};`"
 					class="product-title">P.U.</p>
 				<!-- <p class="product-price">{{getCurrencySymbol}} {{ (product.priceDiscount || product.salePrice || product.price) | currencyFormat }}</p> -->
-				<p class="product-price" v-if="product.wholeSalePrice.length > 0 &&
+				<p class="product-price" v-if="product.wholeSalePrice && product.wholeSalePrice.length > 0 &&
 					product.wholeSalePrice[0].price !== 0 &&
 					product.quantity >= product.wholeSalePrice[0].from &&
 					product.quantity <= product.wholeSalePrice[0].to">
@@ -56,7 +56,7 @@
 					:style="`color: ${globalColors.primary};`"
 					class="product-title">Total</p>
 				<p class="product-total"
-				v-if="product.wholeSalePrice.length > 0 &&
+				v-if="product.wholeSalePrice && product.wholeSalePrice.length > 0 &&
 					Number(product.quantity) >= product.wholeSalePrice[0].from &&
 					Number(product.quantity) <= product.wholeSalePrice[0].to &&
 					product.wholeSalePrice[0].price !== 0">
