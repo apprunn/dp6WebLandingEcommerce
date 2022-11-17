@@ -70,6 +70,7 @@ export default {
 		status: [],
 		total: null,
 		waysPayments: null,
+		wholeSalePrice: [],
 	},
 	pollData: {
 		progress: 0,

@@ -28,7 +28,14 @@
 				<p
 					:style="`color: ${globalColors.primary};`"
 					class="product-title">P.U.</p>
-				<p class="product-price">{{getCurrencySymbol}} {{ (product.priceDiscount || product.salePrice || product.price) | currencyFormat }}</p>
+				<!-- <p class="product-price">{{getCurrencySymbol}} {{ (product.priceDiscount || product.salePrice || product.price) | currencyFormat }}</p> -->
+				<p class="product-price" v-if="product.wholeSalePrice && product.wholeSalePrice.length > 0 &&
+					product.wholeSalePrice[0].price !== 0 &&
+					product.quantity >= product.wholeSalePrice[0].from &&
+					product.quantity <= product.wholeSalePrice[0].to">
+					{{getCurrencySymbol}} {{ product.wholeSalePrice[0].price | currencyFormat }}
+				</p>
+				<p class="product-price" v-else>{{getCurrencySymbol}} {{ product.priceDiscount | currencyFormat }}</p>
 			</div>
 			<div class="quantity">
 				<p
@@ -48,7 +55,14 @@
 				<p
 					:style="`color: ${globalColors.primary};`"
 					class="product-title">Total</p>
-				<p class="product-total">{{getCurrencySymbol}} {{product.total | currencyFormat}}</p>
+				<p class="product-total"
+				v-if="product.wholeSalePrice && product.wholeSalePrice.length > 0 &&
+					Number(product.quantity) >= product.wholeSalePrice[0].from &&
+					Number(product.quantity) <= product.wholeSalePrice[0].to &&
+					product.wholeSalePrice[0].price !== 0">
+					{{getCurrencySymbol}}{{Number(product.quantity) * Number(product.wholeSalePrice[0].price) | currencyFormat}}
+				</p>	
+				<p class="product-total" v-else>{{getCurrencySymbol}} {{product.total | currencyFormat}}</p>
 			</div>
 			<!-- <div class="comments">
 				<text-area
@@ -107,12 +121,15 @@ function showComments() {
 
 function clickQuantity(val) {
 	let { quantity } = this.product;
+	const { unit } = this.product;
+	console.log(unit);
 	const opt = {
 		more: 1,
 		less: -1,
 	};
 	quantity += opt[val];
 	quantity = quantity < 1 ? 1 : quantity;
+	this.quantityStock = parseInt(unit.quantity * quantity, 10);
 	if (this.showUnity) {
 		if (quantity >= this.stockAvaible) {
 			this.maxQuantity = true;
@@ -121,9 +138,13 @@ function clickQuantity(val) {
 			this.maxQuantity = false;
 		}
 	}
-	this.$set(this.product, 'quantity', quantity);
-	this.$forceUpdate();
-	this.$store.commit('UPDATE_PRODUCTS_TO_BUY', { product: this.product, context: this });
+	if (this.quantityStock > this.product.stock) {
+		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`, 'warning');
+	} else {
+		this.$set(this.product, 'quantity', quantity);
+		this.$forceUpdate();
+		this.$store.commit('UPDATE_PRODUCTS_TO_BUY', { product: this.product, context: this });
+	}
 }
 
 function stepOne() {

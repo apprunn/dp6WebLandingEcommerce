@@ -10,6 +10,13 @@ const getters = {
 					'total',
 					({ price, salePrice, priceDiscount, quantity }) =>
 						twoDecimals(quantity * (salePrice || priceDiscount || price)),
+					({ priceList, salePrice, priceDiscount, quantity, wholeSalePrice }) => {
+						if (wholeSalePrice.length > 0 && wholeSalePrice[0].price !== 0
+							&& quantity >= wholeSalePrice[0].from && quantity <= wholeSalePrice[0].to) {
+							return twoDecimals(quantity * wholeSalePrice[0].price);
+						}
+						return twoDecimals(quantity * (salePrice || priceDiscount || priceList.price));
+					},
 				),
 				state.order.products,
 			);
@@ -25,8 +32,15 @@ const getters = {
 		const newProducts = isEmpty(order) ? products : order.details;
 		if (newProducts) {
 			return newProducts.reduce(
-				(acc, { price, priceDiscount, salePrice, quantity }) =>
-					twoDecimals((priceDiscount || salePrice || price) * quantity) + acc, 0);
+				(acc, { priceList, priceDiscount, salePrice, quantity, wholeSalePrice }) => {
+					if (wholeSalePrice && wholeSalePrice.length > 0 &&
+						wholeSalePrice[0].price !== 0 &&
+						quantity >= wholeSalePrice[0].from &&
+						quantity <= wholeSalePrice[0].to) {
+						return twoDecimals(wholeSalePrice[0].price * quantity) + acc;
+					}
+					return twoDecimals((priceDiscount || salePrice || priceList.price) * quantity) + acc;
+				}, 0);
 		}
 		return 0;
 	},

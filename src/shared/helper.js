@@ -206,7 +206,10 @@ function getOrderDetails(products, warehouseId, warehouseName) {
 			productImage: p.urlImage || p.productImage,
 			productName: p.name || p.productName,
 			quantity: p.quantity,
-			salePrice: p.priceDiscount || p.salePrice || p.price,
+			salePrice:  p.wholeSalePrice && p.wholeSalePrice.length > 0 &&
+			Number(p.quantity) >= p.wholeSalePrice[0].from &&
+			Number(p.quantity) <= p.wholeSalePrice[0].to &&
+			p.wholeSalePrice[0].price !== 0 ? p.wholeSalePrice[0].price : p.priceDiscount || p.salePrice || p.price,
 			stockQuantity: p.stock,
 			taxes: newTaxes,
 			unit: p.unit,

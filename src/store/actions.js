@@ -22,10 +22,6 @@ function setToken(context, token) {
 	context.commit('setToken', token);
 }
 
-function setStock(context, stock) {
-	context.commit('setStock', stock);
-}
-
 function setUser(context, user) {
 	const newUser = user;
 	newUser.dni = Number(user.dni) ? user.dni : null;
@@ -37,7 +33,8 @@ function setUser(context, user) {
 
 function addProductToBuyCar(context, product) {
 	const newProduct = product.quantity ? product : setNewProperty('quantity', 1)(product);
-	const productsSelected = JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
+	const localS = localStorage.getItem('ecommerce::product-select');
+	const productsSelected = localS !== null ? JSON.parse(localStorage.getItem('ecommerce::product-select')) : [];
 	const index = productsSelected.findIndex(
 		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
 	);
@@ -46,7 +43,7 @@ function addProductToBuyCar(context, product) {
 		const { stock, stockWarehouse, stockComposite } = currentProduct;
 		const finalStock = helper.isComposed(currentProduct) ?
 			stockComposite : (stockWarehouse || stock);
-		let quantity = currentProduct.quantity + newProduct.quantity;
+		let quantity = currentProduct.quantity + (newProduct.quantity - currentProduct.quantity);
 		quantity = finalStock > quantity ? quantity : finalStock;
 		productsSelected[index].quantity = quantity;
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);
@@ -241,6 +238,10 @@ function SET_ECOMMERCE_THEME({ commit }, theme) {
 
 function setRatingProductId({ commit }, productId) {
 	commit('SET_PRODUCT_ID_TO_RATE', productId);
+}
+
+function setStock(context, stock) {
+	context.commit('setStock', stock);
 }
 
 function UPDATE_PRODUCT_SEARCH({ commit }, search) {

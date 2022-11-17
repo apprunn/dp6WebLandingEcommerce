@@ -15,7 +15,17 @@
 			<p class="product-information">
 				<span class="product-name">{{ product.name }}</span>
 				<span>{{ product.description | cuttingWord(62) }}</span>
+				<span 
+					class="product-price"
+					:style="`color:${globalColors.secondary}`"
+					v-if="wholeSalePrice.length > 0 &&
+					Number(product.quantity) >= wholeSalePrice[0].from &&
+					Number(product.quantity) <= wholeSalePrice[0].to &&
+					wholeSalePrice[0].price !== 0">
+					{{getCurrencySymbol}}{{Number(product.quantity) * Number(wholeSalePrice[0].price) | currencyFormat}}
+				</span>
 				<span
+					v-else
 					class="product-price"
 					:style="`color:${globalColors.secondary}`"
 				>{{getCurrencySymbol}}{{Number(product.quantity) * Number(product.priceDiscount) | currencyFormat}}</span>
@@ -70,6 +80,10 @@ export default {
 		product: {
 			default: () => {},
 			type: Object,
+		},
+		wholeSalePrice: {
+			default: () => [],
+			type: Array,
 		},
 	},
 };

@@ -6,6 +6,7 @@
 			:style="topLocation"
 		>
 			<app-modal
+				:wholeSalePrice="wholeSalePrice"
 				:product="productDetails"
 				@close-modal="closeConfirmModal"
 			></app-modal>
@@ -24,6 +25,8 @@
 				@unit-selection="selectedUnit"
 			/>
 			<product-detail
+				:disabled-order="disabledOrder"
+				:disabled-buy="disabledBuy"
 				:open-warehouse="stockWarehouse"
 				:data="productDetails"
 				:features="globalFeatures"
@@ -120,6 +123,7 @@ function mounted() {
 	const company = this.getCommerceData.company ?
 		this.getCommerceData.company : ecommerceLocal.company;
 	this.showUnity = company.settings ? company.settings.flagShowBaseUnit : false;
+	// this.showUnity = true;
 }
 
 function isLoggedUser() {
@@ -142,8 +146,10 @@ async function loadProduct() {
 					Object.keys(conversions),
 				);
 			}
-			this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0]
-				? conversionsFormatted[0].quantity : 0, 10);
+			this.stockAvaible = conversionsFormatted && conversionsFormatted[0] ?
+				parseInt(this.product.stock / conversionsFormatted[0].quantity, 10) : 0;
+			// this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0]
+			// 	? conversionsFormatted[0].quantity : 0, 10);
 			this.$store.dispatch('setStock', this.stockAvaible);
 		}
 		this.updatePageTitle(this.product.name.toUpperCase());
@@ -238,6 +244,7 @@ async function loadData(id) {
 		this.disabledBtn = true;
 	}
 	this.wholeSalePrice = this.productInstance.getWholeSalePrice();
+	this.product.wholeSalePrice = this.wholeSalePrice;
 }
 
 function selectFeature(value) {
@@ -329,15 +336,33 @@ function clickQuantity(value) {
 		num = value === 'more' ? num += 1 : num -= 1;
 	}
 	const validQuantity = this.checkValidQuantity(num);
-	if (validQuantity) {
+	this.quantityStock = parseInt(this.unitProductValid.quantity * num, 10);
+	if (this.quantityStock > this.product.stock) {
+		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación ${this.unitProductValid.name}.`, 'warning');
+	} else if (validQuantity) {
 		this.$set(newProductdetail, 'quantity', num);
 		this.product = { ...newProductdetail };
 		this.productInstance.updateQuantity(num);
+		// this.getProductPrice();
 		this.productDetails = { ...this.productInstance.getProductDetails() };
 	} else {
 		this.showNotification(`Cantidad: ${num} no disponible`, 'primary');
 	}
 }
+
+// function getProductPrice() {
+// 	const { priceList, unitId, quantity } = this.product;
+// 	const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+// 	const priceListId = this.getCommerceData.settings.salPriceListId;
+// 	const commercePriceListId = user && user.salPriceListId ? user.salPriceListId : null;
+// 	this.priceListIdSelected = commercePriceListId || priceListId;
+// 	const priceListSelected = priceList[this.priceListIdSelected];
+// 	const unitSelected = priceListSelected.units ? priceList.units[unitId] : null;
+// 	const listRanges = priceListSelected.ranges || [];
+// 	const listRangeApply = listRanges.find(lr => quantity >= lr.from && quantity <= lr.to);
+// 	console.log(this.product, unitSelected, listRangeApply);
+// 	return 0;
+// }
 
 function inputQuantity(num) {
 	const newProductdetail = { ...this.product };
@@ -377,6 +402,23 @@ function closeModal(value) {
 
 function selectedUnit(unit) {
 	this.stockAvaible = parseInt(this.product.stock / unit.quantity, 10);
+	this.quantityStock = parseInt(unit.quantity * this.product.quantity, 10);
+	const unitDefault = {
+		name: 'UNIDAD',
+		quantity: 1,
+	};
+	this.unitProductValid = unit || unitDefault;
+	if (this.quantityStock > this.product.stock) {
+		const validQuantity = parseInt(this.product.stock / unit.quantity, 10);
+		const newProductdetail = { ...this.product };
+		this.$set(newProductdetail, 'quantity', validQuantity);
+		this.product = { ...newProductdetail };
+		this.productInstance.updateQuantity(validQuantity);
+		this.showNotification(`El producto ${this.product.name}
+		no cuenta con más stock en la presentación ${unit.name}`, 'warning');
+	} else {
+		this.disabledBuy = false;
+	}
 	this.$store.dispatch('setStock', this.stockAvaible);
 	this.productInstance.updateUnit(unit);
 	this.productImages = [...this.productInstance.getImages()];
@@ -392,6 +434,13 @@ function topLocation() {
 	return `top:${this.topModal}px`;
 }
 
+function disabledOrder() {
+	if (this.showUnity) {
+		// this.showGenericError('No se encuentre el stock suficiente');
+		return !this.stockAvaible > 0;
+	}
+	return false;
+}
 
 function data() {
 	return {
@@ -406,6 +455,7 @@ function data() {
 		disabled: false,
 		disabledBtn: false,
 		dialogWarehouses: false,
+		disabledBuy: false,
 		features: [],
 		featureSelect: [],
 		featuresFather: [],
@@ -423,8 +473,10 @@ function data() {
 		showUnity: false,
 		showConfirmModal: false,
 		stockWarehouse: false,
+		quantityStock: 0,
 		stockAvaible: 0,
 		tabs: [],
+		unitProductValid: {},
 		warehouses: [],
 		wholeSalePrice: [],
 		totalPriceProduct: 0,
@@ -457,6 +509,7 @@ export default {
 			relateds: state => state.products.relateds,
 			topModal: state => state.topLocationModal,
 		}),
+		disabledOrder,
 		topLocation,
 		noStock,
 	},

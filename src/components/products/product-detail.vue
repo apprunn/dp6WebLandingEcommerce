@@ -104,6 +104,7 @@
 		<!---- -->
 		<product-buy class="mobile"
 			:disabled-order="disabledOrder"
+			:disabled-buy="disabledBuy"
 			:open-warehouse="openWarehouse"
 			:number="data.quantity"
 			:product="data"
@@ -111,8 +112,9 @@
 			@add-to-car="addToCar"
 			@open-dialog="$emit('open-dialog')"
 		/>
-		<cart-bottom 
+		<cart-bottom
 			:disabled-order="disabledOrder"
+			:disabled-buy="disabledBuy"
 			:open-warehouse="openWarehouse"
 			:number="data.quantity"
 			:priceDiscount="data.priceDiscount"
@@ -189,13 +191,6 @@ function getBrandName(data) {
 	return getDeeper('warehouseProduct.brand.name')(data);
 }
 
-function disabledOrder() {
-	if (this.showUnity) {
-		return !this.stockAvaible > 0;
-	}
-	return false;
-}
-
 function unitSelection(item) {
 	this.$emit('unit-selection', item);
 }
@@ -245,7 +240,7 @@ export default {
 		...mapGetters('loading', [
 			'isLoading',
 		]),
-		disabledOrder,
+		// disabledOrder,
 		isComposed,
 		isService,
 		isVariation,
@@ -277,12 +272,20 @@ export default {
 		},
 		showUnity: {
 			type: Boolean,
-			default: false,
+			default: true,
 		},
 		openWarehouse: false,
 		wholeSalePrice: {
 			default: () => [],
 			type: Array,
+		},
+		disabledOrder: {
+			type: Boolean,
+			default: false,
+		},
+		disabledBuy: {
+			type: Boolean,
+			default: false,
 		},
 	},
 };
