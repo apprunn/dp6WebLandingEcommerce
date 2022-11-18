@@ -137,10 +137,12 @@ function clickQuantity(val) {
 			this.maxQuantity = false;
 		}
 	}
+	this.product.priceDiscountOrigin = this.product.priceDiscount;
 	if (this.quantityStock > this.product.stock) {
 		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`, 'warning');
 	} else {
 		const rangeApply = [wholeSalePrice].find(ur => quantity >= ur.from && quantity <= ur.to);
+		debugger;
 		if (rangeApply) {
 			this.product.priceDiscount = rangeApply.price;
 		} else {
