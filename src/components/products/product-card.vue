@@ -159,11 +159,22 @@ function addToCar() {
 		this.showAdd = true;
 		this.quantityAddProduct += 1;
 		const productSelected = this.product;
+		// const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+		// productSelected.unitSelected = this.product.unitId;
+		// const commercePriceListId = user && user.salPriceListId ? user.salPriceListId : null;
+		// const priceListSelectedId = this.getCommerceData.settings.salPriceListId;
+		// this.priceListId = commercePriceListId || priceListSelectedId;
+		// const priceList = this.product.priceList[this.priceListId] || null;
+		// const { units } = priceList;
+		// const rightRanges = units[productSelected.unitSelected];
+		// const { ranges } = rightRanges || priceList;
+		productSelected.unitSelected = this.product.unitId;
+		productSelected.wholeSalePrice = this.WholeSalePrice || [];
+		productSelected.priceDiscountOrigin = this.product.priceDiscount || 0;
 		this.disabledAdd = this.quantityAddProduct >= productSelected.stock;
 		if (this.quantityAddProduct >= productSelected.stock) {
 			this.showNotStock = true;
 		}
-		productSelected.unitSelected = this.product.unitId;
 		this.$store.dispatch('addProductToBuyCar', productSelected);
 	}
 }
