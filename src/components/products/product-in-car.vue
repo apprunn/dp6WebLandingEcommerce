@@ -144,7 +144,7 @@ function clickQuantity(val) {
 		if (rangeApply) {
 			this.product.priceDiscount = rangeApply.price;
 		} else {
-			this.product.priceDiscount = this.product.price;
+			this.product.priceDiscount = this.product.priceDiscountOrigin;
 		}
 		this.$set(this.product, 'quantity', quantity);
 		this.$forceUpdate();

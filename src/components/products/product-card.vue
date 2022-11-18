@@ -170,6 +170,7 @@ function addToCar() {
 		// const { ranges } = rightRanges || priceList;
 		productSelected.unitSelected = this.product.unitId;
 		productSelected.wholeSalePrice = this.WholeSalePrice || [];
+		productSelected.priceDiscountOrigin = this.product.priceDiscount || 0;
 		this.disabledAdd = this.quantityAddProduct >= productSelected.stock;
 		if (this.quantityAddProduct >= productSelected.stock) {
 			this.showNotStock = true;
