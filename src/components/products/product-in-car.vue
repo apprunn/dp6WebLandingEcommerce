@@ -121,8 +121,7 @@ function showComments() {
 
 function clickQuantity(val) {
 	let { quantity } = this.product;
-	const { unit } = this.product;
-	console.log(unit);
+	const { unit, wholeSalePrice } = this.product;
 	const opt = {
 		more: 1,
 		less: -1,
@@ -141,6 +140,12 @@ function clickQuantity(val) {
 	if (this.quantityStock > this.product.stock) {
 		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`, 'warning');
 	} else {
+		const rangeApply = [wholeSalePrice].find(ur => quantity >= ur.from && quantity <= ur.to);
+		if (rangeApply) {
+			this.product.priceDiscount = rangeApply.price;
+		} else {
+			this.product.priceDiscount = this.product.price;
+		}
 		this.$set(this.product, 'quantity', quantity);
 		this.$forceUpdate();
 		this.$store.commit('UPDATE_PRODUCTS_TO_BUY', { product: this.product, context: this });
@@ -176,6 +181,7 @@ export default {
 		...mapGetters([
 			'getCurrencySymbol',
 			'stockAvaible',
+			'getWholeSalePrice',
 		]),
 		stepOne,
 	},
