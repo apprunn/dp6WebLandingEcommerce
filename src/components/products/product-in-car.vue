@@ -114,6 +114,9 @@ function goToProduct({ slug, id }) {
 	this.goTo('detail-product', { params });
 }
 
+function mounted() {
+	this.product.priceDiscountOrigin = this.product.priceDiscount;
+}
 
 function showComments() {
 	this.show = !this.show;
@@ -137,7 +140,7 @@ function clickQuantity(val) {
 			this.maxQuantity = false;
 		}
 	}
-	this.product.priceDiscountOrigin = this.product.priceDiscount;
+	// this.product.priceDiscountOrigin = this.product.priceDiscount;
 	if (this.quantityStock > this.product.stock) {
 		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`, 'warning');
 	} else {
@@ -188,6 +191,7 @@ export default {
 		stepOne,
 	},
 	data,
+	mounted,
 	methods: {
 		clickQuantity,
 		deleteProduct,
