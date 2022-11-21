@@ -6,6 +6,7 @@
 		/>
 		<app-banner-top ref="bannerTop" v-if="!indeterminate" :data="bannerTop"/>
 		<app-header
+			v-if="!isValid"
 			ref="ecoHeader"
 			:logo="logo" 
 			:menu="showMenu"
@@ -85,6 +86,10 @@ function mounted() {
 	this.bannerTopAndHeaderHeight();
 }
 
+function isValid() {
+	return process.env.USER_LOCKED === '1';
+}
+
 function bannerTopAndHeaderHeight() {
 	const { bannerTop, ecoHeader } = this.$refs;
 	const ecoHeaderEl = getDeeper('$el.offsetHeight')(ecoHeader) || 0;
@@ -153,6 +158,7 @@ export default {
 	computed: {
 		indeterminate,
 		snackbar,
+		isValid,
 		...mapGetters([
 			'bannersTypes',
 			'getBanners',
