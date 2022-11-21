@@ -44,4 +44,5 @@ module.exports = merge(prodEnv, {
 	PAGE_TITLE: `'${process.env.PAGE_TITLE}'`,
 	PRODUCTS_READ_REPORT: `'${process.env.PRODUCTS_READ_REPORT}'`,
 	SALES_READ_REPORT: `'${process.env.SALES_READ_REPORT}'`,
+	USER_LOCKED: `'${process.env.USER_LOCKED}'` || '"false"',
 });

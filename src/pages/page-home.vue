@@ -1,5 +1,8 @@
 <template>
-	<layout-admin>
+	<div class="text-bloque" v-if="isValid">
+		CUENTA SUSPENDIDA
+	</div>
+	<layout-admin v-else>
 		<banner-carousel :banners="getBannersHome"/>
 		<div
 			class="loading-categories-container"
@@ -58,6 +61,10 @@ import cartBottom from '@/components/footer/cart-bottom';
 function created() {
 	this.updatePageTitle(this.getCommerceData.name);
 	this.updateDescriptionTag(this.homeDescriptionMetaTag);
+}
+
+function isValid() {
+	return process.env.USER_LOCKED === '1';
 }
 
 function filterSelect(filter) {
@@ -165,6 +172,7 @@ export default {
 			'getFilters',
 			'indeterminate',
 		]),
+		isValid,
 		filtersExist,
 		getCategoriesLength,
 	},
@@ -185,5 +193,18 @@ export default {
 
 	.loading-banner-container {
 		height: 616px;
+	}
+
+	.text-bloque {
+		color: red;
+		padding: 180px;
+		font-size: 50px;
+		font-weight: bold;
+		text-align: center;
+
+		@media (max-width: 950px) {
+			padding: 190px 30px;
+			font-size: 35px;
+		}
 	}
 </style>
