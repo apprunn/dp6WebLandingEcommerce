@@ -138,7 +138,6 @@ function data() {
 				select: false,
 			},
 		],
-		showBlocked: false,
 		colorDark: process.env.COLOR_TITLE,
 		colorBase: process.env.COLOR_PRIMARY,
 		colorSecondary: process.env.COLOR_SECONDARY,
