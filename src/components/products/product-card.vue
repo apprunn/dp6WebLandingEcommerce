@@ -184,6 +184,7 @@ function removeProductFromCar() {
 	this.disabledAdd = !(this.quantityAddProduct < this.product.stockWarehouse);
 	if (this.quantityAddProduct < this.product.stockWarehouse) {
 		this.showNotStock = false;
+		this.showAdd = false;
 	}
 	const productsSelected = JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
 	const product = productsSelected.find(p => p.id === this.product.id);
