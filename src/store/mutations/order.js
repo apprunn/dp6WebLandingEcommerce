@@ -36,11 +36,11 @@ const orderMutation = {
 			const productId = p.productId || p.id;
 			return productId === id && p.unitSelected === unitSelected;
 		});
-		const { stock, typeInfo } = products[index];
-		products[index].quantity = quantity > stock ? stock : quantity;
+		const { stockWarehouse, typeInfo } = products[index];
+		products[index].quantity = quantity > stockWarehouse ? stockWarehouse : quantity;
 		if (typeInfo.code === 'servicios') {
 			products[index].quantity = quantity;
-		} else if (quantity > stock) {
+		} else if (quantity > stockWarehouse) {
 			context.showNotification(`Cantidad: ${quantity} no disponible`, 'primary');
 		}
 		Vue.set(state.order, 'products', [...products]);
