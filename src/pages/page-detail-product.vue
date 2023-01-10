@@ -104,6 +104,7 @@ async function created() {
 }
 
 function addToCar() {
+	debugger;
 	if (!this.noStock) {
 		this.$store.dispatch('addProductToBuyCar', this.product);
 		this.showConfirmModal = true;
@@ -147,7 +148,7 @@ async function loadProduct() {
 				);
 			}
 			this.stockAvaible = conversionsFormatted && conversionsFormatted[0] ?
-				parseInt(this.product.stock / conversionsFormatted[0].quantity, 10) : 0;
+				parseInt(this.product.stockWarehouse / conversionsFormatted[0].quantity, 10) : 0;
 			// this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0]
 			// 	? conversionsFormatted[0].quantity : 0, 10);
 			this.$store.dispatch('setStock', this.stockAvaible);
@@ -201,7 +202,7 @@ async function loadData(id) {
 	if (!Array.isArray(this.productDetails.sections)) {
 		this.showNotification('Se esta cargando mal la información del producto', 'warning');
 	}
-	this.productImages = [...this.productInstance.getImages()];
+	this.productImages = [...this.productInstance.getImages()] || [];
 	this.allFeatures = this.childrens.reduce((acum, children) => acum.concat(children.features), []);
 	this.features = this.allFeatures.reduce((acum, feature) => {
 		const index = acum.findIndex(a => a.name === feature.name);
@@ -337,7 +338,7 @@ function clickQuantity(value) {
 	}
 	const validQuantity = this.checkValidQuantity(num);
 	this.quantityStock = parseInt(this.unitProductValid.quantity * num, 10);
-	if (this.quantityStock > this.product.stock) {
+	if (this.quantityStock > this.product.stockWarehouse) {
 		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación ${this.unitProductValid.name}.`, 'warning');
 	} else if (validQuantity) {
 		this.$set(newProductdetail, 'quantity', num);
@@ -401,15 +402,15 @@ function closeModal(value) {
 }
 
 function selectedUnit(unit) {
-	this.stockAvaible = parseInt(this.product.stock / unit.quantity, 10);
+	this.stockAvaible = parseInt(this.product.stockWarehouse / unit.quantity, 10);
 	this.quantityStock = parseInt(unit.quantity * this.product.quantity, 10);
 	const unitDefault = {
 		name: 'UNIDAD',
 		quantity: 1,
 	};
 	this.unitProductValid = unit || unitDefault;
-	if (this.quantityStock > this.product.stock) {
-		const validQuantity = parseInt(this.product.stock / unit.quantity, 10);
+	if (this.quantityStock > this.product.stockWarehouse) {
+		const validQuantity = parseInt(this.product.stockWarehouse / unit.quantity, 10);
 		const newProductdetail = { ...this.product };
 		this.$set(newProductdetail, 'quantity', validQuantity);
 		this.product = { ...newProductdetail };
@@ -421,7 +422,7 @@ function selectedUnit(unit) {
 	}
 	this.$store.dispatch('setStock', this.stockAvaible);
 	this.productInstance.updateUnit(unit);
-	this.productImages = [...this.productInstance.getImages()];
+	this.productImages = [...this.productInstance.getImages()] || [];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
 	this.wholeSalePrice = this.productInstance.getWholeSalePrice();
 }

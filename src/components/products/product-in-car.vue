@@ -141,7 +141,7 @@ function clickQuantity(val) {
 		}
 	}
 	// this.product.priceDiscountOrigin = this.product.priceDiscount;
-	if (this.quantityStock > this.product.stock) {
+	if (this.quantityStock > this.product.stockWarehouse) {
 		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`, 'warning');
 	} else {
 		const rangeApply = [wholeSalePrice].find(ur => quantity >= ur.from && quantity <= ur.to);

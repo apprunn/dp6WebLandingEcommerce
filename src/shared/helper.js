@@ -30,11 +30,12 @@ function noStock(product) {
 		const { stockVirtual } = product;
 		return stockVirtual === 0;
 	}
-	const { stock } = product;
-	return stock <= 0;
+	const { stockWarehouse } = product;
+	return stockWarehouse <= 0;
 }
 
 function stockGreaterThanCero(product) {
+	debugger;
 	if (isComposed(product)) {
 		const { stockComposite } = product;
 		return stockComposite === 0;
@@ -46,8 +47,8 @@ function stockGreaterThanCero(product) {
 		const { stockVirtual } = product;
 		return stockVirtual === 0;
 	}
-	const { stock } = product;
-	return stock <= 0;
+	const { stockWarehouse } = product;
+	return stockWarehouse <= 0;
 }
 
 function exactDate(date, formatter = 'DD-MM-YYYY', splitBy = 'T') {
