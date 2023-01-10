@@ -171,8 +171,8 @@ function addToCar() {
 		productSelected.unitSelected = this.product.unitId;
 		productSelected.wholeSalePrice = this.WholeSalePrice || [];
 		productSelected.priceDiscountOrigin = this.product.priceDiscount || 0;
-		this.disabledAdd = this.quantityAddProduct >= productSelected.stock;
-		if (this.quantityAddProduct >= productSelected.stock) {
+		this.disabledAdd = this.quantityAddProduct >= productSelected.stockWarehouse;
+		if (this.quantityAddProduct >= productSelected.stockWarehouse) {
 			this.showNotStock = true;
 		}
 		this.$store.dispatch('addProductToBuyCar', productSelected);
@@ -181,8 +181,8 @@ function addToCar() {
 
 function removeProductFromCar() {
 	this.quantityAddProduct -= 1;
-	this.disabledAdd = !(this.quantityAddProduct < this.product.stock);
-	if (this.quantityAddProduct < this.product.stock) {
+	this.disabledAdd = !(this.quantityAddProduct < this.product.stockWarehouse);
+	if (this.quantityAddProduct < this.product.stockWarehouse) {
 		this.showNotStock = false;
 	}
 	const productsSelected = JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
