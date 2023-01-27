@@ -104,7 +104,6 @@ async function created() {
 }
 
 function addToCar() {
-	debugger;
 	if (!this.noStock) {
 		this.$store.dispatch('addProductToBuyCar', this.product);
 		this.showConfirmModal = true;
