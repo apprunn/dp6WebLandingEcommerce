@@ -104,7 +104,6 @@ async function created() {
 }
 
 function addToCar() {
-	debugger;
 	if (!this.noStock) {
 		this.$store.dispatch('addProductToBuyCar', this.product);
 		this.showConfirmModal = true;
@@ -198,6 +197,7 @@ async function loadData(id) {
 	);
 	this.productInstance.firstProductSelected(this.product);
 	this.globalFeatures = [...this.productInstance.getFeatures()];
+	this.globalFeatures = this.globalFeatures.sort();
 	this.productDetails = { ...this.productInstance.getProductDetails() };
 	if (!Array.isArray(this.productDetails.sections)) {
 		this.showNotification('Se esta cargando mal la información del producto', 'warning');
