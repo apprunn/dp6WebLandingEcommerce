@@ -11,7 +11,6 @@ class GlobalFeatures {
 			const { values } = features[i];
 			if (values && values.length > 0) {
 				const orderedValues = values.sort((x, y) => x.value - y.value);
-				// const orderedValues = values.sort((a, b) => (a.value > b.value ? 1 : -1));
 				this.features[i].values = [...orderedValues];
 			} else {
 				this.features[i].values = [];
