@@ -141,7 +141,6 @@ function clickQuantity(val) {
 		}
 	}
 	// this.product.priceDiscountOrigin = this.product.priceDiscount;
-	debugger;
 	if (this.quantityStock > this.product.stockWarehouse) {
 		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`, 'warning');
 	} else {

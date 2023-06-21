@@ -224,7 +224,6 @@ class ProductDetails {
 	}
 
 	getWholeSalePrice() {
-		debugger;
 		const priceList = this.selectedProduct.priceList[this.priceListId];
 		const { units } = priceList;
 		const rightRanges = units[this.selectedProduct.unitSelected];

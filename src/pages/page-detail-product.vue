@@ -243,7 +243,6 @@ async function loadData(id) {
 	if (this.childrens.length) {
 		this.disabledBtn = true;
 	}
-	debugger;
 	this.wholeSalePrice = this.productInstance.getWholeSalePrice();
 	this.product.wholeSalePrice = this.wholeSalePrice;
 }

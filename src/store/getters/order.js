@@ -11,7 +11,6 @@ const getters = {
 					({ price, salePrice, priceDiscount, quantity }) =>
 						twoDecimals(quantity * (salePrice || priceDiscount || price)),
 					({ priceList, salePrice, priceDiscount, quantity, wholeSalePrice }) => {
-						debugger;
 						if (wholeSalePrice.length > 0 && wholeSalePrice[0].price !== 0
 							&& quantity >= wholeSalePrice[0].from && quantity <= wholeSalePrice[0].to) {
 							return twoDecimals(quantity * wholeSalePrice[0].price);
@@ -34,9 +33,7 @@ const getters = {
 		if (newProducts) {
 			return newProducts.reduce(
 				(acc, { priceList, priceDiscount, salePrice, quantity, wholeSalePrice }) => {
-					debugger;
 					const findRow = wholeSalePrice.find(el => el.from <= quantity && el.to >= quantity);
-					console.log(findRow);
 					if (wholeSalePrice && wholeSalePrice.length > 0 &&
 						findRow) {
 						return twoDecimals(findRow.price * quantity) + acc;
