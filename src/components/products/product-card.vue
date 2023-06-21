@@ -151,6 +151,7 @@ function created() {
 }
 
 function mounted() {
+	debugger;
 	this.WholeSalePrice = this.getWholeSalePrice();
 }
 
@@ -170,6 +171,7 @@ function addToCar() {
 		// const { ranges } = rightRanges || priceList;
 		productSelected.unitSelected = this.product.unitId;
 		productSelected.wholeSalePrice = this.WholeSalePrice || [];
+		debugger;
 		productSelected.priceDiscountOrigin = this.product.priceDiscount || 0;
 		this.disabledAdd = this.quantityAddProduct >= productSelected.stockWarehouse;
 		if (this.quantityAddProduct >= productSelected.stockWarehouse) {
@@ -264,6 +266,7 @@ function isService() {
 }
 
 function getWholeSalePrice() {
+	debugger;
 	if (Object.keys(this.getCommerceData).length === 0 || this.getCommerceData === null) {
 		return {};
 	}
