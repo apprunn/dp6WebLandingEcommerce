@@ -33,7 +33,9 @@ const getters = {
 		if (newProducts) {
 			return newProducts.reduce(
 				(acc, { priceList, priceDiscount, salePrice, quantity, wholeSalePrice }) => {
-					const findRow = wholeSalePrice.find(el => el.from <= quantity && el.to >= quantity);
+					const findRow = wholeSalePrice && wholeSalePrice.length > 0 ?
+						wholeSalePrice.find(el => el.from <= quantity && el.to >= quantity) :
+						wholeSalePrice;
 					if (wholeSalePrice && wholeSalePrice.length > 0 &&
 						findRow) {
 						return twoDecimals(findRow.price * quantity) + acc;

@@ -281,7 +281,7 @@ function getWholeSalePrice() {
 			return acc;
 		}, []);
 	}
-	return prices.length > 0 ? prices[0] : {};
+	return prices.length > 0 ? prices : {};
 }
 
 function data() {
