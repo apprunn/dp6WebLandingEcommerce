@@ -78,6 +78,7 @@
 					v-for="product in listProducts"
 					:key="product.id"
 					:product="product"
+					:page-last="page"
 					/>
 			</section>
 			<p v-if="!loadingProducts && listProducts.length === 0" class="not-products">No se encontraron productos</p>
@@ -168,6 +169,11 @@ function updateProductCard(value) {
 function selectCategory() {
 	const categoriesEcommerceLocal = this.getLocalStorage('ecommerce::categories');
 	this.breadcrumbs = [];
+	const lastPage = this.getLocalStorage('last-page-category');
+	if (lastPage && lastPage > 0) {
+		this.page = lastPage;
+	}
+	localStorage.removeItem('last-page-category');
 	this.setAttribute();
 	this.loadProduct();
 	this.categories = this.getCategories.length === 0 ? categoriesEcommerceLocal : this.getCategories;

@@ -209,7 +209,11 @@ function buyProduct() {
 
 function goToProduct({ slug, id }) {
 	const params = { id: slug || id };
-	this.goTo('detail-product', { params });
+	let query = {};
+	if (this.$route.name === 'category') {
+		query = { pageLast: this.pageLast };
+	}
+	this.goTo('detail-product', { params, query });
 }
 
 function goToCategories(item) {
@@ -341,6 +345,7 @@ export default {
 			default: () => {},
 			type: Object,
 		},
+		pageLast: [String, Number],
 	},
 };
 </script>

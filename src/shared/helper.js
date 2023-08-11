@@ -35,7 +35,6 @@ function noStock(product) {
 }
 
 function stockGreaterThanCero(product) {
-	debugger;
 	if (isComposed(product)) {
 		const { stockComposite } = product;
 		return stockComposite === 0;
