@@ -101,6 +101,10 @@ async function created() {
 		// localStorage.setItem(`${process.env.STORAGE_USER_KEY}::orderExternal`, orderId);
 		this.addToCar();
 	}
+	if (this.$route.query.pageLast) {
+		const lastPage = JSON.stringify(this.$route.query.pageLast);
+		localStorage.setItem('last-page-category', lastPage);
+	}
 }
 
 function addToCar() {
