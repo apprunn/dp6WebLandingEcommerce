@@ -102,7 +102,11 @@
 			<a href="#" class="btn" @click.prevent="getMap()">Ubicar en el Mapa</a>
 		</div>
 		<div class="map mx-2 my-1 map-field" v-if="showMap">
-			<map-component :zoom="16" :markers="[{location: {lat: newAddress.latitude, lng: newAddress.longitude},}]" :location="{lat: newAddress.latitude, lng: newAddress.longitude}" :center="{lat: newAddress.latitude, lng: newAddress.longitude}"/>
+			<map-component
+				:zoom="16"
+				:markers="[{location: {lat: newAddress.latitude, lng: newAddress.longitude},}]"
+				:location="{lat: newAddress.latitude, lng: newAddress.longitude}"
+				:center="{lat: newAddress.latitude, lng: newAddress.longitude}"/>
 		</div>	
 	</form>
 </template>

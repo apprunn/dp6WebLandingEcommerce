@@ -4,7 +4,7 @@ export default function (Vue) {
 	Vue.use(VueGoogleMaps, {
 		load: {
 			key: process.env.GOOGLE_MAP_API_KEY,
-			libraries: 'places', // This is required if you use the Autocomplete plugin
+			libraries: 'places,geometry', // This is required if you use the Autocomplete plugin
 		},
 		// installComponents: true,
 		// If you intend to programmatically custom event listener code
