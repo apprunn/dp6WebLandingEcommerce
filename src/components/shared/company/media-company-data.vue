@@ -53,7 +53,7 @@ export default {
 		font-size: 8px;
 		margin-left: 6px;
 		max-width: 80px;
-    	overflow: auto;
+    	overflow: hidden;
     	text-overflow: initial;
 	}
 }
