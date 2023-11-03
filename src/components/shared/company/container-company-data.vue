@@ -63,14 +63,18 @@ export default {
 	}
 
 	.container-company-data {
+
 		align-items: center;
 		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		// padding: 10px 15px;
 		height: 86px;
 		justify-content: space-around;
 		width: 901px;
 		
 		@media screen and (max-width: 860px) {
-			height: 52px;
+			min-height: 52px;
 			width: 95%;
 		}
 	}

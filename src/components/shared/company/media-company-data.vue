@@ -34,7 +34,6 @@ export default {
 	display: flex;
 	flex: 1 1 33.3%;
 	justify-content: center;
-	padding: 0 30px;
 
 	@media (max-width: 860px) {
 		padding: 0 9px;
@@ -44,17 +43,17 @@ export default {
 .text-company-data {
 	color: color(white);
 	margin: 0 0 0 9px;
-	max-width: 290px;
+	// max-width: 290px;
     overflow: hidden;
-    text-overflow: ellipsis;
+    // text-overflow: ellipsis;
     white-space: nowrap;
 
 	@media (max-width: 860px) {
-		font-size: 8px;
-		margin-left: 6px;
-		max-width: 80px;
-    	overflow: hidden;
-    	text-overflow: initial;
+		font-size: 12px;
+		// margin-left: 6px;
+		// max-width: 80px;
+    	// overflow: hidden;
+    	// text-overflow: initial;
 	}
 }
 
