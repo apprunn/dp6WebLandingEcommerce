@@ -405,7 +405,7 @@ export default {
 .section-product-card {
 	display: grid;
 	grid-auto-rows: minmax(min-content, max-content);
-	grid-template-columns: repeat(auto-fill, minmax(214px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
 
 	@media (max-width: 986px) {
 		margin: 0;
