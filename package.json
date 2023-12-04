@@ -46,7 +46,7 @@
     "copy-webpack-plugin": "4.6.0",
     "css-loader": "^0.28.11",
     "cssnano": "^3.10.0",
-    "cypress": "^4.12.1",
+    "cypress": "^13.6.0",
     "dotenv": "4.0.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^11.1.3",
