@@ -9,24 +9,24 @@
 >
 		<media-company-data
 			v-if="!indeterminate"
-			image="https://s3.amazonaws.com/apprunn-acl/COM-PRU-01/ARQ88/image/customer-service.png"
-			image-height="30"
+			image="https://apprunn-acl.s3.amazonaws.com/icons/phone-icon.svg"
+			image-height="20"
 			border-right="#ffffff"
 			family="medium"
 			:description="getCommerceData.phone"
 		></media-company-data>
 		<media-company-data
 			v-if="!indeterminate"
-			image="https://s3.amazonaws.com/apprunn-acl/COM-PRU-01/ARQ88/image/address.svg"
-			image-height="32"
+			image="https://apprunn-acl.s3.amazonaws.com/icons/location-icon.svg"
+			image-height="20"
 			border-right="#ffffff"
 			family="medium"
 			:description="getCommerceData.address"
 		></media-company-data>
 		<media-company-data
 			v-if="!indeterminate"
-			image="https://s3.amazonaws.com/apprunn-acl/COM-PRU-01/ARQ88/image/open-email.svg"
-			image-height="29"
+			image="https://apprunn-acl.s3.amazonaws.com/icons/open-email-icon.svg"
+			image-height="20"
 			family="medium"
 			:description="getCommerceData.email"
 		></media-company-data>
