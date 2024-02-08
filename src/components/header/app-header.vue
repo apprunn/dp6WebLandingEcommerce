@@ -17,7 +17,7 @@
 						{ 'loading': indeterminate },
 					]"
 				>
-					<router-link to="/" class="link-logo" v-if="!indeterminate">
+					<router-link to="/" class="link-logo" v-if="!indeterminate" @click.native="handleHomeClick">
 						<img
 							v-if="logo.urlImage"
 							:src="logo.urlImage"
@@ -169,6 +169,13 @@ function goToFavorites() {
 	}
 }
 
+function handleHomeClick(event) {
+	if (this.$route.path === '/') {
+		event.preventDefault();
+		window.location.reload();
+	}
+}
+
 function data() {
 	return {
 		imagesButton: [
@@ -243,6 +250,7 @@ export default {
 		searchProduct,
 		updateFilter,
 		toogleSearch,
+		handleHomeClick,
 	},
 	mounted,
 	props: {

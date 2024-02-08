@@ -66,14 +66,6 @@ export default {
 		cleanInput,
 		focusInput,
 	},
-	watch: {
-		$route(to) {
-			if (to.path === '/') {
-				this.cleanInput();
-				this.$emit('search', '');
-			}
-		},
-	},
 };
 </script>
 <style lang="scss" scoped>
