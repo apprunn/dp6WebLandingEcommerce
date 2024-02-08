@@ -70,6 +70,7 @@ export default {
 		$route(to) {
 			if (to.path === '/') {
 				this.cleanInput();
+				this.$emit('search', '');
 			}
 		},
 	},
