@@ -66,6 +66,13 @@ export default {
 		cleanInput,
 		focusInput,
 	},
+	watch: {
+		$route(to) {
+			if (to.path === '/') {
+				this.cleanInput();
+			}
+		},
+	},
 };
 </script>
 <style lang="scss" scoped>
