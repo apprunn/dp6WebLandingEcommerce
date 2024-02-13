@@ -66,6 +66,14 @@ export default {
 		cleanInput,
 		focusInput,
 	},
+	watch: {
+		$route(to) {
+			if (to.name === 'page-home') {
+				this.cleanInput();
+				// this.$emit('search', '');
+			}
+		},
+	},
 };
 </script>
 <style lang="scss" scoped>

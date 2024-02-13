@@ -17,14 +17,15 @@
 						{ 'loading': indeterminate },
 					]"
 				>
-					<router-link to="/" class="link-logo" v-if="!indeterminate">
+					<!-- <router-link to="/" class="link-logo" v-if="!indeterminate"> -->
 						<img
 							v-if="logo.urlImage"
 							:src="logo.urlImage"
 							alt="Logo de compañía"
 							class="logo-image"
+							@click="goToHome()"
 						/>
-					</router-link>
+					<!-- </router-link> -->
 				</h1>
 				<div 
 					class="container-search flex"
@@ -243,6 +244,11 @@ export default {
 		searchProduct,
 		updateFilter,
 		toogleSearch,
+		goToHome() {
+			// this.$store.dispatch('updateProductSelect', null);
+			this.searchProduct('');
+			this.goTo('page-home');
+		},
 	},
 	mounted,
 	props: {
