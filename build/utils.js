@@ -47,6 +47,8 @@ exports.cssLoaders = function (options) {
   }
 
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
+  const stylesDir = path.resolve(__dirname, '../src/stylesheets');
+
   return {
     css: generateLoaders(),
     postcss: generateLoaders(),
@@ -55,7 +57,7 @@ exports.cssLoaders = function (options) {
 		scss: generateLoaders('sass').concat({
 			loader: 'sass-resources-loader',
 			options: {
-				resources: path.resolve(__dirname, '../src/stylesheets/index.scss'),
+        resources: path.resolve(stylesDir, 'index.scss'),
 			},
 		}),
     stylus: generateLoaders('stylus'),
