@@ -60,8 +60,10 @@ Vue.use(VueAwesomeSwiper);
 const router = vueRouter(Vue);
 registerFilters(Vue);
 registerVuetify(Vue);
+Vue.prototype.$bus = new Vue();
 Vue.prototype.$imageUrl = process.env.S3_IMAGES_URL;
 Vue.prototype.$clientId = process.env.CLIENT_ID;
+Vue.prototype.$allowOrderStockNegative = process.env.CLIENT_ID;
 Vue.config.productionTip = false;
 Vue.mixin(globalMixin);
 
@@ -111,6 +113,10 @@ async function created() {
 		this.httpResponseSuccessInterceptor,
 		this.httpResponseInterceptor,
 	);
+	this.$bus.$on('LOAD_COMMERCE_INFO', (commerceData) => {
+		Vue.prototype.$commerceData = commerceData;
+		Vue.prototype.$allowOrderStockNegative = commerceData.settings.allowOrderStockNegative;
+	});
 }
 
 /* eslint-disable no-new */

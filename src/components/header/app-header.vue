@@ -9,6 +9,7 @@
 					@change-menu="changeMenu"
 				/>
 			</div>
+			{{  $allowOrderStockNegative }}
 			<div class="flex container-header-logo">
 				<h1
 					:class="[
