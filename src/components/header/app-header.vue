@@ -8,8 +8,7 @@
 					:menu="menu"
 					@change-menu="changeMenu"
 				/>
-			</div>
-			{{  $allowOrderStockNegative }}
+			</div>		
 			<div class="flex container-header-logo">
 				<h1
 					:class="[

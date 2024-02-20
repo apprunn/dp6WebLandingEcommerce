@@ -63,7 +63,6 @@ registerVuetify(Vue);
 Vue.prototype.$bus = new Vue();
 Vue.prototype.$imageUrl = process.env.S3_IMAGES_URL;
 Vue.prototype.$clientId = process.env.CLIENT_ID;
-Vue.prototype.$allowOrderStockNegative = process.env.CLIENT_ID;
 Vue.config.productionTip = false;
 Vue.mixin(globalMixin);
 
@@ -114,8 +113,9 @@ async function created() {
 		this.httpResponseInterceptor,
 	);
 	this.$bus.$on('LOAD_COMMERCE_INFO', (commerceData) => {
+		console.log({ commerceData });
 		Vue.prototype.$commerceData = commerceData;
-		Vue.prototype.$allowOrderStockNegative = commerceData.settings.allowOrderStockNegative;
+		Vue.prototype.$allowOrderStockNegative = commerceData.company.settings.allowOrderStockNegative;
 	});
 }
 
