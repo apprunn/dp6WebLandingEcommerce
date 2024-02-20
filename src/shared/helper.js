@@ -2,6 +2,7 @@ import { format } from 'date-fns';
 import { getDeeper, isEmpty } from '@/shared/lib';
 import waysDeliveries from '@/shared/enums/waysDeliveries';
 import TypeProduct from '@/shared/enums/typeProduct';
+import Vue from 'vue';
 
 function isComposed(product) {
 	const composeCode = getDeeper('typeInfo.code')(product);
@@ -19,6 +20,10 @@ function isVariation(product) {
 }
 
 function noStock(product) {
+	const allowOrderStockNegative = Vue.prototype.$allowOrderStockNegative;
+	if (allowOrderStockNegative) {
+		return false;
+	}
 	if (isComposed(product)) {
 		const { stockComposite } = product;
 		return stockComposite === 0;
