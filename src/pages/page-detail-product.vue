@@ -382,7 +382,7 @@ function inputQuantity(num) {
 }
 
 function checkValidQuantity(quantity) {
-	if (this.productInstance.isService) {
+	if (this.productInstance.isService || this.$allowOrderStockNegative) {
 		return true;
 	}
 	const { stock } = this.productInstance;

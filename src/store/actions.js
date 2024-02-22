@@ -43,7 +43,7 @@ function addProductToBuyCar(context, product) {
 		const { stock, stockWarehouse, stockComposite } = currentProduct;
 		const finalStock = helper.isComposed(currentProduct) ?
 			stockComposite : (stockWarehouse || stock);
-		let quantity = currentProduct.quantity + (newProduct.quantity - currentProduct.quantity);
+		let quantity = currentProduct.quantity + newProduct.quantity;
 		quantity = finalStock > quantity ? quantity : finalStock;
 		productsSelected[index].quantity = quantity;
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);

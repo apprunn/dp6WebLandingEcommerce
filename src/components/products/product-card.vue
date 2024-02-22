@@ -171,8 +171,10 @@ function addToCar() {
 		productSelected.unitSelected = this.product.unitId;
 		productSelected.wholeSalePrice = this.WholeSalePrice || [];
 		productSelected.priceDiscountOrigin = this.product.priceDiscount || 0;
-		this.disabledAdd = this.quantityAddProduct >= productSelected.stockWarehouse;
-		if (this.quantityAddProduct >= productSelected.stockWarehouse) {
+		const StockSoldOut = this.quantityAddProduct >= productSelected.stockWarehouse &&
+			!this.$allowOrderStockNegative;
+		this.disabledAdd = StockSoldOut;
+		if (StockSoldOut) {
 			this.showNotStock = true;
 		}
 		this.$store.dispatch('addProductToBuyCar', productSelected);
