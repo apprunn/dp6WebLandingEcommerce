@@ -8,7 +8,7 @@
 					:menu="menu"
 					@change-menu="changeMenu"
 				/>
-			</div>
+			</div>		
 			<div class="flex container-header-logo">
 				<h1
 					:class="[

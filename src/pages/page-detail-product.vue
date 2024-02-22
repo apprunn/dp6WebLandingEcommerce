@@ -377,7 +377,7 @@ function inputQuantity(num) {
 		this.productInstance.updateQuantity(num);
 		this.productDetails = { ...this.productInstance.getProductDetails() };
 	} else {
-		this.showNotification(`Cantidad: ${num} no disponible`, 'primary');
+		this.showNotification(`Cantidad: ${num} no disponible inputQuantity`, 'primary');
 	}
 }
 

@@ -248,6 +248,7 @@ const asyncActions = {
 		const url = `com-ecommerce-companies/${process.env.COMMERCE_CODE}/public`;
 		const { data: commerceData } = process.env.SALES_READ_REPORT ?
 			await context.$httpSalesReadPublic.get(url) : await context.$httpSalesPublic.get(url);
+		context.$bus.$emit('LOAD_COMMERCE_INFO', commerceData);
 		context.setLocalData(`${process.env.STORAGE_USER_KEY}::ecommerce-data`, commerceData);
 		commit('SET_COMMERCE_DATA', commerceData);
 		commit('SET_FLAG_NOT_VALID_EMAIL_USER', commerceData.settings.flagNotValidEmailUser);

@@ -60,6 +60,7 @@ Vue.use(VueAwesomeSwiper);
 const router = vueRouter(Vue);
 registerFilters(Vue);
 registerVuetify(Vue);
+Vue.prototype.$bus = new Vue();
 Vue.prototype.$imageUrl = process.env.S3_IMAGES_URL;
 Vue.prototype.$clientId = process.env.CLIENT_ID;
 Vue.config.productionTip = false;
@@ -111,6 +112,11 @@ async function created() {
 		this.httpResponseSuccessInterceptor,
 		this.httpResponseInterceptor,
 	);
+	this.$bus.$on('LOAD_COMMERCE_INFO', (commerceData) => {
+		console.log({ commerceData });
+		Vue.prototype.$commerceData = commerceData;
+		Vue.prototype.$allowOrderStockNegative = commerceData.company.settings.allowOrderStockNegative;
+	});
 }
 
 /* eslint-disable no-new */
