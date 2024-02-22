@@ -133,7 +133,7 @@ function clickQuantity(val) {
 	quantity = quantity < 1 ? 1 : quantity;
 	this.quantityStock = parseInt(unit.quantity * quantity, 10);
 	if (this.showUnity) {
-		if (quantity >= this.stockAvaible) {
+		if (quantity >= this.stockAvaible && !this.$allowOrderStockNegative) {
 			this.maxQuantity = true;
 			this.showNotification('No cuenta con la disponibilidad de stock del producto', 'warning');
 		} else {
@@ -141,7 +141,7 @@ function clickQuantity(val) {
 		}
 	}
 	// this.product.priceDiscountOrigin = this.product.priceDiscount;
-	if (this.quantityStock > this.product.stockWarehouse) {
+	if (this.quantityStock > this.product.stockWarehouse && !this.$allowOrderStockNegative) {
 		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`, 'warning');
 	} else {
 		const rangeApply = [wholeSalePrice].find(ur => quantity >= ur.from && quantity <= ur.to);
