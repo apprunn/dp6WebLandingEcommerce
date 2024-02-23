@@ -40,6 +40,10 @@ function noStock(product) {
 }
 
 function stockGreaterThanCero(product) {
+	const allowOrderStockNegative = Vue.prototype.$allowOrderStockNegative;
+	if (allowOrderStockNegative) {
+		return false;
+	}
 	if (isComposed(product)) {
 		const { stockComposite } = product;
 		return stockComposite === 0;
