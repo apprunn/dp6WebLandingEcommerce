@@ -2,6 +2,8 @@ import { setNewProperty } from '@/shared/lib';
 import waysDeliveries from '@/shared/enums/waysDeliveries';
 // import orderStatesEnum from '@/shared/enums/orderStateId';
 import helper from '@/shared/helper';
+import Vue from 'vue';
+
 
 function clearUser(context) {
 	context.commit('clearUser');
@@ -32,6 +34,7 @@ function setUser(context, user) {
 }
 
 function addProductToBuyCar(context, product) {
+	const allowOrderStockNegative = Vue.prototype.$allowOrderStockNegative;
 	const newProduct = product.quantity ? product : setNewProperty('quantity', 1)(product);
 	const localS = localStorage.getItem('ecommerce::product-select');
 	const productsSelected = localS !== null ? JSON.parse(localStorage.getItem('ecommerce::product-select')) : [];
@@ -44,7 +47,7 @@ function addProductToBuyCar(context, product) {
 		const finalStock = helper.isComposed(currentProduct) ?
 			stockComposite : (stockWarehouse || stock);
 		let quantity = currentProduct.quantity + newProduct.quantity;
-		quantity = finalStock > quantity ? quantity : finalStock;
+		quantity = finalStock > quantity || allowOrderStockNegative ? quantity : finalStock;
 		productsSelected[index].quantity = quantity;
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);
 		context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected);
