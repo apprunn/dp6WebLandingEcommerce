@@ -46,6 +46,10 @@
 							<h4>Correo: <span>
 								{{account.additionalInformation && account.additionalInformation.documentEmail}}
 							</span></h4>
+							<h4 v-if="account.accountNumberCi">
+								Número de cuenta interbancario: <span>
+								{{account.accountNumberCi}}
+							</span></h4>
 						</div>
 					</li>
 				</ul>
