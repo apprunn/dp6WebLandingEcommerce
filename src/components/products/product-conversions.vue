@@ -53,6 +53,11 @@ function conversionsChanges(conversions) {
 		newP.isSelected = index === 0;
 		return newP;
 	});
+	if (this.$flagShowBaseUnit === 1) {
+		this.conversionsComputed = this.conversionsComputed.filter(p => p.name !== 'UNIDAD');
+	} else if (this.$flagShowBaseUnit === 2) {
+		this.conversionsComputed = this.conversionsComputed.filter(p => p.name === 'UNIDAD');
+	}
 }
 
 function selectedConversion(item)	{
