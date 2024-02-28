@@ -371,10 +371,13 @@ export default {
 	}
 
 	.product-detail-description {
-		text-transform: lowercase;
 		@media (max-width: 800px) {
 			display: none;
 		}
+	}
+
+	.product-detail-description::first-letter {
+		text-transform: uppercase;
 	}
 	.product-detail-code {
 		color: color(base);

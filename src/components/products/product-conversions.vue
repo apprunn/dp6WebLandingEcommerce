@@ -43,20 +43,16 @@ function conversionsChanges(conversions) {
 			Object.keys(conversions),
 		);
 	}
-	if (this.showUnit) {
-		this.conversionsComputed = conversionsFormatted;
-	} else {
-		this.conversionsComputed = [].concat(this.defaultUnit, conversionsFormatted);
-	}
+	this.conversionsComputed = [].concat(this.defaultUnit, conversionsFormatted);
 	this.conversionsComputed = this.conversionsComputed.map((p, index) => {
 		const newP = { ...p };
 		newP.isSelected = index === 0;
 		return newP;
 	});
 	if (this.$flagShowBaseUnit === 1) {
-		this.conversionsComputed = this.conversionsComputed.filter(p => p.name !== 'UNIDAD');
+		this.conversionsComputed = this.conversionsComputed.filter(p => p.id !== this.defaultUnit.id);
 	} else if (this.$flagShowBaseUnit === 2) {
-		this.conversionsComputed = this.conversionsComputed.filter(p => p.name === 'UNIDAD');
+		this.conversionsComputed = this.conversionsComputed.filter(p => p.id === this.defaultUnit.id);
 	}
 }
 
