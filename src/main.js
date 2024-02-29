@@ -113,9 +113,10 @@ async function created() {
 		this.httpResponseInterceptor,
 	);
 	this.$bus.$on('LOAD_COMMERCE_INFO', (commerceData) => {
-		console.log({ commerceData });
+		// console.log({ commerceData });
 		Vue.prototype.$commerceData = commerceData;
 		Vue.prototype.$allowOrderStockNegative = commerceData.company.settings.allowOrderStockNegative;
+		Vue.prototype.$flagShowBaseUnit = commerceData.company.settings.flagShowBaseUnit;
 	});
 }
 
