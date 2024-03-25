@@ -53,6 +53,9 @@ Now you can start the server, if you have any problems please ask @azulchic. She
 ## Build Setup
 
 ```bash
+#Node version
+14.18.2
+
 # install dependencies
 npm install
 
