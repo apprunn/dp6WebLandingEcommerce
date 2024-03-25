@@ -34,6 +34,7 @@ function setUser(context, user) {
 }
 
 function addProductToBuyCar(context, product) {
+	// console.log('add');
 	const allowOrderStockNegative = Vue.prototype.$allowOrderStockNegative;
 	const newProduct = product.quantity ? product : setNewProperty('quantity', 1)(product);
 	const localS = localStorage.getItem('ecommerce::product-select');
@@ -58,6 +59,8 @@ function addProductToBuyCar(context, product) {
 }
 
 function removeProductToBuyCar(context, product) {
+	// console.log('add');
+
 	const newProduct = product.quantity ? product : setNewProperty('quantity', 1)(product);
 	const productsSelected = JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
 	const index = productsSelected.findIndex(

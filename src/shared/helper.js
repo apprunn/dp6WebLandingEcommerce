@@ -268,6 +268,33 @@ function copyFn(node) {
 	window.getSelection().removeRange(range);
 }
 
+const getRangesOfProduct = (product) => {
+	const [, priceList] = Object.entries(product.priceList).flat()
+	return priceList.ranges
+}
+
+const getPriceByRange = ({
+	ranges,
+	originalPrice,
+	quantity
+  }) => {
+  
+	const sortedRanges = ranges.toSorted((a, b) => a.from - b.from)
+  
+	if(sortedRanges.length === 0) return originalPrice
+	
+	const index = sortedRanges.findIndex(
+	  range => range.from <= quantity && range.to >= quantity
+	)
+	
+	console.log(quantity);
+
+	if(index === -1) return originalPrice
+	
+	return sortedRanges[index].price
+	
+}
+
 const methods = {
 	buildOrderBody,
 	copyFn,
@@ -286,6 +313,8 @@ const methods = {
 	showDownloadDialog,
 	stockGreaterThanCero,
 	updateOrderDetailsInLocalStorage,
+	getRangesOfProduct,
+	getPriceByRange
 };
 
 export default methods;

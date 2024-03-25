@@ -29,13 +29,13 @@
 					:style="`color: ${globalColors.primary};`"
 					class="product-title">P.U.</p>
 				<!-- <p class="product-price">{{getCurrencySymbol}} {{ (product.priceDiscount || product.salePrice || product.price) | currencyFormat }}</p> -->
-				<p class="product-price" v-if="product.wholeSalePrice && product.wholeSalePrice.length > 0 &&
+				<!-- <p class="product-price" v-if="product.wholeSalePrice && product.wholeSalePrice.length > 0 &&
 					product.wholeSalePrice[0].price !== 0 &&
 					product.quantity >= product.wholeSalePrice[0].from &&
 					product.quantity <= product.wholeSalePrice[0].to">
 					{{getCurrencySymbol}} {{ product.wholeSalePrice[0].price | currencyFormat }}
-				</p>
-				<p class="product-price" v-else>{{getCurrencySymbol}} {{ product.priceDiscount | currencyFormat }}</p>
+				</p> -->
+				<p class="product-price">{{getCurrencySymbol}} {{ product.price | currencyFormat }}</p>
 			</div>
 			<div class="quantity">
 				<p
@@ -55,14 +55,9 @@
 				<p
 					:style="`color: ${globalColors.primary};`"
 					class="product-title">Total</p>
-				<p class="product-total"
-				v-if="product.wholeSalePrice && product.wholeSalePrice.length > 0 &&
-					Number(product.quantity) >= product.wholeSalePrice[0].from &&
-					Number(product.quantity) <= product.wholeSalePrice[0].to &&
-					product.wholeSalePrice[0].price !== 0">
-					{{getCurrencySymbol}}{{Number(product.quantity) * Number(product.wholeSalePrice[0].price) | currencyFormat}}
+				<p class="product-total">
+					{{getCurrencySymbol}}{{Number(product.quantity) * Number(product.price) | currencyFormat}}
 				</p>	
-				<p class="product-total" v-else>{{getCurrencySymbol}} {{product.total | currencyFormat}}</p>
 			</div>
 			<!-- <div class="comments">
 				<text-area

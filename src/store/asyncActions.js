@@ -38,10 +38,17 @@ const asyncActions = {
 			context.$httpProductsPublic.get('products-public', { params: completeParams }),
 		);
 		const [{ data: products, headers }] = await Promise.all(request);
+
+		const mappedProducts = [...products].map(el => ({
+			...el,
+			originalPrice: el.price,
+		}));
+
+
 		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
 		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
 			getters.getCommerceData.settings.salPriceListId;
-		const setUpDateInProducts = updateProducts(products, commercePriceListId, getters);
+		const setUpDateInProducts = updateProducts(mappedProducts, commercePriceListId, getters);
 		let newProducts = null;
 		if (setUpDateInProducts.length > 20) {
 			newProducts = [].concat(state.products.list, setUpDateInProducts);
