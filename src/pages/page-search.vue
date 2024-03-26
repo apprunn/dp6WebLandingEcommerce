@@ -142,11 +142,7 @@ async function loadProduct() {
 			await this.$httpProductsPublic.get(url, { params });
 		const commercePriceListId = this.getCommerceData.settings.salPriceListId;
 
-		const mappedProducts = [...products].map(el => ({
-			...el,
-			originalPrice: el.price,
-		}));
-		this.listProducts = mappedProducts.map(
+		this.listProducts = products.map(
 			compose(
 				setNewProperty('price', product => helper.setPrices(product, commercePriceListId, 'price')),
 				setNewProperty('priceDiscount', product => helper.setPrices(product, commercePriceListId, 'priceDiscount')),

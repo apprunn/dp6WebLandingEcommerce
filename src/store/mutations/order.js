@@ -44,13 +44,18 @@ const orderMutation = {
 		} else if (quantity > stockWarehouse) {
 			context.showNotification(`Cantidad: ${quantity} no disponible`, 'primary');
 		}
+
+		const indexOriginal = state.originalProducts.findIndex(el => el.id === id);
 		const ranges = h.getRangesOfProduct({ ...products[index] });
+		console.log(state);
 		const newPrice = h.getPriceByRange({
 			ranges,
 			quantity: products[index].quantity,
-			originalPrice: 80,
+			originalPrice: state.originalProducts[indexOriginal].priceDiscount,
 		});
-		products[index].price = newPrice;
+
+
+		products[index].priceDiscount = newPrice;
 		Vue.set(state.order, 'products', [...products]);
 		localStorage.setItem('ecommerce::product-select', JSON.stringify([...products]));
 		orderMutation.UPDATE_ORDER_DETAILS_IF_EXIST(state, products);

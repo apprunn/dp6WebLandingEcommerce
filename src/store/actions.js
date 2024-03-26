@@ -34,7 +34,6 @@ function setUser(context, user) {
 }
 
 function addProductToBuyCar(context, product) {
-	// console.log('add');
 	const allowOrderStockNegative = Vue.prototype.$allowOrderStockNegative;
 	const newProduct = product.quantity ? product : setNewProperty('quantity', 1)(product);
 	const localS = localStorage.getItem('ecommerce::product-select');
@@ -43,6 +42,7 @@ function addProductToBuyCar(context, product) {
 		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
 	);
 	if (index > -1) {
+		const { state } = context;
 		const currentProduct = productsSelected[index];
 		const { stock, stockWarehouse, stockComposite } = currentProduct;
 		const finalStock = helper.isComposed(currentProduct) ?
@@ -50,6 +50,17 @@ function addProductToBuyCar(context, product) {
 		let quantity = currentProduct.quantity + newProduct.quantity;
 		quantity = finalStock > quantity || allowOrderStockNegative ? quantity : finalStock;
 		productsSelected[index].quantity = quantity;
+
+		const indexOriginal = state.originalProducts.findIndex(el => el.id === currentProduct.id);
+		const ranges = helper.getRangesOfProduct({ ...productsSelected[index] });
+		const newPrice = helper.getPriceByRange({
+			ranges,
+			quantity: productsSelected[index].quantity,
+			originalPrice: state.originalProducts[indexOriginal].priceDiscount,
+		});
+
+		productsSelected[index].priceDiscount = newPrice;
+
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);
 		context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected);
 	} else {
@@ -59,14 +70,13 @@ function addProductToBuyCar(context, product) {
 }
 
 function removeProductToBuyCar(context, product) {
-	// console.log('add');
-
 	const newProduct = product.quantity ? product : setNewProperty('quantity', 1)(product);
 	const productsSelected = JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
 	const index = productsSelected.findIndex(
 		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
 	);
 	if (index > -1) {
+		const { state } = context;
 		const currentProduct = productsSelected[index];
 		const { stock, stockWarehouse, stockComposite } = currentProduct;
 		const finalStock = helper.isComposed(currentProduct) ?
@@ -75,6 +85,15 @@ function removeProductToBuyCar(context, product) {
 		if (quantity > 0) {
 			quantity = finalStock > quantity ? quantity : finalStock;
 			productsSelected[index].quantity = quantity;
+			const indexOriginal = state.originalProducts.findIndex(el => el.id === currentProduct.id);
+			const ranges = helper.getRangesOfProduct({ ...productsSelected[index] });
+			const newPrice = helper.getPriceByRange({
+				ranges,
+				quantity: productsSelected[index].quantity,
+				originalPrice: state.originalProducts[indexOriginal].priceDiscount,
+			});
+			productsSelected[index].priceDiscount = newPrice;
+
 			context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);
 			context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected);
 		}
