@@ -159,7 +159,6 @@ function addToCar() {
 		this.showAdd = true;
 		this.quantityAddProduct += 1;
 		const productSelected = this.product;
-		console.log({ productSelected });
 		// const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
 		// productSelected.unitSelected = this.product.unitId;
 		// const commercePriceListId = user && user.salPriceListId ? user.salPriceListId : null;

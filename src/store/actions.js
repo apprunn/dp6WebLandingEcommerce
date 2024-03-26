@@ -42,7 +42,6 @@ function addProductToBuyCar(context, product) {
 		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
 	);
 	if (index > -1) {
-		const { state } = context;
 		const currentProduct = productsSelected[index];
 		const { stock, stockWarehouse, stockComposite } = currentProduct;
 		const finalStock = helper.isComposed(currentProduct) ?
@@ -51,12 +50,11 @@ function addProductToBuyCar(context, product) {
 		quantity = finalStock > quantity || allowOrderStockNegative ? quantity : finalStock;
 		productsSelected[index].quantity = quantity;
 
-		const indexOriginal = state.originalProducts.findIndex(el => el.id === currentProduct.id);
 		const ranges = helper.getRangesOfProduct({ ...productsSelected[index] });
 		const newPrice = helper.getPriceByRange({
 			ranges,
 			quantity: productsSelected[index].quantity,
-			originalPrice: state.originalProducts[indexOriginal].priceDiscount,
+			originalPrice: productsSelected[index].originalPrice,
 		});
 
 		productsSelected[index].priceDiscount = newPrice;
@@ -76,7 +74,6 @@ function removeProductToBuyCar(context, product) {
 		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
 	);
 	if (index > -1) {
-		const { state } = context;
 		const currentProduct = productsSelected[index];
 		const { stock, stockWarehouse, stockComposite } = currentProduct;
 		const finalStock = helper.isComposed(currentProduct) ?
@@ -85,12 +82,11 @@ function removeProductToBuyCar(context, product) {
 		if (quantity > 0) {
 			quantity = finalStock > quantity ? quantity : finalStock;
 			productsSelected[index].quantity = quantity;
-			const indexOriginal = state.originalProducts.findIndex(el => el.id === currentProduct.id);
 			const ranges = helper.getRangesOfProduct({ ...productsSelected[index] });
 			const newPrice = helper.getPriceByRange({
 				ranges,
 				quantity: productsSelected[index].quantity,
-				originalPrice: state.originalProducts[indexOriginal].priceDiscount,
+				originalPrice: productsSelected[index].originalPrice,
 			});
 			productsSelected[index].priceDiscount = newPrice;
 
