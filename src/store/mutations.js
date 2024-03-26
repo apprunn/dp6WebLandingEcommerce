@@ -34,6 +34,7 @@ function UPDATE_POLL_PROGRESS(state, number) {
 
 function SET_PRODUCTS(state, products) {
 	Vue.set(state.products, 'list', products);
+	Vue.set(state, 'originalProducts', products);
 }
 
 function SET_PRODUCT_TO_BUY(state, product) {

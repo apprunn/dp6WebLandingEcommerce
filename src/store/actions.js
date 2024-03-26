@@ -49,6 +49,16 @@ function addProductToBuyCar(context, product) {
 		let quantity = currentProduct.quantity + newProduct.quantity;
 		quantity = finalStock > quantity || allowOrderStockNegative ? quantity : finalStock;
 		productsSelected[index].quantity = quantity;
+
+		const ranges = helper.getRangesOfProduct({ ...productsSelected[index] });
+		const newPrice = helper.getPriceByRange({
+			ranges,
+			quantity: productsSelected[index].quantity,
+			originalPrice: productsSelected[index].originalPrice,
+		});
+
+		productsSelected[index].priceDiscount = newPrice;
+
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);
 		context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected);
 	} else {
@@ -72,6 +82,14 @@ function removeProductToBuyCar(context, product) {
 		if (quantity > 0) {
 			quantity = finalStock > quantity ? quantity : finalStock;
 			productsSelected[index].quantity = quantity;
+			const ranges = helper.getRangesOfProduct({ ...productsSelected[index] });
+			const newPrice = helper.getPriceByRange({
+				ranges,
+				quantity: productsSelected[index].quantity,
+				originalPrice: productsSelected[index].originalPrice,
+			});
+			productsSelected[index].priceDiscount = newPrice;
+
 			context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);
 			context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected);
 		}
