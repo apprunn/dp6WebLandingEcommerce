@@ -340,6 +340,15 @@ function newRoute() {
 }
 
 function clickQuantity(value) {
+	if (this.product.priceDiscount <= 0) {
+		this.showNotification(
+			'El producto no se puede agregar al carrito, porque su precio es 0.',
+			'error',
+			null,
+		);
+		return;
+	}
+
 	let num = this.product.quantity;
 	const newProductdetail = { ...this.product };
 	if (value === 'less' && num === 1) {

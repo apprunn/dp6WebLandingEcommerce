@@ -178,6 +178,14 @@ function isService() {
 }
 
 function addToCar() {
+	if (this.data.priceDiscount <= 0) {
+		this.showNotification(
+			'El producto no se puede agregar al carrito, porque su precio es 0.',
+			'error',
+			null,
+		);
+		return;
+	}
 	if (!this.noStock) {
 		this.$store.dispatch('addProductToBuyCar', this.data);
 		this.$emit('open-confirm-modal');
