@@ -279,16 +279,20 @@ const getPriceByRange = ({
 	quantity
 }) => {
   
+	if(ranges.length === 0) return originalPrice
+
 	const sortedRanges = ranges.toSorted((a, b) => a.from - b.from)
   
-	if(sortedRanges.length === 0) return originalPrice
-	
 	const index = sortedRanges.findIndex(
 	  range => range.from <= quantity && range.to >= quantity
 	)
 
 	if(index === -1) return originalPrice
 	
+	if(sortedRanges[index].to === 0 || sortedRanges[index].price === 0 ){
+		return originalPrice
+	}
+
 	return sortedRanges[index].price
 	
 }

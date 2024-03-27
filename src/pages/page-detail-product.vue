@@ -188,6 +188,7 @@ async function loadData(id) {
 		return newImage;
 	});
 	this.product.quantity = 1;
+	this.product.originalPrice = this.product.price;
 	this.productFather = { ...this.product };
 	this.tabs = this.product.sections.map(p => p.name);
 	this.tabs.push('Comentarios');
