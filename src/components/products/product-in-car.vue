@@ -57,14 +57,16 @@
 				<p
 					:style="`color: ${globalColors.primary};`"
 					class="product-title">Total</p>
-				<p class="product-total"
+				<!-- <p class="product-total"
 				v-if="product.wholeSalePrice && product.wholeSalePrice.length > 0 &&
 					Number(product.quantity) >= product.wholeSalePrice[0].from &&
 					Number(product.quantity) <= product.wholeSalePrice[0].to &&
 					product.wholeSalePrice[0].price !== 0">
 					{{getCurrencySymbol}}{{Number(product.quantity) * Number(product.wholeSalePrice[0].price) | currencyFormat}}
 				</p>	
-				<p class="product-total" v-else>{{getCurrencySymbol}} {{product.total | currencyFormat}}</p>
+				<p class="product-total" v-else>{{getCurrencySymbol}} {{product.total | currencyFormat}}</p> -->
+				<p class="product-total">{{getCurrencySymbol}} {{product.total | currencyFormat}}</p>
+
 			</div>
 			<!-- <div class="comments">
 				<text-area
@@ -126,7 +128,7 @@ function showComments() {
 
 function clickQuantity(val) {
 	let { quantity } = this.product;
-	const { unit, wholeSalePrice } = this.product;
+	const { unit } = this.product;
 	const opt = {
 		more: 1,
 		less: -1,
@@ -146,12 +148,12 @@ function clickQuantity(val) {
 	if (this.quantityStock > this.product.stockWarehouse && !this.$allowOrderStockNegative) {
 		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`, 'warning');
 	} else {
-		const rangeApply = [wholeSalePrice].find(ur => quantity >= ur.from && quantity <= ur.to);
-		if (rangeApply) {
-			this.product.priceDiscount = rangeApply.price;
-		} else {
-			this.product.priceDiscount = this.product.priceDiscountOrigin;
-		}
+		// const rangeApply = [wholeSalePrice].find(ur => quantity >= ur.from && quantity <= ur.to);
+		// if (rangeApply) {
+		// 	this.product.priceDiscount = rangeApply.price;
+		// } else {
+		// this.product.priceDiscount = this.product.priceDiscountOrigin;
+		// }
 		this.$set(this.product, 'quantity', quantity);
 		this.$forceUpdate();
 		this.$store.commit('UPDATE_PRODUCTS_TO_BUY', { product: this.product, context: this });
