@@ -2,7 +2,7 @@
 <div class="cart-continer">
 	<v-btn :style="activeStyle" class="btn-add-cart" depressed small type="button" @click="removeCarEvent"><span class="txt-icon-min"></span></v-btn>
 	<!-- <button :style="activeStyle" class="btn-add-cart" @click="removeCarEvent"> <span class="txt-icon-min"></span></button> -->
-	<v-btn :style="activeStyle" :disabled="disabledAdd" depressed small type="button" class="btn-add-cart" @click="addCarEvent"><span class="txt-icon-plus"> + </span></v-btn>
+	<v-btn :style="activeStyle" depressed small type="button" class="btn-add-cart" @click="addCarEvent"><span class="txt-icon-plus"> + </span></v-btn>
 	<!-- <button :style="activeStyle" class="btn-add-cart" @click="addCarEvent"> <span class="txt-icon-plus"> + </span></button> -->
 </div>
 	
