@@ -39,7 +39,9 @@ const getters = {
 						quantity <= wholeSalePrice[0].to) {
 						return twoDecimals(wholeSalePrice[0].price * quantity) + acc;
 					}
-					return twoDecimals((priceDiscount || salePrice || priceList.price) * quantity) + acc;
+					const priceToShow = (priceDiscount || salePrice || priceList.price) || priceDiscount;
+
+					return twoDecimals(priceToShow * quantity) + acc;
 				}, 0);
 		}
 		return 0;

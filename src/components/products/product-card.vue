@@ -155,6 +155,15 @@ function mounted() {
 }
 
 function addToCar() {
+	if (this.product.priceDiscount <= 0) {
+		this.showNotification(
+			'El producto no se puede agregar al carrito, porque su precio es 0.',
+			'error',
+			null,
+		);
+		return;
+	}
+
 	if (!this.noStock) {
 		this.showAdd = true;
 		this.quantityAddProduct += 1;
