@@ -187,8 +187,15 @@ async function loadData(id) {
 		newImage.select = index === 0;
 		return newImage;
 	});
+	const { discount } = Object.entries(this.product.priceList).flat()[1];
+	let originalPrice = this.product.price;
+	if (discount > 0) {
+		originalPrice = (1 - (discount / 100)) * this.product.price;
+	}
+
 	this.product.quantity = 1;
-	this.product.originalPrice = this.product.price;
+	this.product.originalPrice = originalPrice;
+
 	this.productFather = { ...this.product };
 	this.tabs = this.product.sections.map(p => p.name);
 	this.tabs.push('Comentarios');

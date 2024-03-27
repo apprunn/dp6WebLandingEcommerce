@@ -141,7 +141,17 @@ async function loadProduct() {
 			? await this.$httpProductsReadPublic.get(url, { params }) :
 			await this.$httpProductsPublic.get(url, { params });
 		const commercePriceListId = this.getCommerceData.settings.salPriceListId;
-		const mappedProducts = products.map(el => ({ ...el, originalPrice: el.price }));
+		const mappedProducts = products.map((el) => {
+			const { discount } = Object.entries(el.priceList).flat()[1];
+			let originalPrice = el.price;
+
+			if (discount > 0) {
+				originalPrice = (1 - (discount / 100)) * el.price;
+			}
+
+			return ({ ...el, originalPrice });
+		});
+
 		this.listProducts = mappedProducts.map(
 			compose(
 				setNewProperty('price', product => helper.setPrices(product, commercePriceListId, 'price')),

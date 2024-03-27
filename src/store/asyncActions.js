@@ -39,7 +39,16 @@ const asyncActions = {
 		);
 		const [{ data: products, headers }] = await Promise.all(request);
 
-		const mappedProducts = products.map(el => ({ ...el, originalPrice: el.price }));
+		const mappedProducts = products.map((el) => {
+			const { discount } = Object.entries(el.priceList).flat()[1];
+			let originalPrice = el.price;
+
+			if (discount > 0) {
+				originalPrice = (1 - (discount / 100)) * el.price;
+			}
+
+			return ({ ...el, originalPrice });
+		});
 
 		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
 		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
