@@ -30,7 +30,7 @@
 					<td class="row-actions">
 						<details-component class="action-btn" @click="seeDetails(row)"/>
 						<delete-component
-							v-show="row.orderState.code === 'CONFIRMED'"
+							v-show="row.orderState.code === 'DRAFT'"
 							class="action-btn"
 							@click="openDeletingOrderModal(row)"
 						/>
