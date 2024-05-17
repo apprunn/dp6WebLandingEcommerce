@@ -77,7 +77,8 @@
 							:class="[
 							'product-img',
 							]"
-							:src="product.urlImage"
+							:src="validProductImage"
+							@error="handleImageError"
 							alt="imagen del product"
 						>
 					</div>
@@ -311,6 +312,7 @@ function data() {
 		quantityAddProduct: 0,
 		showAdd: false,
 		showNotStock: false,
+		fallbackImage: '/static/img/placeholder-product.png',
 	};
 }
 
@@ -333,6 +335,9 @@ export default {
 		isService,
 		isVariation,
 		noStock,
+		validProductImage() {
+			return this.product.urlImage && this.product.urlImage.trim() !== '' ? this.product.urlImage : this.fallbackImage;
+		},
 	},
 	data,
 	methods: {
@@ -344,6 +349,10 @@ export default {
 		removeProductFromCar,
 		getWholeSalePrice,
 		goToCategories,
+		handleImageError(event) {
+			const target = event.target;
+			target.src = this.fallbackImage;
+		},
 	},
 	created,
 	mounted,
