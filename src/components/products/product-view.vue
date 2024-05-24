@@ -19,6 +19,7 @@
 				<picture>
 					<img 
 						:src="image.urlImage" 
+						@error="handleImageError"
 						:alt="image.name" 
 						class="image-slider"
 					>
@@ -37,6 +38,7 @@
 						<img 
 							:src="image.urlImage" 
 							:alt="image.name"
+							@error="handleImageError"
 							class="image-product-slider"
 						>
 					</div>
@@ -168,6 +170,7 @@ function data() {
 			},
 		},
 		webLocalImages: [],
+		fallbackImage: '/static/img/placeholder-product.png',
 	};
 }
 export default {
@@ -187,6 +190,13 @@ export default {
 		unitSelection,
 		goToSlider,
 		imagesHandler,
+		handleImageError(event) {
+			const target = event.target;
+			target.src = this.fallbackImage;
+		},
+		validProductImage(image) {
+			return image.urlImage && image.urlImage.trim() !== '' ? image.urlImage : this.fallbackImage;
+		},
 	},
 	props: {
 		data: {

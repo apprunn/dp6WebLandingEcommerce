@@ -10,7 +10,13 @@
 				:style="idSelect(data.id) ? `color: ${globalColors.primary}` : `color: ${globalColors.dark}`"
 				@click="$emit('change-category', data)"	
 			>
-				<img :src="data.webImage" class="mr-3" width="25">
+				<!-- <img :src="data.webImage" class="mr-3" width="25"> -->
+				<v-icon
+					class="mr-2"
+					size="30"
+					color="info">
+					radio_button_checked
+				</v-icon>
 				<span>{{data.title}}</span>
 			</button>
 			<button
