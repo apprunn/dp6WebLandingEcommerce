@@ -209,8 +209,18 @@ class ProductDetails {
 	}
 	updateProductPrices() {
 		const priceList = this.selectedProduct.priceList[this.priceListId] || null;
+		if (!priceList) {
+			this.selectedProduct.price = null;
+			this.selectedProduct.priceDiscount = null;
+			return;
+		}
 		let { discount } = priceList;
 		const { units, price } = priceList;
+		if (!units) {
+			this.selectedProduct.price = price || null;
+			this.selectedProduct.priceDiscount = price || null;
+			return;
+		}
 		const rightConversion = units[this.selectedProduct.unitSelected];
 		this.selectedProduct.price = rightConversion ? rightConversion.price : price;
 		discount = rightConversion ? rightConversion.discount : discount;
@@ -224,10 +234,18 @@ class ProductDetails {
 	}
 
 	getWholeSalePrice() {
-		const priceList = this.selectedProduct.priceList[this.priceListId];
-		const { units } = priceList;
-		const rightRanges = units[this.selectedProduct.unitSelected];
-		const { ranges } = rightRanges || priceList;
+		const selectedProduct = this.selectedProduct;
+		if (!selectedProduct ||
+			!selectedProduct.priceList || !selectedProduct.priceList[this.priceListId]) {
+			return [];
+		}
+		const priceList = selectedProduct.priceList[this.priceListId];
+		const units = priceList.units;
+		if (!units || !units[selectedProduct.unitSelected]) {
+			return [];
+		}
+		const rightRanges = units[selectedProduct.unitSelected];
+		const ranges = rightRanges ? rightRanges.ranges : priceList.ranges;
 		const resultRanges = ranges || [];
 		return resultRanges;
 	}

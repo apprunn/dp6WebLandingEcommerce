@@ -121,6 +121,7 @@ function imagesHandler(newImages) {
 		if (this.webLocalImages.length === 0 && this.movilLocalImages > 0) {
 			this.webLocalImages = this.movilLocalImages;
 		}
+		this.webLocalImages = this.movilLocalImages;
 		this.$set(this.webLocalImages[0], 'select', true);
 	}
 }

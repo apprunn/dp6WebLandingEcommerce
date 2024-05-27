@@ -210,6 +210,7 @@ async function loadData(id) {
 	this.productInstance.firstProductSelected(this.product);
 	this.globalFeatures = [...this.productInstance.getFeatures()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
+	console.log(this.productDetails);
 	if (!Array.isArray(this.productDetails.sections)) {
 		this.showNotification('Se esta cargando mal la información del producto', 'warning');
 	}
