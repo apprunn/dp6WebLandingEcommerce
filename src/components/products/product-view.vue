@@ -193,7 +193,7 @@ export default {
 		imagesHandler,
 		handleImageError(event) {
 			const target = event.target;
-			target.src = this.fallbackImage;
+			target.src = this.data.urlImage || this.fallbackImage;
 		},
 		validProductImage(image) {
 			return image.urlImage && image.urlImage.trim() !== '' ? image.urlImage : this.fallbackImage;
