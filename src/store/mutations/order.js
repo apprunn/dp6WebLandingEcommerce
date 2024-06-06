@@ -49,7 +49,8 @@ const orderMutation = {
 		const newPrice = h.getPriceByRange({
 			ranges,
 			quantity: products[index].quantity,
-			originalPrice: products[index].originalPrice,
+			originalPrice: products[index].originalPrice
+				|| products[index].priceDiscountOrigin,
 		});
 
 		products[index].priceDiscount = newPrice;
@@ -137,3 +138,4 @@ const orderMutation = {
 	},
 };
 export default orderMutation;
+
