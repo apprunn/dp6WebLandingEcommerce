@@ -11,7 +11,7 @@
 			v-if="product.category.type === 2"
 			class="input-number"
 			type="number"
-			:value="number"
+			v-model="number"
 			@input="$emit('input', $event.target.value )"
 		></input>
 		<div
@@ -78,10 +78,13 @@ export default {
 	button:hover {
 		background-color: color(border);
 	}
-}
 
-.input-number {
-	width: 50px;
-	text-align: center;
+	.input-number {
+		width: 50px;
+		text-align: center;
+		border-left: 1px solid color(base);
+		border-right: 1px solid color(base);
+		font-family: font(heavy);
+	}
 }
 </style>
