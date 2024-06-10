@@ -200,7 +200,7 @@ function clickQuantity(val) {
 			this.maxQuantity = false;
 		}
 	}
-	// this.product.priceDiscountOrigin = this.product.priceDiscount;
+	this.product.priceDiscount = this.product.priceDiscountOrigin;
 	if (
 		this.quantityStock > this.product.stockWarehouse &&
 		!this.$allowOrderStockNegative
