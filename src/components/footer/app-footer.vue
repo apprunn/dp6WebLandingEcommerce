@@ -2,22 +2,23 @@
 	<div class="app-footer">
 		<section-links :menu="helperCenter"></section-links>
 		<div class="content-company-footer">
-			<p class="company-footer">© 2019   power by Apprunn.com</p>
+			<p class="company-footer">© 2019 power by Apprunn.com</p>
 			<router-link :to="{ name: 'reclamaciones' }" v-if="isPeru">
 				Libro de Reclamaciones
 			</router-link>
 			<div>
 				<a
-					v-for="social in getCommerceData.socialNetworks" :key="social.id"
+					v-for="social in getCommerceData.socialNetworks"
+					:key="social.id"
 					:href="social.link"
 					target="_blank"
 				>
 					<img
 						v-if="social.logo"
-						:src="social.logo"
+						:src="getSocial(social.code)"
 						alt="logo-redes-sociales"
 						class="social-logo"
-					>
+					/>
 				</a>
 			</div>
 		</div>
@@ -54,14 +55,29 @@ function helperCenter() {
 
 export default {
 	name: 'app-footer',
+	data() {
+		return {
+			socialIcons: {
+				facebook: '/static/img/icons/facebook.svg',
+				youtube: '/static/img/icons/youtube.svg',
+				instagram: '/static/img/icons/instagram.svg',
+				twitter: '/static/img/icons/twitter.svg',
+			},
+		};
+	},
 	components: {
 		sectionLinks,
 	},
 	computed: {
-		...mapGetters([
-			'getCommerceData',
-		]),
+		...mapGetters(['getCommerceData']),
 		helperCenter,
+	},
+	methods: {
+		getSocial(code) {
+			return (
+				this.socialIcons[code.toLowerCase()] || '/static/img/icons/error.svg'
+			);
+		},
 	},
 };
 </script>
@@ -75,7 +91,7 @@ export default {
 
 	@media (max-width: 750px) {
 		padding-left: 0;
-		text-align: center;	
+		text-align: center;
 	}
 }
 
@@ -89,16 +105,14 @@ export default {
 
 .app-footer {
 	width: 100%;
-	@media (max-width:669px){
+	@media (max-width: 669px) {
 		margin-bottom: 50px;
 	}
 }
 
 .social-logo {
-	border-radius: 50%;
-	height: 35px;
+	height: 30px;
 	margin-left: 10px;
 	object-fit: cover;
-	width: 35px;
 }
 </style>
