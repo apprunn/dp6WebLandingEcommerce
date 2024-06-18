@@ -1,0 +1,31 @@
+name: Notify Discord on Merge to Production
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - production
+
+jobs:
+  notify-discord:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Send notification to Discord
+        env:
+          DISCORD_MERGE: ${{ secrets.DISCORD_MERGE }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          COMMIT_URL="https://github.com/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
+          MENTION="<@690191607307567119>"
+          curl -H "Content-Type: application/json" \
+            -d "{\"content\": \"Se ha hecho merge a la rama production en el repositorio ${GITHUB_REPOSITORY}:\nPull Request: ${PR_URL}\nTítulo: ${PR_TITLE}\nCommit: [${GITHUB_SHA}](${COMMIT_URL})\nAutor: ${{ github.actor }}\nMencionado: ${MENTION}\"}" \
+            $DISCORD_MERGE
