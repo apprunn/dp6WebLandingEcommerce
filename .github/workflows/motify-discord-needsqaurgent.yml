@@ -6,7 +6,7 @@ on:
 
 jobs:
   notify-discord:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'needs-qa-urgent') }}
+    if: ${{ github.event.action == 'opened' && contains(github.event.pull_request.labels.*.name, 'needs-qa-urgent') || github.event.action == 'labeled' && github.event.label.name == 'needs-qa-urgent' }}
     runs-on: ubuntu-latest
 
     steps:
