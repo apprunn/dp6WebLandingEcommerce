@@ -62,8 +62,6 @@
 					<quantityButton
 						class="continer-quantity-button"
 						:number="product.quantity"
-						:product="product"
-						@input="inputQuantity"
 						@click="clickQuantity"
 						:max-quantity="maxQuantity"
 					/>
@@ -165,32 +163,15 @@ function showComments() {
 	this.show = !this.show;
 }
 
-function inputQuantity(value) {
-	this.product.quantity = Number(value);
-	this.clickQuantity();
-}
-
 function clickQuantity(val) {
 	let { quantity } = this.product;
 	const { unit } = this.product;
-	if (val) {
-		if (this.product.id === 3581799) {
-			this.opt = {
-				more: 0.1,
-				less: -0.1,
-			};
-			quantity += this.opt[val];
-			quantity = +quantity.toFixed(2);
-			quantity = quantity < 0.1 ? 0.1 : quantity;
-		} else {
-			this.opt = {
-				more: 1,
-				less: -1,
-			};
-			quantity += this.opt[val];
-			quantity = quantity < 1 ? 1 : quantity;
-		}
-	}
+	const opt = {
+		more: 1,
+		less: -1,
+	};
+	quantity += opt[val];
+	quantity = quantity < 1 ? 1 : quantity;
 	this.quantityStock = parseInt(unit.quantity * quantity, 10);
 	if (this.showUnity) {
 		if (quantity >= this.stockAvaible && !this.$allowOrderStockNegative) {
@@ -241,7 +222,6 @@ function data() {
 	return {
 		comments: '',
 		show: false,
-		opt: {},
 		maxQuantity: false,
 	};
 }
@@ -265,7 +245,6 @@ export default {
 		deleteProduct,
 		showComments,
 		goToProduct,
-		inputQuantity,
 	},
 	props: {
 		product: {
