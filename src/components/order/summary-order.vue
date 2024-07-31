@@ -7,35 +7,46 @@
 			<div class="summary-amounts">
 				<p class="summary-amount-container separate">
 					<span>Subtotal</span>
-					<span data-cy="subtotal" class="summary-amount">{{getCurrencySymbol}}. {{getTotalToBuy | currencyFormat}}</span>
+					<span data-cy="subtotal" class="summary-amount"
+						>{{ getCurrencySymbol }}. {{ getTotalToBuy | currencyFormat }}</span
+					>
 				</p>
 				<p class="summary-amount-container separate">
 					<span>Descuento</span>
-					<span data-cy="discount" class="summary-amount">{{getCurrencySymbol}}. {{discount | currencyFormat}}</span>
+					<span data-cy="discount" class="summary-amount"
+						>{{ getCurrencySymbol }}. {{ discount | currencyFormat }}</span
+					>
 				</p>
 				<p class="summary-amount-container separate">
 					<span>Envío</span>
-					<span data-cy="shipping" class="summary-amount">{{getCurrencySymbol}}. {{getShippingCost | currencyFormat}}</span>
+					<span data-cy="shipping" class="summary-amount"
+						>{{ getCurrencySymbol }}.
+						{{ getShippingCost | currencyFormat }}</span
+					>
 				</p>
 				<p class="summary-amount-container total">
 					<span>Total</span>
-					<span data-cy="total" class="summary-total">{{getCurrencySymbol}}. {{total | currencyFormat}}</span>
+					<span data-cy="total" class="summary-total"
+						>{{ getCurrencySymbol }}. {{ total | currencyFormat }}</span
+					>
 				</p>
 			</div>
 		</section>
 		<section class="btns-summary-order" :style="styleBtnMobile">
+			<div v-if="stepOne">
+				<app-button
+					data-cy="make-order"
+					:action="`Hacer pedido ${getCurrencySymbol}. ${listenerPriceOrder}`"
+					class="btn-order"
+					:background="globalColors.primary"
+					@click="goToMakeOrder"
+				/>
+				<span v-if="isNoOrderPrice && orderPrice" class="text-min-order">El monto mínimo para realizar un pedido es de {{getCurrencySymbol}} {{minOrderPrice}}, pero tu pedido actual es de {{getCurrencySymbol}} {{listenerPriceOrder}}.</span>
+			</div>
 			<app-button
-				data-cy="make-order"
-				v-if="stepOne"
-				:action="`Hacer pedido ${getCurrencySymbol}. ${listenerPriceOrder}`"
-				class="btn-order"
-				:background="globalColors.primary"
-				@click="goToMakeOrder"
-			/>
-			<app-button 
 				data-cy="go-pay"
 				v-else-if="stepTwo"
-				:action=" `Pasar a Caja`"
+				:action="`Pasar a Caja`"
 				class="btn-order "
 				:background="globalColors.primary"
 				:disabled="invalidOrder || isToogleBtn ? true : false"
@@ -45,7 +56,7 @@
 			<app-button
 				data-cy="pay"
 				v-else-if="stepThree"
-				:action=" `Terminar Compra ${getCurrencySymbol}. ${listenerPriceOrder}`"
+				:action="`Terminar Compra ${getCurrencySymbol}. ${listenerPriceOrder}`"
 				class="btn-order"
 				:disabled="isOnlinePayment || isToogleBtn ? true : false"
 				:background="globalColors.primary"
@@ -61,9 +72,9 @@ import appButton from '@/components/shared/buttons/app-button';
 import { getDeeper, compose, setNewProperty } from '@/shared/lib';
 import { creditCard } from '@/shared/enums/wayPayment';
 
-
 function total() {
-	const totalBuyWithShipp = (this.getTotalToBuy - this.discount) + this.getShippingCost;
+	const totalBuyWithShipp =
+		(this.getTotalToBuy - this.discount) + this.getShippingCost;
 	const newTotal = Number(totalBuyWithShipp.toFixed(2));
 	this.$store.commit('SET_TOTAL_BUY_SHIPP', newTotal);
 	return newTotal;
@@ -102,6 +113,10 @@ function stepTwo() {
 }
 
 function goToMakeOrder() {
+	if (this.orderPrice) {
+		this.isNoOrderPrice = true;
+		return;
+	}
 	if (this.token) {
 		this.$store.commit('SET_IS_COLLAPSE_PRODUCT', false);
 		this.$emit('close-collapse');
@@ -125,9 +140,14 @@ function discount() {
 }
 
 function isOnlinePayment() {
-	if (this.getWaypaymentsByCommerce && this.getWaypaymentsByCommerce.length > 0) {
+	if (
+		this.getWaypaymentsByCommerce &&
+		this.getWaypaymentsByCommerce.length > 0
+	) {
 		const selectedId = this.getWayPayment.wayPayment;
-		const paymentSelected = this.getWaypaymentsByCommerce.find(w => w.wayPaymentId === selectedId);
+		const paymentSelected = this.getWaypaymentsByCommerce.find(
+			w => w.wayPaymentId === selectedId,
+		);
 		const isOnline = creditCard.code === paymentSelected.code;
 		return isOnline;
 	}
@@ -143,7 +163,8 @@ function listenerPriceOrder() {
 	if (!decimals) {
 		return `${integer}.00`;
 	}
-	const newDecimals = decimals.length === 1 && decimals < 10 ? `${decimals}0` : decimals;
+	const newDecimals =
+		decimals.length === 1 && decimals < 10 ? `${decimals}0` : decimals;
 	return `${integer}.${newDecimals}`;
 }
 
@@ -155,6 +176,12 @@ function styleBtnMobile() {
 
 export default {
 	name: 'summary-order',
+	data() {
+		return {
+			minOrderPrice: null,
+			isNoOrderPrice: false,
+		};
+	},
 	components: {
 		appButton,
 	},
@@ -192,6 +219,12 @@ export default {
 		total,
 		listenerPriceOrder,
 		styleBtnMobile,
+		orderPrice() {
+			const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+			this.minOrderPrice = user.commerce.settings.minOrderPrice;
+			const isMinOrderPrice = this.minOrderPrice > Number(this.listenerPriceOrder);
+			return isMinOrderPrice;
+		},
 	},
 	methods: {
 		goToMakeOrder,
@@ -201,91 +234,95 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-	.btns-summary-order {
-		@media (max-width:669px){
-			background-color: var(--bg-mobile-color);
-			border-radius: 10px;
-			position:fixed;
-			bottom: 0;
-			left: 0;
-			z-index: 11;
-			width:94%;
-			margin-left: 3%;
-			margin-right: 3%;
-			margin-bottom: 2px;
-		}
+.btns-summary-order {
+	@media (max-width: 669px) {
+		background-color: var(--bg-mobile-color);
+		border-radius: 10px;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		z-index: 11;
+		width: 94%;
+		margin-left: 3%;
+		margin-right: 3%;
+		margin-bottom: 2px;
 	}
-	.summary-container {
-		position: relative;
-		top: 0;
-		margin: 0 auto;
-		max-width: 400px;
-	}
+}
+.summary-container {
+	position: relative;
+	top: 0;
+	margin: 0 auto;
+	max-width: 400px;
+}
 
-	.summary-order {
-		background-color: white;
-		border-radius: 20px;
-		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.18);
-		margin-bottom: 10px;
-		padding: 8px;
-		width: 260px;
-	}
+.text-min-order {
+	color: red;
+	font-size: 12px;
+}
 
-	.summary-header {
-		border-bottom: 1px solid color(border);
-		color: color(dark);
-		font-family: font(demi);
-		font-size: size(medium);
-		font-weight: bold;
-		padding: 25px 50px 17px;
-	}
+.summary-order {
+	background-color: white;
+	border-radius: 20px;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.18);
+	margin-bottom: 10px;
+	padding: 8px;
+	width: 260px;
+}
 
-	.summary-title {
-		margin: 0 auto;
-		white-space: nowrap;	
-	}
+.summary-header {
+	border-bottom: 1px solid color(border);
+	color: color(dark);
+	font-family: font(demi);
+	font-size: size(medium);
+	font-weight: bold;
+	padding: 25px 50px 17px;
+}
 
-	.summary-amounts {
-		color: color(dark);
-		font-family: font(demi);
-		font-size: size(medium);
-		padding: 30px 32px 16px;
-	}
+.summary-title {
+	margin: 0 auto;
+	white-space: nowrap;
+}
 
-	.summary-amount-container {
-		align-items: center;
-		display: flex;
-		justify-content: space-between;
-		padding: 8px 5px;
-	}
+.summary-amounts {
+	color: color(dark);
+	font-family: font(demi);
+	font-size: size(medium);
+	padding: 30px 32px 16px;
+}
 
-	.total {
-		margin-bottom: 0;
-	}
+.summary-amount-container {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	padding: 8px 5px;
+}
 
-	.separate {
-		border-bottom: 1px solid color(border);
-	}
+.total {
+	margin-bottom: 0;
+}
 
-	.shipping {
-		padding-bottom: 12px;
-	}
+.separate {
+	border-bottom: 1px solid color(border);
+}
 
-	.shipping-cost {
-		align-items: center;
-		display: flex;
-		justify-content: space-between;
-		width: 100%;
-	}
+.shipping {
+	padding-bottom: 12px;
+}
 
-	.summary-amount {
-		color: color(base);
-		font-family: font(medium);
-		font-size: size(medium);
-	}
+.shipping-cost {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
 
-	.summay-total {
-		font-family: font(bold);
-	}
+.summary-amount {
+	color: color(base);
+	font-family: font(medium);
+	font-size: size(medium);
+}
+
+.summay-total {
+	font-family: font(bold);
+}
 </style>
-
