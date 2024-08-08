@@ -1,22 +1,24 @@
 <template>
-	<div v-if="conversionsComputed.length > 0"
-		class="conversions-container"
-	>
+	<div v-if="conversionsComputed.length > 0" class="conversions-container">
 		<h3
-			:class="[
-				indeterminate ? 'loading' : 'conversions-title',
-			]"
+			:class="[indeterminate ? 'loading' : 'conversions-title']"
 			:style="`color:${globalColors.title}`"
-		>Presentaciones:</h3>
+		>
+			Presentaciones:
+		</h3>
 		<v-flex xs12>
-			<div
-				:class="{ 'loading conversions-select-container': indeterminate }"
-			>
+			<div :class="{ 'loading conversions-select-container': indeterminate }">
 				<div v-if="!indeterminate">
 					<v-btn
 						v-for="(item, index) in conversionsComputed"
 						class="btn-conversions pa-2"
-						:style="`border:1px solid ${globalColors.primary};color: ${item.isSelected ? 'white' : globalColors.primary};background-color: ${item.isSelected ? globalColors.primary : 'white'}`"
+						:style="
+							`border:1px solid ${globalColors.primary};color: ${
+								item.isSelected ? 'white' : globalColors.primary
+							};background-color: ${
+								item.isSelected ? globalColors.primary : 'white'
+							}`
+						"
 						:key="index"
 						type="button"
 						v-model="conversionSelected"
@@ -50,13 +52,17 @@ function conversionsChanges(conversions) {
 		return newP;
 	});
 	if (this.$flagShowBaseUnit === 1) {
-		this.conversionsComputed = this.conversionsComputed.filter(p => p.id !== this.defaultUnit.id);
+		this.conversionsComputed = this.conversionsComputed.filter(
+			p => p.id !== this.defaultUnit.id,
+		);
 	} else if (this.$flagShowBaseUnit === 2) {
-		this.conversionsComputed = this.conversionsComputed.filter(p => p.id === this.defaultUnit.id);
+		this.conversionsComputed = this.conversionsComputed.filter(
+			p => p.id === this.defaultUnit.id,
+		);
 	}
 }
 
-function selectedConversion(item)	{
+function selectedConversion(item) {
 	this.conversionsComputed = this.conversionsComputed.map((o) => {
 		const newData = { ...o };
 		newData.isSelected = item.id === o.id;
@@ -78,9 +84,7 @@ export default {
 		AppSelect,
 	},
 	computed: {
-		...mapGetters([
-			'indeterminate',
-		]),
+		...mapGetters(['indeterminate']),
 	},
 	data,
 	methods: {
@@ -111,38 +115,38 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-	.conversions-container {
-		align-items: center;
-		border-bottom: 1px solid color(border);
-		border-top: 1px solid color(border);
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-		margin-top: 10px;
-		padding: 20px 0;
+.conversions-container {
+	align-items: center;
+	border-bottom: 1px solid color(border);
+	border-top: 1px solid color(border);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	margin-top: 10px;
+	padding: 20px 0;
 
-		@media (max-width: 960px) {
-			display: none;
-		}
+	@media (max-width: 960px) {
+		display: none;
 	}
+}
 
-	.conversions-title {
-		margin: 0 10px;
+.conversions-title {
+	margin: 0 10px;
+}
+
+.conversions-select-container {
+	height: 24px;
+	margin-left: 10px;
+	width: 100%;
+}
+
+.btn-conversions {
+	border-radius: 7px;
+	font-family: font(bold);
+
+	&.active {
+		background-color: red;
+		color: white;
 	}
-
-	.conversions-select-container {
-		height: 24px;
-		margin-left: 10px;
-		width: 100%;
-	}
-
-	.btn-conversions {
-		border-radius: 7px;
-		font-family: font(bold);
-
-		&.active {
-			background-color: red;
-			color: white;
-		}
-	}
+}
 </style>
