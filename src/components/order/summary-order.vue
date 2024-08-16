@@ -220,9 +220,9 @@ export default {
 		listenerPriceOrder,
 		styleBtnMobile,
 		orderPrice() {
-			const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
-			if (user.length > 0) {
-				this.minOrderPrice = user.commerce.settings.minOrderPrice;
+			const ecommerce = JSON.parse(localStorage.getItem('ecommerce::ecommerce-data')) || null;
+			if (ecommerce) {
+				this.minOrderPrice = ecommerce.settings.minOrderPrice;
 				const isMinOrderPrice = this.minOrderPrice > Number(this.listenerPriceOrder);
 				return isMinOrderPrice;
 			}
