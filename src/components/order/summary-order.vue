@@ -221,9 +221,12 @@ export default {
 		styleBtnMobile,
 		orderPrice() {
 			const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
-			this.minOrderPrice = user.commerce.settings.minOrderPrice;
-			const isMinOrderPrice = this.minOrderPrice > Number(this.listenerPriceOrder);
-			return isMinOrderPrice;
+			if (user.length > 0) {
+				this.minOrderPrice = user.commerce.settings.minOrderPrice;
+				const isMinOrderPrice = this.minOrderPrice > Number(this.listenerPriceOrder);
+				return isMinOrderPrice;
+			}
+			return false;
 		},
 	},
 	methods: {
