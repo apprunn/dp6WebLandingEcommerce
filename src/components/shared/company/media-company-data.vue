@@ -1,7 +1,16 @@
 <template>
-	<div class="container-media-company"
-	:style="`border-right: ${borderRight ? `1px solid ${borderRight}` : null}; font-family: ${family ? `font(${family})` : null }`">
-		<img :src="image" :height="imageHeight" alt="" class="image-company">
+	<div
+		class="container-media-company"
+		:style="
+			`border-right: ${
+				borderRight ? `1px solid ${borderRight}` : null
+			}; font-family: ${family ? `font(${family})` : null}`
+		"
+	>
+		<!-- <img :src="image" :height="imageHeight" alt="" class="image-company" /> -->
+		<v-icon color="#ffffff">
+			{{ item }}
+		</v-icon>
 		<a href="#" v-if="categories">
 			<p class="text-company-data">
 				{{ description }}
@@ -17,6 +26,10 @@
 export default {
 	name: 'media-company-data',
 	props: {
+		item: {
+			type: String,
+			required: true,
+		},
 		image: String,
 		imageHeight: [String, Number],
 		description: [String, Number],
@@ -44,16 +57,16 @@ export default {
 	color: color(white);
 	margin: 0 0 0 9px;
 	// max-width: 290px;
-    overflow: hidden;
-    // text-overflow: ellipsis;
-    white-space: nowrap;
+	overflow: hidden;
+	// text-overflow: ellipsis;
+	white-space: nowrap;
 
 	@media (max-width: 860px) {
 		font-size: 12px;
 		// margin-left: 6px;
 		// max-width: 80px;
-    	// overflow: hidden;
-    	// text-overflow: initial;
+		// overflow: hidden;
+		// text-overflow: initial;
 	}
 }
 
