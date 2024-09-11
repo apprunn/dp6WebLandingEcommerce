@@ -20,6 +20,7 @@ module.exports = merge(prodEnv, {
 	DEFAULT_AVATAR: `'${process.env.DEFAULT_AVATAR}'`,
 	FORM_BACKGROUND: `'${process.env.FORM_BACKGROUND}'`,
 	PRODUCTS_URL: `'${process.env.PRODUCTS_URL}'`,
+	API_GOOGLE_MAPS: `'${process.env.API_GOOGLE_MAPS}'`,
 	REDIRECT_URI: `'${process.env.REDIRECT_URI}'`,
 	ROLE_CODE: `'${process.env.ROLE_CODE}'`,
 	S3_IMAGES_URL: "'//apprunn.s3.amazonaws.com'",

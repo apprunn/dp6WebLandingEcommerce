@@ -19,6 +19,10 @@ const salesInstance = axios.create({
 	baseURL: process.env.SALES_URL,
 });
 
+const httpsMaps = axios.create({
+	baseURL: process.env.API_GOOGLE_MAPS,
+});
+
 const updateTransactionIntance = axios.create({
 	baseURL: process.env.SALES_URL,
 });
@@ -79,4 +83,5 @@ export default function (Vue) {
 	Vue.prototype.$httpSalesReadPublic = saleReadReportPublic;
 	Vue.prototype.$httpProductsRead = productsReadReport;
 	Vue.prototype.$httpSalesRead = saleReadReport;
+	Vue.prototype.$httpMaps = httpsMaps;
 }
