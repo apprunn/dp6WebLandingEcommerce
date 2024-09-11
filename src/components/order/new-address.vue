@@ -115,6 +115,7 @@
 				]"
 				:location="{ lat: newAddress.latitude, lng: newAddress.longitude }"
 				:center="{ lat: newAddress.latitude, lng: newAddress.longitude }"
+				@update-address="updateAddressLine1"	
 			/>
 		</div>
 	</form>
@@ -194,6 +195,7 @@ function googleSearch() {
 function selectDepartment(provinceId) {
 	this.newAddress.province = null;
 	this.newAddress.district = null;
+	this.newAddress.addressLine1 = null;
 	this.$store.commit('SET_PROVINCES', []);
 	this.$store.commit('SET_DISTRICTS', []);
 	// this.calculateShippingCost({ provinceId });
@@ -203,6 +205,7 @@ function selectDepartment(provinceId) {
 
 function selectProvince(cityId) {
 	this.newAddress.districts = null;
+	this.newAddress.addressLine1 = null;
 	this.$store.commit('SET_DISTRICTS', []);
 	// this.calculateShippingCost({
 	// 	provinceId: this.newAddress.department,
@@ -213,6 +216,7 @@ function selectProvince(cityId) {
 }
 
 function selectDistrict(parishId) {
+	this.newAddress.addressLine1 = null;
 	this.calculateShippingCost({
 		provinceId: this.newAddress.department,
 		cityId: this.newAddress.province,
@@ -351,6 +355,9 @@ export default {
 		setCustomerAddress,
 		googleSearch,
 		getMap,
+		updateAddressLine1(address) {
+			this.newAddress.addressLine1 = address;
+		},
 	},
 	validations,
 	watch: {
