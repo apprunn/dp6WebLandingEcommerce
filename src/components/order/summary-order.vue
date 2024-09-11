@@ -33,14 +33,16 @@
 			</div>
 		</section>
 		<section class="btns-summary-order" :style="styleBtnMobile">
-			<app-button
-				data-cy="make-order"
-				v-if="stepOne"
-				:action="`Hacer pedido ${getCurrencySymbol}. ${listenerPriceOrder}`"
-				class="btn-order"
-				:background="globalColors.primary"
-				@click="goToMakeOrder"
-			/>
+			<div v-if="stepOne">
+				<app-button
+					data-cy="make-order"
+					:action="`Hacer pedido ${getCurrencySymbol}. ${listenerPriceOrder}`"
+					class="btn-order"
+					:background="globalColors.primary"
+					@click="goToMakeOrder"
+				/>
+				<span v-if="isNoOrderPrice && orderPrice" class="text-min-order">El monto mínimo para realizar un pedido es de {{getCurrencySymbol}} {{minOrderPrice}}, pero tu pedido actual es de {{getCurrencySymbol}} {{listenerPriceOrder}}.</span>
+			</div>
 			<app-button
 				data-cy="go-pay"
 				v-else-if="stepTwo"
@@ -72,7 +74,7 @@ import { creditCard } from '@/shared/enums/wayPayment';
 
 function total() {
 	const totalBuyWithShipp =
-		this.getTotalToBuy - (this.discount + this.getShippingCost);
+		(this.getTotalToBuy - this.discount) + this.getShippingCost;
 	const newTotal = Number(totalBuyWithShipp.toFixed(2));
 	this.$store.commit('SET_TOTAL_BUY_SHIPP', newTotal);
 	return newTotal;
@@ -111,6 +113,10 @@ function stepTwo() {
 }
 
 function goToMakeOrder() {
+	if (this.orderPrice) {
+		this.isNoOrderPrice = true;
+		return;
+	}
 	if (this.token) {
 		this.$store.commit('SET_IS_COLLAPSE_PRODUCT', false);
 		this.$emit('close-collapse');
@@ -170,6 +176,12 @@ function styleBtnMobile() {
 
 export default {
 	name: 'summary-order',
+	data() {
+		return {
+			minOrderPrice: null,
+			isNoOrderPrice: false,
+		};
+	},
 	components: {
 		appButton,
 	},
@@ -207,6 +219,15 @@ export default {
 		total,
 		listenerPriceOrder,
 		styleBtnMobile,
+		orderPrice() {
+			const ecommerce = JSON.parse(localStorage.getItem('ecommerce::ecommerce-data')) || null;
+			if (ecommerce) {
+				this.minOrderPrice = ecommerce.settings.minOrderPrice;
+				const isMinOrderPrice = this.minOrderPrice > Number(this.listenerPriceOrder);
+				return isMinOrderPrice;
+			}
+			return false;
+		},
 	},
 	methods: {
 		goToMakeOrder,
@@ -235,6 +256,11 @@ export default {
 	top: 0;
 	margin: 0 auto;
 	max-width: 400px;
+}
+
+.text-min-order {
+	color: red;
+	font-size: 12px;
 }
 
 .summary-order {
