@@ -21,9 +21,10 @@
 						<img
 							v-if="logo.urlImage"
 							:src="logo.urlImage"
-							alt="Logo de compañía"
+							:alt="`Logo de ${logo.name}`"
 							class="logo-image"
 							@click="goToHome()"
+							@error="handleImageError"
 						/>
 					<!-- </router-link> -->
 				</h1>
@@ -202,6 +203,7 @@ function data() {
 		isSearchMobile: false,
 		scrolled: false,
 		searchText: null,
+		defaultImage: '/static/img/home-defaul.svg',
 	};
 }
 
@@ -248,6 +250,12 @@ export default {
 			// this.$store.dispatch('updateProductSelect', null);
 			this.searchProduct('');
 			this.goTo('page-home');
+		},
+		handleImageError(event) {
+			const imgElement = event.target;
+			imgElement.src = this.defaultImage;
+			imgElement.style.width = '30px';
+			imgElement.style.height = '40px';
 		},
 	},
 	mounted,
