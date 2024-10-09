@@ -121,6 +121,11 @@ function imagesHandler(newImages) {
 		if (this.webLocalImages.length === 0 && this.movilLocalImages > 0) {
 			this.webLocalImages = this.movilLocalImages;
 		}
+		if (this.data.urlImage) {
+			this.webLocalImages = [];
+			this.webLocalImages.unshift(this.data);
+		}
+		this.webLocalImages = this.movilLocalImages;
 		this.$set(this.webLocalImages[0], 'select', true);
 	}
 }
@@ -192,7 +197,7 @@ export default {
 		imagesHandler,
 		handleImageError(event) {
 			const target = event.target;
-			target.src = this.fallbackImage;
+			target.src = this.data.urlImage || this.fallbackImage;
 		},
 		validProductImage(image) {
 			return image.urlImage && image.urlImage.trim() !== '' ? image.urlImage : this.fallbackImage;
