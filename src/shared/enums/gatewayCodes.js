@@ -10,3 +10,4 @@ export const xchange = 'xchange';
 export const alignet = 'alignet';
 export const mercadopagoMp = 'mercadopagoMp';
 export const mercadopago = 'mercadopago';
+export const openpay = 'openpay';
