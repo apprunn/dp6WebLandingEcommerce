@@ -1,10 +1,20 @@
 <template>
 	<div>
+		<div class="conditions">
+			<v-checkbox
+				data-cy="niubiz-check"
+				class="check"
+				v-model="checkbox"
+			>
+			</v-checkbox>
+			<span>Acepto los <button type="button" @click="conditionsAndTermsLink">términos y condiciones</button></span>
+		</div>
 		<button
 			type="button"
 			data-cy="niubiz-btn"
 			class="niubiz-btn"
 			style="padding:1rem"
+			:disabled="!checkbox"
 			@click="checkout"
 		>
 			<img :src="img" alt="logo_Niubiz">
@@ -15,7 +25,11 @@
 			method='post'
 		></form>
 		<v-dialog max-width="425" v-model="dialog" persistent>
-			<open-pay-form/>
+			<open-pay-form
+				:response="response"
+				@close="openDialog"
+				@save-payment="savePayment"
+			/>
 		</v-dialog>
 	</div>
 </template>
@@ -23,47 +37,28 @@
 import OpenPayForm from '@/components/order/paymentsMethods/open-pay-form';
 import { mapGetters, mapState } from 'vuex';
 
-function createScript() {
-	if (process.browser && this.merchantId) {
-		const visaForm = document.createElement('script');
-		const dataSessionToken = this.sessionKey;
-		const dataMerchantId = this.merchantId;
-		const dataAmount = this.amount;
-		const dataCurrency = this.currency;
-		const src = this.payboxProduction === 'dev' ? this.dev : this.prod;
-		const purchaseNumber = this.getOrderId;
-		const logo = this.getCommerceData.urlImage;
-		const name = process.env.COMPANY_LOGIN_TITLE;
-		const btnColor = process.env.COLOR_PRIMARY;
-		visaForm.setAttribute('src', src);
-		visaForm.setAttribute('data-sessiontoken', dataSessionToken);
-		visaForm.setAttribute('data-channel', 'web');
-		visaForm.setAttribute('data-merchantid', dataMerchantId);
-		visaForm.setAttribute('data-merchantlogo', logo);
-		visaForm.setAttribute('data-merchantname', name);
-		visaForm.setAttribute('data-formbuttoncolor', btnColor);
-		visaForm.setAttribute('data-purchasenumber', purchaseNumber);
-		visaForm.setAttribute('data-amount', dataAmount);
-		visaForm.setAttribute('data-currency', dataCurrency);
-		visaForm.setAttribute('currency', dataCurrency);
-		visaForm.setAttribute('data-expirationminutes', 20);
-		visaForm.setAttribute('data-timeouturl', 'timeout.html');
-		const Visa = document.getElementById('visa-payment').appendChild(visaForm);
-		Visa.onload = () => {
-			const visaBtn = document.querySelector('.modal-opener');
-			visaBtn.style.visibility = 'hidden';
-			visaBtn.click();
-		};
-	}
-}
 
 function orderTotal() {
 	return this.getTotalToBuy + this.getShippingCost;
 }
 
 async function checkout() {
-	console.log('checkout');
-	this.dialog = !this.dialog;
+	try {
+		const body = {
+			orderId: this.getOrderId,
+			commerceCode: process.env.COMMERCE_CODE,
+			ipAddress: this.ipAddress,
+		};
+		const url = 'payment-gateway/openpay/checkout';
+		const { data: res } = await this.$httpSales.post(url, body);
+		this.hash = res.hash;
+		this.currency = res.curency;
+		this.amount = res.amount;
+		this.response = res;
+		this.openDialog();
+	} catch (error) {
+		this.showNotification('Error. La transacción no se completó.', 'error');
+	}
 }
 
 function redirect() {
@@ -103,10 +98,11 @@ function data() {
 		expirationTime: null,
 		loading: false,
 		merchantId: '',
-		payboxProduction: false,
+		hash: false,
 		prod: 'https://static-content.vnforapps.com/v2/js/checkout.js',
 		sessionKey: null,
 		totalAmount: null,
+		response: null,
 	};
 }
 
@@ -133,8 +129,31 @@ export default {
 	methods: {
 		checkout,
 		conditionsAndTermsLink,
-		createScript,
 		normalize,
+		openDialog() {
+			this.dialog = !this.dialog;
+		},
+		async savePayment(token, deviceSessionId) {
+			try {
+				const body = {
+					hash: this.hash,
+					gatewayResponse: {
+						amount: this.amount,
+						currency: this.currency,
+						description: 'Pago por servicio OpenPay',
+						method: 'card',
+						order_id: this.getOrderId,
+						device_session_id: deviceSessionId,
+						source_id: token,
+					},
+				};
+				const url = 'payment-gateway/validation';
+				await this.$httpSales.patch(url, body);
+				this.openDialog();
+			} catch (error) {
+				console.log(error);
+			}
+		},
 	},
 	props: {
 		img: {
