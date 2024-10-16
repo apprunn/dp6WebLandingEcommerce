@@ -132,8 +132,8 @@ export default {
 			this.dialog = !this.dialog;
 		},
 		async savePayment(token, deviceSessionId) {
-			const successUri = 'uri=resumen-de-mi-pedido';
-			const errorUri = `errorUri=carrito-de-compras/pago/${this.getOrderId}`;
+			// const successUri = 'uri=resumen-de-mi-pedido';
+			// const errorUri = `errorUri=carrito-de-compras/pago/${this.getOrderId}`;
 			try {
 				const body = {
 					hash: this.hash,
@@ -148,8 +148,8 @@ export default {
 					},
 				};
 				const url = 'payment-gateway/validation';
-				const fullUrl = `${url}?${successUri}&${errorUri}`;
-				await this.$httpSales.patch(fullUrl, body);
+				// const fullUrl = `${url}?${successUri}&${errorUri}`;
+				await this.$httpSales.patch(url, body);
 				this.openDialog();
 			} catch (error) {
 				console.log(error);
