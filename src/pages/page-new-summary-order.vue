@@ -138,7 +138,7 @@
 			/>
 		</v-layout>
 		<section
-			v-if="isNiubiz && isOnlinePayment"
+			v-if="(isOpenPay || isNiubiz) && isOnlinePayment"
 			class="card-data-niubiz"
 			data-cy="online-payment-info"
 		>
@@ -167,7 +167,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { getDeeper, isEmpty } from '@/shared/lib';
-import { niubiz } from '@/shared/enums/gatewayCodes';
+import { niubiz, openpay } from '@/shared/enums/gatewayCodes';
 import { creditCard, deposit, reciveAndPay } from '@/shared/enums/wayPayment';
 import deliveryWays from '@/shared/enums/waysDeliveries';
 import productInSummary from '@/components/products/product-in-summary';
@@ -410,6 +410,10 @@ export default {
 		isHome,
 		isDeposit,
 		isNiubiz,
+		isOpenPay() {
+			const codeNiubiz = getDeeper('additionalInformation.gatewayCode')(this.order);
+			return codeNiubiz === openpay;
+		},
 		isOnlinePayment,
 		isReciveAndPay,
 		isStore,

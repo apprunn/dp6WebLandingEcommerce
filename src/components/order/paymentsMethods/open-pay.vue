@@ -25,6 +25,7 @@
 			<open-pay-form
 				:is-loading="isLoading"
 				:response="response"
+				:key="dialogKey"
 				@close="openDialog"
 				@save-payment="savePayment"
 			/>
@@ -102,6 +103,7 @@ function data() {
 		sessionKey: null,
 		totalAmount: null,
 		response: null,
+		dialogKey: 0,
 	};
 }
 
@@ -131,6 +133,10 @@ export default {
 		normalize,
 		openDialog() {
 			this.dialog = !this.dialog;
+			if (this.dialog) {
+				// eslint-disable-next-line no-plusplus
+				this.dialogKey++;
+			}
 		},
 		async savePayment(token, deviceSessionId) {
 			this.isLoading = true;
@@ -155,13 +161,21 @@ export default {
 				const response = await this.$httpSales.patch(url, body);
 				if (response.data.paymentGateway.status === 'Aprobado') {
 					this.$router.push({ name: 'buy-summary', params: { orderId } });
+					localStorage.removeItem('ecommerce-order');
 				}
-				this.openDialog();
 			} catch (error) {
-				this.showNotification('Error. La transacción no se completó.', 'error');
+				this.showNotification(error.data.paymentGateway.errorMessage, 'error');
+				this.$router.replace({
+					name: 'buy-payment',
+					params: {
+						orderId,
+					},
+				});
+				window.location.reload();
 			} finally {
 				this.isLoading = false;
 			}
+			this.openDialog();
 		},
 	},
 	props: {

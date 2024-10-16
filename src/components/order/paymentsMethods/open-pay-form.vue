@@ -7,60 +7,64 @@
 			<div class="form-group">
 				<label for="holder-name">Nombre del titular</label>
 				<input 
-				v-model="formData.holderName" 
-				type="text" 
-				id="holder-name" 
-				placeholder="Como aparece en la tarjeta" 
-				required
+					v-model="formData.holderName" 
+					type="text" 
+					id="holder-name" 
+					required
 				/>
+				<span class="alert-message" v-if="!formData.holderName">Requiere el nombre completo*</span>
 			</div>
 			<div class="form-group">
 				<label for="card-number">Número de tarjeta</label>
 				<input 
-				v-model="formData.cardNumber" 
-				type="text" 
-				id="card-number" 
-				placeholder="1234 5678 9012 3456" 
-				required
+					v-model="formData.cardNumber" 
+					type="number" 
+					id="card-number"
+					required
 				/>
+				<span class="alert-message" v-if="!isOnlyNumber(formData.cardNumber, 'cardNumber')">Solo numeros*</span>
 			</div>
 			<div class="form-row">
 				<div class="form-group">
-				<label for="expiration-month">Mes</label>
-				<input 
+					<label for="expiration-month">Mes</label>
+					<select 
 					v-model="formData.expMonth" 
-					type="text" 
 					id="expiration-month" 
-					placeholder="MM" 
 					required
-				/>
+					>
+					<option v-for="month in months" :key="month" :value="month">
+						{{ month < 10 ? '0' + month : month }}
+					</option>
+					</select>
 				</div>
 				<div class="form-group">
 				<label for="expiration-year">Año</label>
-				<input 
-					v-model="formData.expYear" 
-					type="text" 
-					id="expiration-year" 
-					placeholder="YYYY" 
-					required
-				/>
+				    <select 
+						v-model="formData.expYear" 
+						id="expiration-year" 
+						required
+					>
+						<option v-for="year in years" :key="year" :value="year">
+							{{ year }}
+						</option>
+					</select>
 				</div>
 				<div class="form-group">
 				<label for="cvv">CVV</label>
 				<input 
 					v-model="formData.cvv" 
-					type="text" 
-					id="cvv" 
-					placeholder="123" 
+					type="number" 
+					id="cvv"
 					required
 				/>
+				<span class="alert-message" v-if="!isOnlyNumber(formData.cvv, 'cvv')" >3 digitos numericos*</span>
 				</div>
 			</div>
 			<v-btn
 				type="submit"
 				class="pay-button"
 				:loading="isLoading"
-				:disabled="isLoading"
+				:disabled="isLoading || isFormValid"
 				color="primary"
 				>
 				<span v-if="isLoading">Cargando...</span>
@@ -79,6 +83,7 @@
   function data() {
 	return {
 		deviceSessionId: '',
+		months: Array.from({ length: 12 }, (_, i) => i + 1),
 		formData: {
 			holderName: '',
 			cardNumber: '',
@@ -86,6 +91,7 @@
 			expYear: '',
 			cvv: '',
 		},
+		years: this.generateYears(),
 	};
   }
   
@@ -93,7 +99,8 @@ export default {
 	name: 'open-pay-form',
 	data,
 	created() {
-		this.loadOpenPayScripts();
+		this.cleanData();
+		// this.loadOpenPayScripts();
 	},
 	props: {
 		response: Object,
@@ -103,6 +110,25 @@ export default {
 		},
 	},
 	methods: {
+		cleanData() {
+			this.formData = {
+				holderName: '',
+				cardNumber: '',
+				expMonth: '',
+				expYear: '',
+				cvv: '',
+			};
+		},
+		isOnlyNumber(number, model) {
+			if (model === 'cvv') {
+				return /^\d+$/.test(number) && number.length === 3;
+			}
+			return /^\d+$/.test(number);
+		},
+		generateYears() {
+			const currentYear = new Date().getFullYear();
+			return Array.from({ length: 71 }, (_, i) => currentYear + i);
+		},
 		loadOpenPayScripts() {
 			const openpayScript = document.createElement('script');
 			openpayScript.src = 'https://js.openpay.pe/openpay.v1.min.js';
@@ -138,6 +164,7 @@ export default {
 		},
 		closeForm() {
 			this.$emit('close');
+			this.cleanData();
 		},
 		handlePayment() {
 			const { holderName, cardNumber, expMonth, expYear, cvv } = this.formData;
@@ -145,7 +172,7 @@ export default {
 				holder_name: holderName,
 				card_number: cardNumber,
 				expiration_month: expMonth,
-				expiration_year: expYear,
+				expiration_year: expYear % 100,
 				cvv2: cvv,
 				device_session_id: this.deviceSessionId,
 			};
@@ -156,13 +183,55 @@ export default {
 			this.$emit('save-payment', token, this.deviceSessionId);
 		},
 		errorCallback(error) {
-			console.error('Error al generar el token:', error);
+			this.isLoading = false;
+			this.showNotification(error.data.description, 'error');
+		},
+	},
+	computed: {
+		isFormValid() {
+			const { holderName, cardNumber, expMonth, expYear, cvv } = this.formData;
+			const validate = Boolean(holderName && cardNumber && expMonth && expYear && cvv);
+			return !validate;
 		},
 	},
 };
 </script>
   
 <style scoped>
+.alert-message {
+  color: red;
+  font-size: 9.5px;
+  padding-left: 5px;
+}
+
+.year-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 200px; /* Ajusta el ancho máximo del contenedor */
+  margin: 0 auto; /* Centra el contenedor */
+}
+
+select {
+  width: 100px;
+  padding: 7px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+  box-sizing: border-box; /* Incluye el padding en el ancho total */
+}
+
+select:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* Estilo para limitar el ancho de la lista desplegable */
+select {
+  max-width: 200px; /* Asegura que el menú no se expanda más allá del ancho deseado */
+}
 .payment-form-container {
   display: flex;
   justify-content: center;

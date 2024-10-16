@@ -1,10 +1,15 @@
 <template>
 	<div class="buy-container">
-		<section class="rejected-transaction" v-if="isNiubiz">
-			<h4>La transacción <span>{{transactionId}}</span> fue rechazada</h4>
-			<h5>Nro pedido: <span>{{getOrderInfo.id}}</span></h5>
-			<h5>fecha: <span>{{getOrderInfo.createdAt | formatDate}}</span></h5>
-			<h4>Razón: <span>{{ getOrderInfo.additionalInformation.paymentGateway.status }}</span> </h4>
+		<section class="rejected-transaction" v-if="showTransactionInfo">
+			<div class="header">
+				<h4>La transacción <span>{{ transactionId }}</span> fue rechazada</h4>
+				<button class="close-btn" @click="closeTransaction">×</button>
+			</div>
+			<div class="content">
+				<h5>Nro pedido: <span>{{ getOrderInfo.id }}</span></h5>
+				<h5>Fecha: <span>{{ getOrderInfo.createdAt | formatDate }}</span></h5>
+				<h5>Razón: <span>{{ getOrderInfo.additionalInformation.paymentGateway.status }}</span></h5>
+			</div>
 		</section>
 		<div
 			v-if="stepThree"
@@ -64,7 +69,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { getDeeper } from '@/shared/lib';
-import { niubiz } from '@/shared/enums/gatewayCodes';
+import { niubiz, openpay } from '@/shared/enums/gatewayCodes';
 import appButton from '@/components/shared/buttons/app-button';
 import productInCar from '@/components/products/product-in-car';
 import summaryOrder from '@/components/order/summary-order';
@@ -182,6 +187,7 @@ function data() {
 			section: '/static/icons/arrow.svg',
 		},
 		productsBuys: [],
+		isVisible: true,
 	};
 }
 
@@ -202,6 +208,13 @@ export default {
 			'isCollapseProduct',
 		]),
 		isNiubiz,
+		isOpenPay()	{
+			const codeOpenPay = getDeeper('additionalInformation.gatewayCode')(this.getOrderInfo);
+			return codeOpenPay === openpay;
+		},
+		showTransactionInfo() {
+			return (this.isNiubiz || this.isOpenPay) && this.isVisible;
+		},
 		stepOneAndTwo,
 		stepThree,
 		stepTwo,
@@ -216,6 +229,9 @@ export default {
 		getProductToBuyHandler,
 		loadProductsQuery,
 		toogleCollapse,
+		closeTransaction() {
+			this.isVisible = false;
+		},
 	},
 	mounted,
 	watch: {
@@ -349,4 +365,36 @@ export default {
 	.container-routes {
 		margin-top: -30px;
 	}
+	.rejected-transaction {
+  background-color: #ffebee;
+  border: 1px solid #f44336;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 20px 0;
+  position: relative;
+  color: #b71c1c;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #b71c1c;
+}
+
+.close-btn:hover {
+  color: #f44336;
+}
+
+.content h5 {
+  margin: 8px 0;
+}
 </style>
