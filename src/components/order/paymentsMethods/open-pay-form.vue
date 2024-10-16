@@ -56,7 +56,16 @@
 				/>
 				</div>
 			</div>
-		  <button type="submit" class="pay-button">Pagar</button>
+			<v-btn
+				type="submit"
+				class="pay-button"
+				:loading="isLoading"
+				:disabled="isLoading"
+				color="primary"
+				>
+				<span v-if="isLoading">Cargando...</span>
+				<span v-else>Pagar</span>
+			</v-btn>
 		</form>
 		<div class="payment-info">
 			<p>Transacciones realizadas vía: <strong>OpenPay</strong></p>
@@ -88,6 +97,10 @@ export default {
 	},
 	props: {
 		response: Object,
+		isLoading: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	methods: {
 		loadOpenPayScripts() {
@@ -114,6 +127,7 @@ export default {
 			document.head.appendChild(openpayScript);
 		},
 		setupDeviceData() {
+			this.isLoading = true;
 			try {
 				const deviceDataId = window.OpenPay.deviceData.setup('payment-form');
 				this.deviceSessionId = deviceDataId;
@@ -194,13 +208,24 @@ input {
 }
 
 .pay-button {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   background-color: #4a90e2;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.pay-button:hover {
+  background-color: #3a7bb5; /* Color más oscuro al pasar el ratón */
+}
+
+.pay-button:disabled {
+  background-color: #c0c0c0; /* Color para el botón deshabilitado */
+  cursor: not-allowed; /* Cursor de no permitido */
 }
 
 .payment-info {

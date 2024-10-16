@@ -64,7 +64,7 @@ function replaceString(word, selectionStart, newWord) {
 	return newWord;
 }
 
-function showNotification(text, color = 'success', html = null, isBtn = false, timeout = 60000) {
+function showNotification(text, color = 'success', html = null, isBtn = false, timeout = 500) {
 	this.$store.dispatch('showSnackBar', { text, color, html, isBtn, timeout });
 }
 

@@ -23,6 +23,7 @@
 		<form id="visa-payment" :action="redirect" method="post"></form>
 		<v-dialog max-width="425" v-model="dialog" persistent>
 			<open-pay-form
+				:is-loading="isLoading"
 				:response="response"
 				@close="openDialog"
 				@save-payment="savePayment"
@@ -94,7 +95,7 @@ function data() {
 		currency: 'PEN',
 		dev: 'https://static-content-qas.vnforapps.com/v2/js/checkout.js?qa=true',
 		expirationTime: null,
-		loading: false,
+		isLoading: false,
 		merchantId: '',
 		hash: false,
 		prod: 'https://static-content.vnforapps.com/v2/js/checkout.js',
@@ -132,8 +133,10 @@ export default {
 			this.dialog = !this.dialog;
 		},
 		async savePayment(token, deviceSessionId) {
+			this.isLoading = true;
 			// const successUri = 'uri=resumen-de-mi-pedido';
 			// const errorUri = `errorUri=carrito-de-compras/pago/${this.getOrderId}`;
+			const orderId = this.getOrderId;
 			try {
 				const body = {
 					hash: this.hash,
@@ -149,10 +152,15 @@ export default {
 				};
 				const url = 'payment-gateway/validation';
 				// const fullUrl = `${url}?${successUri}&${errorUri}`;
-				await this.$httpSales.patch(url, body);
+				const response = await this.$httpSales.patch(url, body);
+				if (response.data.paymentGateway.status === 'Aprobado') {
+					this.$router.push({ name: 'buy-summary', params: { orderId } });
+				}
 				this.openDialog();
 			} catch (error) {
-				console.log(error);
+				this.showNotification('Error. La transacción no se completó.', 'error');
+			} finally {
+				this.isLoading = false;
 			}
 		},
 	},
