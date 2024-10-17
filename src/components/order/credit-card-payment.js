@@ -1,7 +1,7 @@
 import { mapGetters } from 'vuex';
 import { LINK, BUTTON } from '@/shared/enums/paymentStrategy';
 import {
-	leadgods, niubiz, datafast, pagoplux, pagopluxLink,
+	leadgods, niubiz, datafast, pagoplux, pagopluxLink, openpay,
 	xchange, paymentez, placetopay, alignet, mercadopago, mercadopagoMp,
 } from '@/shared/enums/gatewayCodes';
 
@@ -15,6 +15,7 @@ const LeadGods = () => import('@/components/order/paymentsMethods/leadgods');
 const PlaceToPay = () => import('@/components/order/paymentsMethods/place-to-pay');
 const Alignet = () => import('@/components/order/paymentsMethods/alignet');
 const MercadoPago = () => import('@/components/order/paymentsMethods/mercadopago');
+const OpenPay = () => import('@/components/order/paymentsMethods/open-pay');
 
 /**
  * @param {object-function} h render function
@@ -69,6 +70,7 @@ function paymentLinkCreator(h, gateway, ipAddress) {
  */
 const paymentButtonCreator = (h, gateway, ipAddress) => {
 	const buttonOptions = {
+		[openpay]: OpenPay,
 		[alignet]: Alignet,
 		[datafast]: DataFast,
 		[mercadopago]: MercadoPago,
