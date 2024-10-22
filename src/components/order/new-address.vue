@@ -18,9 +18,9 @@
 			v-model="newAddress.department"
 			@input="selectDepartment"
 		>
-		<div>
-		</div>
-			<span v-if="$v.newAddress.department.$invalid">El {{countryLabels.department}} es requerido
+			<div></div>
+			<span v-if="$v.newAddress.department.$invalid"
+				>El {{ countryLabels.department }} es requerido
 				<v-progress-circular
 					v-if="isToogleDp"
 					indeterminate
@@ -41,16 +41,18 @@
 			@input="selectProvince"
 			v-model="newAddress.province"
 		>
-		<div class="divSpinner">
-			<span  v-if="$v.newAddress.province.$invalid">La {{countryLabels.province}} es requerida</span>
-			<v-progress-circular
-				v-if="isTooglePr"
-				indeterminate
-				color="deep-orange"
-				:width="2"
-				:size="15"
-			></v-progress-circular>
-		</div>
+			<div class="divSpinner">
+				<span v-if="$v.newAddress.province.$invalid"
+					>La {{ countryLabels.province }} es requerida</span
+				>
+				<v-progress-circular
+					v-if="isTooglePr"
+					indeterminate
+					color="deep-orange"
+					:width="2"
+					:size="15"
+				></v-progress-circular>
+			</div>
 		</app-select>
 		<app-select
 			item-text="name"
@@ -63,16 +65,18 @@
 			v-model="newAddress.district"
 			@input="selectDistrict"
 		>
-		<div class="divSpinner">
-			<span v-if="$v.newAddress.district.$invalid">El {{countryLabels.district}} es requerido</span>
-			<v-progress-circular
-				v-if="isTooglePs"
-				indeterminate
-				color="deep-orange"
-				:width="2"
-				:size="15"
-			></v-progress-circular>
-		</div>
+			<div class="divSpinner">
+				<span v-if="$v.newAddress.district.$invalid"
+					>El {{ countryLabels.district }} es requerido</span
+				>
+				<v-progress-circular
+					v-if="isTooglePs"
+					indeterminate
+					color="deep-orange"
+					:width="2"
+					:size="15"
+				></v-progress-circular>
+			</div>
 		</app-select>
 		<app-input
 			data-cy="direccion"
@@ -80,7 +84,9 @@
 			class="mx-2 my-1 address-field field"
 			v-model="newAddress.addressLine1"
 		>
-			<span v-if="$v.newAddress.addressLine1.$invalid">La dirección es requerida</span>
+			<span v-if="$v.newAddress.addressLine1.$invalid"
+				>La dirección es requerida</span
+			>
 		</app-input>
 		<app-input
 			data-cy="apto"
@@ -98,16 +104,20 @@
 			v-model="newAddress.addressLine2"
 		>
 		</app-input>
-		<div class="mx-2 my-1 button-field field" v-if="flagMap">
+		<div class="mx-2 my-1 button-field field">
 			<a href="#" class="btn" @click.prevent="getMap()">Ubicar en el Mapa</a>
 		</div>
 		<div class="map mx-2 my-1 map-field" v-if="showMap">
 			<map-component
 				:zoom="16"
-				:markers="[{location: {lat: newAddress.latitude, lng: newAddress.longitude},}]"
-				:location="{lat: newAddress.latitude, lng: newAddress.longitude}"
-				:center="{lat: newAddress.latitude, lng: newAddress.longitude}"/>
-		</div>	
+				:markers="[
+					{ location: { lat: newAddress.latitude, lng: newAddress.longitude } },
+				]"
+				:location="{ lat: newAddress.latitude, lng: newAddress.longitude }"
+				:center="{ lat: newAddress.latitude, lng: newAddress.longitude }"
+				@update-address="updateAddressLine1"	
+			/>
+		</div>
 	</form>
 </template>
 <script>
@@ -128,35 +138,64 @@ function flagMap() {
 }
 
 function getMap() {
-	if (this.newAddress.department !== null &&
+	if (
+		this.newAddress.department !== null &&
 		this.newAddress.province !== null &&
-		this.newAddress.district) {
+		this.newAddress.district
+	) {
 		this.googleSearch();
+	} else {
+		this.showNotification(
+			'Debe seleccionar el Departamento, Provincia y Distrito.',
+			'warning',
+			null,
+			false,
+			2000,
+		);
 	}
 }
 
 function googleSearch() {
 	const geocoder = new google.maps.Geocoder();
-	const departmentName = this.departments.filter(d => d.id === this.newAddress.department);
-	const provinceName = this.provinces.filter(p => p.id === this.newAddress.province);
-	const disctrictName = this.districts.filter(d => d.id === this.newAddress.district);
-	geocoder.geocode({ address: `${departmentName[0].name} ${provinceName[0].name} ${disctrictName[0].name} ${this.newAddress.addressLine1}` }, (results, status) => {
-		if (status === google.maps.GeocoderStatus.OK) {
-			const lat = results[0].geometry.location.lat();
-			const lng = results[0].geometry.location.lng();
-			this.newAddress.latitude = lat;
-			this.newAddress.longitude = lng;
-			this.showMap = true;
-			this.setCustomerAddress();
-		} else {
-			console.error('Request failed.');
-		}
-	});
+	const departmentName = this.departments.filter(
+		d => d.id === this.newAddress.department,
+	);
+	const provinceName = this.provinces.filter(
+		p => p.id === this.newAddress.province,
+	);
+	const disctrictName = this.districts.filter(
+		d => d.id === this.newAddress.district,
+	);
+	geocoder.geocode(
+		{
+			address: `${departmentName[0].name} ${provinceName[0].name} ${disctrictName[0].name} ${this.newAddress.addressLine1}`,
+		},
+		(results, status) => {
+			if (status === google.maps.GeocoderStatus.OK) {
+				const lat = results[0].geometry.location.lat();
+				const lng = results[0].geometry.location.lng();
+				this.newAddress.latitude = lat;
+				this.newAddress.longitude = lng;
+				this.showMap = true;
+				this.setCustomerAddress();
+			} else {
+				this.showNotification(
+					'No se encontro esa ubicación en el mapa.',
+					'error',
+					null,
+					false,
+					4000,
+				);
+				console.error('Request failed.');
+			}
+		},
+	);
 }
 
 function selectDepartment(provinceId) {
 	this.newAddress.province = null;
 	this.newAddress.district = null;
+	this.newAddress.addressLine1 = null;
 	this.$store.commit('SET_PROVINCES', []);
 	this.$store.commit('SET_DISTRICTS', []);
 	// this.calculateShippingCost({ provinceId });
@@ -166,6 +205,7 @@ function selectDepartment(provinceId) {
 
 function selectProvince(cityId) {
 	this.newAddress.districts = null;
+	this.newAddress.addressLine1 = null;
 	this.$store.commit('SET_DISTRICTS', []);
 	// this.calculateShippingCost({
 	// 	provinceId: this.newAddress.department,
@@ -176,6 +216,7 @@ function selectProvince(cityId) {
 }
 
 function selectDistrict(parishId) {
+	this.newAddress.addressLine1 = null;
 	this.calculateShippingCost({
 		provinceId: this.newAddress.department,
 		cityId: this.newAddress.province,
@@ -195,7 +236,13 @@ async function calculateShippingCost(locationId, location) {
 		if (error.data.message === 'PRICE_NOT_CONFIGURATION') {
 			this.$store.dispatch('setShippingCostError', true);
 			this.$store.dispatch('setNoShippingCost');
-			this.showNotification('No es posible hacer envios a ese destino.', 'error', null, false, 8000);
+			this.showNotification(
+				'No es posible hacer envios a ese destino.',
+				'error',
+				null,
+				false,
+				8000,
+			);
 		}
 	}
 }
@@ -308,6 +355,9 @@ export default {
 		setCustomerAddress,
 		googleSearch,
 		getMap,
+		updateAddressLine1(address) {
+			this.newAddress.addressLine1 = address;
+		},
 	},
 	validations,
 	watch: {
@@ -322,80 +372,79 @@ export default {
 <style lang="scss" scoped>
 .divSpinner {
 	margin: 2px;
-justify-content: space-between;
+	justify-content: space-between;
 }
 .v-progress-circular {
-  float: right;
+	float: right;
 }
-	.new-address-form {
-		align-items: center;
-		display: flex;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		margin-top: 20px;
-	}
+.new-address-form {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	margin-top: 20px;
+}
 
-	.field {
-		height: 68px;
-	}
+.field {
+	height: 68px;
+}
 
-	.name-field,
-	.department-field {
-		flex: 1 1 40%;
+.name-field,
+.department-field {
+	flex: 1 1 40%;
 
-		@media (max-width: 925px) {
-			flex: 1 1 100%;
-		}
-	}
-
-	.district-field,
-	.province-field {
-		flex: 1 1 40%;
-	}
-
-	.address-field {
-		flex: 1 1 60%;
-	}
-
-	.number-field {
-		flex: 1 1 20%;
-
-		@media (max-width: 925px) {
-			flex: 1 1 100%;
-		}
-	}
-
-	.reference-field {
-		flex: 1 1 60%;
-		@media (max-width: 925px) {
-			flex: 1 1 100%;
-		}
-	}
-
-
-	.button-field{
-		flex: 1 1 20%;
-
-		@media (max-width: 925px) {
-			flex: 1 1 100%;
-		}
-	}
-
-	.map-field{
+	@media (max-width: 925px) {
 		flex: 1 1 100%;
 	}
+}
 
-	.btn{
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		font-family: "Avenir Next Medium";
-		font-size: 12px;
-		height: 46.8px;
-		outline: none;
-		border: 1px solid rgb(227, 5, 23);
-		border-radius: 7px;
-		color: rgb(227, 5, 23);
-		text-decoration: none;
+.district-field,
+.province-field {
+	flex: 1 1 40%;
+}
+
+.address-field {
+	flex: 1 1 60%;
+}
+
+.number-field {
+	flex: 1 1 20%;
+
+	@media (max-width: 925px) {
+		flex: 1 1 100%;
 	}
+}
+
+.reference-field {
+	flex: 1 1 60%;
+	@media (max-width: 925px) {
+		flex: 1 1 100%;
+	}
+}
+
+.button-field {
+	flex: 1 1 20%;
+
+	@media (max-width: 925px) {
+		flex: 1 1 100%;
+	}
+}
+
+.map-field {
+	flex: 1 1 100%;
+}
+
+.btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Avenir Next Medium';
+	font-size: 12px;
+	height: 46.8px;
+	outline: none;
+	border: 1px solid rgb(227, 5, 23);
+	border-radius: 7px;
+	color: rgb(227, 5, 23);
+	text-decoration: none;
+}
 </style>
