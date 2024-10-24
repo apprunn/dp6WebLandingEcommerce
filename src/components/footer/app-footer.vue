@@ -62,6 +62,7 @@ export default {
 				youtube: '/static/img/icons/youtube.svg',
 				instagram: '/static/img/icons/instagram.svg',
 				twitter: '/static/img/icons/twitter.svg',
+				tiktok: '/static/img/icons/tiktok.svg',
 			},
 		};
 	},
