@@ -30,7 +30,7 @@
 				:open-warehouse="stockWarehouse"
 				:data="productDetails"
 				:features="globalFeatures"
-				:show-unity="showUnity"
+				:show-unity="Boolean(showUnity)"
 				:stock-avaible="stockAvaible"
 				:wholeSalePrice="wholeSalePrice"
 				class="container-product-detail"
