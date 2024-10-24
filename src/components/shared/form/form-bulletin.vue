@@ -1,36 +1,43 @@
 <template>
 	<div class="form-bulletin">
 		<div class="form-bulletin-description-company">
-			<div class="content-date-company">
+			<div class="content-date-company" @click="redirectToWhatsApp(getCommerceData.phone)" style="cursor: pointer;">
 				<PhoneIcon/>
 				<p
 					:class="[
 						'item-date-company',
 						{ 'loading': indeterminate },
 					]"
-				>{{getCommerceData.phone}}</p>
+				>
+					{{ getCommerceData.phone }}
+				</p>
 			</div>
-			<div class="content-date-company">
+			<div class="content-date-company" @click="sendEmail(getCommerceData.email)" style="cursor: pointer;">
 				<EmailIcon/>
 				<p
 					:class="[
 						'item-date-direction email',
 						{ 'loading': indeterminate },
 					]"
-				>Correo: {{getCommerceData.email}}</p>
+				>
+					Correo: {{ getCommerceData.email }}
+				</p>
 			</div>
-			<div class="content-date-company">
+			<div class="content-date-company" @click="openMap(getCommerceData.address)" style="cursor: pointer;">
 				<LocationIcon/>
 				<p
 					:class="[
 						'item-date-direction',
 						{ 'loading': indeterminate },
 					]"
-				>{{getCommerceData.address}}</p>
+				>
+					{{ getCommerceData.address }}
+				</p>
 			</div>
 		</div>
 	</div>
 </template>
+
 
 <script>
 import { mapGetters } from 'vuex';
@@ -44,6 +51,20 @@ export default {
 		EmailIcon,
 		LocationIcon,
 		PhoneIcon,
+	},
+	methods: {
+		redirectToWhatsApp(phone) {
+			const whatsappUrl = `https://wa.me/${phone}`;
+			window.open(whatsappUrl, '_blank');
+		},
+		sendEmail(email) {
+			const mailtoUrl = `mailto:${email}`;
+			window.location.href = mailtoUrl;
+		},
+		openMap(address) {
+			const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+			window.open(mapUrl, '_blank');
+		},
 	},
 	computed: {
 		...mapGetters([

@@ -23,6 +23,7 @@
 							:src="logo.urlImage"
 							alt="Logo de compañía"
 							class="logo-image"
+							@error="handleImageError"
 							@click="goToHome()"
 						/>
 					<!-- </router-link> -->
@@ -172,6 +173,7 @@ function goToFavorites() {
 
 function data() {
 	return {
+		fallbackImage: '/static/img/placeholder-product.png',
 		imagesButton: [
 			{
 				image: '/static/img/user.svg',
@@ -244,6 +246,10 @@ export default {
 		searchProduct,
 		updateFilter,
 		toogleSearch,
+		handleImageError(event) {
+			const target = event.target;
+			target.src = this.fallbackImage;
+		},
 		goToHome() {
 			// this.$store.dispatch('updateProductSelect', null);
 			this.searchProduct('');
@@ -315,13 +321,13 @@ export default {
 
 	.container-header-logo {
 		align-items: center;
-		flex: 1 1 70%;
+		flex: 1 0 40%;
 		height: inherit;
 		padding: 1.5rem 0;
 
 		@media (max-width: 764px) {
 			justify-content: center;
-			padding: 1rem 0;
+			padding: 5px 1px;
 		}
 	}
 
@@ -415,7 +421,7 @@ export default {
 	.logo-image {
 		height: 67px;
 		object-fit: contain;
-		width: 103px;
+		width: 145px;
 	}
 
 	.app-modal-login {

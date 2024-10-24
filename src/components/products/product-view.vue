@@ -67,6 +67,7 @@
 						<img 
 							:src="image.urlImage" 
 							:alt="image.name"
+							@error="handleImageError"
 							class="image-product-slider"
 						>
 					</div>
@@ -110,18 +111,35 @@ function imagesHandler(newImages) {
 
 		newImages.forEach((img) => {
 			if (img.fromApp === 0) {
-				this.webLocalImages.push(img);
+				const imageToValidate = new Image();
+				imageToValidate.src = img.urlImage;
+				imageToValidate.onload = () => {
+					if (imageToValidate.complete) {
+						this.webLocalImages.push(img);
+					} else {
+						this.webLocalImages.push(this.data);
+					}
+				};
+
+				imageToValidate.onerror = () => {
+					this.webLocalImages.push(this.data);
+				};
+			} else if (img.urlImage === '/static/icons/no-picture-found.svg') {
+				this.movilLocalImages.push(this.data);
 			} else {
 				this.movilLocalImages.push(img);
 			}
 		});
+
 		if (this.movilLocalImages.length === 0) {
 			this.movilLocalImages = this.webLocalImages;
 		}
-		if (this.webLocalImages.length === 0 && this.movilLocalImages > 0) {
+		if (this.webLocalImages.length === 0 && this.movilLocalImages.length > 0) {
 			this.webLocalImages = this.movilLocalImages;
 		}
-		this.$set(this.webLocalImages[0], 'select', true);
+		if (this.webLocalImages.length > 0) {
+			this.$set(this.webLocalImages[0], 'select', true);
+		}
 	}
 }
 
