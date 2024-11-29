@@ -12,10 +12,9 @@
 			></app-modal>
 		</div>
 		<div v-if="disabled" class="product-disabled">
-			<h1
-				:style="`color:${globalColors.primary}`"
-				class="sorry-text"
-			>Lo sentimos, este producto está desactivado  :(</h1>
+			<h1 :style="`color:${globalColors.primary}`" class="sorry-text">
+				Lo sentimos, este producto está desactivado :(
+			</h1>
 		</div>
 		<div v-else class="detail-product-top">
 			<product-view
@@ -29,6 +28,7 @@
 				:disabled-buy="disabledBuy"
 				:open-warehouse="stockWarehouse"
 				:data="productDetails"
+				:warehouses-total="warehousesTotal"
 				:features="globalFeatures"
 				:show-unity="Boolean(showUnity)"
 				:stock-avaible="stockAvaible"
@@ -55,15 +55,13 @@
 				:sections="productDetails.sections"
 				:lastIndex="lastIndex"
 				:opinions="opinions"
-				@update-opinion="loadOpinions"/>
-		</div>
-		<div>
-			<product-related
-				:relateds="relateds"
-				v-if="relateds.length"
+				@update-opinion="loadOpinions"
 			/>
 		</div>
-		<product-publicity class="container-publicity mobile"/>
+		<div>
+			<product-related :relateds="relateds" v-if="relateds.length" />
+		</div>
+		<product-publicity class="container-publicity mobile" />
 		<app-banner-top
 			:data="getPromotionalBanner"
 			:color="globalColors.secondary"
@@ -124,8 +122,9 @@ function noStock() {
 
 function mounted() {
 	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
-	const company = this.getCommerceData.company ?
-		this.getCommerceData.company : ecommerceLocal.company;
+	const company = this.getCommerceData.company
+		? this.getCommerceData.company
+		: ecommerceLocal.company;
 	this.showUnity = company.settings ? company.settings.flagShowBaseUnit : false;
 	// this.showUnity = true;
 }
@@ -150,12 +149,25 @@ async function loadProduct() {
 					Object.keys(conversions),
 				);
 			}
-			this.stockAvaible = conversionsFormatted && conversionsFormatted[0] ?
-				parseInt(this.product.stockWarehouse / conversionsFormatted[0].quantity, 10) : 0;
+			this.stockAvaible =
+				conversionsFormatted && conversionsFormatted[0]
+					? parseInt(
+							this.product.stockWarehouse / conversionsFormatted[0].quantity,
+							10,
+					  )
+					: 0;
 			// this.stockAvaible = parseInt(this.product.stock / conversionsFormatted[0]
 			// 	? conversionsFormatted[0].quantity : 0, 10);
 			this.$store.dispatch('setStock', this.stockAvaible);
 		}
+		this.warehousesTotal = this.product.warehouseProductDetails;
+		const isExist = this.warehousesTotal.some(
+			w => w.id === this.product.warehouseProduct.warehouseId,
+		);
+		if (!isExist) {
+			this.warehousesTotal.push(this.product.warehouseProduct);
+		}
+		console.log(this.warehousesTotal);
 		this.updatePageTitle(this.product.name.toUpperCase());
 		this.updateDescriptionTag(this.product.description);
 		this.$store.dispatch('setRatingProductId', this.product.id);
@@ -165,7 +177,10 @@ async function loadProduct() {
 		if (error.data.message === 'PRODUCT_NOT_FOUND') {
 			this.disabled = true;
 			this.showNotification('Este producto ya no está disponible', 'warning');
-			this.$store.dispatch('LOAD_RELATED_PRODUCTS', { context: this, id: this.id });
+			this.$store.dispatch('LOAD_RELATED_PRODUCTS', {
+				context: this,
+				id: this.id,
+			});
 		} else {
 			this.showGenericError();
 		}
@@ -178,9 +193,7 @@ async function loadData(id) {
 		const requests = [
 			this.$httpProductsPublic.get(`products-public/${id}/children`),
 		];
-		([
-			{ data: this.childrens },
-		] = await Promise.all(requests));
+		[{ data: this.childrens }] = await Promise.all(requests);
 	}
 	this.product.images = this.product.images.map((i, index) => {
 		const newImage = { ...i };
@@ -190,7 +203,7 @@ async function loadData(id) {
 	const { discount } = Object.entries(this.product.priceList).flat()[1];
 	let originalPrice = this.product.price;
 	if (discount > 0) {
-		originalPrice = (1 - (discount / 100)) * this.product.price;
+		originalPrice = (1 - discount / 100) * this.product.price;
 	}
 
 	this.product.quantity = 1;
@@ -200,8 +213,10 @@ async function loadData(id) {
 	this.tabs = this.product.sections.map(p => p.name);
 	this.tabs.push('Comentarios');
 	this.lastIndex = this.product.sections.length;
-	const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
-	const commercePriceListId = user && user.salPriceListId ? user.salPriceListId : null;
+	const user =
+		JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+	const commercePriceListId =
+		user && user.salPriceListId ? user.salPriceListId : null;
 	this.productInstance = new ProductDetails(
 		this.childrens,
 		this.getCommerceData.settings.salPriceListId,
@@ -211,14 +226,22 @@ async function loadData(id) {
 	this.globalFeatures = [...this.productInstance.getFeatures()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
 	if (!Array.isArray(this.productDetails.sections)) {
-		this.showNotification('Se esta cargando mal la información del producto', 'warning');
+		this.showNotification(
+			'Se esta cargando mal la información del producto',
+			'warning',
+		);
 	}
 	this.productImages = [...this.productInstance.getImages()] || [];
-	this.allFeatures = this.childrens.reduce((acum, children) => acum.concat(children.features), []);
+	this.allFeatures = this.childrens.reduce(
+		(acum, children) => acum.concat(children.features),
+		[],
+	);
 	this.features = this.allFeatures.reduce((acum, feature) => {
 		const index = acum.findIndex(a => a.name === feature.name);
 		if (index > -1) {
-			const indexValue = acum[index].values.findIndex(i => i.name === feature.value);
+			const indexValue = acum[index].values.findIndex(
+				i => i.name === feature.value,
+			);
 			if (indexValue === -1) {
 				const value = {
 					name: feature.value,
@@ -230,25 +253,26 @@ async function loadData(id) {
 				acum[index].values.push(value);
 			}
 		} else {
-			acum.push(
-				{
-					name: feature.name,
-					value: 'PADRE',
-					values: [
-						{ name: feature.name,
-							active: false,
-							possible: false,
-							disabled: true,
-							code: 'PADRE',
-						},
-						{ name: feature.value,
-							active: false,
-							possible: false,
-							disabled: false,
-							code: feature.code,
-						},
-					],
-				});
+			acum.push({
+				name: feature.name,
+				value: 'PADRE',
+				values: [
+					{
+						name: feature.name,
+						active: false,
+						possible: false,
+						disabled: true,
+						code: 'PADRE',
+					},
+					{
+						name: feature.value,
+						active: false,
+						possible: false,
+						disabled: false,
+						code: feature.code,
+					},
+				],
+			});
 		}
 		return acum;
 	}, []);
@@ -272,9 +296,17 @@ function possibleFeature(possibles) {
 		element.values.forEach((value, indexValue) => {
 			if (this.productsFilter.length === 1) {
 				const flag = possibles.filter(p => p.value === value.code);
-				this.$set(this.features[index].values[indexValue], 'active', !!flag.length);
+				this.$set(
+					this.features[index].values[indexValue],
+					'active',
+					!!flag.length,
+				);
 				this.$set(this.features[index].values[indexValue], 'possible', false);
-				this.$set(this.features[index].values[indexValue], 'disabled', !flag.length);
+				this.$set(
+					this.features[index].values[indexValue],
+					'disabled',
+					!flag.length,
+				);
 				if (value.code === 'PADRE') {
 					this.$set(this.features[index].values[indexValue], 'disabled', true);
 				}
@@ -282,19 +314,31 @@ function possibleFeature(possibles) {
 					this.$set(this.features[index], 'value', value.code);
 				}
 			} else {
-				const flag = possibles.filter(p => p.value === value.code && !value.active);
-				this.$set(this.features[index].values[indexValue], 'possible', !!flag.length);
-				this.$set(this.features[index].values[indexValue], 'disabled', !flag.length);
+				const flag = possibles.filter(
+					p => p.value === value.code && !value.active,
+				);
+				this.$set(
+					this.features[index].values[indexValue],
+					'possible',
+					!!flag.length,
+				);
+				this.$set(
+					this.features[index].values[indexValue],
+					'disabled',
+					!flag.length,
+				);
 			}
 		});
 		return element;
 	});
 	if (this.productsFilter.length === 1) {
-		this.productsFilter[0].images = this.productsFilter[0].images.map((i, index) => {
-			const newImage = { ...i };
-			newImage.select = index === 0;
-			return newImage;
-		});
+		this.productsFilter[0].images = this.productsFilter[0].images.map(
+			(i, index) => {
+				const newImage = { ...i };
+				newImage.select = index === 0;
+				return newImage;
+			},
+		);
 		this.assignProduct(this.productsFilter[0]);
 		this.disabledBtn = false;
 	}
@@ -310,17 +354,20 @@ async function loadOpinions() {
 		typeQuestionAnswer: 3,
 		productId: this.product.id,
 	};
-	const { data: response } = process.env.PRODUCTS_READ_REPORT ?
-		await this.$httpProductsReadPublic.get('question-answer/public', { params }) : await this.$httpProductsPublic.get('question-answer/public', { params });
+	const { data: response } = process.env.PRODUCTS_READ_REPORT
+		? await this.$httpProductsReadPublic.get('question-answer/public', {
+				params,
+		  })
+		: await this.$httpProductsPublic.get('question-answer/public', { params });
 	this.opinions = response;
 	this.$loading(false);
 }
 
 function clearFeatures() {
-	this.features = this.features.map((element) => {
+	this.features = this.features.map(element => {
 		const newElement = { ...element };
 		newElement.value = 'PADRE';
-		newElement.values = element.values.map((v) => {
+		newElement.values = element.values.map(v => {
 			const newValue = { ...v };
 			newValue.active = false;
 			newValue.possible = false;
@@ -354,12 +401,15 @@ function clickQuantity(value) {
 	if (value === 'less' && num === 1) {
 		num = 1;
 	} else {
-		num = value === 'more' ? num += 1 : num -= 1;
+		num = value === 'more' ? (num += 1) : (num -= 1);
 	}
 	const validQuantity = this.checkValidQuantity(num);
 	this.quantityStock = parseInt(this.unitProductValid.quantity * num, 10);
 	if (this.quantityStock > this.product.stockWarehouse) {
-		this.showNotification(`El producto ${this.product.name} no cuenta con más stock en la presentación ${this.unitProductValid.name}.`, 'warning');
+		this.showNotification(
+			`El producto ${this.product.name} no cuenta con más stock en la presentación ${this.unitProductValid.name}.`,
+			'warning',
+		);
 	} else if (validQuantity) {
 		this.$set(newProductdetail, 'quantity', num);
 		this.product = { ...newProductdetail };
@@ -394,7 +444,10 @@ function inputQuantity(num) {
 		this.productInstance.updateQuantity(num);
 		this.productDetails = { ...this.productInstance.getProductDetails() };
 	} else {
-		this.showNotification(`Cantidad: ${num} no disponible inputQuantity`, 'primary');
+		this.showNotification(
+			`Cantidad: ${num} no disponible inputQuantity`,
+			'primary',
+		);
 	}
 }
 
@@ -409,7 +462,9 @@ function checkValidQuantity(quantity) {
 async function openDialog() {
 	const id = this.productDetails.id;
 	try {
-		const { data: response } = await this.$httpProductsPublic.get(`products-public/${id}/stock-by-warehouse`);
+		const { data: response } = await this.$httpProductsPublic.get(
+			`products-public/${id}/stock-by-warehouse`,
+		);
 		this.warehouses = response;
 		this.dialogWarehouses = true;
 	} catch (error) {
@@ -430,13 +485,19 @@ function selectedUnit(unit) {
 	};
 	this.unitProductValid = unit || unitDefault;
 	if (this.quantityStock > this.product.stockWarehouse) {
-		const validQuantity = parseInt(this.product.stockWarehouse / unit.quantity, 10);
+		const validQuantity = parseInt(
+			this.product.stockWarehouse / unit.quantity,
+			10,
+		);
 		const newProductdetail = { ...this.product };
 		this.$set(newProductdetail, 'quantity', validQuantity);
 		this.product = { ...newProductdetail };
 		this.productInstance.updateQuantity(validQuantity);
-		this.showNotification(`El producto ${this.product.name}
-		no cuenta con más stock en la presentación ${unit.name}`, 'warning');
+		this.showNotification(
+			`El producto ${this.product.name}
+		no cuenta con más stock en la presentación ${unit.name}`,
+			'warning',
+		);
 	} else {
 		this.disabledBuy = false;
 	}
@@ -468,7 +529,8 @@ function data() {
 		allFeatures: [],
 		arrayPossible: [],
 		bannerTop: {
-			urlImage: 'https://s3.amazonaws.com/apprunn-acl/COM-PRU-01/ARQ88/image/big.png',
+			urlImage:
+				'https://s3.amazonaws.com/apprunn-acl/COM-PRU-01/ARQ88/image/big.png',
 			image: 'descuento',
 		},
 		childrens: [],
@@ -499,6 +561,7 @@ function data() {
 		tabs: [],
 		unitProductValid: {},
 		warehouses: [],
+		warehousesTotal: [],
 		wholeSalePrice: [],
 		totalPriceProduct: 0,
 	};
@@ -518,14 +581,8 @@ export default {
 		warehousesModal,
 	},
 	computed: {
-		...mapGetters([
-			'getCommerceData',
-			'getPromotionalBanner',
-			'token',
-		]),
-		...mapGetters('loading', [
-			'isLoading',
-		]),
+		...mapGetters(['getCommerceData', 'getPromotionalBanner', 'token']),
+		...mapGetters('loading', ['isLoading']),
 		...mapState({
 			relateds: state => state.products.relateds,
 			topModal: state => state.topLocationModal,
@@ -569,112 +626,111 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-	.container-product-view {
-		flex: 1 1 50%;
-		margin-right: 15px;
+.container-product-view {
+	flex: 1 1 50%;
+	margin-right: 15px;
 
-		@media screen and (max-width: 996px) {
-			flex: 1 1 100%;
-			margin-right: 0;
-		}
+	@media screen and (max-width: 996px) {
+		flex: 1 1 100%;
+		margin-right: 0;
 	}
+}
 
-	.page-detail-product {
-		background: color(white);
-		position: relative;
+.page-detail-product {
+	background: color(white);
+	position: relative;
 
-		@media screen and (max-width: 996px) {
-			padding-top: 29px;
-		}
+	@media screen and (max-width: 996px) {
+		padding-top: 29px;
 	}
+}
 
-	.detail-product-top {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 92px;
-		padding: 53px 7% 0;
+.detail-product-top {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 92px;
+	padding: 53px 7% 0;
 
-		@media screen and (max-width: 996px) {
-			flex-direction: column;
-			margin-bottom: 35px;
-			padding: 0 5px;
-		}
+	@media screen and (max-width: 996px) {
+		flex-direction: column;
+		margin-bottom: 35px;
+		padding: 0 5px;
 	}
+}
 
-	.container-product-detail {
-		flex: 1 1 40%;
-		margin-left: 15px;
+.container-product-detail {
+	flex: 1 1 40%;
+	margin-left: 15px;
 
-		@media screen and (max-width: 996px) {
-			flex: 1 1 100%;
-			margin-left: 0;
-		}
+	@media screen and (max-width: 996px) {
+		flex: 1 1 100%;
+		margin-left: 0;
 	}
+}
 
-	.container-product-tab {
-		flex: 1 1 70%;
+.container-product-tab {
+	flex: 1 1 70%;
+}
+
+.container-publicity {
+	flex: 1 1 30%;
+	margin-right: 29px;
+}
+
+.detail-tab-publicity {
+	display: flex;
+	justify-content: space-between;
+	padding: 0 3%;
+
+	@media screen and (max-width: 764px) {
+		flex-direction: column;
+		padding: 0;
 	}
+}
 
-	.container-publicity {
-		flex: 1 1 30%;
-		margin-right: 29px;
+.mobile {
+	display: none;
+	@media screen and (max-width: 764px) {
+		display: block;
 	}
+}
 
-	.detail-tab-publicity {
-		display: flex;
-		justify-content: space-between;
-		padding: 0 3%;
-
-		@media screen and (max-width: 764px) {
-			flex-direction: column;
-			padding: 0;
-		}
-	}
-
-	.mobile {
+.desktop {
+	@media screen and (max-width: 764px) {
 		display: none;
-		@media screen and (max-width: 764px) {
-			display: block;
-		}
 	}
+}
 
-	.desktop {
-		@media screen and (max-width: 764px) {
-			display: none;
-		}
+.container-general-tab {
+	padding: 0 7%;
+
+	@media screen and (max-width: 764px) {
+		padding: 0 5%;
 	}
+}
 
-	.container-general-tab {
-		padding: 0 7%;
+.confirm-modal-container {
+	background-color: white;
+	border: 1px solid color(border);
+	border-radius: 8px;
+	box-shadow: 0 2px 4px 0 rgba(213, 213, 213, 0.5);
+	margin-top: 1rem;
+	padding: 10px;
+	position: fixed;
+	right: 37px;
+	width: 350px;
+	z-index: 2;
+}
 
-		@media screen and (max-width: 764px) {
-			padding: 0 5%;
-		}
-	}
+.product-disabled {
+	align-items: center;
+	display: flex;
+	height: 300px;
+	justify-content: center;
+}
 
-	.confirm-modal-container {
-		background-color: white;
-		border: 1px solid color(border);
-		border-radius: 8px;
-		box-shadow: 0 2px 4px 0 rgba(213, 213, 213, 0.5);
-		margin-top: 1rem;
-		padding: 10px;
-		position: fixed;
-		right: 37px;
-		width: 350px;
-		z-index: 2;
-	}
-
-	.product-disabled {
-		align-items: center;
-		display: flex;
-		height: 300px;
-		justify-content: center;
-	}
-
-	.sorry-text {
-		margin: 0 20px;
-		text-align: center;
-	}
+.sorry-text {
+	margin: 0 20px;
+	text-align: center;
+}
 </style>
-

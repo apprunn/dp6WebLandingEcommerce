@@ -38,8 +38,10 @@ function addProductToBuyCar(context, product) {
 	const newProduct = product.quantity ? product : setNewProperty('quantity', 1)(product);
 	const localS = localStorage.getItem('ecommerce::product-select');
 	const productsSelected = localS !== null ? JSON.parse(localStorage.getItem('ecommerce::product-select')) : [];
-	const index = productsSelected.findIndex(
-		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
+	const index = productsSelected.findIndex(p =>
+		p.id === newProduct.id &&
+		p.unitSelected === newProduct.unitSelected &&
+		newProduct.warehouse.id === p.warehouse.id
 	);
 	if (index > -1) {
 		const currentProduct = productsSelected[index];
