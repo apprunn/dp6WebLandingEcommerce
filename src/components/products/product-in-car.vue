@@ -27,6 +27,9 @@
 				<p class="product-brand">
 					{{ product.unit ? product.unit.name : null }}
 				</p>
+				<span class="product-warehouse">
+					{{ product.warehouse ? product.warehouse.name : null }}
+				</span>
 				<p
 					v-if="showUnity"
 					:style="`color: ${globalColors.primary};`"
@@ -315,8 +318,6 @@ export default {
 .description {
 	grid-area: description;
 	place-self: flex-start;
-	margin-top: 15px;
-	text-transform: lowercase;
 	width: 100%;
 	@media (min-width: 800px) {
 		margin-top: 0;
@@ -401,6 +402,10 @@ export default {
 
 .product-brand {
 	color: color(base);
+	font-size: size(msmall);
+}
+
+.product-warehouse {
 	font-size: size(msmall);
 }
 

@@ -157,12 +157,13 @@
 				this.redirect();
 			}
 		} catch (err) {
-			if (err.data.message === 'USER_NOT_ACTIVATED_BY_EMAIL') {
+			console.log(err);
+			if (err.data && err.data.message === 'USER_NOT_ACTIVATED_BY_EMAIL') {
 				this.showNotification(
 					'Su cuenta no está activada. Le hemos enviado un correo para que lo pueda hacer',
 					'accent',
 				);
-			} else if (err.status === 500) {
+			} else if (err.status && err.status === 500) {
 				this.showGenericError();
 			}
 		} finally {
