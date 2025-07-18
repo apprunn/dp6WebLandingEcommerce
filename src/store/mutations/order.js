@@ -46,8 +46,8 @@ const orderMutation = {
 		const newPrice = h.getPriceByRange({
 			ranges,
 			quantity: products[index].quantity,
-			originalPrice: products[index].priceDiscountOrigin
-				|| products[index].originalPrice,
+			originalPrice: products[index].priceDiscount
+				|| products[index].priceDiscountOrigin,
 		});
 		products[index].priceDiscount = newPrice;
 		Vue.set(state.order, 'products', [...products]);
