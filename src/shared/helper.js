@@ -306,8 +306,21 @@ function copyFn(node) {
 }
 
 const getRangesOfProduct = product => {
-	const [, priceList] = Object.entries(product.priceList).flat();
-	return priceList.ranges;
+	// ESTA FUNCION SOLO DEBERIA DEVOLVER LOS RANGOS DE UN PRODUCTO CON LISTA DE PRECIO DEL COMERCIO
+	const ecommerce = JSON.parse(
+		localStorage.getItem('ecommerce::ecommerce-data') || '',
+	);
+	// Obtener ID de la lista de precios que usa el comercio
+	const idPriceList = ecommerce && ecommerce.settings && ecommerce.settings.salPriceListId;
+
+	// Validar que exista priceList en el producto
+	const priceList = product.priceList;
+	if (!priceList || !idPriceList) return [];
+
+	// Retornar los ranges si existen
+	return priceList[idPriceList] && priceList[idPriceList].ranges
+		? priceList[idPriceList].ranges
+		: [];
 };
 
 function getDomainDynamic(value) {
