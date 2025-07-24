@@ -50,7 +50,8 @@ function addProductToBuyCar(context, product) {
 		let quantity = newProduct.quantity;
 		quantity = finalStock > quantity || allowOrderStockNegative ? quantity : finalStock;
 		currentProduct.quantity = quantity;
-
+		// const { priceDiscountOrigin, originalPrice, priceDiscount } = currentProduct;
+		// console.log('current', { priceDiscountOrigin, originalPrice, priceDiscount });
 		const ranges = helper.getRangesOfProduct({ ...currentProduct });
 		const newPrice = helper.getPriceByRange({
 			ranges,
@@ -64,12 +65,13 @@ function addProductToBuyCar(context, product) {
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);
 		context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected);
 	} else {
+		// const { priceDiscountOrigin, originalPrice, priceDiscount } = newProduct;
+		// console.log('current', { priceDiscountOrigin, originalPrice, priceDiscount });
 		// SE AÑADE POR PRIMERA VEZ AL CARRITO
 		// const { unitSelected, unitId, unit } = currentProduct;
 		// const idUnit = unitSelected || unitId || unit.id;
 		// const priceDiscountOrigin = currentProduct.priceDiscount
 		newProduct.priceDiscountOrigin = newProduct.priceDiscount;
-		console.log({ priceDiscountOrigin: newProduct.priceDiscountOrigin });
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected.concat(newProduct));
 		context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected.concat(newProduct));
 	}
