@@ -2,6 +2,12 @@ import { compose, isEmpty, setNewProperty, map } from '@/shared/lib';
 import helper from '@/shared/helper';
 
 const PAGE_TITLE = process.env.PAGE_TITLE;
+const PRODUCTS_READ_REPORT = process.env.PRODUCTS_READ_REPORT;
+const STORAGE_USER_KEY = process.env.STORAGE_USER_KEY;
+const SALES_READ_REPORT = process.env.SALES_READ_REPORT;
+const COMMERCE_CODE = process.env.COMMERCE_CODE;
+const ACL_COMPANY_CODE = process.env.ACL_COMPANY_CODE;
+const CODE_PROJECT = process.env.CODE_PROJECT;
 
 function updateProducts(products, priceListId, getters) {
 	const priceListDefault = getters && getters.getCommerceData ?
@@ -23,13 +29,13 @@ const asyncActions = {
 		const completeParams = Object.assign({}, getters.productParams, params);
 		// if (state.token) {
 		// 	request.push(
-		// 		process.env.PRODUCTS_READ_REPORT ?
+		// 		PRODUCTS_READ_REPORT ?
 		// 		context.$httpProductsRead.get('products-public', { params: completeParams }) :
 		// 		context.$httpProducts.get('products-public', { params: completeParams }),
 		// 	);
 		// } else {
 		// 	request.push(
-		// 		process.env.PRODUCTS_READ_REPORT ?
+		// 		PRODUCTS_READ_REPORT ?
 		// context.$httpProductsRead.get('products-public', { params: completeParams }) :
 		// 			context.$httpProducts.get('products-public', { params: completeParams }),
 		// 	);
@@ -67,7 +73,7 @@ const asyncActions = {
 	},
 	LOAD_RELATED_PRODUCTS: async ({ commit, getters }, { context, id }) => {
 		const url = `products-public/${id}/related`;
-		const { data: products } = process.env.PRODUCTS_READ_REPORT ?
+		const { data: products } = PRODUCTS_READ_REPORT ?
 			await context.$httpProductsReadPublic.get(url) : await context.$httpProductsPublic.get(url);
 		const commercePriceListId = getters.getCommerceData.settings.salPriceListId;
 		const updatedProducts = updateProducts(products, commercePriceListId);
@@ -223,15 +229,17 @@ const asyncActions = {
 		commit('setUser', user);
 	},
 	SET_CURRENCY_DEFAULT: async ({ commit }, context) => {
-		const aclCode = process.env.ACL_COMPANY_CODE;
+		console.log('INIT SET_CURRENCY_DEFAULT');
+		const aclCode = ACL_COMPANY_CODE;
 		const url = `companies/${aclCode}/acl`;
 		const { data: res } = await context.$httpSales.get(url);
-		context.setLocalData(`${process.env.STORAGE_USER_KEY}::currency-default`, res.currencyDefault);
-		context.setLocalData(`${process.env.STORAGE_USER_KEY}::country`, res.country.countryCode);
+		context.setLocalData(`${STORAGE_USER_KEY}::currency-default`, res.currencyDefault);
+		context.setLocalData(`${STORAGE_USER_KEY}::country`, res.country.countryCode);
 		commit('SET_CURRENCY_DEFAULT', res.currencyDefault);
+		console.log('END SET_CURRENCY_DEFAULT');
 	},
 	LOAD_FILTERS: async ({ commit }, context) => {
-		const { data: filters } = process.env.SALES_READ_REPORT ?
+		const { data: filters } = SALES_READ_REPORT ?
 			await context.$httpProductsReadPublic.get('filters-public') : await context.$httpProductsPublic.get('filters-public');
 		if (filters.length > 0) {
 			const allFilter = { id: null, title: 'Todos', urlImage: filters[0].urlImage };
@@ -257,11 +265,11 @@ const asyncActions = {
 		commit('SET_BANNERS', banners);
 	},
 	LOAD_COMMERCE_INFO: async ({ commit, dispatch }, context) => {
-		const url = `com-ecommerce-companies/${process.env.COMMERCE_CODE}/public`;
-		const { data: commerceData } = process.env.SALES_READ_REPORT ?
+		const url = `com-ecommerce-companies/${COMMERCE_CODE}/public`;
+		const { data: commerceData } = SALES_READ_REPORT ?
 			await context.$httpSalesReadPublic.get(url) : await context.$httpSalesPublic.get(url);
 		context.$bus.$emit('LOAD_COMMERCE_INFO', commerceData);
-		context.setLocalData(`${process.env.STORAGE_USER_KEY}::ecommerce-data`, commerceData);
+		context.setLocalData(`${STORAGE_USER_KEY}::ecommerce-data`, commerceData);
 		commit('SET_COMMERCE_DATA', commerceData);
 		commit('SET_FLAG_NOT_VALID_EMAIL_USER', commerceData.settings.flagNotValidEmailUser);
 		dispatch('SET_ECOMMERCE_THEME', commerceData.settings.theme);
@@ -273,20 +281,21 @@ const asyncActions = {
 		link.sizes = '16x16';
 		document.getElementsByTagName('head')[0].appendChild(link);
 		const pageTitle = document.getElementsByTagName('title');
-		const backUp = 	commerceData.name || 'AppRunn SAC';
+		const backUp = commerceData.name || 'AppRunn SAC';
 		const title = PAGE_TITLE === 'undefined' ? backUp : PAGE_TITLE;
 		pageTitle[0].innerHTML = title;
 	},
 	LOAD_DOMAINS: async (store, { context }) => {
-		const codeCompany = process.env.ACL_COMPANY_CODE;
-		const codeProject = process.env.CODE_PROJECT;
+		console.log('INIT LOAD_DOMAINS');
+
+		const codeCompany = ACL_COMPANY_CODE;
+		const codeProject = CODE_PROJECT;
 		const url = `project/${codeProject}/domains?codeCompany=${codeCompany}`;
 		const { data: res } = await context.$httpAcl.get(url);
-		context.setLocalData(`${process.env.STORAGE_USER_KEY}::domains`, res.domains);
-		const domains = JSON.parse(localStorage.getItem(`${process.env.STORAGE_USER_KEY}::domains`));
-		if (domains) {
-			window.location.reload();
-		}
+		context.setLocalData(`${STORAGE_USER_KEY}::domains`, res.domains);
+		console.log('END LOAD_DOMAINS');
+
+		// console.log('Los dominios han sido cargados en el localStorage. Los dominios cargados son', res.domains);
 	},
 	MAKE_ORDER: async ({ dispatch, getters, commit }, { flagFinish, context }) => {
 		commit('SET_IS_TOOGLE_BTN', true);
@@ -317,7 +326,7 @@ const asyncActions = {
 		const url = 'payment-gateway';
 		const params = {
 			codeGateway,
-			commerceCode: process.env.COMMERCE_CODE,
+			commerceCode: COMMERCE_CODE,
 			page,
 		};
 		const { data: response, headers } = await context.$httpSales.get(url, { params });

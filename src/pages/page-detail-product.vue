@@ -199,7 +199,7 @@ async function loadData(id) {
 	this.tabs.push('Comentarios');
 	this.lastIndex = this.product.sections.length;
 	const user =
-		JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
+		JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || {};
 	const commercePriceListId =
 		user && user.salPriceListId ? user.salPriceListId : null;
 	this.productInstance = new ProductDetails(

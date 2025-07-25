@@ -159,7 +159,7 @@ function goToProduct({ slug, id }) {
 }
 
 function mounted() {
-	this.product.priceDiscountOrigin = this.product.priceDiscount;
+	// this.product.priceDiscountOrigin = this.product.priceDiscount;
 }
 
 function showComments() {
@@ -246,16 +246,7 @@ export default {
 			return helper.noStock(this.product);
 		},
 		getUnitPrice() {
-			const priceList = this.product.priceList
-				? Object.values(this.product.priceList)
-				: null;
-			if (priceList && priceList[0].ranges.length) {
-				const range = priceList[0].ranges.find(
-					r => this.product.quantity >= r.from && this.product.quantity <= r.to,
-				);
-				return range ? range.price : this.product.priceDiscount;
-			}
-			return Number(this.product.quantity) * Number(this.product.priceDiscount);
+			return this.product.priceDiscount;
 		},
 		getTotal() {
 			const priceList = this.product.priceList

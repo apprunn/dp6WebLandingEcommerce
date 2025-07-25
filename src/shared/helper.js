@@ -85,9 +85,8 @@ function generateBlob(data, contentType = 'application/pdf') {
 }
 
 function getLocalData(key) {
-	return JSON.parse(
-		localStorage.getItem(`${process.env.STORAGE_USER_KEY}::${key}`),
-	);
+	const item = localStorage.getItem(`${process.env.STORAGE_USER_KEY}::${key}`);
+	return item ? JSON.parse(item) : null;
 }
 
 function getLocalStorage() {
@@ -120,10 +119,10 @@ function showDownloadDialog(blob, name, extension) {
 /* eslint-disable */
 function debounce(func, wait = 800, immediate) {
 	var timeout;
-	return function() {
+	return function () {
 		var context = this,
 			args = arguments;
-		var later = function() {
+		var later = function () {
 			timeout = null;
 			if (!immediate) func.apply(context, args);
 		};
@@ -244,17 +243,17 @@ function getOrderDetails(products, warehouseId, warehouseName, salPriceListId) {
 			productName: p.name || p.productName,
 			priceList:
 				salPriceListId &&
-				p.priceList &&
-				p.priceList[salPriceListId] !== undefined
+					p.priceList &&
+					p.priceList[salPriceListId] !== undefined
 					? p.priceList[salPriceListId]
 					: null,
 			quantity: p.quantity,
 			salePrice:
 				p.wholeSalePrice &&
-				p.wholeSalePrice.length > 0 &&
-				Number(p.quantity) >= p.wholeSalePrice[0].from &&
-				Number(p.quantity) <= p.wholeSalePrice[0].to &&
-				p.wholeSalePrice[0].price !== 0
+					p.wholeSalePrice.length > 0 &&
+					Number(p.quantity) >= p.wholeSalePrice[0].from &&
+					Number(p.quantity) <= p.wholeSalePrice[0].to &&
+					p.wholeSalePrice[0].price !== 0
 					? p.wholeSalePrice[0].price
 					: p.priceDiscount || p.salePrice || p.price,
 			stockQuantity: p.stock,
@@ -307,11 +306,24 @@ function copyFn(node) {
 }
 
 const getRangesOfProduct = product => {
-	const [, priceList] = Object.entries(product.priceList).flat();
-	return priceList.ranges;
+	// ESTA FUNCION SOLO DEBERIA DEVOLVER LOS RANGOS DE UN PRODUCTO CON LISTA DE PRECIO DEL COMERCIO
+	const ecommerce = JSON.parse(
+		localStorage.getItem('ecommerce::ecommerce-data') || '',
+	);
+	// Obtener ID de la lista de precios que usa el comercio
+	const idPriceList = ecommerce && ecommerce.settings && ecommerce.settings.salPriceListId;
+
+	// Validar que exista priceList en el producto
+	const priceList = product.priceList;
+	if (!priceList || !idPriceList) return [];
+
+	// Retornar los ranges si existen
+	return priceList[idPriceList] && priceList[idPriceList].ranges
+		? priceList[idPriceList].ranges
+		: [];
 };
 
-function getKeyStorage(value) {
+function getDomainDynamic(value) {
 	const urls =
 		JSON.parse(
 			localStorage.getItem(`${process.env.STORAGE_USER_KEY}::domains`),
@@ -361,7 +373,7 @@ const methods = {
 	updateOrderDetailsInLocalStorage,
 	getRangesOfProduct,
 	getPriceByRange,
-	getKeyStorage,
+	getDomainDynamic,
 	stockProductByType,
 };
 

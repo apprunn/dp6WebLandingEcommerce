@@ -22,6 +22,8 @@ module.exports = {
 	},
 	// add your custom rules here
 	rules: {
+		"no-alert": "off",
+		"no-console": "off",
 		'comma-dangle': 'off',
 		'arrow-parens': ['off', 'off'], // Desactiva la regla o ajusta según tu preferencia
 		'import/no-extraneous-dependencies': 'off', // Desactiva la regla import/no-extraneous-dependencies

@@ -36,20 +36,21 @@ const orderMutation = {
 			const productId = p.productId || p.id;
 			return productId === id && p.unitSelected === unitSelected;
 		});
-		const stockProd = h.stockProductByType(products[index]);
-		products[index].quantity = quantity > stockProd ? stockProd : quantity;
+		const currentProduct = products[index];
+		const stockProd = h.stockProductByType(currentProduct);
+		currentProduct.quantity = quantity > stockProd ? stockProd : quantity;
 		if (quantity > stockProd) {
 			context.showNotification(`Cantidad: ${quantity} no disponible`, 'primary');
 		}
-
-		const ranges = h.getRangesOfProduct({ ...products[index] });
+		// console.log('currentProduct', currentProduct.priceDiscount, currentProduct.priceDiscountOrigin);
+		const ranges = h.getRangesOfProduct({ ...currentProduct });
 		const newPrice = h.getPriceByRange({
 			ranges,
-			quantity: products[index].quantity,
-			originalPrice: products[index].priceDiscountOrigin
-				|| products[index].originalPrice,
+			quantity: currentProduct.quantity,
+			originalPrice: currentProduct.priceDiscountOrigin
+				|| currentProduct.priceDiscount,
 		});
-		products[index].priceDiscount = newPrice;
+		currentProduct.priceDiscount = newPrice;
 		Vue.set(state.order, 'products', [...products]);
 		localStorage.setItem('ecommerce::product-select', JSON.stringify([...products]));
 		orderMutation.UPDATE_ORDER_DETAILS_IF_EXIST(state, products);

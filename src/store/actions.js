@@ -28,7 +28,7 @@ function setUser(context, user) {
 	const newUser = user;
 	newUser.dni = Number(user.dni) ? user.dni : null;
 	newUser.typePerson.documentNumber =
-			Number(newUser.typePerson.documentNumber) ? newUser.typePerson.documentNumber : null;
+		Number(newUser.typePerson.documentNumber) ? newUser.typePerson.documentNumber : null;
 	localStorage.setItem('ecommerce::ecommerce-user', JSON.stringify(newUser));
 	context.commit('setUser', newUser);
 }
@@ -41,28 +41,37 @@ function addProductToBuyCar(context, product) {
 	const index = productsSelected.findIndex(
 		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
 	);
-	if (index > -1) {
-		const currentProduct = productsSelected[index];
+	const currentProduct = index > -1 ? productsSelected[index] : null;
+	if (currentProduct) {
+		// SI YA EXISTE EN EL CARRITO
 		const { stock, stockWarehouse, stockComposite } = currentProduct;
 		const finalStock = helper.isComposed(currentProduct) ?
 			stockComposite : (stockWarehouse || stock);
 		let quantity = newProduct.quantity;
 		quantity = finalStock > quantity || allowOrderStockNegative ? quantity : finalStock;
-		productsSelected[index].quantity = quantity;
-
-		const ranges = helper.getRangesOfProduct({ ...productsSelected[index] });
+		currentProduct.quantity = quantity;
+		// const { priceDiscountOrigin, originalPrice, priceDiscount } = currentProduct;
+		// console.log('current', { priceDiscountOrigin, originalPrice, priceDiscount });
+		const ranges = helper.getRangesOfProduct({ ...currentProduct });
 		const newPrice = helper.getPriceByRange({
 			ranges,
-			quantity: productsSelected[index].quantity,
-			originalPrice: productsSelected[index].priceDiscountOrigin
-				|| productsSelected[index].originalPrice,
+			quantity: currentProduct.quantity,
+			originalPrice: currentProduct.priceDiscountOrigin
+				|| currentProduct.originalPrice,
 		});
 
-		productsSelected[index].priceDiscount = newPrice;
+		currentProduct.priceDiscount = newPrice;
 
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected);
 		context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected);
 	} else {
+		// const { priceDiscountOrigin, originalPrice, priceDiscount } = newProduct;
+		// console.log('current', { priceDiscountOrigin, originalPrice, priceDiscount });
+		// SE AÑADE POR PRIMERA VEZ AL CARRITO
+		// const { unitSelected, unitId, unit } = currentProduct;
+		// const idUnit = unitSelected || unitId || unit.id;
+		// const priceDiscountOrigin = currentProduct.priceDiscount
+		newProduct.priceDiscountOrigin = newProduct.priceDiscount;
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected.concat(newProduct));
 		context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected.concat(newProduct));
 	}

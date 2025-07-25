@@ -104,9 +104,8 @@ function countryLabels() {
 }
 
 function getLocalStorage(key) {
-	const itemsString = localStorage.getItem(key);
-	const items = itemsString && JSON.parse(itemsString);
-	return items;
+	const item = localStorage.getItem(key);
+	return item ? JSON.parse(item) : null;
 }
 
 function setLocalData(key, setData) {

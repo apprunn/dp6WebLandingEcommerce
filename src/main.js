@@ -8,17 +8,12 @@ import VueAuthenticate from 'vue-authenticate';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import 'normalize.css';
-import updateFromLocalStorage from '@/mixins/updateFromLocalStorage';
 import loadResources from '@/mixins/loadResources';
 import App from './App';
 import registerVuetify from './vuetify';
 import './assets/css/swiper.css';
-import {
-	httpRequestInterceptor,
-	httpResponseInterceptor,
-	httpResponseSuccessInterceptor,
-} from './http/index';
-import registerAxios from './axios';
+
+import VueHttp from './http/plugin';
 import vueRouter from './router';
 import globalMixin from './mixins/global';
 import registerFilters from './filters/global';
@@ -30,12 +25,14 @@ window.onload = () => {
 	store.dispatch('SET_WINDOW_LOADED_TO_TRUE');
 	store.dispatch('toggleLoading', false);
 };
-registerAxios(Vue);
 registerMap(Vue);
+
+// PLUGINS
 Vue.use(VueAxios, axios);
 Vue.use(VueTheMask);
 Vue.use(Vuelidate);
 Vue.use(VueSimpleSVG);
+Vue.use(VueHttp, { store });
 Vue.use(VueAuthenticate, {
 	baseUrl: process.env.ACL_URL,
 	providers: {
@@ -57,79 +54,28 @@ Vue.use(VueAnalytics, {
 });
 Vue.use(VueAwesomeSwiper);
 
-const router = vueRouter(Vue);
+
 registerFilters(Vue);
 registerVuetify(Vue);
+
 Vue.prototype.$bus = new Vue();
 Vue.prototype.$imageUrl = process.env.S3_IMAGES_URL;
 Vue.prototype.$clientId = process.env.CLIENT_ID;
 Vue.config.productionTip = false;
+
 Vue.mixin(globalMixin);
-
-async function created() {
-	this.$http2.interceptors.request.use(this.httpRequestInterceptor);
-	this.$http2.interceptors.response.use(
-		this.httpResponseSuccessInterceptor,
-		this.httpResponseInterceptor,
-	);
-	this.$httpProducts.interceptors.request.use(this.httpRequestInterceptor);
-	this.$httpProducts.interceptors.response.use(
-		this.httpResponseSuccessInterceptor,
-		this.httpResponseInterceptor,
-	);
-	this.$httpAcl.interceptors.request.use(this.httpRequestInterceptor);
-	this.$httpAcl.interceptors.response.use(
-		this.httpResponseSuccessInterceptor,
-		this.httpResponseInterceptor,
-	);
-	this.$httpSales.interceptors.request.use(this.httpRequestInterceptor);
-	this.$httpSales.interceptors.response.use(
-		this.httpResponseSuccessInterceptor,
-		this.httpResponseInterceptor,
-	);
-	this.$httpProductsPublic.interceptors.request.use(this.httpRequestInterceptor);
-	this.$httpProductsPublic.interceptors.response.use(
-		this.httpResponseSuccessInterceptor,
-		this.httpResponseInterceptor,
-	);
-	this.$httpProductsRead.interceptors.request.use(this.httpRequestInterceptor);
-	this.$httpProductsRead.interceptors.response.use(
-		this.httpResponseSuccessInterceptor,
-		this.httpResponseInterceptor,
-	);
-	this.$httpSalesRead.interceptors.request.use(this.httpRequestInterceptor);
-	this.$httpSalesRead.interceptors.response.use(
-		this.httpResponseSuccessInterceptor,
-		this.httpResponseInterceptor,
-	);
-	this.$httpProductsReadPublic.interceptors.request.use(this.httpRequestInterceptor);
-	this.$httpProductsReadPublic.interceptors.response.use(
-		this.httpResponseSuccessInterceptor,
-		this.httpResponseInterceptor,
-	);
-	this.$httpSalesReadPublic.interceptors.request.use(this.httpRequestInterceptor);
-	this.$httpSalesReadPublic.interceptors.response.use(
-		this.httpResponseSuccessInterceptor,
-		this.httpResponseInterceptor,
-	);
-	this.$bus.$on('LOAD_COMMERCE_INFO', (commerceData) => {
-		// console.log({ commerceData });
-		Vue.prototype.$commerceData = commerceData;
-		Vue.prototype.$allowOrderStockNegative = commerceData.company.settings.allowOrderStockNegative;
-		Vue.prototype.$flagShowBaseUnit = commerceData.company.settings.flagShowBaseUnit;
-	});
-}
-
+const router = vueRouter(Vue);
 /* eslint-disable no-new */
 new Vue({
-	created,
-	el: '#app',
-	methods: {
-		httpRequestInterceptor,
-		httpResponseInterceptor,
-		httpResponseSuccessInterceptor,
+	async created() {
+		this.$bus.$on('LOAD_COMMERCE_INFO', (commerceData) => {
+			Vue.prototype.$commerceData = commerceData;
+			Vue.prototype.$allowOrderStockNegative = commerceData.company.settings.allowOrderStockNegative;
+			Vue.prototype.$flagShowBaseUnit = commerceData.company.settings.flagShowBaseUnit;
+		});
 	},
-	mixins: [updateFromLocalStorage, loadResources],
+	el: '#app',
+	mixins: [loadResources],
 	router,
 	render: h => h(App),
 	store,
