@@ -1,5 +1,5 @@
-$yape: #7D349B;
-$yapeSecondary: #00D0B6;
+$yape: #7d349b;
+$yapeSecondary: #00d0b6;
 
 $colors: (
 	background: #fcfcfc,
@@ -9,7 +9,7 @@ $colors: (
 	dark: #4a4a4a,
 	disabled: #f5f5f5,
 	error: rgb(237, 100, 100),
-	errorLight: #FDEDED,
+	errorLight: #fdeded,
 	highLight: #f8e71c,
 	primary: #f42b17,
 	secondary: #004e9c,
@@ -17,25 +17,25 @@ $colors: (
 	white: #ffffff,
 	gray: #f1f1f1,
 	success: #7eca94,
-	plin: #00E3CD,
-	yape: #7D349B,
-	yapeSecondary: #00D0B6,
-	blueLight: #004e9c,
+	plin: #00e3cd,
+	yape: #7d349b,
+	yapeSecondary: #00d0b6,
+	blueLight: #004e9c
 );
 
 $fonts: (
-	bold: 'Avenir Next Bold',
-	demi: 'Avenir Next Demi',
-	demi-italic: 'Avenir Next Demi Italic',
-	heavy: 'Avenir Next Heavy',
-	heavy-italic: 'Avenir Next Heavy Italic',
-	italic: 'Avenir Next Italic',
-	medium: 'Avenir Next Medium',
-	medium-italic: 'Avenir Next Medium Italic',
-	regular: 'Avenir Next Regular',
-	ultra-light: 'Avenir Next Ultra Light',
-	ultra-light-italic: 'Avenir Next Ultra Light Italic',
-	book: 'Avenir Next Book',
+	bold: "Avenir Next Bold",
+	demi: "Avenir Next Regular",
+	demi-italic: "Avenir Next Demi Italic",
+	heavy: "Avenir Next Heavy",
+	heavy-italic: "Avenir Next Heavy Italic",
+	italic: "Avenir Next Italic",
+	medium: "Avenir Next Medium",
+	medium-italic: "Avenir Next Medium Italic",
+	regular: "Avenir Next Regular",
+	ultra-light: "Avenir Next Ultra Light",
+	ultra-light-italic: "Avenir Next Ultra Light Italic",
+	book: "Avenir Next Book"
 );
 
 $sizes: (
@@ -47,5 +47,5 @@ $sizes: (
 	large: 16px,
 	xlarge: 18px,
 	sbig: 20px,
-	big: 24px,
+	big: 24px
 );
