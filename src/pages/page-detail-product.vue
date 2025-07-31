@@ -373,6 +373,39 @@ function newRoute() {
 	this.loadProduct();
 }
 
+function updateNumber(quantity) {
+	const newQuantity = parseInt(quantity, 10) || 1;
+	const newProductdetail = { ...this.product };
+	if (newQuantity <= 0 || quantity.includes('-')) {
+		this.$set(newProductdetail, 'quantity', 1);
+		this.product = { ...newProductdetail };
+		this.productInstance.updateQuantity(1);
+		this.productDetails = { ...this.productInstance.getProductDetails() };
+		return;
+	}
+
+	const validQuantity = this.checkValidQuantity(newQuantity);
+	this.quantityStock = parseInt(
+		(this.unitProductValid.quantity || 1) * newQuantity,
+		10,
+	);
+
+	if (this.quantityStock > helper.stockProductByType(this.product)) {
+		this.showNotification(
+			`El producto ${this.product.name} no cuenta con más stock en la presentación ${this.unitProductValid.name}.`,
+			'warning',
+		);
+	} else if (validQuantity) {
+		this.$set(newProductdetail, 'quantity', newQuantity);
+		this.product = { ...newProductdetail };
+		this.productInstance.updateQuantity(newQuantity);
+		// this.getProductPrice();
+		this.productDetails = { ...this.productInstance.getProductDetails() };
+	} else {
+		this.showNotification(`Cantidad: ${newQuantity} no disponible`, 'primary');
+	}
+}
+
 function clickQuantity(value) {
 	if (this.product.priceDiscount <= 0) {
 		this.showNotification(
@@ -582,6 +615,7 @@ export default {
 		addToCar,
 		checkValidQuantity,
 		clearFeatures,
+		updateNumber,
 		clickQuantity,
 		closeConfirmModal,
 		closeModal,
@@ -624,20 +658,20 @@ export default {
 				this.productDetails.priceDiscount = priceList[0].price;
 			}
 		},
-		updateNumber(num) {
-			this.productDetails.quantity = Number(num);
-			const priceList = this.productDetails.priceList
-				? Object.values(this.productDetails.priceList)
-				: null;
-			if (priceList && priceList[0].ranges.length) {
-				const range = priceList[0].ranges.find(
-					r => Number(num) >= r.from && Number(num) <= r.to,
-				);
-				this.productDetails.priceDiscount = range
-					? range.price
-					: this.priceOrigin;
-			}
-		},
+		// updateNumber(num) {
+		// 	this.productDetails.quantity = Number(num);
+		// 	const priceList = this.productDetails.priceList
+		// 		? Object.values(this.productDetails.priceList)
+		// 		: null;
+		// 	if (priceList && priceList[0].ranges.length) {
+		// 		const range = priceList[0].ranges.find(
+		// 			r => Number(num) >= r.from && Number(num) <= r.to,
+		// 		);
+		// 		this.productDetails.priceDiscount = range
+		// 			? range.price
+		// 			: this.priceOrigin;
+		// 	}
+		// },
 	},
 	props: {
 		id: {
