@@ -596,9 +596,21 @@ export default {
 		selectedUnit,
 		inputQuantity,
 		getPriceList() {
-			const user =
-				JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
-			const salPriceListDefault = user.company.salPriceListDefault.id;
+			const user = JSON.parse(
+				localStorage.getItem('ecommerce::ecommerce-user'),
+			);
+
+			const ecommerce = JSON.parse(
+				localStorage.getItem('ecommerce::ecommerce-data'),
+			);
+
+			let salPriceListDefault =
+				ecommerce && ecommerce.settings && ecommerce.settings.salPriceListId;
+
+			if (user && user.company && user.company.salPriceListDefault) {
+				salPriceListDefault = user.company.salPriceListDefault.id;
+			}
+
 			const priceListDefault = this.productDetails.priceList[
 				salPriceListDefault
 			];
