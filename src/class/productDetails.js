@@ -84,9 +84,8 @@ class ProductDetails {
 		const imgsBySelectedUnitId = allProductsImages.filter(img => img.unitId === this.unitId);
 		if (isEmpty(imgsBySelectedUnitId)) {
 			const imgs = this.getImgsWithoutUnitId.call(this, allProductsImages);
-			if (imgs.length > 0) {
-				this.setImagePresentation.call(this, imgs[0].urlImage);
-			}
+			const url = imgs.length > 0 ? imgs[0].urlImage : this.allProductsImages[0].urlImage;
+			this.setImagePresentation.call(this, url);
 			return imgs;
 		}
 		this.setImagePresentation.call(this, imgsBySelectedUnitId[0].urlImage);
@@ -192,6 +191,7 @@ class ProductDetails {
 		this.selectedFeatures[feature.id] = feature;
 	}
 	updateSelectedProducts(productsCollection) {
+		console.log('updateSelectedProducts', productsCollection);
 		[this.selectedProduct] = productsCollection;
 		if (l.isNotEmpty(this.selectedProduct)) {
 			this.updateQuantity(1);
