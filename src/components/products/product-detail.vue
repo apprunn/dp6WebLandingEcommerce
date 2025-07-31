@@ -397,12 +397,6 @@ export default {
 	}
 }
 
-.product-detail-description {
-	@media (max-width: 800px) {
-		display: none;
-	}
-}
-
 .product-detail-description::first-letter {
 	text-transform: uppercase;
 }
