@@ -84,18 +84,17 @@ class ProductDetails {
 		const imgsBySelectedUnitId = allProductsImages.filter(img => img.unitId === this.unitId);
 		if (isEmpty(imgsBySelectedUnitId)) {
 			const imgs = this.getImgsWithoutUnitId.call(this, allProductsImages);
-			if (imgs.length > 0) {
-				this.setImagePresentation.call(this, imgs[0].urlImage);
-			}
+			const url = imgs.length > 0 ? imgs[0].urlImage : allProductsImages[0].urlImage;
+			this.setImagePresentation.call(this, url);
 			return imgs;
 		}
 		this.setImagePresentation.call(this, imgsBySelectedUnitId[0].urlImage);
 		return imgsBySelectedUnitId;
 	}
 	getImgsWithoutUnitId(allImgs) {
-		const baseUnitId = this.getProductDetails().unitId;
+		const { unitId: baseUnitId, imagePresentation } = this.getProductDetails();
 		const selectedUnitId = this.unitId;
-		const defaultImage = [{ urlImage: this.pictureNotFound, select: false }];
+		const defaultImage = [{ urlImage: imagePresentation || this.pictureNotFound, select: false }];
 		if (baseUnitId === selectedUnitId) {
 			const imgsWithoutUnitId = isEmpty(allImgs)
 				? defaultImage : allImgs.filter(img => !img.unitId);
@@ -192,6 +191,7 @@ class ProductDetails {
 		this.selectedFeatures[feature.id] = feature;
 	}
 	updateSelectedProducts(productsCollection) {
+		console.log('updateSelectedProducts', productsCollection);
 		[this.selectedProduct] = productsCollection;
 		if (l.isNotEmpty(this.selectedProduct)) {
 			this.updateQuantity(1);

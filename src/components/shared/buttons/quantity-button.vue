@@ -8,12 +8,16 @@
 			-
 		</button>
 		<input
-			v-if="(product && product.category && product.category.type === 2) || isEditNumber"
+			v-if="
+				(product && product.category && product.category.type === 2) ||
+					isEditNumber
+			"
 			class="input-number"
 			type="number"
-			v-model="number"
-			@input="$emit('input', $event.target.value )"
-		></input>
+			:value="number"
+			:min="0"
+			@input="$emit('input', $event.target.value.replace('-', ''))"
+		/>
 		<div
 			v-else
 			data-cy="quantity-to-buy"
@@ -33,7 +37,6 @@
 	</div>
 </template>
 <script>
-
 export default {
 	name: 'quantity-button',
 	props: {
