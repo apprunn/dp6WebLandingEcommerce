@@ -156,7 +156,7 @@ async function initSession() {
 			this.showGenericError('Correo o password incorrecto.', 50000);
 		} else if (response.data) {
 			const { token } = response.data;
-			localStorage.clear();
+			// localStorage.clear();
 			localStorage.setItem(`${process.env.STORAGE_USER_KEY}::token`, token);
 			this.$store.dispatch('setToken', token);
 			this.$store.dispatch('SET_CURRENCY_DEFAULT', this);

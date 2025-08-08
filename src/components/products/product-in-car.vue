@@ -61,6 +61,7 @@
 				</p>
 				<div v-if="stepOne" class="quantity-button-container">
 					<quantityButton
+						:is-edit-number="!!(priceList && priceList[0].ranges.length)"
 						class="continer-quantity-button"
 						:number="product.quantity"
 						:product="product"
@@ -135,7 +136,7 @@
 		</div>
 		<v-flex xs12 sm8 md8 v-if="noStock">
 			<p :style="`color: red;`" class="product-title">
-				Este producto no cuenta con sotck
+				Este producto no cuenta con stock
 			</p>
 		</v-flex>
 
@@ -158,7 +159,10 @@ function goToProduct({ slug, id }) {
 	this.goTo('detail-product', { params });
 }
 
-function mounted() {
+function created() {
+	this.priceList = this.product.priceList
+		? Object.values(this.product.priceList)
+		: null;
 	// this.product.priceDiscountOrigin = this.product.priceDiscount;
 }
 
@@ -228,6 +232,7 @@ function data() {
 		opt: {},
 		maxQuantity: false,
 		fallbackImage: '/static/img/placeholder-product.png',
+		priceList: {},
 	};
 }
 
@@ -256,13 +261,13 @@ export default {
 				const range = priceList[0].ranges.find(
 					r => this.product.quantity >= r.from && this.product.quantity <= r.to,
 				);
-				return range ? range.price : this.product.total;
+				return range ? range.price * this.product.quantity : this.product.total;
 			}
 			return this.product.total;
 		},
 	},
 	data,
-	mounted,
+	created,
 	methods: {
 		clickQuantity,
 		deleteProduct,
