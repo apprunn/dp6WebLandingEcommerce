@@ -47,7 +47,7 @@ const getters = {
 							r => quantity >= r.from && quantity <= r.to,
 						);
 						const priceToShow = (priceDiscount || salePrice || priceList.price) || priceDiscount;
-						return range ? range.price : twoDecimals(priceToShow * quantity) + acc;
+						return range ? range.price * quantity : twoDecimals(priceToShow * quantity) + acc;
 					}
 					const priceToShow = (priceDiscount || salePrice || priceList.price) || priceDiscount;
 					return twoDecimals(priceToShow * quantity) + acc;

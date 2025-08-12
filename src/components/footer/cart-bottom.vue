@@ -163,7 +163,7 @@ function getTotalPrice() {
 					Number(this.quantityInput) <= r.to,
 			);
 			return range
-				? range.price
+				? range.price * this.quantityInput
 				: Number(this.quantityInput) * this.priceDiscount;
 		}
 		return Number(this.quantityInput) * this.priceDiscount;

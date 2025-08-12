@@ -102,7 +102,7 @@ export default {
 				const range = priceList[0].ranges.find(
 					r => this.product.quantity >= r.from && this.product.quantity <= r.to,
 				);
-				return range ? range.price : price;
+				return range ? range.price * this.product.quantity : price;
 			}
 			return price;
 		},
