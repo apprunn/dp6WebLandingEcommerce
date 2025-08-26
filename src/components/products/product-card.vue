@@ -548,19 +548,23 @@ export default {
 						? priceList[defaultIdPiceList].units
 						: null;
 				this.showViewProduct = false;
-				this.conversionsProducts = Object.keys(this.product.conversions).map(
-					key => ({
-						id: key,
-						...priceListUnits[key],
-						...this.product.conversions[key],
-					}),
-				);
-				if (this.conversionsProducts.length) {
+				if (this.$flagShowBaseUnit !== 2) {
+					this.conversionsProducts = Object.keys(this.product.conversions).map(
+						key => ({
+							id: key,
+							...priceListUnits[key],
+							...this.product.conversions[key],
+						}),
+					);
+				}
+				if (this.$flagShowBaseUnit !== 1) {
 					this.conversionsProducts.unshift(
 						this.product.unitDefault || this.product.unit,
 					);
-				} else {
-					this.addToCar();
+				}
+
+				if (this.conversionsProducts.length === 1) {
+					this.addToCar(this.conversionsProducts[0]);
 				}
 				this.addQuantity = !this.addQuantity;
 			} else {
@@ -574,6 +578,7 @@ export default {
 		},
 		closeViewProduct() {
 			this.showViewProduct = true;
+			this.addQuantity = true;
 		},
 	},
 	created,

@@ -146,9 +146,10 @@ async function loadProduct() {
 			const { conversions } = this.product;
 			const stock = helper.stockProductByType(this.product);
 			const firstConversion = Object.keys(conversions || {})[0];
-			const stockAvaible = firstConversion
-				? parseInt(stock / firstConversion.quantity, 10)
-				: stock;
+			const stockAvaible =
+				firstConversion && stock !== Infinity
+					? parseInt(stock / firstConversion.quantity, 10)
+					: stock;
 			this.stockAvaible = stockAvaible;
 			this.$store.dispatch('setStock', this.stockAvaible);
 		}
