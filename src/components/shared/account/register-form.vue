@@ -12,7 +12,10 @@
 					</span>
 					<span
 						class="error-message"
-						v-if="!validatons.model.name.onlyCharacters && validatons.model.name.required"
+						v-if="
+							!validatons.model.name.onlyCharacters &&
+								validatons.model.name.required
+						"
 					>
 						Solo se permiten letras
 					</span>
@@ -24,12 +27,18 @@
 					:value="model.lastname"
 					@input="$emit('set-model', { model: 'lastname', value: $event })"
 				>
-					<span class="error-message" v-if="!validatons.model.lastname.required">
+					<span
+						class="error-message"
+						v-if="!validatons.model.lastname.required"
+					>
 						El apellido es requerido
 					</span>
 					<span
 						class="error-message"
-						v-if="!validatons.model.lastname.onlyCharacters && validatons.model.lastname.required"
+						v-if="
+							!validatons.model.lastname.onlyCharacters &&
+								validatons.model.lastname.required
+						"
 					>
 						Solo se permiten letras
 					</span>
@@ -61,17 +70,29 @@
 					La contraseña es requerida
 				</span>
 			</v-flex>
-			<v-flex xs12 text-xs-left v-if="noFacebookPass && model.password !== passwordVerified">
+			<v-flex
+				xs12
+				text-xs-left
+				v-if="noFacebookPass && model.password !== passwordVerified"
+			>
 				<app-input
 					type="password"
 					placeholder="Verificar contraseña"
 					:value="passwordVerified"
-					@input="$emit('set-model', { model: 'passwordVerified', value: $event })"
+					@input="
+						$emit('set-model', { model: 'passwordVerified', value: $event })
+					"
 				></app-input>
-				<span class="error-message" v-if="!validatons.passwordVerified.required">
+				<span
+					class="error-message"
+					v-if="!validatons.passwordVerified.required"
+				>
 					Vuelva a escribir la contraseña
 				</span>
-				<span class="error-message" v-else-if="!validatons.passwordVerified.sameAsPassword">
+				<span
+					class="error-message"
+					v-else-if="!validatons.passwordVerified.sameAsPassword"
+				>
 					Las contraseñas no coinciden
 				</span>
 			</v-flex>
@@ -79,14 +100,22 @@
 				<app-input
 					placeholder="Número de documento"
 					:value="model.documentNumber"
-					@input="$emit('set-model', { model: 'documentNumber', value: $event })"
+					@input="
+						$emit('set-model', { model: 'documentNumber', value: $event })
+					"
 				>
-					<span class="error-message" v-if="!validatons.model.documentNumber.required">
+					<span
+						class="error-message"
+						v-if="!validatons.model.documentNumber.required"
+					>
 						El número de documento es requerido
 					</span>
 					<span
 						class="error-message"
-						v-if="!validatons.model.documentNumber.onlyNumbers && validatons.model.documentNumber.required"
+						v-if="
+							!validatons.model.documentNumber.onlyNumbers &&
+								validatons.model.documentNumber.required
+						"
 					>
 						Solo se permiten números
 					</span>
@@ -103,7 +132,10 @@
 					</span>
 					<span
 						class="error-message"
-						v-if="!validatons.model.phone.onlyNumbers && validatons.model.phone.required"
+						v-if="
+							!validatons.model.phone.onlyNumbers &&
+								validatons.model.phone.required
+						"
 					>
 						Solo se permiten números
 					</span>
@@ -170,6 +202,7 @@ export default {
 						name: {},
 						password: {},
 						phone: {},
+						documentNumber: {},
 					},
 					passwordVerified: {},
 				};
@@ -181,40 +214,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.register-form {
-		padding: 19.9px 30px 15.4px;
+.register-form {
+	padding: 19.9px 30px 15.4px;
 
-		@media (min-width: 768px) {
-			padding: 16px 36px 30px;
-		}
-
-		.flex {
-			position: relative;
-		}
+	@media (min-width: 768px) {
+		padding: 16px 36px 30px;
 	}
 
-	.form-label {
-		color: color(base);
-		font-family: font(demi);
-		font-size: size(xsmall);
+	.flex {
+		position: relative;
 	}
+}
 
-	.form-check {
-		margin-top: 9px !important;
-		padding-top: 0px !important;
+.form-label {
+	color: color(base);
+	font-family: font(demi);
+	font-size: size(xsmall);
+}
 
-		@media (min-width: 768px) {
-			margin-top: 13px !important;
-		}
+.form-check {
+	margin-top: 9px !important;
+	padding-top: 0px !important;
+
+	@media (min-width: 768px) {
+		margin-top: 13px !important;
 	}
+}
 
-	.error-message {
-		color: color(error);
-		display: block;
-		font-size: size(xsmall);
-		line-height: 1;
-		margin-top: 2px;
-		position: absolute;
-		width: 100%;
-	}
+.error-message {
+	color: color(error);
+	display: block;
+	font-size: size(xsmall);
+	line-height: 1;
+	margin-top: 2px;
+	position: absolute;
+	width: 100%;
+}
 </style>

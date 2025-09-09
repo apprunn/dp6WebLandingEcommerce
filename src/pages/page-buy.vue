@@ -58,7 +58,7 @@
 					</div>
 					<div v-show="isCollapseProduct" class="section-collapse-step1">
 						<product-in-car
-							:show-unity="Boolean(showUnity)"
+							:show-unity="!!showUnity"
 							data-cy="product-in-car"
 							v-for="(product, indexProduct) in getProductToBuy"
 							:key="indexProduct"
