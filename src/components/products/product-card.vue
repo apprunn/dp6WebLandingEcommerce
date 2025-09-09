@@ -147,7 +147,8 @@
 								]"
 							>
 								{{ getCurrencySymbol }}
-								{{ product.priceDiscount | currencyFormat }}
+								{{ productPriceDiscount | currencyFormat }}
+								{{ $flagShowBaseUnit === 1 ? `x ${unitCode}` : '' }}
 							</h3>
 							<!-- 
 							<small
@@ -226,6 +227,18 @@ function created() {
 		JSON.parse(localStorage.getItem('ecommerce::product-select')) || [];
 	const product = productsSelected.find(p => p.id === this.product.id);
 	this.showAdd = product && product.quantity > 0;
+	const commerceData = this.getCommerceData.settings
+		? this.getCommerceData.settings
+		: this.getLocalStorage('ecommerce::ecommerce-data');
+	const selectedPriceList = this.product.priceList[commerceData.salPriceListId];
+	const unitKey = Object.keys(selectedPriceList.units)[0];
+	if (this.$flagShowBaseUnit === 1 && selectedPriceList && unitKey) {
+		this.unitCode = this.product.conversions[unitKey].code.slice(0, 3);
+		const firstUnit = selectedPriceList.units[unitKey];
+		this.productPriceDiscount = firstUnit.price;
+	} else {
+		this.productPriceDiscount = this.product.priceDiscount || 0;
+	}
 	this.getPriceList();
 }
 
@@ -444,6 +457,8 @@ function data() {
 		fallbackImage: '/static/img/placeholder-product.png',
 		showViewProduct: true,
 		conversionsProducts: [],
+		productPriceDiscount: 0,
+		unitCode: 'UND',
 	};
 }
 
