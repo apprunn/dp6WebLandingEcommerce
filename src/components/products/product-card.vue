@@ -552,6 +552,7 @@ export default {
 			if (
 				this.product.conversions &&
 				typeof this.product.conversions === 'object' &&
+				Object.keys(this.product.conversions).length &&
 				this.$flagShowBaseUnit !== 2
 			) {
 				const { priceList } = this.product;

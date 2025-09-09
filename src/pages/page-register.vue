@@ -38,7 +38,10 @@ function created() {
 		this.setModel({ model: 'lastname', value: this.modelFacebook.last_name });
 		this.setModel({ model: 'name', value: this.modelFacebook.first_name });
 		this.setModel({ model: 'password', value: this.facebookExternalId });
-		this.setModel({ model: 'passwordVerified', value: this.facebookExternalId });
+		this.setModel({
+			model: 'passwordVerified',
+			value: this.facebookExternalId,
+		});
 	}
 	this.afterLoginRoute = this.getLocalStorage('route-after-login');
 }
@@ -87,7 +90,10 @@ async function createAccount() {
 		if (this.modelFacebook && this.modelFacebook.id) {
 			if (response.data && response.data.token) {
 				localStorage.clear();
-				localStorage.setItem(`${process.env.STORAGE_USER_KEY}::token`, response.data.token);
+				localStorage.setItem(
+					`${process.env.STORAGE_USER_KEY}::token`,
+					response.data.token,
+				);
 				this.$store.dispatch('setToken', response.data.token);
 				this.getCustomerData();
 				this.cleanForm();
@@ -97,7 +103,9 @@ async function createAccount() {
 				this.showNotification('La cuenta ha sido creada exitosamente.');
 				const self = this;
 				setTimeout(() => {
-					self.showNotification('Se le ha enviado un correo electrónico para validar su cuenta.');
+					self.showNotification(
+						'Se le ha enviado un correo electrónico para validar su cuenta.',
+					);
 				}, 5050);
 			}
 		} else {
@@ -106,14 +114,21 @@ async function createAccount() {
 			const self = this;
 			if (this.getFlagNotValidEmailUser) {
 				if (response.data && response.data.token) {
-					const productsCart = this.getLocalStorage('ecommerce::product-select');
-					localStorage.setItem(`${process.env.STORAGE_USER_KEY}::token`, response.data.token);
+					const productsCart = this.getLocalStorage(
+						'ecommerce::product-select',
+					);
+					localStorage.setItem(
+						`${process.env.STORAGE_USER_KEY}::token`,
+						response.data.token,
+					);
 					this.$store.dispatch('setToken', response.data.token);
 					this.$store.dispatch('SET_CURRENCY_DEFAULT', this);
 					this.$store.dispatch('LOAD_COMMERCE_INFO', this);
 					this.getCustomerData();
 					this.cleanForm();
-					this.showNotification('¡Bienvenido! Ya puedes iniciar tu primera compra.');
+					this.showNotification(
+						'¡Bienvenido! Ya puedes iniciar tu primera compra.',
+					);
 					if (productsCart && productsCart.length) {
 						this.goToMakeOrder();
 					} else {
@@ -122,13 +137,18 @@ async function createAccount() {
 				}
 			} else {
 				setTimeout(() => {
-					self.showNotification('Se le ha enviado un correo electrónico para validar su cuenta.');
+					self.showNotification(
+						'Se le ha enviado un correo electrónico para validar su cuenta.',
+					);
 				}, 5050);
 			}
 		}
 	} catch (err) {
 		if (err.status === 400) {
-			if (err.data.message === 'CUSTOMER_EXIST_ERROR' || err.data.message === 'ACL_REGISTER_USER_ERROR') {
+			if (
+				err.data.message === 'CUSTOMER_EXIST_ERROR' ||
+				err.data.message === 'ACL_REGISTER_USER_ERROR'
+			) {
 				this.showGenericError('El email ya ha sido registrado.', 50000);
 			}
 		} else if (err.status === 500) {
@@ -157,7 +177,9 @@ async function getCustomerData() {
 	const headers = {
 		Authorization: `Bearer ${this.token}`,
 	};
-	const { data: userInfo } = await this.$httpSales.get('customers/current', { headers });
+	const { data: userInfo } = await this.$httpSales.get('customers/current', {
+		headers,
+	});
 	userInfo.avatar = userInfo.urlImage || process.env.DEFAULT_AVATAR;
 	userInfo.fullName = userInfo.typePerson.fullName;
 	userInfo.showCustomerDiscountMessage = true;
@@ -258,9 +280,7 @@ export default {
 		...mapState('login', {
 			facebookExternalId: state => state.externalId,
 		}),
-		...mapGetters([
-			'getFlagNotValidEmailUser',
-		]),
+		...mapGetters(['getFlagNotValidEmailUser']),
 	},
 	created,
 	data,

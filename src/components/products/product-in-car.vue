@@ -29,7 +29,7 @@
 					{{ product.unit ? product.unit.name : null }}
 				</p>
 				<p
-					v-if="showUnity"
+					v-if="!!showUnity"
 					:style="`color: ${globalColors.primary};`"
 					class="product-title"
 				>
