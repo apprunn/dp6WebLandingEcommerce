@@ -2,8 +2,8 @@
 	<div class="reclamations-container">
 		<h2 class="main-title">Libro de reclamaciones</h2>
 		<div class="section">
-			<h3>Razón social: {{getCommerceData.rzSocial}}</h3>
-			<h3>RUC: {{getCommerceData.documentNumber}}</h3>
+			<h3>Razón social: {{ getCommerceData.rzSocial }}</h3>
+			<h3>RUC: {{ getCommerceData.documentNumber }}</h3>
 		</div>
 		<form>
 			<div class="section">
@@ -58,14 +58,17 @@
 						placeholder="Correo"
 					/>
 				</label>
-				<label class="input">
+				<span v-if="emailError" class="error-message"
+					>Por favor, ingresa un correo electrónico válido.</span
+				>
+				<!-- <label class="input">
 					Padres (en caso de ser menor de edad)
 					<app-input
 						type="text"
 						v-model="reclamation.parents"
 						placeholder="Padre o Madre (en caso de ser menor de edad)"
 					/>
-				</label>
+				</label> -->
 			</div>
 			<div class="section">
 				<h4>2. Identificación del bien contratado</h4>
@@ -121,7 +124,7 @@
 						id="reclamo"
 						:value="1"
 						@input="reclamo"
-					>
+					/>
 				</label>
 				<label for="queja">
 					Queja
@@ -132,9 +135,10 @@
 						id="queja"
 						:value="2"
 						@input="reclamo"
-					>
+					/>
 				</label>
-				<text-area rows="5"
+				<text-area
+					rows="5"
 					placeholder="Detalle"
 					v-model="reclamation.claimDetail"
 				></text-area>
@@ -167,14 +171,27 @@
 				class="send-reclamation"
 				:style="`background-color:${globalColors.primary}`"
 				@click="reclamationAction"
-			>Enviar Reclamación</button>
+			>
+				Enviar Reclamación
+			</button>
 		</form>
-		<small><b>*RECLAMO:</b> Disconformidad relacionada a los productos o servicios.</small>
-		<small><b>*QUEJA:</b> Disconformidad no relacionada a los productos o servicios; o malestar o descontento respecto a la atención al público.</small>
+		<small
+			><b>*RECLAMO:</b> Disconformidad relacionada a los productos o
+			servicios.</small
+		>
+		<small
+			><b>*QUEJA:</b> Disconformidad no relacionada a los productos o servicios;
+			o malestar o descontento respecto a la atención al público.</small
+		>
 	</div>
 </template>
 <script>
-import { required, requiredIf, email, minValue } from 'vuelidate/lib/validators';
+import {
+	required,
+	requiredIf,
+	email,
+	minValue,
+} from 'vuelidate/lib/validators';
 import appInput from '@/components/shared/inputs/app-input';
 import textArea from '@/components/shared/inputs/text-area';
 import { mapGetters } from 'vuex';
@@ -206,14 +223,13 @@ function typesGood({ target }) {
 }
 
 async function reclamationAction() {
+	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
 	const body = this.reclamation;
+	body.subsidiaryId = ecommerceLocal.subsidiaryId;
 	const url = 'claim-book';
 	try {
 		await this.$httpSales.post(url, body);
-		this.showNotification(
-			'Su reclamo ha sido registrado',
-			'success',
-		);
+		this.showNotification('Su reclamo ha sido registrado', 'success');
 	} catch (err) {
 		this.showGenericError();
 	}
@@ -294,9 +310,15 @@ export default {
 		textArea,
 	},
 	computed: {
-		...mapGetters([
-			'getCommerceData',
-		]),
+		...mapGetters(['getCommerceData']),
+		emailError() {
+			return (
+				this.reclamation.claimentEmail &&
+				!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+					this.reclamation.claimentEmail,
+				)
+			);
+		},
 	},
 	data,
 	methods: {
@@ -390,5 +412,11 @@ export default {
 
 .w-full {
 	width: 100%;
+}
+
+.error-message {
+	color: red;
+	font-size: 12px;
+	margin-top: 5px;
 }
 </style>
