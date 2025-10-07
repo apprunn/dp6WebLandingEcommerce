@@ -233,6 +233,7 @@ const asyncActions = {
 		const aclCode = ACL_COMPANY_CODE;
 		const url = `companies/${aclCode}/acl`;
 		const { data: res } = await context.$httpSales.get(url);
+		console.log('res', res);
 		context.setLocalData(`${STORAGE_USER_KEY}::currency-default`, res.currencyDefault);
 		context.setLocalData(`${STORAGE_USER_KEY}::country`, res.country.countryCode);
 		commit('SET_CURRENCY_DEFAULT', res.currencyDefault);
