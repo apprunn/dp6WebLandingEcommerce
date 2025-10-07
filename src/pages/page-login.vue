@@ -50,7 +50,7 @@ async function aclAuthentication(params) {
 			headers,
 		});
 		if (response.data && response.data.token) {
-			localStorage.clear();
+			// localStorage.clear();
 			localStorage.setItem(
 				`${process.env.STORAGE_USER_KEY}::token`,
 				response.data.token,
@@ -152,6 +152,8 @@ async function initSession() {
 		const { data: response } = await this.$httpSales.post('signin/auth', body, {
 			headers,
 		});
+		console.log('response', response);
+		console.log('this', this);
 		if (response.code === 1008) {
 			this.showGenericError('Correo o password incorrecto.', 50000);
 		} else if (response.data) {
