@@ -152,8 +152,6 @@ async function initSession() {
 		const { data: response } = await this.$httpSales.post('signin/auth', body, {
 			headers,
 		});
-		console.log('response', response);
-		console.log('this', this);
 		if (response.code === 1008) {
 			this.showGenericError('Correo o password incorrecto.', 50000);
 		} else if (response.data) {
@@ -172,6 +170,10 @@ async function initSession() {
 			this.showNotification(
 				'Su cuenta no está activada. Le hemos enviado un correo para que lo pueda hacer',
 				'accent',
+			);
+		} else if (err.data && err.data.code === 1008) {
+			this.showGenericError(
+				'La contraseña ingresada no es correcta. Si has olvidado tu contraseña, puedes recuperarla.',
 			);
 		} else {
 			this.showGenericError();
