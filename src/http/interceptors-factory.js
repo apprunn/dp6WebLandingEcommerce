@@ -3,7 +3,7 @@ export default function createInterceptors(store) {
 		store.dispatch('clearUser');
 		store.dispatch('DEFAULT_USER');
 		store.dispatch('SET_DEFAULT_VALUES');
-		localStorage.clear();
+		// localStorage.clear();
 	}
 
 	return {

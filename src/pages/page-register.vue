@@ -151,6 +151,10 @@ async function createAccount() {
 			) {
 				this.showGenericError('El email ya ha sido registrado.', 50000);
 			}
+		} else if (err.data && err.data.code === 1008) {
+			this.showGenericError(
+				'Tu cuenta ya está registrada. ¡Inicia sesión para continuar!',
+			);
 		} else if (err.status === 500) {
 			this.showGenericError();
 		}
