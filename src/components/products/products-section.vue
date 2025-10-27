@@ -1,8 +1,8 @@
 <template>
 	<div>
+		<section ref="productSection"></section>
 		<section
 			v-if="products.length"
-			ref="productSection"
 			class="product-section transition-product-section"
 			data-cy="productsSection"
 		>
@@ -51,14 +51,12 @@ function addMoreProduct() {
 		this.$nextTick(() => {
 			const el = this.$refs.productSection;
 			if (el) {
-				el.scrollIntoView({ behavior: 'smooth' });
+				el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 				const headerOffset = 200;
-				setTimeout(() => {
-					window.scrollBy({
-						top: -headerOffset,
-						behavior: 'smooth',
-					});
-				}, 300);
+				window.scrollBy({
+					top: -headerOffset,
+					behavior: 'smooth',
+				});
 			}
 		});
 	});
