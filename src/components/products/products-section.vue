@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<section ref="productSection"></section>
 		<section
 			v-if="products.length"
 			class="product-section transition-product-section"
@@ -46,7 +47,19 @@ import SpinnerLoading from '@/components/shared/spinner/spinner-loading';
 
 function addMoreProduct() {
 	this.$store.dispatch('MORE_PRODUCTS');
-	this.$store.dispatch('LOAD_PRODUCTS', { context: this });
+	this.$store.dispatch('LOAD_PRODUCTS', { context: this }).then(() => {
+		this.$nextTick(() => {
+			const el = this.$refs.productSection;
+			if (el) {
+				el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				const headerOffset = 200;
+				window.scrollBy({
+					top: -headerOffset,
+					behavior: 'smooth',
+				});
+			}
+		});
+	});
 }
 
 function products() {
