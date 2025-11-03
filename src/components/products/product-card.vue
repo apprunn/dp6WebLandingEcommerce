@@ -862,7 +862,7 @@ export default {
 
 .opacity {
 	height: 100%;
-	opacity: 0.43;
+	opacity: 0.4;
 	position: relative;
 
 	.without-stock-tag {
@@ -882,7 +882,6 @@ export default {
 		text-transform: uppercase;
 		@media screen and (min-width: 600px) {
 			font-size: 19px;
-			background-color: #acacac;
 			left: 10%;
 			top: 30%;
 			width: 80%;
@@ -905,15 +904,16 @@ export default {
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	height: 40px;
+	height: 30px;
 	z-index: 1;
 	color: white;
 	content: 'Agotado';
-	font-size: 18px;
+	font-size: 16px;
 	font-family: font(bold);
 	text-transform: uppercase;
+	transform: rotate(-45deg);
 	@media screen and (min-width: 600px) {
-		font-size: 20px;
+		font-size: 16px;
 		// margin-top: 10px;
 	}
 }

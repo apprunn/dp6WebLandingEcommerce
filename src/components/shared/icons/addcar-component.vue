@@ -22,7 +22,7 @@
 		<!-- <button :style="activeStyle" class="btn-add-cart" @click="addCarEvent"> <span class="txt-icon-plus"> + </span></button> -->
 
 		<v-btn color="primary" @click="addCarEvent">
-			Añadir al carrito
+			{{ text }}
 			<v-icon class="ml-2" size="20" color="#ffff">shopping_cart</v-icon>
 		</v-btn>
 	</div>
@@ -61,6 +61,10 @@ export default {
 	},
 	props: {
 		value: false,
+		text: {
+			default: 'Añadir al carrito',
+			type: String,
+		},
 		active: {
 			default: false,
 			type: Boolean,
