@@ -213,7 +213,11 @@ function addToCar() {
 		return;
 	}
 	if (!this.noStock) {
-		this.$store.dispatch('addProductToBuyCar', this.data);
+		const product = {
+			...this.data,
+			wholeSalePrice: this.getWholeSalePrice(),
+		};
+		this.$store.dispatch('addProductToBuyCar', product);
 		this.$emit('open-confirm-modal');
 	} else {
 		this.showGenericError('Producto sin stock', 80000);
@@ -266,7 +270,7 @@ export default {
 		cartBottom,
 	},
 	computed: {
-		...mapGetters(['getCurrencySymbol', 'getCategories']),
+		...mapGetters(['getCommerceData', 'getCurrencySymbol', 'getCategories']),
 		...mapGetters('loading', ['isLoading']),
 		// disabledOrder,
 		isComposed,
@@ -284,6 +288,30 @@ export default {
 		unitSelection,
 		goToCategory,
 		inputQuantity,
+		getWholeSalePrice() {
+			if (
+				Object.keys(this.getCommerceData).length === 0 ||
+				this.getCommerceData === null
+			) {
+				return {};
+			}
+			const commerceData = this.getCommerceData.settings
+				? this.getCommerceData
+				: this.getLocalStorage('ecommerce::ecommerce-data');
+			const priceId = commerceData.settings.salPriceListId;
+			const priceList = this.data.priceList || {};
+			const { ranges } = priceList[priceId] || {};
+			let prices = {};
+			if (ranges) {
+				prices = ranges.reduce((acc, range) => {
+					if (range.from > 0 && range.to > 0 && range.price > 0) {
+						acc.push(range);
+					}
+					return acc;
+				}, []);
+			}
+			return prices.length > 0 ? prices[0] : {};
+		},
 	},
 	props: {
 		data: {

@@ -104,7 +104,10 @@ class ProductDetails {
 	}
 
 	getProductDetails() {
-		return { ...this.selectedProduct };
+		return {
+			...this.selectedProduct,
+			wholeSalePrice: this.getWholeSalePrice(),
+		};
 	}
 	featureSelected(feature) {
 		if (isEmpty(this.selectedFeatures)) {
@@ -215,7 +218,7 @@ class ProductDetails {
 			return;
 		}
 		let { discount } = priceList;
-		const { units, price } = priceList;
+		const { units, price, ranges } = priceList;
 		if (!units) {
 			this.selectedProduct.price = price || null;
 			this.selectedProduct.priceDiscount = price || null;
@@ -224,8 +227,21 @@ class ProductDetails {
 		const rightConversion = units[this.selectedProduct.unitSelected];
 		this.selectedProduct.price = rightConversion ? rightConversion.price : price;
 		discount = rightConversion ? rightConversion.discount : discount;
+
+		const currentRanges = rightConversion ? rightConversion.ranges : ranges;
+		if (currentRanges && currentRanges.length > 0) {
+			const quantity = this.selectedProduct.quantity || 1;
+			const range = currentRanges.find(
+				r => quantity >= r.from && (r.to === 0 || quantity <= r.to),
+			);
+			if (range && range.price > 0) {
+				this.selectedProduct.priceDiscount = range.price;
+				return;
+			}
+		}
+
 		if (discount) {
-			const priceDiscount = (1 - (discount / 100)) * this.selectedProduct.price;
+			const priceDiscount = (1 - discount / 100) * this.selectedProduct.price;
 			this.selectedProduct.priceDiscount = Number(priceDiscount.toFixed(2));
 		} else {
 			this.selectedProduct.priceDiscount = this.selectedProduct.price;
@@ -240,13 +256,15 @@ class ProductDetails {
 			return [];
 		}
 		const priceList = selectedProduct.priceList[this.priceListId];
-		const units = priceList.units;
-		if (!units || !units[selectedProduct.unitSelected]) {
-			return [];
-		}
-		const rightRanges = units[selectedProduct.unitSelected];
-		const ranges = rightRanges ? rightRanges.ranges : priceList.ranges;
-		const resultRanges = ranges || [];
+		const { units, ranges } = priceList;
+		const rightConversion = units && selectedProduct.unitSelected && units[selectedProduct.unitSelected]
+			? units[selectedProduct.unitSelected]
+			: null;
+
+		const resultRanges = (rightConversion && rightConversion.ranges && rightConversion.ranges.length > 0)
+			? rightConversion.ranges
+			: (ranges || []);
+
 		return resultRanges;
 	}
 

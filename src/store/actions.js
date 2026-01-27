@@ -71,7 +71,16 @@ function addProductToBuyCar(context, product) {
 		// const { unitSelected, unitId, unit } = currentProduct;
 		// const idUnit = unitSelected || unitId || unit.id;
 		// const priceDiscountOrigin = currentProduct.priceDiscount
-		newProduct.priceDiscountOrigin = newProduct.priceDiscount;
+		const ranges = helper.getRangesOfProduct({ ...product });
+		const newPrice = helper.getPriceByRange({
+			ranges,
+			quantity: product.quantity,
+			originalPrice: product.priceDiscountOrigin
+				|| product.originalPrice,
+		});
+
+		newProduct.priceDiscount = newPrice;
+		// newProduct.priceDiscountOrigin = newProduct.priceDiscount;
 		context.commit('UPDATE_PRODUCTS_SELECTED', productsSelected.concat(newProduct));
 		context.commit('UPDATE_ORDER_DETAILS_IF_EXIST', productsSelected.concat(newProduct));
 	}
