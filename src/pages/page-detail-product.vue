@@ -563,6 +563,7 @@ function data() {
 		product: {},
 		productDetails: {
 			conversions: {},
+			wholeSalePrice: [],
 		},
 		productInstance: {},
 		productsFilter: [],
