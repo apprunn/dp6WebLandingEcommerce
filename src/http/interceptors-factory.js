@@ -3,7 +3,7 @@ export default function createInterceptors(store) {
 		store.dispatch('clearUser');
 		store.dispatch('DEFAULT_USER');
 		store.dispatch('SET_DEFAULT_VALUES');
-		// localStorage.clear();
+		localStorage.clear();
 	}
 
 	return {
@@ -11,8 +11,12 @@ export default function createInterceptors(store) {
 			store.dispatch('addService', config);
 
 			const headers = config.headers || {};
-
-			if (store.state.token) {
+			console.log('config => ', config);
+			console.log('store.state.token => ', store.state.token);
+			if (config.useUserToken && store.state.token) {
+				headers.common = headers.common || {};
+				headers.common.Authorization = `Bearer ${store.state.token}`;
+			} else if (store.state.token) {
 				headers.common = headers.common || {};
 				headers.common.Authorization = `Bearer ${store.state.token}`;
 			} else {

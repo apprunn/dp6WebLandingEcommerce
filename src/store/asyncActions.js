@@ -120,7 +120,7 @@ const asyncActions = {
 	},
 	GET_ORDER_INFO: async (store, { context, id }) => {
 		const url = `orders/${id}?summary=true`;
-		const { data: order } = await context.$httpSales.get(url);
+		const { data: order } = await context.$httpSales.get(url, { useUserToken: true });
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
 		// if (order.orderStateId === 8 && order.paymentStateId === 3) {
 		// 	const body = {
