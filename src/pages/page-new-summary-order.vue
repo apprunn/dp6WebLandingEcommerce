@@ -227,13 +227,30 @@ import { Yape, Plin } from '@/shared/enums/depositPayment';
 
 const { store, house } = deliveryWays;
 
-function created() {
+async function created() {
 	const { orderId: id } = this.$route.params;
+	console.log(`[page-new-summary-order] created para ID: ${id}`);
 	if (id) {
+		// ESPERAR SI EL TOKEN ESTÁ EN LS PERO NO EN STORE (Race Condition)
+		let attempts = 0;
+		while (
+			!this.$store.state.token &&
+			helper.getLocalToken() &&
+			attempts < 10
+		) {
+			console.log(
+				`[page-new-summary-order] Esperando token... intento ${attempts + 1}`,
+			);
+			await new Promise(resolve => setTimeout(resolve, 200));
+			attempts++;
+		}
+
+		console.log(
+			`[page-new-summary-order] Token listo (${
+				this.$store.state.token ? 'SI' : 'NO'
+			}), pidiendo orden`,
+		);
 		this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
-		// if (order.orderStateId === 8 && order.paymentStateId === 3) {
-		// 	this.orderStateOrder();
-		// }
 	}
 }
 
@@ -299,10 +316,10 @@ function addressDel() {
 	const { address, name, addressLine1, parish, city, province } =
 		this.addressObject || {};
 	if (this.isStore) {
-		return `${name}, ${address}.`;
+		return `${name || ''}, ${address || ''}.`;
 	}
-	return `${addressLine1} - ${parish.name || ''} - ${city.name ||
-		''}, ${province.name || ''}.`;
+	return `${addressLine1 || ''} - ${parish?.name || ''} - ${city?.name ||
+		''}, ${province?.name || ''}.`;
 }
 
 function billing() {
@@ -310,7 +327,7 @@ function billing() {
 }
 
 function wayPayment() {
-	return this.order.wayPayment;
+	return this.order?.wayPayment;
 }
 /**
  * Cuando el pago es online wayPayment es null
@@ -320,7 +337,7 @@ function isOnlinePayment() {
 	if (online) {
 		return online;
 	}
-	return this.wayPayment.code === creditCard.code;
+	return this.wayPayment?.code === creditCard.code;
 }
 
 function isReciveAndPay() {
@@ -337,7 +354,7 @@ function isDeposit() {
 		description:
 			'Usa alguna de nuestras cuentas bancarias para realizar el pago.',
 		exist: getDeeper('code')(this.wayPayment) === deposit.code,
-		title: getDeeper('name')(this.wayPayment),
+		title: getDeeper('name')(this.wayPayment) || 'Depósito',
 	};
 }
 
@@ -389,9 +406,11 @@ function discount() {
 
 function niubizGateway() {
 	const payment = getDeeper('additionalInformation.paymentGateway')(this.order);
+	if (!payment)
+		return { createdAt: this.order?.createdAt, cardBrand: '', cardNumber: '' };
 	const { cardBrand, cardReference } = payment;
 	return {
-		createdAt: this.order.createdAt,
+		createdAt: this.order?.createdAt,
 		cardBrand,
 		cardNumber: cardReference,
 	};

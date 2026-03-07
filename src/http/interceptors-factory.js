@@ -3,7 +3,11 @@ export default function createInterceptors(store) {
 		store.dispatch('clearUser');
 		store.dispatch('DEFAULT_USER');
 		store.dispatch('SET_DEFAULT_VALUES');
-		localStorage.clear();
+		// NO USAR localStorage.clear() porque borra los dominios (domains) y el ecommerce-data
+		// que son necesarios para que la app siga funcionando/redirigiendo.
+		const storageKey = process.env.STORAGE_USER_KEY || 'ecommerce';
+		localStorage.removeItem(`${storageKey}::token`);
+		localStorage.removeItem(`${storageKey}::ecommerce-user`);
 	}
 
 	return {
@@ -11,17 +15,23 @@ export default function createInterceptors(store) {
 			store.dispatch('addService', config);
 
 			const headers = config.headers || {};
-			console.log('config => ', config);
-			console.log('store.state.token => ', store.state.token);
+			const timestamp = new Date().toISOString();
+			console.log(`[HTTP Request] ${timestamp} - URL: ${config.url}`);
+			console.log(`[HTTP Request] Token en Store: ${store.state.token ? 'PRESENTE' : 'NULO/VACÍO'}`);
+			console.log(`[HTTP Request] usa Token Usuario (useUserToken): ${!!config.useUserToken}`);
+
 			if (config.useUserToken && store.state.token) {
 				headers.common = headers.common || {};
 				headers.common.Authorization = `Bearer ${store.state.token}`;
+				console.log('[HTTP Request] Inyectando Token de Usuario');
 			} else if (store.state.token) {
 				headers.common = headers.common || {};
 				headers.common.Authorization = `Bearer ${store.state.token}`;
+				console.log('[HTTP Request] Inyectando Token de Sesión (fallback)');
 			} else {
 				headers.common = headers.common || {};
 				headers.common.Authorization = `Bearer ${process.env.TOKEN}`;
+				console.log('[HTTP Request] Usando TOKEN PÚBLICO del .env');
 			}
 
 			store.dispatch('toggleLoading', true);

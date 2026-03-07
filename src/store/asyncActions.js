@@ -45,8 +45,15 @@ const asyncActions = {
 		);
 		const [{ data: products, headers }] = await Promise.all(request);
 
+		if (!Array.isArray(products)) {
+			console.error('LOAD_PRODUCTS: products is not an array', products);
+			return;
+		}
+
 		const mappedProducts = products.map((el) => {
-			const { discount } = Object.entries(el.priceList).flat()[1];
+			const priceList = el.priceList || {};
+			const discountObj = Object.entries(priceList).flat()[1] || {};
+			const discount = discountObj.discount || 0;
 			let originalPrice = el.price;
 
 			if (discount > 0) {
@@ -119,8 +126,10 @@ const asyncActions = {
 		await context.$httpSales.patch(url);
 	},
 	GET_ORDER_INFO: async (store, { context, id }) => {
+		console.log(`[asyncActions] GET_ORDER_INFO iniciando para ID: ${id}`);
 		const url = `orders/${id}?summary=true`;
 		const { data: order } = await context.$httpSales.get(url, { useUserToken: true });
+		console.log('[asyncActions] GET_ORDER_INFO éxito, guardando en LS');
 		localStorage.setItem('ecommerce-order', JSON.stringify(order));
 		// if (order.orderStateId === 8 && order.paymentStateId === 3) {
 		// 	const body = {
