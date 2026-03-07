@@ -42,6 +42,7 @@ export default {
 				const token = helper.getLocalToken();
 				console.log({ token });
 				console.log('deployooo');
+
 				if (token) {
 					this.$store.dispatch('setToken', token);
 					const { data: response } = await this.$httpSales.get('customers/current');
