@@ -7,15 +7,13 @@
 				type="button"
 				@click="checkout"
 			>
-				<img :src="img" alt="logo_data_fast">
+				<img :src="img" alt="logo_data_fast" />
 			</button>
-			<button
-				class="data-fast-btn-details"
-				type="button"
-			>
+			<button class="data-fast-btn-details" type="button">
 				<img src="/static/icons/information.svg" alt="" height="26" />
 				<span class="tooltip">
-					Haz clic en el botón para ver las tarjetas con las que puedes pagar en DATAFAST
+					Haz clic en el botón para ver las tarjetas con las que puedes pagar en
+					DATAFAST
 				</span>
 			</button>
 			<modal v-model="showModal" max-width="520px" @input="closeModal">
@@ -47,12 +45,12 @@
 						:key="card.code"
 					>
 						<template v-if="card.active">
-								<div>
-									<img :src="card.urlImage" height="24" />
-								</div>
-								<div class="name-tarjet">
-									{{ card.name }}
-								</div>
+							<div>
+								<img :src="card.urlImage" height="24" />
+							</div>
+							<div class="name-tarjet">
+								{{ card.name }}
+							</div>
 						</template>
 					</div>
 				</div>
@@ -77,10 +75,7 @@ async function getClientIp() {
 	try {
 		({ data: this.clientIp } = await this.$http.get('https://api.ipify.org'));
 	} catch (err) {
-		this.showNotification(
-			'Ocurrio un error con la ip de origen',
-			'error',
-		);
+		this.showNotification('Ocurrio un error con la ip de origen', 'error');
 	}
 }
 
@@ -127,7 +122,7 @@ function updateDiferidos(ev) {
 		select.options[i].remove();
 	}
 
-	diferidoTime.forEach((item) => {
+	diferidoTime.forEach(item => {
 		const newOption = document.createElement('option');
 		newOption.setAttribute('value', item);
 		const newOptionContent = document.createTextNode(item);
@@ -141,14 +136,26 @@ function insertTiposDeCredito(dtcOptions) {
 	const tipocredito = document.createElement('div');
 	const imgElement = document.createElement('img');
 	tipocredito.setAttribute('class', 'wpwl-wrapper wpwl-wrapper-custom');
-	tipocredito.setAttribute('style', 'margin-top: 10px;flex-direction: column;display: flex');
-	imgElement.setAttribute('src', 'https://www.datafast.com.ec/images/verified.png');
-	imgElement.setAttribute('style', 'display:block;margin:20px 0px 0px auto; width:100%;');
+	tipocredito.setAttribute(
+		'style',
+		'margin-top: 10px;flex-direction: column;display: flex',
+	);
+	imgElement.setAttribute(
+		'src',
+		'https://www.datafast.com.ec/images/verified.png',
+	);
+	imgElement.setAttribute(
+		'style',
+		'display:block;margin:20px 0px 0px auto; width:100%;',
+	);
 	const divContent = document.createTextNode('Tipo de crédito:');
 	tipocredito.appendChild(divContent);
 	const newSelect = document.createElement('select');
 	newSelect.addEventListener('change', this.updateDiferidos);
-	newSelect.setAttribute('style', 'background-color: white;padding: 3.75px 0 3.75px 10px; border: 1px solid #ccc;border-radius: 4px; width: 258px;');
+	newSelect.setAttribute(
+		'style',
+		'background-color: white;padding: 3.75px 0 3.75px 10px; border: 1px solid #ccc;border-radius: 4px; width: 258px;',
+	);
 	newSelect.setAttribute('name', 'customParameters[SHOPPER_TIPOCREDITO]');
 	dtcOnlyActive.forEach(({ id, name }) => {
 		const newOption = document.createElement('option');
@@ -158,7 +165,9 @@ function insertTiposDeCredito(dtcOptions) {
 		newSelect.appendChild(newOption);
 	});
 	tipocredito.appendChild(newSelect);
-	const formCard = document.querySelector('form.wpwl-form-card').querySelector('.wpwl-wrapper-submit');
+	const formCard = document
+		.querySelector('form.wpwl-form-card')
+		.querySelector('.wpwl-wrapper-submit');
 	formCard.appendChild(tipocredito);
 	formCard.appendChild(imgElement);
 }
@@ -173,10 +182,13 @@ function insertDiferidos() {
 	divSelect.setAttribute('style', 'display:inline-block');
 	const newSelect = document.createElement('select');
 	newSelect.setAttribute('id', 'diferidos');
-	newSelect.setAttribute('style', 'background-color: white;width: 258px;border-radius: 4px;border: 1px solid #ccc;padding: 3.75px 0 3.75px 10px;outline: none;');
+	newSelect.setAttribute(
+		'style',
+		'background-color: white;width: 258px;border-radius: 4px;border: 1px solid #ccc;padding: 3.75px 0 3.75px 10px;outline: none;',
+	);
 	newSelect.setAttribute('name', 'recurring.numberOfInstallments');
 
-	this.defaultDiferidos.forEach((item) => {
+	this.defaultDiferidos.forEach(item => {
 		const newOption = document.createElement('option');
 		newOption.setAttribute('value', item);
 		const newOptionContent = document.createTextNode(item);
@@ -185,16 +197,22 @@ function insertDiferidos() {
 	});
 
 	divSelect.appendChild(newSelect);
-	const formCard = document.querySelector('form.wpwl-form-card').querySelector('.wpwl-wrapper-submit');
+	const formCard = document
+		.querySelector('form.wpwl-form-card')
+		.querySelector('.wpwl-wrapper-submit');
 	formCard.appendChild(divTitle);
 	formCard.appendChild(divSelect);
 }
 
 function getDiferidos(ev) {
-	const { target: { value } } = ev;
+	const {
+		target: { value },
+	} = ev;
 	const diferidoItem = this.datafastData.typesCredit.find(d => d.id === value);
 	if (diferidoItem && diferidoItem.children && diferidoItem.children.options) {
-		const { children: { options } } = diferidoItem;
+		const {
+			children: { options },
+		} = diferidoItem;
 
 		const onlyActive = (acc, item) => {
 			if (item.flagActive) {
@@ -203,28 +221,34 @@ function getDiferidos(ev) {
 			return acc;
 		};
 
-		return options.length ? options.reduce(onlyActive, []) : this.defaultDiferidos;
+		return options.length
+			? options.reduce(onlyActive, [])
+			: this.defaultDiferidos;
 	}
 	return this.defaultDiferidos;
 }
 
 function insertForm(dtc) {
-	const datafastCards = JSON.parse(localStorage.getItem('datafast-cards')) || [];
-	const dataBrands = datafastCards.length > 0 ? datafastCards.reduce((a, dfc, i) => {
-		let { codeInternal } = dfc;
-		if (codeInternal.toLowerCase() === 'mastercard') {
-			codeInternal = 'MASTER';
-		} else if (codeInternal.toLowerCase() === 'american') {
-			codeInternal = 'AMEX';
-		}
-		if (a.indexOf(codeInternal) === -1) {
-			if (datafastCards.length > 1 && (i !== (datafastCards.length - 1))) {
-				return a.concat(`${codeInternal} `);
-			}
-			return a.concat(codeInternal);
-		}
-		return a;
-	}, '') : 'VISA MASTER DINERS AMEX DISCOVER';
+	const datafastCards =
+		JSON.parse(localStorage.getItem('datafast-cards')) || [];
+	const dataBrands =
+		datafastCards.length > 0
+			? datafastCards.reduce((a, dfc, i) => {
+					let { codeInternal } = dfc;
+					if (codeInternal.toLowerCase() === 'mastercard') {
+						codeInternal = 'MASTER';
+					} else if (codeInternal.toLowerCase() === 'american') {
+						codeInternal = 'AMEX';
+					}
+					if (a.indexOf(codeInternal) === -1) {
+						if (datafastCards.length > 1 && i !== datafastCards.length - 1) {
+							return a.concat(`${codeInternal} `);
+						}
+						return a.concat(codeInternal);
+					}
+					return a;
+			  }, '')
+			: 'VISA MASTER DINERS AMEX DISCOVER';
 	const dataFastForm = document.createElement('form');
 	const commerceCode = `commerceCode=${this.getCommerceData.code}`;
 	const purchaseNumber = `orderId=${this.getOrderId}`;
@@ -245,7 +269,9 @@ function insertForm(dtc) {
 }
 
 function baseUrl() {
-	return `${process.env.SALES_URL}/payment-gateway/validation`;
+	const salesUrl = process.env.SALES_URL || '';
+	const base = salesUrl.endsWith('/') ? salesUrl.slice(0, -1) : salesUrl;
+	return `${base}/payment-gateway/validation`;
 }
 
 function closeModal(val) {
@@ -259,11 +285,14 @@ async function datafastAdditionals({ code }) {
 	const params = { commerceCode: this.getCommerceData.code };
 	const url = `payment-gateway/${code}/additionals`;
 	try {
-		const { data: datafastResponse } = await this.$httpSales.get(
-			url, { params });
+		const { data: datafastResponse } = await this.$httpSales.get(url, {
+			params,
+		});
 
-		const creditCards = getDeeper('creditCards.options')(datafastResponse) || [];
-		const typesCredit = getDeeper('typesCredit.options')(datafastResponse) || [];
+		const creditCards =
+			getDeeper('creditCards.options')(datafastResponse) || [];
+		const typesCredit =
+			getDeeper('typesCredit.options')(datafastResponse) || [];
 
 		this.datafastData.creditCards = creditCards.filter(cc => cc.active);
 		this.datafastData.typesCredit = typesCredit.filter(tc => tc.flagActive);
@@ -288,7 +317,10 @@ async function datafastAdditionals({ code }) {
 }
 
 function openDetails() {
-	if (this.datafastData.creditCards && this.datafastData.creditCards.length > 0) {
+	if (
+		this.datafastData.creditCards &&
+		this.datafastData.creditCards.length > 0
+	) {
 		this.open = !this.open;
 	}
 }
@@ -315,10 +347,7 @@ export default {
 		modal,
 	},
 	computed: {
-		...mapGetters([
-			'getCommerceData',
-			'getOrderId',
-		]),
+		...mapGetters(['getCommerceData', 'getOrderId']),
 		baseUrl,
 	},
 	created,
@@ -352,7 +381,7 @@ export default {
 <style lang="scss" scoped>
 .data-fast-btn {
 	align-items: center;
-	border: 1px solid #E75A32;
+	border: 1px solid #e75a32;
 	color: white;
 	display: flex;
 	font-family: font(bold);
@@ -370,11 +399,11 @@ export default {
 }
 
 .modal-data-fast {
-    align-items: center;
+	align-items: center;
 	background-color: white;
-    display: flex;
-    justify-content: center;
-    padding: 30px;
+	display: flex;
+	justify-content: center;
+	padding: 30px;
 }
 
 .data-fast-btn-details {
@@ -384,7 +413,7 @@ export default {
 	z-index: 2;
 
 	& > span.tooltip {
-		background-color: rgba(37, 37, 37, .6);
+		background-color: rgba(37, 37, 37, 0.6);
 		border-radius: 4px;
 		color: color(white);
 		display: none;
@@ -412,57 +441,57 @@ export default {
 	position: relative;
 }
 
-	.details-collapse-title {
-		align-items: center;
-		border-bottom: 1px solid rgb(230, 230, 230);
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		font-family: font(bold);
-		font-size: size(medium);
-		justify-content: space-between;
-		padding-bottom: 3px;
+.details-collapse-title {
+	align-items: center;
+	border-bottom: 1px solid rgb(230, 230, 230);
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	font-family: font(bold);
+	font-size: size(medium);
+	justify-content: space-between;
+	padding-bottom: 3px;
 
-		&-btn {
-			border: 1px solid black;
-			border-radius: 6px;
-			font-family: font(demi);
-			font-size: size(minmedium);
-			margin-left: 10px;
-			padding: 4px 5px 0px;
-		}
-	}
-
-	.details-collapse-items {
-		align-items: flex-start;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-		margin-top: 10px;
-	}
-
-	.details-collapse-item {
-		align-items: center;
-		border: 1px solid color(black);
+	&-btn {
+		border: 1px solid black;
 		border-radius: 6px;
-		display: flex;
-		flex-direction: column;
-		font-family: font(bold);
-		margin: 5px 8px;
-		padding: 10px 15px 5px;
-		text-transform: uppercase;
-		width: 205px;
+		font-family: font(demi);
+		font-size: size(minmedium);
+		margin-left: 10px;
+		padding: 4px 5px 0px;
 	}
+}
 
-	.name-tarjet {
-		font-size: 11px;
-		margin-top: 5px;
-		text-align: center;
-	}
+.details-collapse-items {
+	align-items: flex-start;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	margin-top: 10px;
+}
 
-	.component-container {
-		margin-top: 15px;
-		padding: 0 1rem;
-	}
+.details-collapse-item {
+	align-items: center;
+	border: 1px solid color(black);
+	border-radius: 6px;
+	display: flex;
+	flex-direction: column;
+	font-family: font(bold);
+	margin: 5px 8px;
+	padding: 10px 15px 5px;
+	text-transform: uppercase;
+	width: 205px;
+}
+
+.name-tarjet {
+	font-size: 11px;
+	margin-top: 5px;
+	text-align: center;
+}
+
+.component-container {
+	margin-top: 15px;
+	padding: 0 1rem;
+}
 </style>

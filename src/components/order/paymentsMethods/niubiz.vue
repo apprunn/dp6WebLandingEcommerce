@@ -1,13 +1,14 @@
 <template>
 	<div>
 		<div class="conditions">
-			<v-checkbox
-				data-cy="niubiz-check"
-				class="check"
-				v-model="checkbox"
-			>
+			<v-checkbox data-cy="niubiz-check" class="check" v-model="checkbox">
 			</v-checkbox>
-			<span>Acepto los <button type="button" @click="conditionsAndTermsLink">términos y condiciones</button></span>
+			<span
+				>Acepto los
+				<button type="button" @click="conditionsAndTermsLink">
+					términos y condiciones
+				</button></span
+			>
 		</div>
 		<button
 			type="button"
@@ -17,13 +18,9 @@
 			:disabled="!checkbox"
 			@click="checkout"
 		>
-			<img :src="img" alt="logo_Niubiz">
+			<img :src="img" alt="logo_Niubiz" />
 		</button>
-		<form
-			id="visa-payment"
-			:action="redirect"
-			method='post'
-		></form>
+		<form id="visa-payment" :action="redirect" method="post"></form>
 	</div>
 </template>
 <script>
@@ -87,11 +84,14 @@ function redirect() {
 	const orderId = `orderId=${this.getOrderId}`;
 	const successUri = 'uri=resumen-de-mi-pedido';
 	const errorUri = `errorUri=carrito-de-compras/pago/${this.getOrderId}`;
-	return `${this.apiSales}/payment-gateway/validation?${orderId}&${successUri}&${errorUri}`;
+	const base = (this.apiSales || '').endsWith('/')
+		? this.apiSales.slice(0, -1)
+		: this.apiSales;
+	return `${base}/payment-gateway/validation?${orderId}&${successUri}&${errorUri}`;
 }
 
 function conditionsAndTermsLink() {
-	const findIt = this.help.find((h) => {
+	const findIt = this.help.find(h => {
 		const name = this.normalize(h.name);
 		return name === 'terminos y condiciones';
 	});
@@ -103,7 +103,9 @@ function conditionsAndTermsLink() {
 }
 
 function normalize(str) {
-	return str.toLowerCase().normalize('NFD')
+	return str
+		.toLowerCase()
+		.normalize('NFD')
 		.replace(/([aeio])\u0301|(u)[\u0301\u0308]/gi, '$1$2')
 		.normalize();
 }
@@ -162,49 +164,49 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-	.start-js-btn.modal-opener.default {
-		background: url('/static/img/icons/icon-visanet.png') !important;
+.start-js-btn.modal-opener.default {
+	background: url('/static/img/icons/icon-visanet.png') !important;
+}
+
+#visa-payment {
+	width: 656px;
+
+	@media (max-width: 768px) {
+		width: auto;
+	}
+}
+
+.niubiz-btn {
+	border: 1px solid black;
+	display: flex;
+	height: 50px;
+	justify-content: center;
+	margin: auto 1rem;
+	padding: 0 2rem;
+	transition-duration: 250ms;
+
+	&:hover {
+		box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+		transform: scale(1.05);
+	}
+	&[disabled] {
+		opacity: 0.3;
+		cursor: not-allowed;
+	}
+}
+
+.conditions {
+	align-items: center;
+	display: flex;
+
+	.check {
+		margin-right: 1rem;
+		max-width: 2rem;
 	}
 
-	#visa-payment {
-		width: 656px;
-
-		@media (max-width: 768px) {
-			width: auto;
-		}
+	button {
+		color: color(terciary);
+		text-decoration: underline;
 	}
-
-	.niubiz-btn {
-		border: 1px solid black;
-		display: flex;
-		height: 50px;
-		justify-content: center;
-		margin: auto 1rem;
-		padding: 0 2rem;
-		transition-duration: 250ms;
-
-		&:hover {
-			box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-			transform: scale(1.05);
-		}
-		&[disabled] {
-			opacity: 0.3;
-			cursor: not-allowed;
-		}
-	}
-
-	.conditions {
-		align-items: center;
-		display: flex;
-
-		.check {
-			margin-right: 1rem;
-			max-width: 2rem;
-		}
-
-		button {
-			color: color(terciary);
-			text-decoration: underline;
-		}
-	}
+}
 </style>

@@ -3,27 +3,27 @@
 		<section class="summary-header-container">
 			<div class="summary-header">
 				<div>
-					<h2 class="title">{{addressPickUp}}</h2>
+					<h2 class="title">{{ addressPickUp }}</h2>
 					<p class="data" :style="`color:${globalColors.title}`">
-						<span>{{responsible.fullname}},</span>
-						<span>{{countryLabels.dni}}: {{responsible.dni}},</span>
-						<span>Teléfono: {{responsible.phone}}.</span>
+						<span>{{ responsible.fullname }},</span>
+						<span>{{ countryLabels.dni }}: {{ responsible.dni }},</span>
+						<span>Teléfono: {{ responsible.phone }}.</span>
 					</p>
-					<p class="address">Dirección: {{addressDel}}</p>
+					<p class="address">Dirección: {{ addressDel }}</p>
 				</div>
 				<div v-if="billing">
 					<h2 class="title">Solicitud de Factura</h2>
 					<p class="billing-data" :style="`color:${globalColors.title}`">
-						<span>RUC: {{billing.ruc}},</span>
-						<span>Razón social: {{billing.rzSocial}},</span>
-						<span>Domicilio fiscal: {{billing.address}}.</span>
+						<span>RUC: {{ billing.ruc }},</span>
+						<span>Razón social: {{ billing.rzSocial }},</span>
+						<span>Domicilio fiscal: {{ billing.address }}.</span>
 					</p>
 				</div>
 			</div>
 		</section>
 		<section class="summary-content-container">
 			<h2 class="title" :style="`color:${globalColors.primary}`">
-				Resumen de compra - Pedido: {{ this.order.number}}
+				Resumen de compra - Pedido: {{ this.order.number }}
 			</h2>
 			<div class="summary-content">
 				<div class="products-in-order">
@@ -38,55 +38,83 @@
 					<div>
 						<div class="payment-status-container">
 							<span class="delivery-title">Estado del pago:</span>
-							<span class="delivery-result">{{order.paymentStateName}}</span>
+							<span class="delivery-result">{{ order.paymentStateName }}</span>
 						</div>
 						<div class="payment-reference" v-if="showReference">
-							<span class="delivery-title">Su pedido ha sido pagado sobre la referencia:</span>
-							<span class="delivery-result">{{showReference}}</span>
+							<span class="delivery-title"
+								>Su pedido ha sido pagado sobre la referencia:</span
+							>
+							<span class="delivery-result">{{ showReference }}</span>
 						</div>
 						<div class="subtotal-container">
 							<span class="delivery-title">Subtotal:</span>
-							<span class="delivery-result">{{currency}}{{order.subtotal | currencyFormat}}</span>
+							<span class="delivery-result"
+								>{{ currency }}{{ order.subtotal | currencyFormat }}</span
+							>
 						</div>
 						<div class="discount-container">
 							<span class="delivery-title">Descuentos:</span>
-							<span class="delivery-result">{{currency}}{{discount | currencyFormat}}</span>
+							<span class="delivery-result"
+								>{{ currency }}{{ discount | currencyFormat }}</span
+							>
 						</div>
 						<div class="shipping-cost-container">
 							<span class="delivery-title">Costo de envío:</span>
-							<output class="delivery-result">{{currency}}{{order.costShipping | currencyFormat}}</output>
+							<output class="delivery-result"
+								>{{ currency }}{{ order.costShipping | currencyFormat }}</output
+							>
 						</div>
 						<output class="total" :style="`color:${globalColors.primary}`">
-							{{currency}} {{order.formatNumbers.total}}
+							{{ currency }} {{ order.formatNumbers.total }}
 						</output>
 						<div class="payment-strategy">
 							<div v-if="isOnlinePayment" class="online-payment">
-								<h3 class="online-payment-title" :style="`color:${globalColors.primary}`">Pago Online</h3>
+								<h3
+									class="online-payment-title"
+									:style="`color:${globalColors.primary}`"
+								>
+									Pago Online
+								</h3>
 								<div v-if="link.exist">
 									<h4 class="payment-link">Enlace de pago</h4>
-									<img v-if="false" src="" alt="logo de pasarela de pagos">
+									<img v-if="false" src="" alt="logo de pasarela de pagos" />
 									<div class="link-style-container">
 										<a
 											target="_blank"
 											ref="link"
 											:href="link.link"
-											:style="`color:${globalColors.primary};border-color:${globalColors.primary}`"
-										>{{link.link}}</a>
-										<button @click="copyLink" class="copy-button" type="button">copiar</button>
+											:style="
+												`color:${globalColors.primary};border-color:${globalColors.primary}`
+											"
+											>{{ link.link }}</a
+										>
+										<button @click="copyLink" class="copy-button" type="button">
+											copiar
+										</button>
 									</div>
 								</div>
 								<div v-else>
 									<h4>Botón de pago</h4>
-									<img src="" alt="logo de pasarela de pagos">
+									<img src="" alt="logo de pasarela de pagos" />
 								</div>
 							</div>
 							<div v-if="isReciveAndPay.exist" class="online-payment">
-								<h3 class="online-payment-title" :style="`color:${globalColors.primary}`">{{isReciveAndPay.title}}</h3>
-								<h4 class="payment-link">{{isReciveAndPay.description}}</h4>
+								<h3
+									class="online-payment-title"
+									:style="`color:${globalColors.primary}`"
+								>
+									{{ isReciveAndPay.title }}
+								</h3>
+								<h4 class="payment-link">{{ isReciveAndPay.description }}</h4>
 							</div>
 							<div v-if="isDeposit.exist" class="online-payment">
-								<h3 class="online-payment-title" :style="`color:${globalColors.primary}`">{{isDeposit.title}}</h3>
-								<h4 class="payment-link">{{isDeposit.description}}</h4>
+								<h3
+									class="online-payment-title"
+									:style="`color:${globalColors.primary}`"
+								>
+									{{ isDeposit.title }}
+								</h3>
+								<h4 class="payment-link">{{ isDeposit.description }}</h4>
 								<div v-if="true">
 									<swiper :options="swiperOption" ref="swp">
 										<swiper-slide
@@ -94,26 +122,23 @@
 											:key="bankAccount.id"
 										>
 											<div class="bankAccount-container">
-												<h4>{{bankAccount.bank && bankAccount.bank.name}}</h4>
+												<h4>{{ bankAccount.bank && bankAccount.bank.name }}</h4>
 												<div class="bankAccount-data">
 													<span>
-														A nombre de:{{bankAccount.additionalInformation && bankAccount.additionalInformation.personName}}
+														A nombre de:{{
+															bankAccount.additionalInformation &&
+																bankAccount.additionalInformation.personName
+														}}
 													</span>
-													<span>Nro. Cta: {{bankAccount.accountNumber}}</span>
+													<span>Nro. Cta: {{ bankAccount.accountNumber }}</span>
 												</div>
 											</div>
 										</swiper-slide>
 										<div class="swiper-button-prev" slot="button-prev">
-											<ArrowLeft
-												:color="globalColors.primary"
-												class="arrow"
-											/>
+											<ArrowLeft :color="globalColors.primary" class="arrow" />
 										</div>
 										<div class="swiper-button-next" slot="button-next">
-											<ArrowRight
-												:color="globalColors.primary"
-												class="arrow"
-											/>
+											<ArrowRight :color="globalColors.primary" class="arrow" />
 										</div>
 									</swiper>
 								</div>
@@ -142,26 +167,47 @@
 			class="card-data-niubiz"
 			data-cy="online-payment-info"
 		>
-			<h4>Pago realizado con tarjeta: <span>{{niubizGateway.cardBrand}}</span>, nro: <span>{{niubizGateway.cardNumber}}</span></h4>
-			<h5>el día <span>{{niubizGateway.createdAt | formatDate}}</span></h5>
+			<h4>
+				Pago realizado con tarjeta: <span>{{ niubizGateway.cardBrand }}</span
+				>, nro: <span>{{ niubizGateway.cardNumber }}</span>
+			</h4>
+			<h5>
+				el día <span>{{ niubizGateway.createdAt | formatDate }}</span>
+			</h5>
 			<h4>Código de Referencia: {{ order.id }}</h4>
 		</section>
-		<v-flex pl-5 text-xs-center mt-2 mb-2 :style="`color:${globalColors.secondary}`">* Recuerde que debe imprimir o tomar captura a su pedido</v-flex>
+		<v-flex
+			pl-5
+			text-xs-center
+			mt-2
+			mb-2
+			:style="`color:${globalColors.secondary}`"
+			>* Recuerde que debe imprimir o tomar captura a su pedido</v-flex
+		>
 		<section class="summary-btns">
-			<button :style="`background-color:${globalColors.primary}`" type="button" @click="seeOrder">Ver pedido</button>
+			<button
+				:style="`background-color:${globalColors.primary}`"
+				type="button"
+				@click="seeOrder"
+			>
+				Ver pedido
+			</button>
 			<button
 				data-cy="cancel-order"
 				:style="`background-color:${globalColors.primary}`"
 				type="button"
 				@click="cancelOrder"
-			>Cancelar pedido</button>
+			>
+				Cancelar pedido
+			</button>
 			<button
 				:style="`background-color:${globalColors.primary}`"
 				type="button"
 				@click="printOrder"
-			>Imprimir pedido</button>
+			>
+				Imprimir pedido
+			</button>
 		</section>
-
 	</div>
 </template>
 <script>
@@ -192,21 +238,47 @@ function created() {
 }
 
 function beforeUpdate() {
-	const order = JSON.parse(localStorage.getItem('ecommerce-order')) || [];
+	const orderStr = localStorage.getItem('ecommerce-order');
+	console.log('page-new-summary-order -> beforeUpdate -> orderStr:', orderStr);
+	const order = orderStr ? JSON.parse(orderStr) : {};
+
+	console.log('page-new-summary-order -> beforeUpdate -> evaluando estados:', {
+		orderStateId: order.orderStateId,
+		paymentStateId: order.paymentStateId,
+	});
 	if (order.orderStateId === 8 && order.paymentStateId === 3) {
+		console.log('Condición cumplida, llamando a orderStateOrder()');
 		this.orderStateOrder();
 	}
 }
 
 async function orderStateOrder() {
-	const { orderId: id } = this.$route.params;
-	const body = {
-		orderStateCode: orderStatesEnum.confirmed.code,
-	};
-	const { data: updateOrder } = await this.$httpSales.patch(`orders/${id}/update-state`, body);
-	// await this.$store.dispatch('SET_STATE_ORDERS', { context: this, body, id });
-	// const orderNumber = JSON.parse(localStorage.getItem('order-state-order')) || [];
-	this.order.number = updateOrder.number;
+	try {
+		console.log(
+			'page-new-summary-order -> orderStateOrder -> Iniciando confirmación de pedido',
+		);
+		const { orderId: id } = this.$route.params;
+		const body = {
+			orderStateCode: orderStatesEnum.confirmed.code,
+		};
+		const { data: updateOrder } = await this.$httpSales.patch(
+			`orders/${id}/update-state`,
+			body,
+		);
+		console.log(
+			'page-new-summary-order -> orderStateOrder -> success:',
+			updateOrder,
+		);
+
+		// EVITAR MUTAR VUEX DIRECTAMENTE. this.order es un getter.
+		// this.order.number = updateOrder.number;
+
+		// Actualizamos la orden desde el backend
+		await this.$store.dispatch('GET_ORDER_INFO', { context: this, id });
+	} catch (error) {
+		console.error('page-new-summary-order -> orderStateOrder -> ERROR:', error);
+		alert('Ocurrió un error al confirmar tu pedido. Revisa la consola.');
+	}
 }
 
 function addressPickUp() {
@@ -224,11 +296,13 @@ function isStore() {
 }
 
 function addressDel() {
-	const { address, name, addressLine1, parish, city, province } = this.addressObject || {};
+	const { address, name, addressLine1, parish, city, province } =
+		this.addressObject || {};
 	if (this.isStore) {
 		return `${name}, ${address}.`;
 	}
-	return `${addressLine1} - ${parish.name || ''} - ${city.name || ''}, ${province.name || ''}.`;
+	return `${addressLine1} - ${parish.name || ''} - ${city.name ||
+		''}, ${province.name || ''}.`;
 }
 
 function billing() {
@@ -260,7 +334,8 @@ function isReciveAndPay() {
 function isDeposit() {
 	return {
 		bankAccounts: getDeeper('commerce.bankAccountsRelated')(this.order),
-		description: 'Usa alguna de nuestras cuentas bancarias para realizar el pago.',
+		description:
+			'Usa alguna de nuestras cuentas bancarias para realizar el pago.',
 		exist: getDeeper('code')(this.wayPayment) === deposit.code,
 		title: getDeeper('name')(this.wayPayment),
 	};
@@ -268,7 +343,9 @@ function isDeposit() {
 
 function link() {
 	if (this.isOnlinePayment) {
-		const paymentLink = getDeeper('additionalInformation.paymentGateway.url')(this.order);
+		const paymentLink = getDeeper('additionalInformation.paymentGateway.url')(
+			this.order,
+		);
 		return {
 			exist: !isEmpty(paymentLink),
 			link: paymentLink,
@@ -321,13 +398,16 @@ function niubizGateway() {
 }
 
 function showReference() {
-	return getDeeper('additionalInformation.paymentGateway.referenceId')(this.order);
+	return getDeeper('additionalInformation.paymentGateway.referenceId')(
+		this.order,
+	);
 }
 
 function isYape() {
 	const yapeCode = getDeeper('wayPaymentDetailCode')(this.order);
 	if (yapeCode === Yape.code) {
-		const { walletNumber, walletQR } = getDeeper('additionalInfo')(this.order) || {};
+		const { walletNumber, walletQR } =
+			getDeeper('additionalInfo')(this.order) || {};
 		return {
 			exist: true,
 			name: '',
@@ -346,7 +426,8 @@ function isYape() {
 function isPlin() {
 	const plinCode = getDeeper('wayPaymentDetailCode')(this.order);
 	if (plinCode === Plin.code) {
-		const { walletNumber, walletQR } = getDeeper('additionalInfo')(this.order) || {};
+		const { walletNumber, walletQR } =
+			getDeeper('additionalInfo')(this.order) || {};
 		return {
 			exist: true,
 			name: '',
@@ -411,7 +492,9 @@ export default {
 		isDeposit,
 		isNiubiz,
 		isOpenPay() {
-			const codeNiubiz = getDeeper('additionalInformation.gatewayCode')(this.order);
+			const codeNiubiz = getDeeper('additionalInformation.gatewayCode')(
+				this.order,
+			);
 			return codeNiubiz === openpay;
 		},
 		isOnlinePayment,
@@ -564,7 +647,6 @@ export default {
 				margin-top: 1.5rem;
 
 				.online-payment {
-
 					.online-payment-title {
 						font-family: font(bold);
 						font-size: size(small);
@@ -644,5 +726,4 @@ export default {
 	font-family: font(regular);
 	justify-content: center;
 }
-
 </style>
