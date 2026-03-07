@@ -318,8 +318,11 @@ function addressDel() {
 	if (this.isStore) {
 		return `${name || ''}, ${address || ''}.`;
 	}
-	return `${addressLine1 || ''} - ${parish?.name || ''} - ${city?.name ||
-		''}, ${province?.name || ''}.`;
+	const parishName = (parish && parish.name) || '';
+	const cityName = (city && city.name) || '';
+	const provinceName = (province && province.name) || '';
+	return `${addressLine1 ||
+		''} - ${parishName} - ${cityName}, ${provinceName}.`;
 }
 
 function billing() {
@@ -327,7 +330,7 @@ function billing() {
 }
 
 function wayPayment() {
-	return this.order?.wayPayment;
+	return this.order && this.order.wayPayment;
 }
 /**
  * Cuando el pago es online wayPayment es null
@@ -337,7 +340,7 @@ function isOnlinePayment() {
 	if (online) {
 		return online;
 	}
-	return this.wayPayment?.code === creditCard.code;
+	return this.wayPayment && this.wayPayment.code === creditCard.code;
 }
 
 function isReciveAndPay() {
@@ -406,11 +409,11 @@ function discount() {
 
 function niubizGateway() {
 	const payment = getDeeper('additionalInformation.paymentGateway')(this.order);
-	if (!payment)
-		return { createdAt: this.order?.createdAt, cardBrand: '', cardNumber: '' };
+	const createdAt = this.order && this.order.createdAt;
+	if (!payment) return { createdAt, cardBrand: '', cardNumber: '' };
 	const { cardBrand, cardReference } = payment;
 	return {
-		createdAt: this.order?.createdAt,
+		createdAt,
 		cardBrand,
 		cardNumber: cardReference,
 	};

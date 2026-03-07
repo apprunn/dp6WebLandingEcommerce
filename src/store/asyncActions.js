@@ -63,9 +63,10 @@ const asyncActions = {
 			return ({ ...el, originalPrice, unitDefault: el.unit });
 		});
 
-		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
-		const commercePriceListId = user && user.salPriceListId ? user.salPriceListId :
-			getters.getCommerceData.settings.salPriceListId;
+		const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || {};
+		const commerceData = getters.getCommerceData || {};
+		const settings = commerceData.settings || {};
+		const commercePriceListId = (user && user.salPriceListId) || settings.salPriceListId;
 		const setUpDateInProducts = updateProducts(mappedProducts, commercePriceListId, getters);
 		let newProducts = null;
 		if (setUpDateInProducts.length > 20) {
