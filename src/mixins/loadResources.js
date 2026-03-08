@@ -42,10 +42,8 @@ export default {
 				const currencyDefault = this.getLocalStorage('ecommerce::currency-default');
 				const storageProducts = this.getLocalStorage('ecommerce::product-select');
 				const token = helper.getLocalToken();
-				console.log(`[loadResources] Token recuperado de LS: ${token ? 'SI' : 'NO'}`);
 
 				if (token) {
-					console.log('[loadResources] Estableciendo token en Store y validando sesión...');
 					this.$store.dispatch('setToken', token);
 					const { data: response } = await this.$httpSales.get('customers/current');
 					console.log({ response });

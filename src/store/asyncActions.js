@@ -10,8 +10,9 @@ const ACL_COMPANY_CODE = process.env.ACL_COMPANY_CODE;
 const CODE_PROJECT = process.env.CODE_PROJECT;
 
 function updateProducts(products, priceListId, getters) {
-	const priceListDefault = getters && getters.getCommerceData ?
-		getters.getCommerceData.settings.salPriceListId : null;
+	const commerceData = (getters && getters.getCommerceData) || {};
+	const settings = commerceData.settings || {};
+	const priceListDefault = settings.salPriceListId || null;
 	const newPriceList = priceListId || priceListDefault;
 	return products.map(
 		compose(
@@ -83,7 +84,9 @@ const asyncActions = {
 		const url = `products-public/${id}/related`;
 		const { data: products } = PRODUCTS_READ_REPORT ?
 			await context.$httpProductsReadPublic.get(url) : await context.$httpProductsPublic.get(url);
-		const commercePriceListId = getters.getCommerceData.settings.salPriceListId;
+		const commerceData = getters.getCommerceData || {};
+		const settings = commerceData.settings || {};
+		const commercePriceListId = settings.salPriceListId;
 		const updatedProducts = updateProducts(products, commercePriceListId);
 		commit('SET_RELATED_PRODUCTS', updatedProducts);
 	},
