@@ -63,11 +63,14 @@ function redirect() {
 	const orderId = `orderId=${this.getOrderId}`;
 	const successUri = 'uri=resumen-de-mi-pedido';
 	const errorUri = `errorUri=carrito-de-compras/pago/${this.getOrderId}`;
-	return `${this.apiSales}/payment-gateway/validation?${orderId}&${successUri}&${errorUri}`;
+	const base = (this.apiSales || '').endsWith('/')
+		? this.apiSales.slice(0, -1)
+		: this.apiSales;
+	return `${base}/payment-gateway/validation?${orderId}&${successUri}&${errorUri}`;
 }
 
 function conditionsAndTermsLink() {
-	const findIt = this.help.find((h) => {
+	const findIt = this.help.find(h => {
 		const name = this.normalize(h.name);
 		return name === 'terminos y condiciones';
 	});

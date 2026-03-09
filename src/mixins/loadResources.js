@@ -14,9 +14,11 @@ export default {
 				return;
 			}
 		}
+		// CARGAR TOKEN Y SESIÓN PRIMERO
+		await this.loadDataFromLocalStorage();
+
 		await this.loadCommerceData();
 		await this.loadResource();
-		await this.loadDataFromLocalStorage();
 	},
 
 	methods: {
@@ -40,7 +42,6 @@ export default {
 				const currencyDefault = this.getLocalStorage('ecommerce::currency-default');
 				const storageProducts = this.getLocalStorage('ecommerce::product-select');
 				const token = helper.getLocalToken();
-				console.log({ token });
 
 				if (token) {
 					this.$store.dispatch('setToken', token);
