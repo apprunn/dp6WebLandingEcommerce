@@ -128,8 +128,7 @@ function borderPrimaryOnline() {
 	return name === 'online-transactions' ? border : null;
 }
 
-function logout() {
-	this.goTo('page-home');
+async function logout() {
 	this.$store.dispatch('clearUser');
 	this.$store.dispatch('DEFAULT_USER');
 	this.$store.dispatch('SET_DEFAULT_VALUES');
@@ -138,12 +137,13 @@ function logout() {
 	localStorage.removeItem('ecommerce::token');
 	localStorage.removeItem('ecommerce::ecommerce-user');
 	this.$store.dispatch('SET_CURRENCY_DEFAULT', this);
-	if (this.getFilters || this.getFilters.length > 0) {
+	if (this.getFilters && this.getFilters.length > 0) {
 		this.$store.dispatch('UPDATE_PRODUCT_FILTER', this.getFilters[0].id);
 	} else {
 		this.$store.dispatch('UPDATE_PRODUCT_FILTER', null);
 	}
-	this.$store.dispatch('LOAD_PRODUCTS', { context: this });
+	await this.$store.dispatch('LOAD_PRODUCTS', { context: this });
+	this.goTo('page-home');
 }
 
 function getUserAvatar() {

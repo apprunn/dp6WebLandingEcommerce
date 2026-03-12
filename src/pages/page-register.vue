@@ -89,7 +89,9 @@ async function createAccount() {
 		);
 		if (this.modelFacebook && this.modelFacebook.id) {
 			if (response.data && response.data.token) {
-				localStorage.clear();
+				const storageKey = process.env.STORAGE_USER_KEY || 'ecommerce';
+				localStorage.removeItem(`${storageKey}::token`);
+				localStorage.removeItem(`${storageKey}::ecommerce-user`);
 				localStorage.setItem(
 					`${process.env.STORAGE_USER_KEY}::token`,
 					response.data.token,

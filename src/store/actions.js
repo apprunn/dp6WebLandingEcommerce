@@ -209,6 +209,9 @@ function SET_DEFAULT_VALUES({ commit, dispatch }) {
 	dispatch('setAdditionalInformation', null);
 	dispatch('setWayPaymentDetailCode', null);
 	commit('UPDATE_COMENTS', null);
+	commit('SET_PRODUCT_FILTER', null);
+	commit('SET_PRODUCT_SEARCH', null);
+	commit('PAGE_ONE');
 }
 
 function UPDATE_ORDER_FROM_LOCAL_STORAGE({ commit }, orderInfo) {

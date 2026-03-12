@@ -241,8 +241,8 @@ async function created() {
 			console.log(
 				`[page-new-summary-order] Esperando token... intento ${attempts + 1}`,
 			);
-			await new Promise(resolve => setTimeout(resolve, 200));
-			attempts++;
+			await new Promise(resolve => setTimeout(resolve, 200)); // eslint-disable-line no-await-in-loop
+			attempts += 1;
 		}
 
 		console.log(
