@@ -243,12 +243,22 @@ const asyncActions = {
 	},
 	SET_CURRENCY_DEFAULT: async ({ commit }, context) => {
 		console.log('INIT SET_CURRENCY_DEFAULT');
-		const aclCode = ACL_COMPANY_CODE;
-		const url = `companies/${aclCode}/acl`;
-		const { data: res } = await context.$httpSales.get(url);
-		context.setLocalData(`${STORAGE_USER_KEY}::currency-default`, res.currencyDefault);
-		context.setLocalData(`${STORAGE_USER_KEY}::country`, res.country.countryCode);
-		commit('SET_CURRENCY_DEFAULT', res.currencyDefault);
+		try {
+			const aclCode = ACL_COMPANY_CODE;
+			const url = `companies/${aclCode}/acl`;
+			const { data: res } = await context.$httpSales.get(url);
+			if (res && typeof res === 'object') {
+				if (res.currencyDefault) {
+					context.setLocalData(`${STORAGE_USER_KEY}::currency-default`, res.currencyDefault);
+					commit('SET_CURRENCY_DEFAULT', res.currencyDefault);
+				}
+				if (res.country && res.country.countryCode) {
+					context.setLocalData(`${STORAGE_USER_KEY}::country`, res.country.countryCode);
+				}
+			}
+		} catch (error) {
+			console.error('[asyncActions] Error en SET_CURRENCY_DEFAULT:', error);
+		}
 		console.log('END SET_CURRENCY_DEFAULT');
 	},
 	LOAD_FILTERS: async ({ commit }, context) => {
@@ -279,24 +289,35 @@ const asyncActions = {
 	},
 	LOAD_COMMERCE_INFO: async ({ commit, dispatch }, context) => {
 		const url = `com-ecommerce-companies/${COMMERCE_CODE}/public`;
-		const { data: commerceData } = SALES_READ_REPORT ?
-			await context.$httpSalesReadPublic.get(url) : await context.$httpSalesPublic.get(url);
-		context.$bus.$emit('LOAD_COMMERCE_INFO', commerceData);
-		context.setLocalData(`${STORAGE_USER_KEY}::ecommerce-data`, commerceData);
-		commit('SET_COMMERCE_DATA', commerceData);
-		commit('SET_FLAG_NOT_VALID_EMAIL_USER', commerceData.settings.flagNotValidEmailUser);
-		dispatch('SET_ECOMMERCE_THEME', commerceData.settings.theme);
-		dispatch('setFlagGrouper', commerceData.settings.flagGrouper);
-		const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-		link.type = 'image/x-icon';
-		link.rel = 'shortcut icon';
-		link.href = commerceData.favicon.value;
-		link.sizes = '16x16';
-		document.getElementsByTagName('head')[0].appendChild(link);
-		const pageTitle = document.getElementsByTagName('title');
-		const backUp = commerceData.name || 'AppRunn SAC';
-		const title = PAGE_TITLE === 'undefined' ? backUp : PAGE_TITLE;
-		pageTitle[0].innerHTML = title;
+		try {
+			const { data: commerceData } = SALES_READ_REPORT ?
+				await context.$httpSalesReadPublic.get(url) : await context.$httpSalesPublic.get(url);
+
+			if (commerceData && typeof commerceData === 'object' && commerceData.settings) {
+				context.$bus.$emit('LOAD_COMMERCE_INFO', commerceData);
+				context.setLocalData(`${STORAGE_USER_KEY}::ecommerce-data`, commerceData);
+				commit('SET_COMMERCE_DATA', commerceData);
+				commit('SET_FLAG_NOT_VALID_EMAIL_USER', commerceData.settings.flagNotValidEmailUser);
+				dispatch('SET_ECOMMERCE_THEME', commerceData.settings.theme);
+				dispatch('setFlagGrouper', commerceData.settings.flagGrouper);
+
+				if (commerceData.favicon && commerceData.favicon.value) {
+					const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+					link.type = 'image/x-icon';
+					link.rel = 'shortcut icon';
+					link.href = commerceData.favicon.value;
+					link.sizes = '16x16';
+					document.getElementsByTagName('head')[0].appendChild(link);
+				}
+
+				const pageTitle = document.getElementsByTagName('title');
+				const backUp = commerceData.name || 'AppRunn SAC';
+				const title = PAGE_TITLE === 'undefined' ? backUp : PAGE_TITLE;
+				if (pageTitle[0]) pageTitle[0].innerHTML = title;
+			}
+		} catch (error) {
+			console.error('[asyncActions] Error en LOAD_COMMERCE_INFO:', error);
+		}
 	},
 	LOAD_DOMAINS: async (store, { context }) => {
 		console.log('INIT LOAD_DOMAINS');

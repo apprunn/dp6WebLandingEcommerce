@@ -127,17 +127,26 @@ function disabled() {
 }
 
 async function getCustomerData() {
-	const headers = {
-		Authorization: `Bearer ${this.token}`,
-	};
-	const { data: userInfo } = await this.$httpSales.get('customers/current', {
-		headers,
-	});
-	userInfo.avatar = userInfo.urlImage || process.env.DEFAULT_AVATAR;
-	userInfo.fullName = userInfo.typePerson.fullName;
-	userInfo.showCustomerDiscountMessage = true;
-	this.$store.dispatch('setUser', userInfo);
-	this.$store.dispatch('LOAD_PRODUCTS', { context: this });
+	try {
+		const headers = {
+			Authorization: `Bearer ${this.token}`,
+		};
+		const { data: userInfo } = await this.$httpSales.get('customers/current', {
+			headers,
+		});
+
+		if (userInfo && typeof userInfo === 'object') {
+			userInfo.avatar = userInfo.urlImage || process.env.DEFAULT_AVATAR;
+			userInfo.fullName = (userInfo.typePerson && userInfo.typePerson.fullName) || '';
+			userInfo.showCustomerDiscountMessage = true;
+			this.$store.dispatch('setUser', userInfo);
+			this.$store.dispatch('LOAD_PRODUCTS', { context: this });
+		} else {
+			console.error('[page-login] getUserData devolvió una respuesta no válida:', userInfo);
+		}
+	} catch (error) {
+		console.error('[page-login] Error en getCustomerData:', error);
+	}
 }
 
 async function initSession() {

@@ -15,10 +15,10 @@ export default function createInterceptors(store) {
 			store.dispatch('addService', config);
 
 			const headers = config.headers || {};
-			const timestamp = new Date().toISOString();
-			console.log(`[HTTP Request] ${timestamp} - URL: ${config.url}`);
-			console.log(`[HTTP Request] Token en Store: ${store.state.token ? 'PRESENTE' : 'NULO/VACÍO'}`);
-			console.log(`[HTTP Request] usa Token Usuario (useUserToken): ${!!config.useUserToken}`);
+			// const timestamp = new Date().toISOString();
+			// console.log(`[HTTP Request] ${timestamp} - URL: ${config.url}`);
+			// console.log(`[HTTP Request] Token en Store: ${store.state.token ? 'PRESENTE' : 'NULO/VACÍO'}`);
+			// console.log(`[HTTP Request] usa Token Usuario (useUserToken): ${!!config.useUserToken}`);
 
 			if (config.useUserToken && store.state.token) {
 				headers.common = headers.common || {};
