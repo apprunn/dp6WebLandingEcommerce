@@ -203,6 +203,7 @@ async function loadData(id) {
 		JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || {};
 	const commercePriceListId =
 		user && user.salPriceListId ? user.salPriceListId : null;
+	const priceListId = commercePriceListId || this.getCommerceData.settings.salPriceListId;
 	this.productInstance = new ProductDetails(
 		this.childrens,
 		this.getCommerceData.settings.salPriceListId,
@@ -211,6 +212,20 @@ async function loadData(id) {
 	this.productInstance.firstProductSelected(this.product);
 	this.globalFeatures = [...this.productInstance.getFeatures()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
+	const conversions = this.productDetails.conversions || {};
+	const units = this.productDetails.priceList[priceListId] && this.productDetails.priceList[priceListId].units || {};
+	if (Object.keys(conversions).length > 0) {
+		const conversionsFiltered = {};
+		Object.keys(conversions).forEach(key => {
+			if (units[key] && units[key].price > 0) {
+				conversionsFiltered[key] = conversions[key];
+			}
+		});
+		this.productDetails.conversions =
+			Object.keys(conversionsFiltered).length > 0
+				? conversionsFiltered
+				: this.productDetails.conversions;
+	}
 	this.priceOrigin = this.productDetails.priceDiscount;
 	if (!Array.isArray(this.productDetails.sections)) {
 		this.showNotification(
@@ -519,7 +534,6 @@ function selectedUnit(unit) {
 	this.productInstance.updateUnit(unit);
 	this.productImages = [...this.productInstance.getImages()] || [];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
-	this.wholeSalePrice = this.productInstance.getWholeSalePrice();
 }
 
 function closeConfirmModal() {
@@ -794,3 +808,4 @@ export default {
 	text-align: center;
 }
 </style>
+

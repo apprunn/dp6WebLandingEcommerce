@@ -104,6 +104,23 @@ class ProductDetails {
 	}
 
 	getProductDetails() {
+		const conversions = this.selectedProduct.conversions || {};
+		const units = (this.selectedProduct.priceList[this.priceListId]
+			&& this.selectedProduct.priceList[this.priceListId].units)
+			|| {};
+		if (Object.keys(conversions).length > 0) {
+			const conversionsFiltered = {};
+			Object.keys(conversions).forEach(key => {
+				if (units[key] && units[key].price > 0) {
+					conversionsFiltered[key] = conversions[key];
+				}
+			});
+			this.selectedProduct.conversions =
+				Object.keys(conversionsFiltered).length > 0
+					? conversionsFiltered
+					: this.selectedProduct.conversions;
+		}
+
 		return {
 			...this.selectedProduct,
 			wholeSalePrice: this.getWholeSalePrice(),
