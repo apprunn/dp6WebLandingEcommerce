@@ -567,6 +567,20 @@ export default {
 						: null;
 				this.showViewProduct = false;
 				if (this.$flagShowBaseUnit !== 2) {
+					const conversions = this.product.conversions || {};
+					const units = priceListUnits || {};
+					if (Object.keys(conversions).length > 0) {
+						const conversionsFiltered = {};
+						Object.keys(conversions).forEach(key => {
+							if (units[key] && units[key].price > 0) {
+								conversionsFiltered[key] = conversions[key];
+							}
+						});
+						this.product.conversions =
+							Object.keys(conversionsFiltered).length > 0
+								? conversionsFiltered
+								: this.product.conversions;
+					}
 					this.conversionsProducts = Object.keys(this.product.conversions).map(
 						key => ({
 							id: key,
@@ -1029,3 +1043,4 @@ export default {
 	text-align: center;
 }
 </style>
+
