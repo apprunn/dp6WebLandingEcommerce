@@ -194,7 +194,9 @@ function clickQuantity(val) {
 			this.maxQuantity = false;
 		}
 	}
-	this.product.priceDiscount = this.product.priceDiscountOrigin;
+	this.product.priceDiscount = this.$flagShowBaseUnit === 1
+		? this.product.priceDiscount
+		: this.product.priceDiscountOrigin;
 	if (helper.stockProductByType(this.product) < this.quantityStock) {
 		this.showNotification(
 			`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`,
