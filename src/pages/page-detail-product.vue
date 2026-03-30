@@ -148,7 +148,7 @@ async function loadProduct() {
 			const firstConversion = Object.keys(conversions || {})[0];
 			const stockAvaible =
 				firstConversion && stock !== Infinity
-					? parseInt(stock / firstConversion.quantity, 10)
+					? parseInt(stock / conversions[firstConversion].quantity, 10)
 					: stock;
 			this.stockAvaible = stockAvaible;
 			this.$store.dispatch('setStock', this.stockAvaible);
