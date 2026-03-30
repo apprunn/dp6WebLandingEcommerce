@@ -21,8 +21,7 @@ function isVariation(product) {
 
 function stockProductByType(product) {
 	const allowOrderStockNegative = Vue.prototype.$allowOrderStockNegative;
-	const { stockComposite, stockVirtual, stockWarehouse } = product;
-
+	const { stockComposite, stockVirtual, stockWarehouse, stock } = product;
 	if (allowOrderStockNegative) {
 		return Infinity;
 	}
@@ -34,6 +33,9 @@ function stockProductByType(product) {
 	}
 	if (isVariation(product)) {
 		return stockVirtual;
+	}
+	if (product.features && product.features.length > 0) {
+		return stock;
 	}
 	return stockWarehouse;
 }
@@ -58,7 +60,10 @@ function stockGreaterThanCero(product) {
 		const { stockVirtual } = product;
 		return stockVirtual === 0;
 	}
-	const { stockWarehouse } = product;
+	const { stockWarehouse, stock } = product;
+	if (product.features && product.features.length > 0) {
+		return stock === 0;
+	}
 	return stockWarehouse <= 0;
 }
 
