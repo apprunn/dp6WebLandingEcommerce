@@ -174,7 +174,10 @@ async function loadProduct() {
 
 async function loadData(id) {
 	this.$store.dispatch('LOAD_RELATED_PRODUCTS', { context: this, id });
-	const commerceData = this.getCommerceData || {};
+	const ecommerce = JSON.parse(
+				localStorage.getItem('ecommerce::ecommerce-data'),
+			);
+	const commerceData = Object.keys(this.getCommerceData).length > 0 ? this.getCommerceData : ecommerce;
 	if (commerceData.settings && commerceData.settings.flagGrouper !== 2) {
 		const requests = [
 			this.$httpProductsPublic.get(`products-public/${id}/children`),
@@ -203,10 +206,10 @@ async function loadData(id) {
 		JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || {};
 	const commercePriceListId =
 		user && user.salPriceListId ? user.salPriceListId : null;
-	const priceListId = commercePriceListId || this.getCommerceData.settings.salPriceListId;
+	const priceListId = commercePriceListId || commerceData.settings.salPriceListId;
 	this.productInstance = new ProductDetails(
 		this.childrens,
-		this.getCommerceData.settings.salPriceListId,
+		commerceData.settings.salPriceListId,
 		commercePriceListId,
 	);
 	this.productInstance.firstProductSelected(this.product);
@@ -808,4 +811,6 @@ export default {
 	text-align: center;
 }
 </style>
+
+
 
