@@ -42,6 +42,9 @@ function addProductToBuyCar(context, product) {
 		p => p.id === newProduct.id && p.unitSelected === newProduct.unitSelected,
 	);
 	const currentProduct = index > -1 ? productsSelected[index] : null;
+	const ecommerceData = localStorage.getItem('ecommerce::ecommerce-data');
+	const flagShowBaseUnit = ecommerceData != null ? JSON.parse(ecommerceData).flagShowBaseUnit : 0;
+
 	if (currentProduct) {
 		// SI YA EXISTE EN EL CARRITO
 		const { stock, stockWarehouse, stockComposite } = currentProduct;
@@ -57,7 +60,7 @@ function addProductToBuyCar(context, product) {
 			ranges,
 			quantity: currentProduct.quantity,
 			originalPrice: currentProduct.priceDiscountOrigin
-				|| currentProduct.originalPrice,
+				|| (flagShowBaseUnit === 1 ? currentProduct.priceDiscount : currentProduct.priceDiscount),
 		});
 
 		currentProduct.priceDiscount = newPrice;
@@ -76,7 +79,7 @@ function addProductToBuyCar(context, product) {
 			ranges,
 			quantity: product.quantity,
 			originalPrice: product.priceDiscountOrigin
-				|| product.originalPrice,
+				|| (flagShowBaseUnit === 1 ? product.priceDiscount : product.priceDiscount),
 		});
 
 		newProduct.priceDiscount = newPrice;
