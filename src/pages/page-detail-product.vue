@@ -178,6 +178,7 @@ async function loadData(id) {
 				localStorage.getItem('ecommerce::ecommerce-data'),
 			);
 	const commerceData = Object.keys(this.getCommerceData).length > 0 ? this.getCommerceData : ecommerce;
+	const flagShowBaseUnit = commerceData.company.settings.flagShowBaseUnit;
 	if (commerceData.settings && commerceData.settings.flagGrouper !== 2) {
 		const requests = [
 			this.$httpProductsPublic.get(`products-public/${id}/children`),
@@ -230,7 +231,7 @@ async function loadData(id) {
 	}
 	const selectedPriceList = this.product.priceList[priceListId];
 	const unitKey = Object.keys(selectedPriceList.units)[0];
-	if (this.$flagShowBaseUnit === 1 && selectedPriceList && unitKey) {
+	if (flagShowBaseUnit === 1 && selectedPriceList && unitKey) {
 		this.productDetails.unit = {
 			...this.productDetails.conversions[Number(unitKey)],
 			isSelected: false,
