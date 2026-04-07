@@ -148,7 +148,7 @@ async function loadProduct() {
 			const firstConversion = Object.keys(conversions || {})[0];
 			const stockAvaible =
 				firstConversion && stock !== Infinity
-					? parseInt(stock / firstConversion.quantity, 10)
+					? parseInt(stock / conversions[firstConversion].quantity, 10)
 					: stock;
 			this.stockAvaible = stockAvaible;
 			this.$store.dispatch('setStock', this.stockAvaible);
@@ -174,7 +174,11 @@ async function loadProduct() {
 
 async function loadData(id) {
 	this.$store.dispatch('LOAD_RELATED_PRODUCTS', { context: this, id });
-	const commerceData = this.getCommerceData || {};
+	const ecommerce = JSON.parse(
+				localStorage.getItem('ecommerce::ecommerce-data'),
+			);
+	const commerceData = Object.keys(this.getCommerceData).length > 0 ? this.getCommerceData : ecommerce;
+	const flagShowBaseUnit = commerceData.company.settings.flagShowBaseUnit;
 	if (commerceData.settings && commerceData.settings.flagGrouper !== 2) {
 		const requests = [
 			this.$httpProductsPublic.get(`products-public/${id}/children`),
@@ -194,7 +198,6 @@ async function loadData(id) {
 
 	this.product.quantity = 1;
 	this.product.originalPrice = originalPrice;
-
 	this.productFather = { ...this.product };
 	this.tabs = this.product.sections.map(p => p.name);
 	this.tabs.push('Comentarios');
@@ -203,10 +206,10 @@ async function loadData(id) {
 		JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || {};
 	const commercePriceListId =
 		user && user.salPriceListId ? user.salPriceListId : null;
-	const priceListId = commercePriceListId || this.getCommerceData.settings.salPriceListId;
+	const priceListId = commercePriceListId || commerceData.settings.salPriceListId;
 	this.productInstance = new ProductDetails(
 		this.childrens,
-		this.getCommerceData.settings.salPriceListId,
+		commerceData.settings.salPriceListId,
 		commercePriceListId,
 	);
 	this.productInstance.firstProductSelected(this.product);
@@ -225,6 +228,22 @@ async function loadData(id) {
 			Object.keys(conversionsFiltered).length > 0
 				? conversionsFiltered
 				: this.productDetails.conversions;
+	}
+	const selectedPriceList = this.product.priceList[priceListId];
+	const unitKey = Object.keys(selectedPriceList.units)[0];
+	if (flagShowBaseUnit === 1 && selectedPriceList && unitKey) {
+		this.productDetails.unit = {
+			...this.productDetails.conversions[Number(unitKey)],
+			isSelected: false,
+			id: Number(unitKey)
+		};
+		this.productDetails.unitSelected = Number(unitKey);
+		this.product.unit = {
+			...this.productDetails.conversions[Number(unitKey)],
+			isSelected: false,
+			id: Number(unitKey)
+		};
+		this.product.unitSelected = Number(unitKey);
 	}
 	this.priceOrigin = this.productDetails.priceDiscount;
 	if (!Array.isArray(this.productDetails.sections)) {
@@ -657,8 +676,8 @@ export default {
 			let salPriceListDefault =
 				ecommerce && ecommerce.settings && ecommerce.settings.salPriceListId;
 
-			if (user && user.company && user.company.salPriceListDefault) {
-				salPriceListDefault = user.company.salPriceListDefault.id;
+			if (user && user.salPriceListId) {
+				salPriceListDefault = user.salPriceListId;
 			}
 
 			const priceListDefault = this.productDetails.priceList[
@@ -808,4 +827,6 @@ export default {
 	text-align: center;
 }
 </style>
+
+
 

@@ -38,6 +38,10 @@ import { mapGetters } from 'vuex';
 import { setNewProperty, map } from '@/shared/lib';
 
 function conversionsChanges(conversions) {
+	const ecommerce = JSON.parse(
+				localStorage.getItem('ecommerce::ecommerce-data'),
+			);
+	const flagShowBaseUnit = ecommerce.company.settings.flagShowBaseUnit;
 	let conversionsFormatted = [];
 	if (conversions) {
 		conversionsFormatted = map(
@@ -51,11 +55,11 @@ function conversionsChanges(conversions) {
 		newP.isSelected = index === 0;
 		return newP;
 	});
-	if (this.$flagShowBaseUnit === 1) {
+	if (flagShowBaseUnit === 1) {
 		this.conversionsComputed = this.conversionsComputed.filter(
 			p => p.id !== this.defaultUnit.id,
 		);
-	} else if (this.$flagShowBaseUnit === 2) {
+	} else if (flagShowBaseUnit === 2) {
 		this.conversionsComputed = this.conversionsComputed.filter(
 			p => p.id === this.defaultUnit.id,
 		);
@@ -124,7 +128,6 @@ export default {
 	justify-content: flex-start;
 	margin-top: 10px;
 	padding: 20px 0;
-
 	@media (max-width: 960px) {
 		display: none;
 	}
