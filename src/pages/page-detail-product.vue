@@ -215,6 +215,9 @@ async function loadData(id) {
 	this.productInstance.firstProductSelected(this.product);
 	this.globalFeatures = [...this.productInstance.getFeatures()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
+	if (this.productDetails.features && this.productDetails.features.length > 0) {
+		this.stockAvaible = helper.stockProductByType(this.productDetails);
+	}
 	const conversions = this.productDetails.conversions || {};
 	const units = this.productDetails.priceList[priceListId] && this.productDetails.priceList[priceListId].units || {};
 	if (Object.keys(conversions).length > 0) {
@@ -311,6 +314,9 @@ function selectFeature(value) {
 	this.globalFeatures = [...this.productInstance.getFeatures()];
 	this.productImages = [...this.productInstance.getImages()];
 	this.productDetails = { ...this.productInstance.getProductDetails() };
+	if (this.productDetails.features && this.productDetails.features.length > 0) {
+		this.stockAvaible = helper.stockProductByType(this.productDetails);
+	}
 }
 
 function possibleFeature(possibles) {
@@ -442,7 +448,8 @@ function updateNumber(quantity) {
 }
 
 function clickQuantity(value) {
-	if (this.product.priceDiscount <= 0) {
+	const priceDiscount = this.product.type === 5 ? this.productDetails.priceDiscount : this.product.priceDiscount;
+	if (priceDiscount <= 0) {
 		this.showNotification(
 			'El producto no se puede agregar al carrito, porque su precio es 0.',
 			'error',
@@ -463,7 +470,7 @@ function clickQuantity(value) {
 		(this.unitProductValid.quantity || 1) * num,
 		10,
 	);
-	if (this.quantityStock > helper.stockProductByType(this.product)) {
+	if (this.quantityStock > helper.stockProductByType(this.productDetails)) {
 		this.showNotification(
 			`El producto ${this.product.name} no cuenta con más stock en la presentación ${this.unitProductValid.name}.`,
 			'warning',

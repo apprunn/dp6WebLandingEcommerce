@@ -35,7 +35,7 @@
 				>
 					Disponibilidad:
 					<span class="product-price">
-						{{ stockAvaible === Infinity ? 'Ilimitado' : stockAvaible }}
+						{{ stockAvaible === Infinity ? 'Ilimitado' : stockProductByType() }}
 					</span>
 				</p>
 			</div>

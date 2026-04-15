@@ -82,7 +82,7 @@ class GlobalFeatures {
 				if (isEmpty(current)) {
 					return compose(
 						setNewProperty('isSelected', false),
-						setNewProperty('notAllowed', true),
+						setNewProperty('notAllowed', false),
 					)(v);
 				}
 				if (current.isSelected) {
