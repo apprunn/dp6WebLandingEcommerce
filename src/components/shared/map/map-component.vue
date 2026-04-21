@@ -2,7 +2,7 @@
 	<GmapMap
 		:center="center"
 		:zoom="zoom"
-		style="width:100%;height:400px;"
+		style="width: 100%; height: 400px"
 		@click="setCoords"
 	>
 		<GmapMarker
@@ -17,7 +17,7 @@
 	</GmapMap>
 </template>
 <script>
-
+/* global google */
 function selectedMarker(args) {
 	this.$store.commit('SET_DELIVERY_PLACE', args);
 }
@@ -45,19 +45,27 @@ export default {
 		selectedMarker,
 		updateCoordinates,
 		async getAddress(coor) {
-			const url = '/maps/api/geocode/json';
-			const { lat, lng } = coor;
-			const params = {
-				latlng: `${lat},${lng}`,
-				key: process.env.GOOGLE_MAP_API_KEY,
-				language: 'es',
-			};
-			try {
-				const response = await this.$httpMaps.get(url, { params });
-				this.addressLine = response.data.results[0].formatted_address;
-			} catch (error) {
-				this.showGenericError();
-			}
+			const geocoder = new google.maps.Geocoder();
+
+			return new Promise((resolve, reject) => {
+				geocoder.geocode(
+					{
+						location: coor,
+						language: 'es',
+					},
+					(results, status) => {
+						if (status === 'OK' && results[0]) {
+							const address = results[0].formatted_address;
+							this.addressLine = address;
+							resolve(results[0]);
+						} else {
+							console.error('Geocoder failed:', status);
+							this.showGenericError();
+							reject(status);
+						}
+					},
+				);
+			});
 		},
 	},
 	watch: {
