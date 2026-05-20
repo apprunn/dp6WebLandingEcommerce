@@ -149,7 +149,7 @@
 					v-model="reclamation.claimOrder"
 				></text-area>
 			</div>
-			<div class="section">
+			<!-- <div class="section">
 				<h4>4. Observaciones y acciones adoptadas por el proveedor</h4>
 				<label>
 					Fecha de comunicación de la respuesta
@@ -164,7 +164,7 @@
 						v-model="reclamation.answerDescription"
 					></text-area>
 				</label>
-			</div>
+			</div> -->
 			<button
 				type="button"
 				:disabled="$v.$invalid"
@@ -238,8 +238,8 @@ async function reclamationAction() {
 function validations() {
 	return {
 		reclamation: {
-			answerDate: { required },
-			answerDescription: { required },
+			// answerDate: { required },
+			// answerDescription: { required },
 			claimDetail: { required },
 			claimDate: { required },
 			claimOrder: { required },
@@ -277,8 +277,8 @@ function validations() {
 function data() {
 	return {
 		reclamation: {
-			answerDate: '',
-			answerDescription: '',
+			// answerDate: '',
+			// answerDescription: '',
 			claimDetail: '',
 			claimDate: '',
 			claimOrder: '',
