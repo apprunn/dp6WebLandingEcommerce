@@ -112,10 +112,12 @@ import helper from '@/shared/helper';
 function created() {
 	const ecommerceLocal = this.getLocalStorage('ecommerce::ecommerce-data');
 	const localOrder = this.getLocalStorage('ecommerce-order');
+	console.log('ecommerceLocal', ecommerceLocal, this.getCommerceData.company);
 	if (ecommerceLocal || this.getCommerceData.company) {
 		const company = this.getCommerceData.company
 			? this.getCommerceData.company
 			: ecommerceLocal.company;
+		console.log('flagShowBaseUnit', company.settings.flagShowBaseUnit);
 		this.showUnity = company.settings
 			? company.settings.flagShowBaseUnit
 			: false;

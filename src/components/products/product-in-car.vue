@@ -178,13 +178,15 @@ function inputQuantity(value) {
 function clickQuantity(val) {
 	let { quantity } = this.product;
 	const { unit } = this.product;
+	const conversionQuantity = this.getConversionQuantity();
+	const realStock = this.stockProductByType();
 	if (val) {
 		quantity += val === 'more' ? 1 : -1;
 		quantity = quantity < 1 ? 1 : quantity;
 	}
 	this.quantityStock = parseInt(unit.quantity * quantity, 10);
 	if (this.showUnity) {
-		if (helper.stockProductByType(this.product) < quantity) {
+		if (realStock < quantity) {
 			this.maxQuantity = true;
 			this.showNotification(
 				'No cuenta con la disponibilidad de stock del producto',
@@ -194,10 +196,15 @@ function clickQuantity(val) {
 			this.maxQuantity = false;
 		}
 	}
-	this.product.priceDiscount = this.$flagShowBaseUnit === 1
-		? this.product.priceDiscount
-		: this.product.priceDiscountOrigin;
-	if (helper.stockProductByType(this.product) < this.quantityStock) {
+	this.product.priceDiscount =
+		this.$flagShowBaseUnit === 1
+			? this.product.priceDiscount
+			: this.product.priceDiscountOrigin;
+	if (
+		realStock < quantity ||
+		this.quantityStock * conversionQuantity >
+			helper.stockProductByType(this.product)
+	) {
 		this.showNotification(
 			`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`,
 			'warning',
@@ -285,7 +292,17 @@ export default {
 				this.fallbackImage;
 		},
 		stockProductByType() {
-			return helper.stockProductByType(this.product);
+			const conversionQuantity = this.getConversionQuantity();
+			const stockByType = helper.stockProductByType(this.product);
+			return Math.floor(stockByType / conversionQuantity);
+		},
+		getConversionQuantity() {
+			const conversions = this.product.conversions || {};
+			const selectedConversion = conversions[this.product.unitSelected];
+			const quantity = Number(
+				selectedConversion && selectedConversion.quantity,
+			);
+			return quantity > 0 ? quantity : 1;
 		},
 	},
 	props: {
