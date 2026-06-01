@@ -297,10 +297,26 @@ function addToCar(unit, show) {
 					? unitList.price
 					: this.product.priceDiscount * (unit.quantity || 1);
 		}
-		const { stock, stockWarehouse, stockComposite } = productSelected;
-		const finalStock = helper.isComposed(productSelected)
-			? stockComposite
-			: stockWarehouse || stock;
+        const { stock, stockWarehouse, stockComposite } = productSelected;
+        // Obtener el flag que indica si se debe usar la unidad base
+        let flagShowBaseUnit = 0;
+        if (this.getCommerceData && this.getCommerceData.company && this.getCommerceData.company.settings) {
+          flagShowBaseUnit = this.getCommerceData.company.settings.flagShowBaseUnit;
+        }
+        // Calcular el stock disponible según el flag
+        let finalStock;
+        if (flagShowBaseUnit === 1) {
+          // Usar la misma lógica que muestra el detalle del producto
+          const rawStock = stockProductByType(productSelected);
+          const firstConversion = Object.keys(productSelected.conversions || {})[0];
+          finalStock = (firstConversion && rawStock !== Infinity)
+            ? parseInt(rawStock / productSelected.conversions[firstConversion].quantity, 10)
+            : rawStock;
+        } else if (helper.isComposed(productSelected)) {
+          finalStock = stockComposite;
+        } else {
+          finalStock = stockWarehouse || stock;
+        }
 		const validate =
 			finalStock >= this.quantityAddProduct || this.$allowOrderStockNegative;
 		const quantity = validate ? this.quantityAddProduct : finalStock;
