@@ -284,8 +284,13 @@ export default {
 }
 
 .text-min-order {
+	display: inline-block;
+	background: white;
 	color: red;
 	font-size: 12px;
+	padding: 6px 10px;
+	border-radius: 6px;
+	font-weight: 600;
 }
 
 .summary-order {
