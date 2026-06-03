@@ -178,7 +178,6 @@ function inputQuantity(value) {
 function clickQuantity(val) {
 	let { quantity } = this.product;
 	const { unit } = this.product;
-	const conversionQuantity = this.getConversionQuantity();
 	const realStock = this.stockProductByType();
 	if (val) {
 		quantity += val === 'more' ? 1 : -1;
@@ -200,11 +199,7 @@ function clickQuantity(val) {
 		this.$flagShowBaseUnit === 1
 			? this.product.priceDiscount
 			: this.product.priceDiscountOrigin;
-	if (
-		realStock < quantity ||
-		this.quantityStock * conversionQuantity >
-			helper.stockProductByType(this.product)
-	) {
+	if (realStock < quantity) {
 		this.showNotification(
 			`El producto ${this.product.name} no cuenta con más stock en la presentación: ${unit.name}.`,
 			'warning',
