@@ -37,33 +37,46 @@ import AppSelect from '@/components/shared/inputs/app-select';
 import { mapGetters } from 'vuex';
 import { setNewProperty, map } from '@/shared/lib';
 
-function conversionsChanges(conversions) {
-	const ecommerce = JSON.parse(
-				localStorage.getItem('ecommerce::ecommerce-data'),
-			);
-	const flagShowBaseUnit = ecommerce.company.settings.flagShowBaseUnit;
+function conversionsChanges() {
 	let conversionsFormatted = [];
-	if (conversions) {
+	if (this.conversions) {
 		conversionsFormatted = map(
-			k => setNewProperty('id', Number(k))(conversions[k]),
-			Object.keys(conversions),
+			k => setNewProperty('id', Number(k))(this.conversions[k]),
+			Object.keys(this.conversions),
 		);
 	}
-	this.conversionsComputed = [].concat(this.defaultUnit, conversionsFormatted);
-	this.conversionsComputed = this.conversionsComputed.map((p, index) => {
+	const defaultUnitInConversions = conversionsFormatted.find(
+		c => c.id === (this.defaultUnit && this.defaultUnit.id),
+	);
+	if (this.defaultUnit && !defaultUnitInConversions) {
+		this.baseUnit = this.defaultUnit;
+	}
+	let list = [];
+	if (this.baseUnit) {
+		list.push(this.baseUnit);
+	}
+	conversionsFormatted.forEach(c => {
+		if (!this.baseUnit || c.id !== this.baseUnit.id) {
+			list.push(c);
+		}
+	});
+	list = list.map(p => {
 		const newP = { ...p };
-		newP.isSelected = index === 0;
+		newP.isSelected = this.defaultUnit && p.id === this.defaultUnit.id;
 		return newP;
 	});
-	if (flagShowBaseUnit === 1) {
-		this.conversionsComputed = this.conversionsComputed.filter(
-			p => p.id !== this.defaultUnit.id,
-		);
-	} else if (flagShowBaseUnit === 2) {
-		this.conversionsComputed = this.conversionsComputed.filter(
-			p => p.id === this.defaultUnit.id,
-		);
+	const ecommerce = JSON.parse(
+		localStorage.getItem('ecommerce::ecommerce-data'),
+	);
+	const flagShowBaseUnit = ecommerce && ecommerce.company && ecommerce.company.settings
+		? ecommerce.company.settings.flagShowBaseUnit
+		: null;
+	if (flagShowBaseUnit === 1 && this.baseUnit) {
+		list = list.filter(p => p.id !== this.baseUnit.id);
+	} else if (flagShowBaseUnit === 2 && this.baseUnit) {
+		list = list.filter(p => p.id === this.baseUnit.id);
 	}
+	this.conversionsComputed = list;
 }
 
 function selectedConversion(item) {
@@ -79,6 +92,7 @@ function data() {
 	return {
 		conversionSelected: null,
 		conversionsComputed: [],
+		baseUnit: null,
 	};
 }
 
@@ -112,6 +126,10 @@ export default {
 	},
 	watch: {
 		conversions: {
+			deep: true,
+			handler: conversionsChanges,
+		},
+		defaultUnit: {
 			deep: true,
 			handler: conversionsChanges,
 		},
