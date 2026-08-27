@@ -43,12 +43,14 @@ const orderMutation = {
 			context.showNotification(`Cantidad: ${quantity} no disponible`, 'primary');
 		}
 		// console.log('currentProduct', currentProduct.priceDiscount, currentProduct.priceDiscountOrigin);
+		if (!currentProduct.priceDiscountOrigin) {
+			currentProduct.priceDiscountOrigin = currentProduct.priceDiscount;
+		}
 		const ranges = h.getRangesOfProduct({ ...currentProduct });
 		const newPrice = h.getPriceByRange({
 			ranges,
 			quantity: currentProduct.quantity,
 			originalPrice: currentProduct.priceDiscountOrigin
-				|| currentProduct.priceDiscount,
 		});
 		currentProduct.priceDiscount = newPrice;
 		Vue.set(state.order, 'products', [...products]);
@@ -57,6 +59,19 @@ const orderMutation = {
 	},
 	DELETE_PRODUCT_BUY_CAR(state, { id, unitSelected }) {
 		const { products } = state.order;
+		// 1. Buscamos el producto que se va a eliminar
+		const productToRemove = products.find(p => p.id === id && p.unitSelected === unitSelected);
+		// 2. Le regresamos su precio base original para "limpiarlo" antes de que salga del carrito
+		if (productToRemove) {
+			if (productToRemove.trueBasePrice) {
+				productToRemove.priceDiscount = productToRemove.trueBasePrice;
+			} else if (productToRemove.priceDiscountOrigin) {
+				productToRemove.priceDiscount = productToRemove.priceDiscountOrigin;
+			}
+			if (productToRemove.trueBaseUnit) {
+				productToRemove.unit = { ...productToRemove.trueBaseUnit };
+			}
+		}
 		const newProducts = products.filter(p => !(p.id === id && p.unitSelected === unitSelected));
 		Vue.set(state.order, 'products', [...newProducts]);
 		localStorage.removeItem('ids-products');
@@ -64,11 +79,27 @@ const orderMutation = {
 		orderMutation.UPDATE_ORDER_DETAILS_IF_EXIST(state, newProducts);
 	},
 	DELETE_ALL_PRODUCT_BUY_CAR(state) {
+		const { products } = state.order;
+		// Limpiamos los precios de absolutamente TODOS los productos antes de vaciar el carrito
+		if (products && products.length > 0) {
+			for (let i = 0; i < products.length; i += 1) {
+				if (products[i].trueBasePrice) {
+					products[i].priceDiscount = products[i].trueBasePrice;
+				} else if (products[i].priceDiscountOrigin) {
+					products[i].priceDiscount = products[i].priceDiscountOrigin;
+				}
+				if (products[i].trueBaseUnit) {
+					products[i].unit = { ...products[i].trueBaseUnit };
+				}
+			}
+		}
 		Vue.set(state.order, 'products', []);
 		localStorage.removeItem('ids-products');
 		localStorage.setItem('ecommerce::product-select', JSON.stringify([]));
 		orderMutation.UPDATE_ORDER_DETAILS_IF_EXIST(state, []);
 	},
+
+
 	SET_SHIPPING_COST(state, price) {
 		Vue.set(state.order.shippingCost, 'price', price);
 	},
