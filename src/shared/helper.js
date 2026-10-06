@@ -311,21 +311,22 @@ function copyFn(node) {
 }
 
 const getRangesOfProduct = product => {
-	// ESTA FUNCION SOLO DEBERIA DEVOLVER LOS RANGOS DE UN PRODUCTO CON LISTA DE PRECIO DEL COMERCIO
 	const ecommerce = JSON.parse(
 		localStorage.getItem('ecommerce::ecommerce-data') || '',
 	);
-	// Obtener ID de la lista de precios que usa el comercio
 	const idPriceList = ecommerce && ecommerce.settings && ecommerce.settings.salPriceListId;
-
-	// Validar que exista priceList en el producto
 	const priceList = product.priceList;
-	if (!priceList || !idPriceList) return [];
+	
+	if (!priceList || !idPriceList || !priceList[idPriceList]) return [];
+	const isConversion = product.conversions && product.unitSelected && product.conversions[product.unitSelected];
+	
+	if (isConversion) {
+		const unitsList = priceList[idPriceList].units;
+		const unitData = unitsList ? unitsList[product.unitSelected] : null;
+		return (unitData && unitData.ranges) ? unitData.ranges : [];
+	}
 
-	// Retornar los ranges si existen
-	return priceList[idPriceList] && priceList[idPriceList].ranges
-		? priceList[idPriceList].ranges
-		: [];
+	return priceList[idPriceList].ranges ? priceList[idPriceList].ranges : [];
 };
 
 function getDomainDynamic(value) {

@@ -213,9 +213,36 @@ function addToCar() {
 		return;
 	}
 	if (!this.noStock) {
+		let currentBasePrice = this.data.priceDiscount;
+		let trueBasePrice = this.data.priceDiscount;
+		const commerceData = this.getCommerceData && this.getCommerceData.settings ? this.getCommerceData : JSON.parse(localStorage.getItem('ecommerce::ecommerce-data') || '{}');
+		const priceId = commerceData.settings ? commerceData.settings.salPriceListId : null;
+		const pList = priceId && this.data.priceList ? this.data.priceList[priceId] : null;
+		let unitId = null;
+		if (this.unit) {
+			unitId = this.unit.id;
+		} else if (this.data.unit) {
+			unitId = this.data.unit.id;
+		}
+		const defaultUnitId = this.data.unitDefault ? this.data.unitDefault.id : unitId;
+		if (pList) {
+			if (unitId && pList.units && pList.units[unitId] && pList.units[unitId].price) {
+				currentBasePrice = pList.units[unitId].price;
+			} else if (pList.price) {
+				currentBasePrice = pList.price;
+			}
+			if (defaultUnitId && pList.units && pList.units[defaultUnitId] && pList.units[defaultUnitId].price) {
+				trueBasePrice = pList.units[defaultUnitId].price;
+			} else if (pList.price) {
+				trueBasePrice = pList.price;
+			}
+		}
 		const product = {
 			...this.data,
 			wholeSalePrice: this.getWholeSalePrice(),
+			priceDiscountOrigin: currentBasePrice,
+			trueBasePrice,
+			trueBaseUnit: this.data.unitDefault || this.data.unit,
 		};
 		this.$store.dispatch('addProductToBuyCar', product);
 		this.$emit('open-confirm-modal');
@@ -300,8 +327,21 @@ export default {
 				: this.getLocalStorage('ecommerce::ecommerce-data');
 			const priceId = commerceData.settings.salPriceListId;
 			const priceList = this.data.priceList || {};
-			const { ranges } = priceList[priceId] || {};
-			let prices = {};
+			let ranges = [];
+			let selectedUnitId = null;
+			if (this.unit) {
+				selectedUnitId = this.unit.id;
+			} else if (this.data.unit) {
+				selectedUnitId = this.data.unit.id;
+			}
+			const pList = priceList[priceId];
+			if (selectedUnitId && pList && pList.units && pList.units[selectedUnitId]) {
+				ranges = pList.units[selectedUnitId].ranges || [];
+			}
+			if (!ranges || ranges.length === 0) {
+				ranges = pList ? pList.ranges : [];
+			}
+			let prices = [];
 			if (ranges) {
 				prices = ranges.reduce((acc, range) => {
 					if (range.from > 0 && range.to > 0 && range.price > 0) {
@@ -312,6 +352,7 @@ export default {
 			}
 			return prices.length > 0 ? prices[0] : {};
 		},
+
 	},
 	props: {
 		data: {

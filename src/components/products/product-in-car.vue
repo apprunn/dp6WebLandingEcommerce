@@ -131,7 +131,7 @@
 				>
 			</h3>
 			<h3 class="product-total">
-				Total: {{ getCurrencySymbol }}. {{ product.total | currencyFormat }}
+				Total: {{ getCurrencySymbol }}. {{ getTotal | currencyFormat }}
 			</h3>
 		</div>
 		<v-flex xs12 sm8 md8 v-if="noStock">
@@ -258,16 +258,7 @@ export default {
 			return this.product.priceDiscount;
 		},
 		getTotal() {
-			const priceList = this.product.priceList
-				? Object.values(this.product.priceList)
-				: null;
-			if (priceList && priceList[0].ranges.length) {
-				const range = priceList[0].ranges.find(
-					r => this.product.quantity >= r.from && this.product.quantity <= r.to,
-				);
-				return range ? range.price * this.product.quantity : this.product.total;
-			}
-			return this.product.total;
+			return this.product.priceDiscount * this.product.quantity;
 		},
 	},
 	data,

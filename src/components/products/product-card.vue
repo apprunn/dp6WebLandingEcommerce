@@ -203,7 +203,7 @@
 						- {{ getCurrencySymbol }}
 
 						{{
-							item.price ? item.price : product.priceDiscount | currencyFormat
+							item.price ? item.price : productPriceDiscount | currencyFormat
 						}}
 					</v-btn>
 				</div>
@@ -271,8 +271,12 @@ function addToCar(unit, show) {
 		// const rightRanges = units[productSelected.unitSelected];
 		// const { ranges } = rightRanges || priceList;
 		productSelected.unitSelected = unit ? unit.id : this.product.unit.id;
-		productSelected.wholeSalePrice = this.WholeSalePrice || [];
+		productSelected.wholeSalePrice = this.getWholeSalePrice(productSelected.unitSelected) || [];
 		productSelected.priceDiscountOrigin = this.product.priceDiscount || 0;
+		if (!productSelected.trueBasePrice) {
+			productSelected.trueBasePrice = this.productPriceDiscount;
+			productSelected.trueBaseUnit = this.product.unitDefault || this.product.unit;
+		}
 		const StockSoldOut =
 			this.quantityAddProduct >= stockProductByType(productSelected);
 		// this.quantityAddProduct >= productSelected.stockWarehouse &&
@@ -291,11 +295,11 @@ function addToCar(unit, show) {
 			productSelected.priceDiscountOrigin =
 				unitList && unitList.price
 					? unitList.price
-					: this.product.priceDiscount * (unit.quantity || 1);
+					: this.productPriceDiscount * (unit.quantity || 1);
 			productSelected.priceDiscount =
 				unitList && unitList.price
 					? unitList.price
-					: this.product.priceDiscount * (unit.quantity || 1);
+					: this.productPriceDiscount * (unit.quantity || 1);
 		}
         const { stock, stockWarehouse, stockComposite } = productSelected;
         // Obtener el flag que indica si se debe usar la unidad base
@@ -433,7 +437,7 @@ function isService() {
 	return serviceCode === TypeProduct.service;
 }
 
-function getWholeSalePrice() {
+function getWholeSalePrice(unitId = null) {
 	if (
 		Object.keys(this.getCommerceData).length === 0 ||
 		this.getCommerceData === null
@@ -445,8 +449,21 @@ function getWholeSalePrice() {
 		: this.getLocalStorage('ecommerce::ecommerce-data');
 	const priceId = commerceData.settings.salPriceListId;
 	const priceList = this.product.priceList || {};
-	const { ranges } = priceList[priceId] || {};
-	let prices = {};
+	let ranges = [];
+	let selectedUnitId = null;
+	if (unitId) {
+		selectedUnitId = unitId;
+	} else if (this.product.unit) {
+		selectedUnitId = this.product.unit.id;
+	}
+	const pList = priceList[priceId];
+	if (selectedUnitId && pList && pList.units && pList.units[selectedUnitId]) {
+		ranges = pList.units[selectedUnitId].ranges || [];
+	}
+	if (!ranges || ranges.length === 0) {
+		ranges = pList ? pList.ranges : [];
+	}
+	let prices = [];
 	if (ranges) {
 		prices = ranges.reduce((acc, range) => {
 			if (range.from > 0 && range.to > 0 && range.price > 0) {
@@ -457,7 +474,6 @@ function getWholeSalePrice() {
 	}
 	return prices.length > 0 ? prices[0] : {};
 }
-
 function data() {
 	return {
 		addQuantity: true,

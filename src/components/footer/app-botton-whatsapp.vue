@@ -65,3 +65,4 @@ export default {
 	background-color: #128c7e;
 }
 </style>
+

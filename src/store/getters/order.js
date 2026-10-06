@@ -1,26 +1,18 @@
-import lib, { isEmpty, getDeeper, setNewProperty, map } from '@/shared/lib';
+import lib, { isEmpty, getDeeper } from '@/shared/lib';
 
 const twoDecimals = lib.decimals(2);
 
 const getters = {
 	getProductToBuy(state) {
 		if (state.order.products) {
-			const products = map(
-				setNewProperty(
-					'total',
-					({ price, salePrice, priceDiscount, quantity }) =>
-						twoDecimals(quantity * (salePrice || priceDiscount || price)),
-					({ priceList, salePrice, priceDiscount, quantity, wholeSalePrice }) => {
-						if (wholeSalePrice.length > 0 && wholeSalePrice[0].price !== 0
-							&& quantity >= wholeSalePrice[0].from && quantity <= wholeSalePrice[0].to) {
-							return twoDecimals(quantity * wholeSalePrice[0].price);
-						}
-						return twoDecimals(quantity * (salePrice || priceDiscount || priceList.price));
-					},
-				),
-				state.order.products,
-			);
-			return products;
+			return state.order.products.map(product => {
+				const { priceList, priceDiscount, salePrice, quantity, price } = product;
+				const priceToShow = (priceDiscount || salePrice || (priceList ? priceList.price : price));
+				return {
+					...product,
+					total: twoDecimals(quantity * priceToShow)
+				};
+			});
 		}
 		return [];
 	},
@@ -32,24 +24,8 @@ const getters = {
 		const newProducts = isEmpty(order) ? products : order.details;
 		if (newProducts) {
 			return newProducts.reduce(
-				(acc, { priceList, priceDiscount, salePrice, quantity, wholeSalePrice }) => {
-					if (wholeSalePrice && wholeSalePrice.length > 0 &&
-						wholeSalePrice[0].price !== 0 &&
-						quantity >= wholeSalePrice[0].from &&
-						quantity <= wholeSalePrice[0].to) {
-						return twoDecimals(wholeSalePrice[0].price * quantity) + acc;
-					}
-					const priceListArr = priceList
-						? Object.values(priceList)
-						: null;
-					if (priceListArr && priceListArr[0].ranges.length) {
-						const range = priceListArr[0].ranges.find(
-							r => quantity >= r.from && quantity <= r.to,
-						);
-						const priceToShow = (priceDiscount || salePrice || priceList.price) || priceDiscount;
-						return range ? range.price * quantity : twoDecimals(priceToShow * quantity) + acc;
-					}
-					const priceToShow = (priceDiscount || salePrice || priceList.price) || priceDiscount;
+				(acc, { priceList, priceDiscount, salePrice, quantity }) => {
+					const priceToShow = (priceDiscount || salePrice || (priceList ? priceList.price : 0));
 					return twoDecimals(priceToShow * quantity) + acc;
 				}, 0);
 		}
