@@ -8,7 +8,7 @@
 				<p class="summary-amount-container separate">
 					<span>Subtotal</span>
 					<span data-cy="subtotal" class="summary-amount"
-						>{{ getCurrencySymbol }}. {{ getTotalToBuy | currencyFormat }}</span
+						>{{ getCurrencySymbol }}. {{ subtotal | currencyFormat }}</span
 					>
 				</p>
 				<p class="summary-amount-container separate">
@@ -76,10 +76,11 @@ import { mapGetters } from 'vuex';
 import appButton from '@/components/shared/buttons/app-button';
 import { getDeeper, compose, setNewProperty } from '@/shared/lib';
 import { creditCard } from '@/shared/enums/wayPayment';
+import helper from '@/shared/helper';
 
 function total() {
 	const totalBuyWithShipp =
-		this.getTotalToBuy - this.discount + this.getShippingCost;
+		this.getTotalToBuy - this.customerDiscount + this.getShippingCost;
 	const newTotal = Number(totalBuyWithShipp.toFixed(2));
 	this.$store.commit('SET_TOTAL_BUY_SHIPP', newTotal);
 	return newTotal;
@@ -142,10 +143,48 @@ function goToMakeOrder() {
 	}
 }
 
-function discount() {
-	const percentage = this.user.discount || 0;
+// Descuento asignado al cliente (porcentaje sobre el total ya con descuentos de producto)
+function customerDiscount() {
+	const percentage = (this.user && this.user.discount) || 0;
 	const amount = this.getTotalToBuy * (Number(percentage) / 100);
 	return Number(amount.toFixed(2));
+}
+
+function getOriginalPrice(product) {
+	const { conversions, unitSelected } = product;
+	const isConversion = conversions && unitSelected && conversions[unitSelected];
+	if (isConversion) {
+		const unitData = helper.getConversionPriceData(product, unitSelected);
+		return unitData && unitData.discount > 0 ? unitData.price : 0;
+	}
+	const baseUnit = product.trueBaseUnit || product.unitDefault;
+	const isBaseUnit =
+		!baseUnit || !product.unit || baseUnit.id === product.unit.id;
+	return isBaseUnit ? Number(product.price) || 0 : 0;
+}
+
+// Ahorro por descuento de producto: (precio original - precio pagado) * cantidad.
+function productDiscount() {
+	const products = this.getProductToBuy || [];
+	const amount = products.reduce((acc, product) => {
+		const originalPrice = getOriginalPrice(product);
+		if (!originalPrice) {
+			return acc;
+		}
+		const paidPrice = Number(product.priceDiscount || product.salePrice) || 0;
+		const saving =
+			(originalPrice - paidPrice) * (Number(product.quantity) || 0);
+		return saving > 0 ? acc + saving : acc;
+	}, 0);
+	return Number(amount.toFixed(2));
+}
+
+function discount() {
+	return Number((this.productDiscount + this.customerDiscount).toFixed(2));
+}
+
+function subtotal() {
+	return Number((this.getTotalToBuy + this.productDiscount).toFixed(2));
 }
 
 function isOnlinePayment() {
@@ -209,7 +248,7 @@ export default {
 			'getOrderInfo',
 			'getOrderStateId',
 			'getOrderStatus',
-			'getProductsToBuy',
+			'getProductToBuy',
 			'getResponsible',
 			'getShippingCost',
 			'getTotalToBuy',
@@ -220,7 +259,10 @@ export default {
 			'user',
 			'isToogleBtn',
 		]),
+		customerDiscount,
 		discount,
+		productDiscount,
+		subtotal,
 		isOnlinePayment,
 		stepOne,
 		stepThree,

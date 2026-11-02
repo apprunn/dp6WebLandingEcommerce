@@ -329,6 +329,28 @@ const getRangesOfProduct = product => {
 	return priceList[idPriceList].ranges ? priceList[idPriceList].ranges : [];
 };
 
+const applyDiscount = (price, discount) => {
+	const newPrice = Number(price) || 0;
+	const newDiscount = Number(discount) || 0;
+	if (newDiscount <= 0) return newPrice;
+	return Number(((1 - newDiscount / 100) * newPrice).toFixed(2));
+};
+
+const getConversionPriceData = (product, unitId) => {
+	const ecommerce = JSON.parse(
+		localStorage.getItem('ecommerce::ecommerce-data') || 'null',
+	);
+	const idPriceList = ecommerce && ecommerce.settings && ecommerce.settings.salPriceListId;
+	const priceList = product && product.priceList && idPriceList
+		? product.priceList[idPriceList]
+		: null;
+	const unitData = priceList && priceList.units && unitId ? priceList.units[unitId] : null;
+	if (!unitData || !unitData.price) return null;
+	const price = Number(unitData.price) || 0;
+	const discount = Number(unitData.discount) || 0;
+	return { price, discount, priceDiscount: applyDiscount(price, discount) };
+};
+
 function getDomainDynamic(value) {
 	const urls =
 		JSON.parse(
@@ -379,6 +401,8 @@ const methods = {
 	updateOrderDetailsInLocalStorage,
 	getRangesOfProduct,
 	getPriceByRange,
+	applyDiscount,
+	getConversionPriceData,
 	getDomainDynamic,
 	stockProductByType,
 };

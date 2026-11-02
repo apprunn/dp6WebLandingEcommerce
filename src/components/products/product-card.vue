@@ -292,14 +292,13 @@ function addToCar(unit, show) {
 		const unitList = priceList && unit && priceList.units[unit.id];
 		if (unit) {
 			productSelected.unit = { ...unit, isSelected: false };
-			productSelected.priceDiscountOrigin =
+			// Precio de la conversión con su descuento ya aplicado
+			const unitPrice =
 				unitList && unitList.price
-					? unitList.price
+					? helper.applyDiscount(unitList.price, unitList.discount)
 					: this.productPriceDiscount * (unit.quantity || 1);
-			productSelected.priceDiscount =
-				unitList && unitList.price
-					? unitList.price
-					: this.productPriceDiscount * (unit.quantity || 1);
+			productSelected.priceDiscountOrigin = unitPrice;
+			productSelected.priceDiscount = unitPrice;
 		}
         const { stock, stockWarehouse, stockComposite } = productSelected;
         // Obtener el flag que indica si se debe usar la unidad base
