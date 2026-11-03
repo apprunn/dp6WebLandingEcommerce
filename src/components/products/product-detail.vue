@@ -226,15 +226,18 @@ function addToCar() {
 		}
 		const defaultUnitId = this.data.unitDefault ? this.data.unitDefault.id : unitId;
 		if (pList) {
-			if (unitId && pList.units && pList.units[unitId] && pList.units[unitId].price) {
-				currentBasePrice = pList.units[unitId].price;
+			// Se usa el precio con el descuento de la lista/conversión ya aplicado
+			const unitData = helper.getConversionPriceData(this.data, unitId);
+			const defaultUnitData = helper.getConversionPriceData(this.data, defaultUnitId);
+			if (unitData) {
+				currentBasePrice = unitData.priceDiscount;
 			} else if (pList.price) {
-				currentBasePrice = pList.price;
+				currentBasePrice = helper.applyDiscount(pList.price, pList.discount);
 			}
-			if (defaultUnitId && pList.units && pList.units[defaultUnitId] && pList.units[defaultUnitId].price) {
-				trueBasePrice = pList.units[defaultUnitId].price;
+			if (defaultUnitData) {
+				trueBasePrice = defaultUnitData.priceDiscount;
 			} else if (pList.price) {
-				trueBasePrice = pList.price;
+				trueBasePrice = helper.applyDiscount(pList.price, pList.discount);
 			}
 		}
 		const product = {
