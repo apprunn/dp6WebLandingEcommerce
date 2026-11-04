@@ -119,11 +119,9 @@
 							/>
 						</div>
 						<div class="product-description-wrapper">
-							{{
-								product.name && product.name.length > 60
-									? product.name.slice(0, 60) + '...'
-									: product.name
-							}}
+							<span class="product-card-name" :title="product.name">
+								{{ product.name }}
+							</span>
 							<!--span
 							v-if="product.description"
 							:class="[
@@ -822,8 +820,26 @@ export default {
 .product-description-wrapper {
 	display: flex;
 	flex-direction: column;
-	width: 107%;
-	padding: 1em 0 0;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+	padding: 1em 8px 0;
+	overflow: hidden;
+}
+
+.product-card-name {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+	line-height: 1.3em;
+	max-height: 2.6em;
 }
 
 .product-img {
