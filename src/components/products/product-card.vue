@@ -193,16 +193,8 @@
 						class="btn-conversions"
 						@click="addToCar(item, false)"
 					>
-						{{
-							item.name && item.name.length > 9
-								? item.name.slice(0, 9)
-								: item.name
-						}}
-						- {{ getCurrencySymbol }}
-
-						{{
-							item.price ? item.price : productPriceDiscount | currencyFormat
-						}}
+						{{ formatConversionName(item) }} - {{ getCurrencySymbol }}
+						{{ (item.price || product.priceDiscount) | currencyFormat }}
 					</v-btn>
 				</div>
 			</div>
@@ -269,11 +261,13 @@ function addToCar(unit, show) {
 		// const rightRanges = units[productSelected.unitSelected];
 		// const { ranges } = rightRanges || priceList;
 		productSelected.unitSelected = unit ? unit.id : this.product.unit.id;
-		productSelected.wholeSalePrice = this.getWholeSalePrice(productSelected.unitSelected) || [];
+		productSelected.wholeSalePrice =
+			this.getWholeSalePrice(productSelected.unitSelected) || [];
 		productSelected.priceDiscountOrigin = this.product.priceDiscount || 0;
 		if (!productSelected.trueBasePrice) {
 			productSelected.trueBasePrice = this.productPriceDiscount;
-			productSelected.trueBaseUnit = this.product.unitDefault || this.product.unit;
+			productSelected.trueBaseUnit =
+				this.product.unitDefault || this.product.unit;
 		}
 		const StockSoldOut =
 			this.quantityAddProduct >= stockProductByType(productSelected);
@@ -298,26 +292,34 @@ function addToCar(unit, show) {
 			productSelected.priceDiscountOrigin = unitPrice;
 			productSelected.priceDiscount = unitPrice;
 		}
-        const { stock, stockWarehouse, stockComposite } = productSelected;
-        // Obtener el flag que indica si se debe usar la unidad base
-        let flagShowBaseUnit = 0;
-        if (this.getCommerceData && this.getCommerceData.company && this.getCommerceData.company.settings) {
-          flagShowBaseUnit = this.getCommerceData.company.settings.flagShowBaseUnit;
-        }
-        // Calcular el stock disponible según el flag
-        let finalStock;
-        if (flagShowBaseUnit === 1) {
-          // Usar la misma lógica que muestra el detalle del producto
-          const rawStock = stockProductByType(productSelected);
-          const firstConversion = Object.keys(productSelected.conversions || {})[0];
-          finalStock = (firstConversion && rawStock !== Infinity)
-            ? parseInt(rawStock / productSelected.conversions[firstConversion].quantity, 10)
-            : rawStock;
-        } else if (helper.isComposed(productSelected)) {
-          finalStock = stockComposite;
-        } else {
-          finalStock = stockWarehouse || stock;
-        }
+		const { stock, stockWarehouse, stockComposite } = productSelected;
+		// Obtener el flag que indica si se debe usar la unidad base
+		let flagShowBaseUnit = 0;
+		if (
+			this.getCommerceData &&
+			this.getCommerceData.company &&
+			this.getCommerceData.company.settings
+		) {
+			flagShowBaseUnit = this.getCommerceData.company.settings.flagShowBaseUnit;
+		}
+		// Calcular el stock disponible según el flag
+		let finalStock;
+		if (flagShowBaseUnit === 1) {
+			// Usar la misma lógica que muestra el detalle del producto
+			const rawStock = stockProductByType(productSelected);
+			const firstConversion = Object.keys(productSelected.conversions || {})[0];
+			finalStock =
+				firstConversion && rawStock !== Infinity
+					? parseInt(
+							rawStock / productSelected.conversions[firstConversion].quantity,
+							10,
+					  )
+					: rawStock;
+		} else if (helper.isComposed(productSelected)) {
+			finalStock = stockComposite;
+		} else {
+			finalStock = stockWarehouse || stock;
+		}
 		const validate =
 			finalStock >= this.quantityAddProduct || this.$allowOrderStockNegative;
 		const quantity = validate ? this.quantityAddProduct : finalStock;
@@ -381,9 +383,8 @@ function discountPercentage() {
 	const { price, priceDiscount, priceList } = this.product;
 	const ecommerce =
 		JSON.parse(localStorage.getItem('ecommerce::ecommerce-data')) || null;
-	const defaultIdPiceList = (ecommerce && ecommerce.settings)
-		? ecommerce.settings.salPriceListId
-		: null;
+	const defaultIdPiceList =
+		ecommerce && ecommerce.settings ? ecommerce.settings.salPriceListId : null;
 	const discount =
 		priceList && defaultIdPiceList && priceList[defaultIdPiceList]
 			? priceList[defaultIdPiceList].discount
@@ -640,6 +641,13 @@ export default {
 		closeViewProduct() {
 			this.showViewProduct = true;
 			this.addQuantity = true;
+		},
+		formatConversionName(item) {
+			if (!item || !item.name) return '';
+			const shortName =
+				item.name.length > 9 ? item.name.slice(0, 9) : item.name;
+			const quantityText = item.quantity ? ` x (${item.quantity})` : '';
+			return `${shortName}${quantityText}`;
 		},
 	},
 	created,
@@ -1090,4 +1098,3 @@ export default {
 	text-align: center;
 }
 </style>
-
