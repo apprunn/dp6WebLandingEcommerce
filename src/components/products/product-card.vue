@@ -194,16 +194,8 @@
 						class="btn-conversions"
 						@click="addToCar(item, false)"
 					>
-						{{
-							item.name && item.name.length > 9
-								? item.name.slice(0, 9)
-								: item.name
-						}}
-						- {{ getCurrencySymbol }}
-
-						{{
-							item.price ? item.price : product.priceDiscount | currencyFormat
-						}}
+						{{ formatConversionName(item) }} - {{ getCurrencySymbol }}
+						{{ (item.price || product.priceDiscount) | currencyFormat }}
 					</v-btn>
 				</div>
 			</div>
@@ -574,6 +566,13 @@ export default {
 		},
 		closeViewProduct() {
 			this.showViewProduct = true;
+		},
+		formatConversionName(item) {
+			if (!item || !item.name) return '';
+			const shortName =
+				item.name.length > 9 ? item.name.slice(0, 9) : item.name;
+			const quantityText = item.quantity ? ` x (${item.quantity})` : '';
+			return `${shortName}${quantityText}`;
 		},
 	},
 	created,
