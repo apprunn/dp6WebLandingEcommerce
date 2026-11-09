@@ -16,7 +16,7 @@
 			type="number"
 			:value="number"
 			:min="0"
-			@input="$emit('input', $event.target.value.replace('-', ''))"
+			@input="$emit('input', $event.target.value.replace('-', ''), $event)"
 		/>
 		<div
 			v-else
