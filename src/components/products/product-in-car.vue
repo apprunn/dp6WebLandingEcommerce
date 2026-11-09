@@ -170,8 +170,25 @@ function showComments() {
 	this.show = !this.show;
 }
 
-function inputQuantity(value) {
-	this.product.quantity = Number(value);
+function validateQuantity(quantity) {
+	if (Number(this.product.weigth) > 0 || Number.isInteger(quantity)) {
+		return true;
+	}
+	this.showNotification(
+		'Este producto solo permite cantidades enteras',
+		'warning',
+	);
+	return false;
+}
+
+function inputQuantity(value, event) {
+	const quantity = Number(value);
+	if (!this.validateQuantity(quantity)) {
+		const { target } = event;
+		target.value = this.product.quantity;
+		return;
+	}
+	this.product.quantity = quantity;
 	this.clickQuantity();
 }
 
@@ -182,6 +199,9 @@ function clickQuantity(val) {
 	if (val) {
 		quantity += val === 'more' ? 1 : -1;
 		quantity = quantity < 1 ? 1 : quantity;
+	}
+	if (!this.validateQuantity(quantity)) {
+		return;
 	}
 	this.quantityStock = parseInt(unit.quantity * quantity, 10);
 	if (this.showUnity) {
@@ -269,6 +289,7 @@ export default {
 		showComments,
 		goToProduct,
 		inputQuantity,
+		validateQuantity,
 		handleImageError(event) {
 			const target = event.target;
 			target.src =

@@ -237,6 +237,9 @@ function mounted() {
 }
 
 function addToCar(unit, show) {
+	if (!this.validateQuantity(this.quantityAddProduct)) {
+		return;
+	}
 	this.showViewProduct = !show;
 	if (this.product.priceDiscount <= 0) {
 		this.showNotification(
@@ -248,7 +251,6 @@ function addToCar(unit, show) {
 	}
 
 	if (!this.noStock) {
-		this.showAdd = true;
 		// this.quantityAddProduct += 1;
 		const productSelected = this.product;
 		// const user = JSON.parse(localStorage.getItem('ecommerce::ecommerce-user')) || [];
@@ -323,6 +325,10 @@ function addToCar(unit, show) {
 		const validate =
 			finalStock >= this.quantityAddProduct || this.$allowOrderStockNegative;
 		const quantity = validate ? this.quantityAddProduct : finalStock;
+		if (!this.validateQuantity(quantity)) {
+			return;
+		}
+		this.showAdd = true;
 		this.quantityAddProduct = quantity;
 		productSelected.quantity = quantity;
 		const unitDef = unit || productSelected.unit;
@@ -342,6 +348,17 @@ function addToCar(unit, show) {
 		this.$store.dispatch('addProductToBuyCar', productSelected);
 		// this.quantityAddProduct = 1;
 	}
+}
+
+function validateQuantity(quantity) {
+	if (Number(this.product.weigth) > 0 || Number.isInteger(quantity)) {
+		return true;
+	}
+	this.showNotification(
+		'Este producto solo permite cantidades enteras',
+		'warning',
+	);
+	return false;
 }
 
 function productFavo() {
@@ -529,10 +546,20 @@ export default {
 		addToCar,
 		getWholeSalePrice,
 		goToCategories,
-		inputQuantity(value) {
-			this.quantityAddProduct = Number(value);
+		validateQuantity,
+		inputQuantity(value, event) {
+			const quantity = Number(value);
+			if (!this.validateQuantity(quantity)) {
+				const { target } = event;
+				target.value = this.quantityAddProduct;
+				return;
+			}
+			this.quantityAddProduct = quantity;
 		},
 		clickQuantity(val) {
+			if (!this.validateQuantity(this.quantityAddProduct)) {
+				return;
+			}
 			if (val === 'more') {
 				this.quantityAddProduct += 1;
 				this.addToCar();
