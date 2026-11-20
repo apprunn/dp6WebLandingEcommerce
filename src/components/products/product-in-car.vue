@@ -170,7 +170,11 @@ function showComments() {
 	this.show = !this.show;
 }
 
-function validateQuantity(quantity) {
+function validateQuantity(value) {
+	const quantity = Number(value);
+	if (!Number.isFinite(quantity) || quantity <= 0) {
+		return false;
+	}
 	if (Number(this.product.weigth) > 0 || Number.isInteger(quantity)) {
 		return true;
 	}
@@ -182,13 +186,12 @@ function validateQuantity(quantity) {
 }
 
 function inputQuantity(value, event) {
-	const quantity = Number(value);
-	if (!this.validateQuantity(quantity)) {
+	if (!this.validateQuantity(value)) {
 		const { target } = event;
 		target.value = this.product.quantity;
 		return;
 	}
-	this.product.quantity = quantity;
+	this.product.quantity = Number(value);
 	this.clickQuantity();
 }
 
