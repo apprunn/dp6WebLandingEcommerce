@@ -16,7 +16,7 @@
 			type="number"
 			:value="number"
 			:min="0"
-			@input="$emit('input', $event.target.value.replace('-', ''), $event)"
+			@input="inputQuantity"
 		/>
 		<div
 			v-else
@@ -39,6 +39,14 @@
 <script>
 export default {
 	name: 'quantity-button',
+	methods: {
+		inputQuantity(event) {
+			const { target } = event;
+			const value = target.value.replace('-', '').replace(/^0+(?=\d)/, '');
+			target.value = value === '' || Number(value) === 0 ? '1' : value;
+			this.$emit('input', target.value, event);
+		},
+	},
 	props: {
 		number: {
 			default: () => 1,
